@@ -1,0 +1,3 @@
+[submodule "lib/Nek5000"]
+	path = lib/Nek5000
+	url = git@github.com:exabl/Nek5000.git
