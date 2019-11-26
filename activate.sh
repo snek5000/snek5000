@@ -1,2 +1,2 @@
 DIR="$(pwd)"
-export SOURCE_ROOT="$DIR/eturb/lib/Nek5000"
+export SOURCE_ROOT="$DIR/lib/Nek5000"

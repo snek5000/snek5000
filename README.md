@@ -18,6 +18,9 @@ cd -
 
 # Build case
 cd src/abl_nek5000/
+genbox
+mv -f box.re2 3D_ABL.re2
+genmap
 makenek
 cd -
 

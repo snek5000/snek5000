@@ -37,3 +37,7 @@ src/*/obj
 src/*/*.f
 src/*/makefile
 src/*/nek5000
+
+# Python
+venv/
+.python-version
