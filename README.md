@@ -21,7 +21,7 @@ cd src/abl_nek5000/
 genbox
 mv -f box.re2 3D_ABL.re2
 genmap
-makenek
+FFLAGS="-mcmodel=medium" CFLAGS="-mcmodel=medium" makenek
 cd -
 
 # Run case
