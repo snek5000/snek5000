@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# Tarballs
+*.tar.gz
+
 # Nek5000 build files
 .state
 src/*/obj
@@ -43,7 +46,8 @@ src/*/nek5000
 # Nek5000 run output
 src/*/*.f?????
 src/*/SESSION.NAME
-
+src/*/*.nek5000
+src/*/*.log*
 
 # Python
 venv/

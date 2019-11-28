@@ -3,7 +3,7 @@
 # Unix-style newlines with a newline ending every file
 [*]
 indent_style = space
-indent_size = 2
+indent_size = 4
 tab_width = 4
 end_of_line = lf
 trim_trailing_whitespace = true
@@ -16,17 +16,9 @@ trim_trailing_whitespace = false
 [*.py]
 charset = utf-8
 
-# Matches multiple files with brace expansion notation
-# 4 space indentation
-[*.{py,tex,par}]
-indent_style = space
-indent_size = 4
-
-# Matches the exact file SIZE,
-# and fortran files
-[{SIZE,lib/Nek5000/core/*,*.{f,f90,inc,usr}}]
-indent_style = space
-indent_size = 4
+# Shell scripts, yaml, toml etc.
+[*.{sh,yml,toml}]
+indent_size = 2
 
 # Tab indentation (no size specified)
 [{Makefile,makefile,Makefile.*}]
@@ -34,10 +26,3 @@ indent_style = tab
 indent_size = unset
 tab_width = unset
 
-# Indentation override for all JS under lib directory
-# [lib/**.js]
-# indent_style = space
-# indent_size = 2
-
-# Matches the exact files either package.json or .travis.yml
-# [{package.json,.travis.yml}]
