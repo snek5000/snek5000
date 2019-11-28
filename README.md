@@ -18,10 +18,11 @@ cd -
 
 # Build case
 cd src/abl_nek5000/
-genbox
+CASE="3D_ABL"
+echo "$CASE.box" | genbox
 mv -f box.re2 3D_ABL.re2
-genmap
-FFLAGS="-mcmodel=medium" CFLAGS="-mcmodel=medium" makenek
+echo "$CASE\n0.01" | genmap
+FFLAGS="-mcmodel=medium -march=native" CFLAGS="-mcmodel=medium -march=native" makenek
 cd -
 
 # Run case
