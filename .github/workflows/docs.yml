@@ -41,12 +41,23 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
+    - name: Cache doxygen
+      id: doxygen-cache
+      uses: actions/cache@v1
+      with:
+        path: ${{ env.GITHUB_WORKSPACE }}/doxygen-${{ env.DOXYGEN_VERSION }}
+        key: ${{ runner.os }}-doxygen-${{ env.DOXYGEN_VERSION }}
+        restore-keys: |
+          ${{ runner.os }}-doxygen-
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        curl -LO http://doxygen.nl/files/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
-        tar -xf doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
+        if [ ! -d "doxygen-${DOXYGEN_VERSION}" ]; then
+          curl -LO http://doxygen.nl/files/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
+          tar -xf doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
+        fi
 
     - name: Build docs
       run: |
