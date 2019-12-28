@@ -53,3 +53,6 @@ src/*/*.log*
 venv/
 .python-version
 .snakemake
+
+# Doxygen / Sphinx
+docs/_build
