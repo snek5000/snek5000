@@ -45,7 +45,7 @@ jobs:
       id: doxygen-cache
       uses: actions/cache@v1
       with:
-        path: ${{ env.GITHUB_WORKSPACE }}/doxygen-${{ env.DOXYGEN_VERSION }}
+        path: ./doxygen-${{ env.DOXYGEN_VERSION }}
         key: ${{ runner.os }}-doxygen-${{ env.DOXYGEN_VERSION }}
         restore-keys: |
           ${{ runner.os }}-doxygen-
