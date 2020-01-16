@@ -6,3 +6,9 @@ if [ -d venv ]; then
 else
   echo WARNING: no venv present. Try running 'python -m venv venv'
 fi
+
+if [ "$BASH_VERSION" ]; then
+  if [ $(type -P "snakemake") ]; then
+    eval $(snakemake --bash-completion)
+  fi
+fi

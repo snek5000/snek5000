@@ -1,4 +1,7 @@
 snakemake
 fluiddyn
+flake8
+ipython
 breathe
 sphinx-rtd-theme
+-e .
