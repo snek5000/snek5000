@@ -1,4 +1,6 @@
-# General guidelines
+# Developer guide
+
+## General guidelines
 
 
 * **Editor**: Use an editor which supports [EditorConfig](http://editorconfig.org/)

@@ -6,12 +6,41 @@
 Welcome to eturb's documentation!
 =================================
 
++------------+--------------------------------+
+| Repository | https://github.com/exabl/eturb |
++------------+--------------------------------+
+| Version    | |release|                      |
++------------+--------------------------------+
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Getting Started
+
+   README
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User Guide
 
    abl
    nek5000
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Help & Reference
+
+   CONTRIBUTING
+   CHANGELOG
+   AUTHORS
+
+Links
+=====
+
+.. * :ref:`Upstream documentation for Nek5000 <nek:genindex>`
+.. Strange intersphinx bug: WARNING: undefined label: nek:genindex (if the link has no caption the label must precede a section header)
+
+* `Nek5000 documentation <https://nek5000.github.io/NekDoc/appendix.html>`_
+* `KTH framework documentation <https://kth-nek5000.github.io/KTH_Framework>`_
 
 Indices and tables
 ==================

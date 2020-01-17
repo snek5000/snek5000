@@ -1,7 +1,8 @@
 # eturb
+
 Efficient simulations of turbulent atmospheric boundary layer.
 
-## Getting started
+## Installation
 
 ```sh
 # Clone
@@ -22,13 +23,24 @@ cd -
 
 ### Easy way
 
+This workflow requires you to setup a python environment. There are two ways to
+do this (and it has to be done only once):
+
+1. Using `venv`
+   ```sh
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   pip install -e .
+   ```
+2. Using `conda`
+   ```sh
+   conda env create -n eturb -f environment.yml
+   conda activate eturb
+   ```
+
+#### Run Snakemake
 ```sh
-# Setup python environment
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt  # only once
-
-
 # Everything done via a Snakefile at once
 cd src/abl_nek5000/
 snakemake run

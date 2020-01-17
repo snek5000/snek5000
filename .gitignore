@@ -53,8 +53,10 @@ src/*/*.log*
 venv/
 .python-version
 .snakemake
+.eggs
 *.egg-info
 __pycache__
+src/*/_version.py
 
 # Doxygen / Sphinx
 docs/_build
