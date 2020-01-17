@@ -8,6 +8,7 @@ from fluiddyn.util.paramcontainer import ParamContainer as _ParamContainer
 
 literal_python2nek = {nan: "<real>", None: "none", True: "yes", False: "no"}
 literal_nek2python = {v: k for k, v in literal_python2nek.items()}
+literal_prune = ("<real>", "")
 
 
 class Parameters:
@@ -93,6 +94,9 @@ When scalars are used, the keys of each scalar are defined under the section
         params.VELOCITY._set_attribs(dict(viscosity=nan, density=nan))
         params.PRESSURE._set_attrib("preconditioner", "semg_xxt")
 
+    def __repr__(self):
+        repr(self.params)
+
     def read_par(self, path=None):
         """Read par file into params."""
         if not path:
@@ -108,25 +112,30 @@ When scalars are used, the keys of each scalar are defined under the section
                     value = literal_nek2python[value]
                 setattr(params_section, option, value)
 
+    def update_par_section(self, section_name, section_dict):
+        """Updates a section of the ``par_file`` object."""
+        par = self.par_file
+        if section_name not in par.sections():
+            par.add_section(section_name)
+        for option, value in section_dict.items():
+            if value in literal_python2nek:
+                value = literal_python2nek[value]
+            if value in literal_prune:
+                continue
+            par.set(section_name, str(option), str(value))
+
     def sync_par(self):
-        """Sync values in params to par object."""
+        """Sync values in params to ``par_file`` object."""
         par = self.par_file
         #  par.read_dict(self.params._make_dict_tree())
-        for section in par.sections():
-            section_dict = getattr(self.params, section)._make_dict_tree()
-            breakpoint()
-            par[section].update(section_dict)
-            enabled = par.getboolean(section, "_enabled")
+        for section_name in par.sections():
+            section_dict = getattr(self.params, section_name)._make_dict_tree()
+            self.update_par_section(section_name, section_dict)
+            enabled = par.getboolean(section_name, "_enabled")
             if enabled:
-                par.remove_option(section, "_enabled")
+                par.remove_option(section_name, "_enabled")
             else:
-                par.remove_section(section)
-
-        for section in par.sections():
-            for option, value in par.items(section):
-                if value in literal_python2nek and value is not nan:
-                    value = literal_python2nek[value]
-                par.set(section, option, value)
+                par.remove_section(section_name)
 
     def write_par(self, path=stdout):
         self.sync_par()

@@ -4,3 +4,6 @@ flake8
 ipython
 breathe
 sphinx-rtd-theme
+pdbpp
+rope
+black
