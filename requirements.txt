@@ -4,7 +4,6 @@
 #
 #    pip-compile
 #
--e file:///home/avmo/src/exabl/eturb
 alabaster==0.7.12         # via sphinx
 appdirs==1.4.3            # via snakemake
 attrs==19.3.0             # via jsonschema
