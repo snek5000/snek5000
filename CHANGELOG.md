@@ -28,9 +28,9 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
-## [0.0.0] - 2020-01-17
+## [0.0.1] - 2020-01-17
 
 ### Added
-- Scripting for executing managing run parameters `eturb.params`
+- Scripting for managing run parameters `eturb.params`
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation

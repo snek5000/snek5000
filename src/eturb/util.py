@@ -1,8 +1,6 @@
 """Miscellaneous utilities
 ==========================
 
-.. automodule:: eturb.util
-   :members:
 
 """
 import os

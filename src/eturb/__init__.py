@@ -1,5 +1,5 @@
-"""eturb
-========
+"""
+Python package for scripted assistance.
 
 .. autosummary::
    :toctree:

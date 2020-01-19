@@ -35,7 +35,7 @@ sys.path.insert(0, root(breathe))
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, root(eturb))
 
-print(sys.path)
+print("sys.path =\n   ", '\n    '.join(sys.path))
 
 # -- Project information -----------------------------------------------------
 

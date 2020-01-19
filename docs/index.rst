@@ -25,6 +25,9 @@ Welcome to eturb's documentation!
    abl
    nek5000
 
+.. autosummary:: eturb
+   :toctree: _generated/
+
 .. toctree::
    :maxdepth: 1
    :caption: Help & Reference

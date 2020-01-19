@@ -1,5 +1,9 @@
+"""Runtime parameters
+=====================
+Scripting interface for Nek5000 :ref:`parameter file <nek:case_files_par>`.
+
+"""
 from configparser import ConfigParser
-from copy import deepcopy
 from math import nan
 from sys import stdout
 
@@ -12,7 +16,7 @@ literal_prune = ("<real>", "")
 
 
 class Parameters:
-    """Scripting interface for Nek5000 parameter_ file.
+    """Container for reading, modifying and writing par files.
 
     .. _parameter: https://nek5000.github.io/NekDoc/problem_setup/case_files.html#parameter-file-par
 
