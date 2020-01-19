@@ -60,3 +60,7 @@ src/*/_version.py
 
 # Doxygen / Sphinx
 docs/_build
+docs/_generated
+
+# VS Code
+.vscode
