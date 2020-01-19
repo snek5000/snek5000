@@ -19,8 +19,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Fetch all history for all tags and branches
-      run: git fetch --prune --unshallow
+    - name: Fetch all history for all tags
+      run: git fetch --prune --tags
 
     - name: Clone private submodules FIXME
       uses: actions/checkout@v2
