@@ -28,6 +28,9 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+### Changed
+- Extra requirements `[test]` renamed to `[tests]`
+
 ## [0.0.1] - 2020-01-17
 
 ### Added
