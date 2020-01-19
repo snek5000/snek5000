@@ -1,4 +1,4 @@
-# eturb
+# Project *eturb*
 
 Efficient simulations of turbulent atmospheric boundary layer.
 

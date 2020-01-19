@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to eturb's documentation!
-=================================
+Welcome to project *eturb*'s documentation!
+===========================================
 
 +------------+--------------------------------+
 | Repository | https://github.com/exabl/eturb |
@@ -25,8 +25,10 @@ Welcome to eturb's documentation!
    abl
    nek5000
 
-.. autosummary:: eturb
+.. autosummary::
    :toctree: _generated/
+
+   eturb
 
 .. toctree::
    :maxdepth: 1

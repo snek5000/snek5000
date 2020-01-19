@@ -24,3 +24,6 @@ intersphinx-python:
 
 intersphinx-nek:
 	@python -msphinx.ext.intersphinx https://nek5000.github.io/NekDoc/objects.inv
+
+cleanall: clean
+	@rm -rf _generated/
