@@ -67,7 +67,7 @@ os.makedirs("_build/html/doxygen", exist_ok=True)
 # Inspect whether to run doxygen or not
 last_modified = max(
     eturb.util.last_modified("../lib").stat().st_mtime,
-    eturb.util.last_modified("../src/abl_nek5000").stat().st_mtime
+    eturb.util.last_modified("../src/abl").stat().st_mtime
 )
 timestamp = Path("_build/.doxygen_timestamp")
 if timestamp.exists() and Path("_build/xml").exists():
@@ -131,7 +131,7 @@ else:
     # Input sources
     breathe_projects = {"eturb": "_build/xml/"}
     #  breathe_projects_source = {
-    #      "abl_nek5000": ("../src/abl_nek5000", ["SIZE", "3D_ABL.usr"]),
+    #      "abl": ("../src/abl", ["SIZE", "abl.usr"]),
     #  }
     breathe_default_project = "eturb"
 
@@ -162,6 +162,8 @@ html_theme = "sphinx_rtd_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+html_favicon = "_static/favicon.ico"
 
 # -- Options for Intersphinx -------------------------------------------------
 

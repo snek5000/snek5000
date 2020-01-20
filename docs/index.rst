@@ -6,6 +6,16 @@
 Welcome to project *eTurb*'s documentation!
 ===========================================
 
+.. raw:: html
+
+
+   <!--
+      Icon derived from "wind slap icon" by Lorc. Available at
+      https://game-icons.net/1x1/lorc/wind-slap.html .
+      License: https://creativecommons.org/licenses/by/3.0/
+   -->
+   <img style="float: right;" src="_static/icon.svg" width="100rem"/>
+
 +------------+--------------------------------+
 | Repository | https://github.com/exabl/eturb |
 +------------+--------------------------------+

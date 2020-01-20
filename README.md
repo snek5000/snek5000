@@ -1,6 +1,7 @@
 # Project *eTurb*
 
-Efficient simulations of turbulent atmospheric boundary layer.
+**Efficient** simulations of **turbulent** atmospheric boundary layer.
+
 
 ## Installation
 
