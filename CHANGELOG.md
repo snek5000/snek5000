@@ -30,6 +30,7 @@ Security in case of vulnerabilities.
 
 ### Changed
 - Extra requirements `[test]` renamed to `[tests]`
+- Rename case files `3D_ABL` -> `abl` and directory `abl_nek5000` -> `abl`
 
 ## [0.0.1] - 2020-01-17
 

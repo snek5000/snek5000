@@ -47,7 +47,7 @@ src/*/nek5000
 src/*/*.f?????
 src/*/SESSION.NAME
 src/*/*.nek5000
-src/*/*.log*
+src/**/*.log
 
 # Python
 venv/
