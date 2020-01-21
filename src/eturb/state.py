@@ -1,12 +1,12 @@
 """Paraview interface for Nek5000 files."""
 from pathlib import Path
-import paraview.simple as pvs
+from .log import logger
 
 try:
+    import paraview.simple as pvs
     from paraview.simple import VisItNek5000Reader
-except Exception as e:
-    print(e)
-    pass
+except ImportError as e:
+    logger.warning(e)
 
 #  from vtktools import vtkio
 
@@ -25,7 +25,9 @@ class State:
     def __init__(self, sim=None, path=None):
         self.sim = sim
         if not path:
-            self.path_run = sim.path_run if hasattr(sim, "path_run") else Path.cwd()
+            self.path_run = (
+                sim.path_run if hasattr(sim, "path_run") else Path.cwd()
+            )
 
     def read(self):
         path = self.path_run
