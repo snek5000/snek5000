@@ -1,5 +1,6 @@
 snakemake
 fluiddyn
+fluidsim
 flake8
 ipython
 breathe

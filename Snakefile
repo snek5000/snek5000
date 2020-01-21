@@ -13,3 +13,7 @@ rule requirements:
 
 rule develop:
     shell: 'pip install -e .[dev]'
+
+
+rule docs:
+    shell: 'cd docs && make html'

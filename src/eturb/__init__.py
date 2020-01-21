@@ -4,6 +4,8 @@ Python package for scripted assistance.
 .. autosummary::
    :toctree:
 
+   solvers
+   state
    params
    util
 

@@ -107,18 +107,31 @@ dependencies:
   - pip:
     - alabaster==0.7.12
     - appdirs==1.4.3
+    - astunparse==1.6.3
+    - autopep8==1.5
     - babel==2.7.0
     - backcall==0.1.0
+    - beniget==0.2.0
+    - black==19.10b0
+    - bleach==3.1.0
     - breathe==4.14.0
     - cached-property==1.5.1
     - certifi==2019.9.11
     - chardet==3.0.4
     - click==7.0
+    - cmarkgfm==0.4.2
+    - colorlog==4.1.0
+    - commonmark==0.9.1
     - configargparse==0.15.1
     - decorator==4.4.1
     - docutils==0.15.2
+    - entrypoints==0.3
+    - fancycompleter==0.8
+    - flake8==3.7.9
     - fluiddyn==0.3.1
+    - fluidsim==0.3.2
     - future==0.18.2
+    - gast==0.3.3
     - gitdb2==2.0.6
     - gitpython==3.0.5
     - h5netcdf==0.7.4
@@ -128,27 +141,48 @@ dependencies:
     - ipython==7.11.1
     - ipython-genutils==0.2.0
     - jedi==0.15.2
+    - jeepney==0.4.2
     - jinja2==2.10.3
     - jsonschema==3.2.0
+    - keyring==21.1.0
     - markupsafe==1.1.1
+    - mccabe==0.6.1
     - more-itertools==7.2.0
     - numpy==1.17.4
     - packaging==19.2
+    - pandas==0.25.3
     - parso==0.5.2
+    - pathspec==0.7.0
+    - pdbpp==0.10.2
     - pexpect==4.7.0
     - pickleshare==0.7.5
     - pip-tools==4.3.0
+    - pkginfo==1.5.0.1
+    - pluggy==0.13.1
     - prompt-toolkit==3.0.2
     - ptyprocess==0.6.0
+    - py==1.8.1
+    - pycodestyle==2.5.0
+    - pyflakes==2.1.1
     - pygments==2.5.2
     - pyparsing==2.4.5
     - pyqt5-sip==4.19.18
     - pyqtwebengine==5.12.1
     - pyrsistent==0.15.6
+    - pytest==5.3.3
+    - python-jsonrpc-server==0.3.4
+    - python-language-server==0.31.6
     - pytz==2019.3
     - pyyaml==5.1.2
     - ratelimiter==1.2.0.post0
+    - readme-renderer==24.0
+    - recommonmark==0.6.0
+    - regex==2020.1.8
     - requests==2.22.0
+    - requests-toolbelt==0.9.1
+    - rope==0.16.0
+    - secretstorage==3.1.2
+    - setuptools-scm==3.4.2
     - smmap2==2.0.5
     - snakemake==5.8.1
     - snowballstemmer==2.0.0
@@ -160,8 +194,17 @@ dependencies:
     - sphinxcontrib-jsmath==1.0.1
     - sphinxcontrib-qthelp==1.0.2
     - sphinxcontrib-serializinghtml==1.1.3
+    - toml==0.10.0
+    - tqdm==4.41.1
     - traitlets==4.3.3
+    - transonic==0.4.2
+    - twine==3.1.1
+    - typed-ast==1.4.1
+    - ujson==1.35
     - urllib3==1.25.7
     - wcwidth==0.1.8
+    - webencodings==0.5.1
+    - wmctrl==0.3
     - wrapt==1.11.2
+    - xarray==0.14.1
     - zipp==0.6.0
