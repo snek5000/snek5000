@@ -57,6 +57,7 @@ venv/
 *.egg-info
 __pycache__
 src/*/_version.py
+pip-wheel-metadata
 
 # Doxygen / Sphinx
 docs/_build

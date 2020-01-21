@@ -4,6 +4,7 @@
 
 """
 import os
+from pathlib import Path
 from datetime import datetime
 from functools import reduce
 from tarfile import TarFile
@@ -95,3 +96,18 @@ def last_modified(path):
         lambda x, y: x if x.stat().st_mtime > y.stat().st_mtime else y,
         scantree(path),
     )
+
+
+def activate_paths():
+    """Setup environment variables in preparation for Nek5000 build."""
+    here = Path(__file__).parent
+    if not os.getenv("SOURCE_ROOT"):
+        os.environ["SOURCE_ROOT"] = source_root = str(
+            (here / "../../../lib/Nek5000").absolute()
+        )
+
+    env_path = str(os.getenv("PATH"))
+    if source_root not in env_path:
+        os.environ["PATH"] = path = ":".join((source_root, env_path))
+
+    return source_root, path

@@ -15,12 +15,15 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 import os
-import sys
-from pathlib import Path
 import subprocess
+import sys
+from datetime import date
+from pathlib import Path
 from subprocess import PIPE
 
 import breathe
+
+import abl
 import eturb
 
 
@@ -33,17 +36,21 @@ sys.path.insert(0, root(breathe))
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
+sys.path.insert(0, root(abl))
 sys.path.insert(0, root(eturb))
 
-print("sys.path =\n   ", '\n    '.join(sys.path))
+print("sys.path =\n   ", "\n    ".join(sys.path))
 
 # -- Project information -----------------------------------------------------
 
 project = "eturb"
-copyright = "2019, Ashwin Vishnu Mohanan"
+_today = date.today()
+copyright = (
+    f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
+)
 author = "Ashwin Vishnu Mohanan"
 
-version = '.'.join(eturb.__version__.split('.')[:3])
+version = ".".join(eturb.__version__.split(".")[:3])
 # The full version, including alpha/beta/rc tags
 release = eturb.__version__
 
@@ -67,7 +74,7 @@ os.makedirs("_build/html/doxygen", exist_ok=True)
 # Inspect whether to run doxygen or not
 last_modified = max(
     eturb.util.last_modified("../lib").stat().st_mtime,
-    eturb.util.last_modified("../src/abl").stat().st_mtime
+    eturb.util.last_modified("../src/abl").stat().st_mtime,
 )
 timestamp = Path("_build/.doxygen_timestamp")
 if timestamp.exists() and Path("_build/xml").exists():
@@ -87,9 +94,7 @@ if modify_doxygen:
     # Disable source browser
     with open("Doxyfile", "rb") as doxyfile:
         doxy_cfg = [
-            line
-            for line in doxyfile.readlines()
-            if b"SOURCE_BROWSER" not in line
+            line for line in doxyfile.readlines() if b"SOURCE_BROWSER" not in line
         ]
     doxy_cfg = b"".join(doxy_cfg)
     # print(doxy_cfg.decode("utf8"))
@@ -112,7 +117,9 @@ try:
         with open(timestamp, "w") as fp:
             fp.write(str(last_modified))
     else:
-        print(f"Using old Doxygen XML output... Remove {timestamp} to force doxygen build.")
+        print(
+            f"Using old Doxygen XML output... Remove {timestamp} to force doxygen build."
+        )
 except FileNotFoundError:
     print(
         "Can not find doxygen to generate the documentation of the Fortran code."
@@ -143,7 +150,7 @@ templates_path = ["_templates"]
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = ['.rst', '.md']
+source_suffix = [".rst", ".md"]
 
 
 # List of patterns, relative to source directory, that match files and
@@ -168,8 +175,8 @@ html_favicon = "_static/favicon.ico"
 # -- Options for Intersphinx -------------------------------------------------
 
 intersphinx_mapping = dict(
-    python=('https://docs.python.org/3', None),
-    nek=('https://nek5000.github.io/NekDoc', None)
+    python=("https://docs.python.org/3", None),
+    nek=("https://nek5000.github.io/NekDoc", None),
 )
 
 # -- Other options ------------------------------------------------------------

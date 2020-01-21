@@ -9,3 +9,7 @@ rule requirements:
     input: 'requirements.in'
     output: 'requirements.txt'
     shell: 'pip-compile'
+
+
+rule develop:
+    shell: 'pip install -e .[dev]'
