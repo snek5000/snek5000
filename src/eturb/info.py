@@ -24,7 +24,8 @@ class InfoSolverNek(InfoSolverBase):
         )
         self._set_child("classes")
         self.classes._set_child(
-            "Oper", attribs={"module_name": "eturb.operators", "class_name": "Operators"}
+            "Oper",
+            attribs={"module_name": "eturb.operators", "class_name": "Operators"},
         )
 
 

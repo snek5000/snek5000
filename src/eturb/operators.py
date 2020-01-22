@@ -16,6 +16,7 @@ class Operators:
     .. todo:: Template for box file required mesh generation
 
     """
+
     @staticmethod
     def _complete_params_with_default(params):
         """This static method is used to complete the *params* container.
@@ -54,6 +55,4 @@ class Operators:
             string += f"- {key} = {value}\n"
         for key, value in zip(("nx", "ny", "nz"), str_n):
             string += f"- {key} = {value}\n"
-        return (
-            f"Nek5000 operator:\n{string}"
-        )
+        return f"Nek5000 operator:\n{string}"
