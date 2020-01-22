@@ -7,6 +7,7 @@ Python package for scripted assistance.
    solvers
    output
    params
+   info
    util
 
 """

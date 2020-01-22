@@ -1,5 +1,5 @@
+from ..info import InfoSolverABL
 from .base import SimulNek
-from .info import InfoSolverABL
 
 
 class SimulABL(SimulNek):

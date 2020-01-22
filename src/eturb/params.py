@@ -10,7 +10,7 @@ from sys import stdout
 from fluiddyn.util import import_class
 from fluidsim.base.params import Parameters as _Parameters
 
-from .solvers.info import InfoSolverBase
+from .info import InfoSolverBase
 
 literal_python2nek = {nan: "<real>", None: "none", True: "yes", False: "no"}
 literal_nek2python = {v: k for k, v in literal_python2nek.items()}

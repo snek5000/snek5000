@@ -12,8 +12,8 @@ from fluidsim.base.solvers.base import SimulBase
 from fluidsim.base.solvers.info_base import create_info_simul
 
 from .. import logger, mpi
+from ..info import InfoSolverNek
 from ..params import Parameters, create_params
-from .info import InfoSolverNek
 
 
 class SimulNek(SimulBase):

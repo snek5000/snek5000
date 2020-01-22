@@ -18,9 +18,7 @@ def isoformat(dt):
     """Returns timestamp in modified isoformat from a datetime object (-
     instead of :). Accurate upto seconds.
 
-    Note
-    ----
-    The modified ISO format is YYYY-MM-DDTHH-MM-SS
+    .. note:: The modified ISO format is YYYY-MM-DDTHH-MM-SS
 
     """
     return dt.isoformat(timespec="seconds").replace(":", "-")
@@ -29,9 +27,7 @@ def isoformat(dt):
 def timestamp(path):
     """Modification date of a file or directory as a timestamp.
 
-    Returns
-    -------
-    str
+    :returns str:
 
     """
     return isoformat(util.modification_date(path))
@@ -50,7 +46,11 @@ def modification_date(path):
 
 
 def now():
-    """Return current timestamp."""
+    """The current timestamp.
+
+    :returns str:
+
+    """
     return isoformat(datetime.now())
 
 
@@ -73,9 +73,7 @@ def scantree(path):
 
     Courtesy: https://stackoverflow.com/a/33135143
 
-    Yields
-    ------
-    A generator for ``DirEntry`` objects.
+    :returns generator: A generator for ``DirEntry`` objects.
 
     """
     for entry in os.scandir(path):
@@ -88,9 +86,7 @@ def scantree(path):
 def last_modified(path):
     """Find the last modified file in a directory tree.
 
-    Returns
-    -------
-    A ``DirEntry`` object.
+    :returns DirEntry:
 
     """
     return reduce(
