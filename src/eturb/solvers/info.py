@@ -19,10 +19,22 @@ class InfoSolverNek(InfoSolverBase):
             {
                 "module_name": "eturb.solvers.base",
                 "class_name": "SimulNek",
-                "short_name": "Nek",
+                "short_name": "nek",
             }
         )
         self._set_child("classes")
         self.classes._set_child(
-            "State", attribs={"module_name": "eturb.state", "class_name": "State"}
+            "Oper", attribs={"module_name": "eturb.operators", "class_name": "Operators"}
+        )
+
+
+class InfoSolverABL(InfoSolverNek):
+    def _init_root(self):
+        super()._init_root()
+        self.short_name = "abl"
+        self.classes._set_child(
+            "Output", attribs={"module_name": "abl", "class_name": "Output"}
+        )
+        self.classes._set_child(
+            "Make", attribs={"module_name": "eturb.make", "class_name": "Make"}
         )

@@ -45,6 +45,7 @@ Welcome to project *eTurb*'s documentation!
    :maxdepth: 1
    :caption: Help & Reference
 
+   roadmap
    CONTRIBUTING
    CHANGELOG
    AUTHORS

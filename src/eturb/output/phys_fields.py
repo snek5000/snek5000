@@ -1,6 +1,10 @@
-"""Paraview interface for Nek5000 files."""
+"""Paraview interface for Nek5000 files.
+
+.. todo:: Load field files and make various plots of statistics
+
+"""
 from pathlib import Path
-from .log import logger
+from ..log import logger
 
 try:
     import paraview.simple as pvs
@@ -11,7 +15,7 @@ except ImportError as e:
 #  from vtktools import vtkio
 
 
-class State:
+class PhysFields:
     """Class for loading, plotting simulation files.
 
     :param sim: A simulation instance derived from

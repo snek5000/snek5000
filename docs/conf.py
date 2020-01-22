@@ -65,6 +65,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.todo",
     "recommonmark",
 ]
 
@@ -189,3 +190,4 @@ autodoc_default_options = {
     #  'undoc-members': True,
     #  'exclude-members': '__weakref__'
 }
+todo_include_todos = True

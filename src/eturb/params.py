@@ -7,8 +7,10 @@ from configparser import ConfigParser
 from math import nan
 from sys import stdout
 
+from fluiddyn.util import import_class
 from fluidsim.base.params import Parameters as _Parameters
 
+from .solvers.info import InfoSolverBase
 
 literal_python2nek = {nan: "<real>", None: "none", True: "yes", False: "no"}
 literal_nek2python = {v: k for k, v in literal_python2nek.items()}
@@ -69,9 +71,7 @@ class Parameters(_Parameters):
         par = self._par_file
         #  par.read_dict(self._make_dict_tree())
         for section_name in par.sections():
-            section_dict = getattr(
-                self.nek, section_name
-            )._make_dict_tree()
+            section_dict = getattr(self.nek, section_name)._make_dict_tree()
             self._update_par_section(section_name, section_dict)
             enabled = par.getboolean(section_name, "_enabled")
             if enabled:
@@ -90,3 +90,33 @@ class Parameters(_Parameters):
                 self._par_file.write(fp)
         else:
             self._par_file.write(path)
+
+
+def create_params(input_info_solver):
+    """Create a Parameters instance from an InfoSolverBase instance."""
+    if isinstance(input_info_solver, InfoSolverBase):
+        info_solver = input_info_solver
+    elif hasattr(input_info_solver, "Simul"):
+        info_solver = input_info_solver.Simul.create_default_params()
+    else:
+        raise ValueError("Can not create params from input input_info_solver.")
+
+    params = Parameters(tag="params")
+    dict_classes = info_solver.import_classes()
+
+    dict_classes["Solver"] = import_class(
+        info_solver.module_name, info_solver.class_name
+    )
+
+    for Class in list(dict_classes.values()):
+        if hasattr(Class, "_complete_params_with_default"):
+            try:
+                Class._complete_params_with_default(params)
+            except TypeError:
+                try:
+                    Class._complete_params_with_default(params, info_solver)
+                except TypeError as e:
+                    e.args += ("for class: " + repr(Class),)
+                    raise
+
+    return params

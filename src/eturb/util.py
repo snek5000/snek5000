@@ -4,6 +4,7 @@
 
 """
 import os
+from contextlib import contextmanager
 from pathlib import Path
 from datetime import datetime
 from functools import reduce
@@ -111,3 +112,14 @@ def activate_paths():
         os.environ["PATH"] = path = ":".join((source_root, env_path))
 
     return source_root, path
+
+
+@contextmanager
+def change_dir(path_dir):
+    """Context manager to temporarily change to another directory."""
+    try:
+        curdir = Path.cwd()
+        os.chdir(path_dir)
+        yield
+    finally:
+        os.chdir(curdir)

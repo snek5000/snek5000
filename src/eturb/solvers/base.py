@@ -11,7 +11,8 @@ import numpy as np
 from fluidsim.base.solvers.base import SimulBase
 from fluidsim.base.solvers.info_base import create_info_simul
 
-from ..params import Parameters
+from .. import logger, mpi
+from ..params import Parameters, create_params
 from .info import InfoSolverNek
 
 
@@ -25,6 +26,7 @@ class SimulNek(SimulBase):
        sim = Simul(params)
 
     """
+
     InfoSolver = InfoSolverNek
 
     @classmethod
@@ -33,14 +35,18 @@ class SimulNek(SimulBase):
         parameters consumed by Nek5000.
 
         """
-        tag = "base"
         cls.info_solver = cls.InfoSolver()
         cls.info_solver.complete_with_classes()
-        params = Parameters(tag=tag)
+        return create_params(cls.info_solver)
+
+    @staticmethod
+    def _complete_params_with_default(params):
+        """A static method used to complete the *params* container."""
 
         params._set_child("nek")
         params_nek = params.nek
 
+        params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
         for section in ("GENERAL", "PROBLEMTYPE", "VELOCITY", "PRESSURE"):
             params_nek._set_child(section, {"_enabled": True})
             params._par_file.add_section(section)
@@ -137,9 +143,27 @@ When scalars are used, the keys of each scalar are defined under the section
 
         self.params = params
         self.info = create_info_simul(self.info_solver, params)
+
         # initialize objects
         for cls_name, Class in dict_classes.items():
-            setattr(self, cls_name, Class(self))
+            setattr(self, cls_name.lower(), Class(self))
+
+        if "Output" in dict_classes:
+            # path_run would be initialized by the Output instance if available
+            # See self.output._init_name_run()
+            self.path_run = self.output.path_run
+            self.output.copy(self.path_run)
+        else:
+            self.path_run = None
+            if mpi.rank == 0:
+                logger.warning("No output class initialized!")
+
+        _banner_length = 42
+        if mpi.rank == 0:
+            logger.info("*" * _banner_length)
+            logger.info(f"solver: {self.__class__}")
+            logger.info(f"path_run: {self.path_run}")
+            logger.info("*" * _banner_length)
 
 
 Simul = SimulNek
