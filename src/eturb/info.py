@@ -32,7 +32,10 @@ class InfoSolverNek(InfoSolverBase):
 class InfoSolverABL(InfoSolverNek):
     def _init_root(self):
         super()._init_root()
+        self.module_name = "eturb.solvers.abl"
+        self.class_name = "SimulABL"
         self.short_name = "abl"
+
         self.classes._set_child(
             "Output", attribs={"module_name": "abl", "class_name": "Output"}
         )
