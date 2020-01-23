@@ -1,3 +1,14 @@
+"""Operators classes
+====================
+
+Mesh information
+
+.. todo:: Generate SIZE and abl.box files (using sympy.codegen, jinja or str.template)
+
+.. todo:: Move length to abl.par file and extrude it to allow double precision
+          values.
+
+"""
 from math import pi
 
 
@@ -13,10 +24,7 @@ def _str_len(length):
 class Operators:
     """Container for parameters regarding mesh.
 
-    .. todo:: Template for box file required mesh generation
-
     """
-
     @staticmethod
     def _complete_params_with_default(params):
         """This static method is used to complete the *params* container.

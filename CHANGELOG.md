@@ -28,9 +28,21 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+## [0.1.0] - 2020-01-23
+
+### Added
+- Uses `fluidsim` framework for creating a scripting layer
+- Package `abl` with a single module and an `abl.Output` class
+- New sub-packages and modules under `eturb`: `solvers, output, info, log,
+  make, magic, operators`
+- Testing with `pytest`, and CI on GitHub actions
+- Detailed documentation
+- Versioning with `setuptools_scm`
+
 ### Changed
 - Extra requirements `[test]` renamed to `[tests]`
 - Rename case files `3D_ABL` -> `abl` and directory `abl_nek5000` -> `abl`
+- Overall reorganization of modules and Snakemake + configuration files.
 
 ## [0.0.1] - 2020-01-17
 

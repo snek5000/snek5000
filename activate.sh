@@ -1,6 +1,9 @@
 DIR="$(pwd)"
 export SOURCE_ROOT="$DIR/lib/Nek5000"
 export PATH="$PATH:$SOURCE_ROOT/bin"
+
+alias smake="snakemake"
+
 if [ -d venv ]; then
   source venv/bin/activate
 elif [ -z "$CONDA_PREFIX" ]; then

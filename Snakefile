@@ -16,4 +16,27 @@ rule develop:
 
 
 rule docs:
+    input: 'src/'
     shell: 'cd docs && make html'
+
+rule ctags:
+    input:
+        nek5000='lib/Nek5000/core',
+        abl='src/abl',
+        eturb='src/eturb'
+    output:
+        '.tags'
+    params:
+        excludes=' '.join((f'--exclude={pattern}' for pattern in ('.snakemake', '__pycache__', 'obj', 'logs', '*.tar.gz', '*.f?????')))
+    shell:
+        """
+        ctags -f {output} {params.excludes} --language-force=fortran -R {input.nek5000} {input.abl}
+        ctags -f {output} {params.excludes} --append -R {input.eturb}
+        """
+
+rule watch:
+    params:
+        per_second=5,
+        rules='docs ctags'
+    shell:
+        'watch -n {params.per_second} snakemake --nocolor --quiet {params.rules} 2>&1 &'

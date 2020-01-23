@@ -65,3 +65,6 @@ docs/_generated
 
 # VS Code
 .vscode
+
+# Ctags
+.tags
