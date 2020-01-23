@@ -1,3 +1,20 @@
+"""IPython magic extensions
+===========================
+
+Usage example in an IPython console:
+
+.. code-block:: ipython
+
+   In [1]: %load_ext eturb.magic
+   WARNING  Activating this magic involves dirty monkey-patching of fluidsim.magic
+
+   In [2]: %eturb abl
+   INFO     Reading baseline parameters from /home/avmo/src/exabl/eturb/src/abl/abl.par
+   Created Simul class and default parameters for abl -> Simul, params
+
+   In [3]: sim = Simul(params)
+
+"""
 import pkgutil
 from importlib import import_module
 

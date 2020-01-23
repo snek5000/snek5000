@@ -1,3 +1,9 @@
+"""ABL solver
+=============
+
+A solver which specifically deals with the ABL case files.
+
+"""
 from abl import get_root
 
 from .. import logger, mpi

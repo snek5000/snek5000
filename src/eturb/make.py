@@ -1,8 +1,17 @@
+"""Snakemake interface
+======================
+
+"""
 from snakemake import snakemake
 from .util import change_dir
 
 
 class Make:
+    """Snakemake interface for the solvers.
+
+    :param sim: A simulation instance
+
+    """
     def __init__(self, sim):
         self.sim = sim
         self.path_run = sim.output.path_run

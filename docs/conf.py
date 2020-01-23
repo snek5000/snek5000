@@ -66,6 +66,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
     "recommonmark",
 ]
 

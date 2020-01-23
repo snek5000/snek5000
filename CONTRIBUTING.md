@@ -17,11 +17,19 @@
     * `stable`: main branch tracking the stable version 17
     * `develop`: development branch
 
+* **Testing**: [Run `pytest`](https://pytest.readthedocs.io/) from the
+  top-level directory. The test-cases can be found under `tests/` directory.
+* **Debugging**: Set the environment variable:
+  ```bash
+  export ETURB_DEBUG=true
+  ```
+  to activate debugging logs and longer tests.
+
 ## Vim
 
 Vim users could benefit by setting:
 ```vim
-set exrc
-set secure
+set secure exrc
 ```
-which enables syntax highlighting for file extensions used in `lib/Nek5000`.
+This sources the `.vimrc` file which comes along with the repository and
+enables syntax highlighting for file extensions used in `lib/Nek5000`.

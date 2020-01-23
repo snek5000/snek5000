@@ -30,6 +30,10 @@ class InfoSolverNek(InfoSolverBase):
 
 
 class InfoSolverABL(InfoSolverNek):
+    """Contain the information on a :class:`eturb.solvers.abl.Simul`
+    instance.
+
+    """
     def _init_root(self):
         super()._init_root()
         self.module_name = "eturb.solvers.abl"

@@ -1,13 +1,27 @@
 """
-Python package for scripted assistance.
+A Pythonic frontend to Nek5000.
+
+Sub-packages
+------------
 
 .. autosummary::
    :toctree:
 
-   solvers
    output
-   params
+   solvers
+
+Modules
+-------
+
+.. autosummary::
+   :toctree:
+
    info
+   log
+   magic
+   make
+   operators
+   params
    util
 
 """

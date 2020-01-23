@@ -49,6 +49,7 @@ Welcome to project *eTurb*'s documentation!
    CONTRIBUTING
    CHANGELOG
    AUTHORS
+   license
 
 Links
 =====

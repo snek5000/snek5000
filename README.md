@@ -24,7 +24,7 @@ cd -
 
 ### Easy way
 
-This workflow requires you to setup a python environment. There are two ways to
+This workflow requires you to setup a Python environment. There are two ways to
 do this (and it has to be done only once):
 
 1. Using `venv`
@@ -39,24 +39,39 @@ do this (and it has to be done only once):
    conda env create -n eturb -f environment.yml
    conda activate eturb
    ```
+After setting up Python, you can do either of the following:
 
-#### Run Snakemake
-```sh
-# Everything done via a Snakefile at once
-cd src/abl_nek5000/
-snakemake run
-cd -
+1. Run **Snakemake** in a bash (or similar) console:
+   ```sh
+   # Everything done via a Snakefile at once
+   cd src/abl_nek5000/
+   snakemake run
+   cd -
 
-# ... or one by one
-cd src/abl_nek5000/
-snakemake mesh
-snakemake compile
-snakemake run
-snakemake archive
-snakemake clean
-cd -
+   # ... or one by one
+   cd src/abl_nek5000/
+   snakemake mesh
+   snakemake compile
+   snakemake run
+   snakemake archive
+   snakemake clean
+   cd -
 
-```
+2. Use the **[`eturb` Python
+   API](https://exabl.github.io/eturb/_generated/eturb.html)**, based on
+   [fluidsim](https://fluidsim.readthedocs.io)
+   ```python
+   from eturb.solvers.abl import Simul
+
+   params = Simul.create_default_params()
+
+   # modify parameters as needed
+
+   sim = Simul(params)
+   sim.make.exec()  # by default starts a run
+   sim.make.exec(["mesh", "compile"])  # run rules in order
+   sim.make.exec(["run"], dryrun=True)  # simulate
+   ```
 
 ### Hard way
 
