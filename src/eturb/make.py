@@ -12,6 +12,7 @@ class Make:
     :param sim: A simulation instance
 
     """
+
     def __init__(self, sim):
         self.sim = sim
         self.path_run = sim.output.path_run
@@ -27,7 +28,7 @@ class Make:
     def list(self):
         """List rules."""
         with change_dir(self.path_run):
-            snakemake(self.file, workdir=self.path_run, listrules=True)
+            snakemake(self.file, listrules=True)
 
     def exec(self, rules=('run',), dryrun=False):
         """Execute snakemake rules in sequence."""
