@@ -1,10 +1,14 @@
 snakemake
-fluiddyn
 fluidsim
-flake8
 ipython
+colorlog
 breathe
 sphinx-rtd-theme
+recommonmark
+setuptools_scm
 pdbpp
 rope
+python-language-server
+fortran-language-server
 black
+flake8
