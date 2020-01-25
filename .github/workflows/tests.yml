@@ -24,7 +24,7 @@ jobs:
     - name: Clone private submodules
       run: |
         git config --file .gitmodules --get-regexp url | while read url; do
-         echo "$url" | sed -E "s|git@github.com:\|https://github.com/|https://${{ secrets.GITHUB_ACTIONS_PAT }}:${{ secrets.GITHUB_ACTIONS_PAT }}@github.com/|"
+         git config --file .gitmodules $(echo "$url" | sed -E "s|git@github.com:\|https://github.com/|https://${{ secrets.GITHUB_ACTIONS_PAT }}:${{ secrets.GITHUB_ACTIONS_PAT }}@github.com/|")
         done
         git submodule sync
         git submodule update --init --recursive
