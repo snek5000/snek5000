@@ -22,13 +22,13 @@ jobs:
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
 
-    - name: Clone private submodules FIXME
-      uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GITHUB_ACTIONS_PAT }}
-        repository: exabl/Nek5000
-        ref: develop
-        path: lib/Nek5000
+    - name: Clone private submodules
+      run: |
+        git config --file .gitmodules --get-regexp url | while read url; do
+         echo "$url" | sed -E "s|git@github.com:\|https://github.com/|https://${{ secrets.GITHUB_ACTIONS_PAT }}:${{ secrets.GITHUB_ACTIONS_PAT }}@github.com/|"
+        done
+        git submodule sync
+        git submodule update --init --recursive
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
