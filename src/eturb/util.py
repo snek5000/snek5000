@@ -4,6 +4,7 @@
 
 """
 import os
+import sys
 from contextlib import contextmanager
 from pathlib import Path
 from datetime import datetime
@@ -119,3 +120,31 @@ def change_dir(path_dir):
         yield
     finally:
         os.chdir(curdir)
+
+
+def init_params(Class):
+    """Instantiate an isolated ``params`` for a specific class."""
+    if hasattr(Class, "create_default_params"):
+        params = Class.create_default_params()
+    else:
+        from .params import Parameters
+
+        params = Parameters(tag="params")
+        Class._complete_params_with_default(params)
+
+    return params
+
+
+def docstring_params(Class):
+    """Creates a parameter instance and generate formatted docs for it. The
+    docs are defined by the ``params.<child>._set_doc`` method. Done only when
+    ``sphinx`` is already imported.
+
+    """
+    if "sphinx" in sys.modules:
+        params = init_params(Class)
+        doc = params._get_formatted_docs()
+    else:
+        doc = ""
+
+    return doc

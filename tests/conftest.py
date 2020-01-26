@@ -33,9 +33,8 @@ def sim():
 
 @pytest.fixture(scope="session")
 def oper():
-    from eturb.params import Parameters
     from eturb.operators import Operators as Class
+    from eturb.util import init_params
 
-    params = Parameters(tag="params")
-    Class._complete_params_with_default(params)
+    params = init_params(Class)
     return Class(params=params)
