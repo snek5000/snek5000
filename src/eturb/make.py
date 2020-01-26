@@ -30,7 +30,7 @@ class Make:
         with change_dir(self.path_run):
             snakemake(self.file, listrules=True)
 
-    def exec(self, rules=('run',), dryrun=False):
+    def exec(self, rules=("run",), dryrun=False):
         """Execute snakemake rules in sequence."""
         with change_dir(self.path_run):
             snakemake(self.file, targets=rules, dryrun=dryrun)

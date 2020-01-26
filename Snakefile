@@ -10,10 +10,8 @@ rule requirements:
     output: 'requirements.txt'
     shell: 'pip-compile'
 
-
 rule develop:
     shell: 'pip install -e .[dev]'
-
 
 rule docs:
     input: 'src/'
@@ -27,7 +25,20 @@ rule ctags:
     output:
         '.tags'
     params:
-        excludes=' '.join((f'--exclude={pattern}' for pattern in ('.snakemake', '__pycache__', 'obj', 'logs', '*.tar.gz', '*.f?????')))
+        excludes = ' '.join(
+            (
+                f'--exclude={pattern}'
+                for pattern in
+                (
+                    '.snakemake',
+                    '__pycache__',
+                    'obj',
+                    'logs',
+                    '*.tar.gz',
+                    '*.f?????'
+                )
+            )
+        )
     shell:
         """
         ctags -f {output} {params.excludes} --language-force=fortran -R {input.nek5000} {input.abl}
@@ -39,4 +50,4 @@ rule watch:
         per_second=5,
         rules='docs ctags'
     shell:
-        'watch -n {params.per_second} snakemake --nocolor --quiet {params.rules} 2>&1 &'
+        'nohup watch -n {params.per_second} snakemake {params.rules} 2>&1 > /tmp/watch.log&'

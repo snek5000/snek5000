@@ -3,7 +3,6 @@
 .. todo:: Load field files and make various plots of statistics
 
 """
-from pathlib import Path
 from ..log import logger
 
 try:
@@ -28,10 +27,10 @@ class PhysFields:
 
     def __init__(self, sim=None, path=None):
         self.sim = sim
-        if not path:
-            self.path_run = (
-                sim.path_run if hasattr(sim, "path_run") else Path.cwd()
-            )
+        if not path and sim:
+            self.path_run = sim.output.path_run
+        else:
+            self.path_run = path
 
     def read(self):
         path = self.path_run

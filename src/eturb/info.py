@@ -34,6 +34,7 @@ class InfoSolverABL(InfoSolverNek):
     instance.
 
     """
+
     def _init_root(self):
         super()._init_root()
         self.module_name = "eturb.solvers.abl"
