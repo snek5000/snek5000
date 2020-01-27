@@ -28,6 +28,17 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+## [0.1.1] - 2020-01-27
+
+### Added
+- Templates in `abl.templates` subpackage
+- Expand parameters and write methods in class `Operators`
+- Improved tests and documentation
+- Solver `abl` respects parameters and writes box and SIZE files.
+
+### Changed
+- Snakecase for `nek` parameters
+
 ## [0.1.0] - 2020-01-23
 
 ### Added
