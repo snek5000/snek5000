@@ -25,5 +25,8 @@ intersphinx-python:
 intersphinx-nek:
 	@python -msphinx.ext.intersphinx https://nek5000.github.io/NekDoc/objects.inv
 
+intersphinx-jinja2:
+	@python -msphinx.ext.intersphinx https://jinja.palletsprojects.com/en/2.10.x/objects.inv
+
 cleanall: clean
 	@rm -rf _generated/

@@ -42,25 +42,24 @@ importlib-metadata==1.4.0  # via jsonschema, pluggy
 ipython-genutils==0.2.0   # via nbformat, traitlets
 ipython==7.11.1
 jedi==0.15.2              # via ipython, python-language-server
-jinja2==2.10.3            # via sphinx
+jinja2==2.10.3
 jsonschema==3.2.0         # via nbformat, snakemake
 jupyter-core==4.6.1       # via nbformat
 kiwisolver==1.1.0         # via matplotlib
 markupsafe==1.1.1         # via jinja2
 matplotlib==3.1.2         # via fluiddyn
 mccabe==0.6.1             # via flake8
-more-itertools==8.1.0     # via zipp
 nbformat==5.0.4           # via snakemake
 numpy==1.18.1             # via fluiddyn, h5py, matplotlib, pandas, transonic, xarray
-packaging==20.0           # via sphinx
+packaging==20.1           # via sphinx
 pandas==0.25.3            # via xarray
-parso==0.5.2              # via jedi
+parso==0.6.0              # via jedi
 pathspec==0.7.0           # via black
 pdbpp==0.10.2
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
 pluggy==0.13.1            # via python-language-server
-prompt-toolkit==3.0.2     # via ipython
+prompt-toolkit==3.0.3     # via ipython
 psutil==5.6.7             # via fluiddyn, snakemake
 ptyprocess==0.6.0         # via pexpect
 pycodestyle==2.5.0        # via autopep8, flake8
@@ -99,11 +98,11 @@ typed-ast==1.4.1          # via black
 ujson==1.35               # via python-jsonrpc-server, python-language-server
 urllib3==1.25.8           # via requests
 wcwidth==0.1.8            # via prompt-toolkit
-wheel==0.33.6             # via astunparse
+wheel==0.34.0             # via astunparse
 wmctrl==0.3               # via pdbpp
 wrapt==1.11.2             # via snakemake
 xarray==0.14.1            # via fluidsim
-zipp==2.0.1               # via importlib-metadata
+zipp==2.1.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

@@ -179,6 +179,7 @@ html_favicon = "_static/favicon.ico"
 intersphinx_mapping = dict(
     python=("https://docs.python.org/3", None),
     nek=("https://nek5000.github.io/NekDoc", None),
+    jinja2=("https://jinja.palletsprojects.com/en/2.10.x", None),
 )
 
 # -- Other options ------------------------------------------------------------

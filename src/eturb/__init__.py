@@ -1,8 +1,7 @@
 """
 A Pythonic frontend to Nek5000.
 
-Sub-packages
-------------
+**Sub-packages**
 
 .. autosummary::
    :toctree:
@@ -10,8 +9,7 @@ Sub-packages
    output
    solvers
 
-Modules
--------
+**Modules**
 
 .. autosummary::
    :toctree:
