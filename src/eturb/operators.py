@@ -1,10 +1,7 @@
-"""Operators classes
-====================
+"""Operators
+============
 
 Information regarding mesh, mathematical operators, and domain decomposition.
-
-.. todo:: Generate SIZE and abl.box files (using sympy.codegen, jinja or
-          str.template)
 
 .. todo:: Move length to abl.par file and extrude it to allow double precision
           values.
@@ -15,6 +12,7 @@ Information regarding mesh, mathematical operators, and domain decomposition.
 """
 import math
 import sys
+import inspect
 from math import pi
 from .util import docstring_params
 
@@ -58,38 +56,40 @@ class Operators:
     .. note:: Some values are not available as parameters and instead
               automatically computed for generating the SIZE file.
 
-    ==============  ===================   =====================================
-    SIZE            `properties`          Comment
-    ==============  ===================   =====================================
-    ``lelg``        ``max_n_seq``         Max. number of elements globally
-    ``lelt``        ``max_n_loc``         | Max. number of elements per
-                                            processor (should be not smaller
-                                          | than ``lelg/lpmin``, i.e.
+    ==============  ============================= =====================================
+    SIZE            `properties`                  Comment
+    ==============  ============================= =====================================
+    ``lelg``        :any:`max_n_seq`              Max. number of elements globally
+    ``lelt``        :any:`max_n_loc`              | Max. number of elements per
+                                                    processor (should be not smaller
+                                                  | than ``lelg/lpmin``, i.e.
 
-    ``lelx``        None                  | **Automatically computed**. Max.
-                                            number of elements along x
-                                          | direction for the global tensor
-                                            product solver / dimensions.
+    ``lelx``        :any:`max_nx`                 | **Automatically computed**. Max.
+                                                    number of elements along x
+                                                  | direction for the global tensor
+                                                    product solver / dimensions.
 
-    ``lely``        None                  Same as above for ``y`` direction.
-    ``lelz``        None                  Same as above for ``z`` direction.
+    ``lely``        :any:`max_ny`                 Same as above for ``y`` direction.
+    ``lelz``        :any:`max_nz`                 Same as above for ``z`` direction.
 
-    ``lbelt``       None                  | **Automatically computed** as
-                                          |  ``lelt`` if ``"MHD" in
-                                            params.nek.problem_type.equation``.
-    ``lpelt``       None                  | **Automatically computed** as
-                                          |  ``lelt`` if ``"linear" in
-                                            params.nek.problem_type.equation``.
-    ``lcvelt``      None                  | **Automatically computed** as
-                                          |  ``lelt`` if
-                                            ``params.nek.cvode._enabled is
-                                            True``
+    ``lbelt``       :any:`order_mhd`              | **Automatically computed** as
+                                                  |  ``lelt`` if ``"MHD" in
+                                                    params.nek.problem_type.equation``.
+    ``lpelt``       :any:`order_linear`           | **Automatically computed** as
+                                                  |  ``lelt`` if ``"linear" in
+                                                    params.nek.problem_type.equation``.
+    ``lcvelt``      :any:`order_cvode`            | **Automatically computed** as
+                                                  |  ``lelt`` if
+                                                    ``params.nek.cvode._enabled is
+                                                    True``
 
-    ``lx1m``        None                  | p-order for mesh solver.
-                                            **Automatically computed** from
-                                          | ``params.nek.general.stressFormulat\
-ion``
-    ==============  ===================   =====================================
+    ``lx1m``        :any:`order_mesh_solver`      | p-order for mesh solver.
+                                                    **Automatically computed** based
+                                                  | ``params.nek.general.stress\
+_formulation`` and whether
+                                                  | Arbitrary Lagrangian-Eulerian (ALE)
+                                                    methods are used or not.
+    ==============  ============================= =====================================
 
     """
 
@@ -123,6 +123,7 @@ SIZE        params.oper           Comment
 ``lpmin``   ``nproc_min``         Min MPI ranks
 ``lpmax``   ``nproc_max``         Max MPI ranks
 ``ldimt``   ``scalars``           Number of auxilary fields (minimum 1).
+
 ==========  ===================   =============================================
 
 """
@@ -186,9 +187,10 @@ the default values.
 ==========      ===================   =========================================
 SIZE            params.oper.elem      Comment
 ==========      ===================   =========================================
-``lxd``         ``coef_dealiasing``   | p-order for over-integration.
+``lxd``         ``coef_dealiasing``   | p-order [#f1]_ for over-integration.
                                         **Automatically computed** from float
-                                      | ``coef_dealiasing``.
+                                      | ``coef_dealiasing``. See
+                                        :any:`order_dealiasing`
 
 ``lx1``         ``order``             p-order (avoid uneven and values <6).
 
@@ -199,13 +201,33 @@ SIZE            params.oper.elem      Comment
                                         computed** from boolean
                                       | ``staggered`` (`True` implies
                                         :math:`\mathbb{P}_N - \mathbb{P}_{N-2}`
-                                        and `False` implies :math:`\mathbb{P}_N
-                                        - \mathbb{P}_{N}` or a collocated grid).
+                                        and `False` implies
+                                      | :math:`\mathbb{P}_N
+                                        - \mathbb{P}_{N}` or a collocated
+                                        grid). See :any:`order_pressure`
 
 ==========      ===================   =========================================
 
-.. _[#p-order] Polynomial order. Number of GLL points per element.
+.. [#f1] Polynomial order which means the number of GLL / GL points per element.
 
+"""
+        )
+        attribs = {
+            "fast_diag": False,
+        }
+        params.oper._set_child("misc", attribs=attribs)
+        params.oper.misc._set_doc(
+            r"""
+Other miscellaneous parameters:
+
+==========      ===================   =========================================
+SIZE            params.oper.misc      Comment
+==========      ===================   =========================================
+``lfdm``        ``fast_diag``         | Equals to True for global tensor
+                                        product solver (that uses fast
+                                      | diagonalization method). ``False``
+                                        otherwise.
+==========      ===================   =========================================
 """
         )
 
@@ -215,19 +237,94 @@ SIZE            params.oper.elem      Comment
 
     @property
     def max_n_seq(self):
+        """Equivalent to ``lelg``."""
         params = self.params
         return next_power(params.oper.nx * params.oper.ny * params.oper.nz)
 
     @property
     def max_n_loc(self):
-        """The next integer greater than or equals ``max_n_seq /
-        params.oper.nproc_min``.
+        """Equivalent to ``lelt``. The next integer greater than or equals
+        ``max_n_seq / params.oper.nproc_min``.
         """
         return math.ceil(self.max_n_seq / self.params.oper.nproc_min)
 
     @property
+    def max_nx(self):
+        """Equivalent to ``lelx``."""
+        return next_power(self.params.oper.nx)
+
+    @property
+    def max_ny(self):
+        """Equivalent to ``lely``."""
+        return next_power(self.params.oper.ny)
+
+    @property
+    def max_nz(self):
+        """Equivalent to ``lelz``."""
+        return next_power(self.params.oper.nz)
+
+    @property
     def nb_fields(self):
+        """Used in .box file."""
         return self.params.oper.scalars + 1
+
+    @property
+    def order(self):
+        """Equivalent to ``lx1``."""
+        return self.params.oper.elem.order
+
+    @property
+    def order_dealiasing(self):
+        """Equivalent to ``lxd``."""
+        elem = self.params.oper.elem
+        return math.ceil(elem.order / elem.coef_dealiasing)
+
+    @property
+    def order_pressure(self):
+        """Equivalent to ``lx2``."""
+        pn = self.order
+        staggered = self.params.oper.elem.staggered
+        return pn - 2 if staggered else pn
+
+    @property
+    def order_mesh_solver(self):
+        """
+        Equivalent to ``lx1m``.
+
+        .. todo:: Must include a condition to check if ALE methods are used or
+                  not.
+        """
+        return (
+            self.order
+            if (
+                self.params.nek.problemtype.stress_formulation
+                # or ALE
+            )
+            else 1
+        )
+
+    @property
+    def order_mhd(self):
+        """Equivalent to ``lbelt``."""
+        return (
+            self.order
+            if "mhd" in self.params.nek.problemtype.equation.lower()
+            else 1
+        )
+
+    @property
+    def order_linear(self):
+        """Equivalent to ``lpelt``."""
+        return (
+            self.order
+            if "linear" in self.params.nek.problemtype.equation.lower()
+            else 1
+        )
+
+    @property
+    def order_cvode(self):
+        """Equivalent to ``lcvelt``."""
+        return self.order if self.params.nek.cvode._enabled else 1
 
     def memory_required(self):
         """According to FAQ_ the following estimate::
@@ -242,7 +339,7 @@ SIZE            params.oper.elem      Comment
         elem = params.oper.elem
 
         lx1 = elem.order
-        ldim = params.oper.ndim
+        ldim = params.oper.dim
         ly1 = lx1
         lz1 = 1 + (ldim - 2) * (lx1 - 1)
         lelt = self.max_n_loc
@@ -276,7 +373,7 @@ SIZE            params.oper.elem      Comment
         tool.
 
         :param jinja2.environment.Template template: Template instance like
-            :ref:``abl.templates.box``
+            :code:`abl.templates.box`
 
         :param boundary: Boundary conditions
         :type boundary: tuple[str]
@@ -286,7 +383,7 @@ SIZE            params.oper.elem      Comment
         """
         params = self.params
         comments += """
-Autogenerated using eturb.operators.write_box()
+Autogenerated using eturb.operators.Operators.write_box()
 
 If dim < 0 .re2 file will be generated
 
@@ -322,23 +419,40 @@ Note that the character bcs _must_ have 3 spaces.
             ),
         }
         options = {
-            "dim": str(-params.oper.dim),
-            "nb_fields": str(self.nb_fields),  # scalars + velocity
             "comments": comments,
+            "dim": str(-params.oper.dim),
             "grid_info": grid_info,
+            "nb_fields": str(self.nb_fields),  # scalars + velocity
         }
 
         output = template.render(**options)
         fp.write(output)
 
-    def write_size(self, template, fp=sys.stdout):
+    def write_size(self, template, fp=sys.stdout, comments=""):
         """Write the SIZE file which is required for compilation.
 
         :param jinja2.environment.Template template: Template instance like
-            :ref:``abl.templates.size``
+            :code:`abl.templates.size`
 
         """
-        pass
+        comments += """
+Autogenerated using eturb.operators.Operators.write_size()
+"""
+        options = {
+            "comments": comments,
+            "params": self.params,
+        }
+        # Include all @property attributes to the template
+        options.update(
+            {
+                name: getattr(self, name)
+                for name, _ in inspect.getmembers(
+                    self.__class__, lambda attr: isinstance(attr, property)
+                )
+            }
+        )
+        output = template.render(**options)
+        fp.write(output)
 
 
-__doc__ += docstring_params(Operators)
+Operators.__doc__ += docstring_params(Operators)

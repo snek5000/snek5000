@@ -16,9 +16,7 @@ def test_box_template(oper):
     )
 
 
-def test_size_template(oper):
+def test_size_template(sim):
     from abl.templates import size
 
-    oper.write_size(
-        size
-    )
+    sim.oper.write_size(size, comments=__name__)
