@@ -98,14 +98,15 @@ _formulation`` and whether
         """This static method is used to complete the *params* container.
         """
         attribs = {
-            "nx": 48,
-            "ny": 48,
-            "nz": 48,
+            "nx": 8,
+            "ny": 8,
+            "nz": 8,
             "Lx": 2 * pi,
             "Ly": 2 * pi,
             "Lz": 2 * pi,
+            "boundary": ["P", "P", "W", "W", "P", "P"],
             "dim": 3,
-            "nproc_min": 8,
+            "nproc_min": 4,
             "nproc_max": 32,
             "scalars": 1,
         }
@@ -368,7 +369,7 @@ SIZE            params.oper.misc      Comment
             string += f"- {key} = {value}\n"
         return f"Nek5000 operator:\n{string}"
 
-    def write_box(self, template, boundary, fp=sys.stdout, comments=""):
+    def write_box(self, template, fp=sys.stdout, comments=""):
         """Write the .box file which is input for the ``genbox`` meshing
         tool.
 
@@ -399,6 +400,8 @@ Note that the character bcs _must_ have 3 spaces.
             fmt = "{:.1f} {:.4f} {:.1f}"
             args = (float(value) for value in args)
             return fmt.format(*args)
+
+        boundary = self.params.oper.boundary
 
         for bc in boundary:
             if len(bc) > 3:

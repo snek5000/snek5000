@@ -4,7 +4,7 @@
 A solver which specifically deals with the ABL case files.
 
 """
-from abl import get_root
+from abl import get_root, templates
 
 from .. import logger, mpi
 from ..info import InfoSolverABL
@@ -25,6 +25,23 @@ class SimulABL(SimulNek):
         params._read_par(primary_par_file)
 
         return params
+
+    def __init__(self, params):
+        super().__init__(params)
+        if mpi.rank == 0:
+            box_file = self.path_run / f"{self.output.name_pkg}.box"
+            logger.info(f"Writing box file... {box_file}")
+            with open(box_file, "w") as fp:
+                self.oper.write_box(
+                    templates.box, fp, comments=params.short_name_type_run
+                )
+
+            size_file = self.path_run / "SIZE"
+            logger.info(f"Writing SIZE file... {size_file}")
+            with open(size_file, "w") as fp:
+                self.oper.write_size(
+                    templates.size, fp, comments=params.short_name_type_run
+                )
 
 
 Simul = SimulABL

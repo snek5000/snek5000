@@ -157,7 +157,7 @@ When scalars are used, the keys of each scalar are defined under the section
             self.output.copy(self.path_run)
             par_file = self.path_run / f"{self.output.name_pkg}.par"
             with open(par_file, "w") as fp:
-                self.params._write_par(fp)
+                params._write_par(fp)
         else:
             self.path_run = None
             if mpi.rank == 0:
