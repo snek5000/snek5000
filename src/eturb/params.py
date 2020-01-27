@@ -9,6 +9,7 @@ from sys import stdout
 
 from fluiddyn.util import import_class
 from fluidsim.base.params import Parameters as _Parameters
+from inflection import camelize, underscore
 
 from .info import InfoSolverBase
 
@@ -48,36 +49,53 @@ class Parameters(_Parameters):
         self._par_file.read(path)
 
         for section in self._par_file.sections():
-            params_section = getattr(params_nek, section)
+            params_section = getattr(params_nek, underscore(section))
+
             for option, value in self._par_file.items(section):
                 if value in literal_nek2python:
                     value = literal_nek2python[value]
-                setattr(params_section, option, value)
+                setattr(params_section, underscore(option), value)
 
     def _update_par_section(self, section_name, section_dict):
-        """Updates a section of the ``par_file`` object."""
+        """Updates a section of the ``par_file`` object from a dictionary."""
         par = self._par_file
-        if section_name not in par.sections():
-            par.add_section(section_name)
+        section_name_par = section_name.upper()
+
+        if section_name_par not in par.sections():
+            par.add_section(section_name_par)
         for option, value in section_dict.items():
             if value in literal_python2nek:
                 value = literal_python2nek[value]
+
             if value in literal_prune:
                 continue
-            par.set(section_name, str(option), str(value))
+
+            # Make everything consistent where values refer to option names
+            if option in ("stop_at", "write_control", "equation"):
+                value = camelize(str(value), uppercase_first_letter=False)
+
+            par.set(
+                section_name_par,
+                camelize(str(option), uppercase_first_letter=False),
+                str(value),
+            )
 
     def _sync_par(self):
         """Sync values in ``self.nek`` to ``self._par_file`` object."""
         par = self._par_file
-        #  par.read_dict(self._make_dict_tree())
-        for section_name in par.sections():
-            section_dict = getattr(self.nek, section_name)._make_dict_tree()
-            self._update_par_section(section_name, section_dict)
-            enabled = par.getboolean(section_name, "_enabled")
-            if enabled:
-                par.remove_option(section_name, "_enabled")
-            else:
-                par.remove_section(section_name)
+
+        if hasattr(self, "nek"):
+            for section_name in self.nek._tag_children:
+                section_dict = getattr(self.nek, section_name)._make_dict_tree()
+
+                section_name_par = section_name.upper()
+                self._update_par_section(section_name_par, section_dict)
+
+                enabled = par.getboolean(section_name_par, "_enabled")
+                if enabled:
+                    par.remove_option(section_name_par, "_enabled")
+                else:
+                    par.remove_section(section_name_par)
 
     def _write_par(self, path=stdout):
         """Write contents of ``self._par_file`` to file handler opened in disk

@@ -48,15 +48,16 @@ class SimulNek(SimulBase):
         params_nek = params.nek
 
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
-        for section in ("GENERAL", "PROBLEMTYPE", "VELOCITY", "PRESSURE"):
+        for section in ("general", "problemtype", "velocity", "pressure"):
             params_nek._set_child(section, {"_enabled": True})
-            params._par_file.add_section(section)
+            section_name_par = section.upper()
+            params._par_file.add_section(section_name_par)
 
         for section in (
-            "MESH",
-            "TEMPERATURE",
-            "SCALAR01",
-            "CVODE",
+            "mesh",
+            "temperature",
+            "scalar01",
+            "cvode",
         ):
             params_nek._set_child(section, {"_enabled": False})
 
@@ -64,59 +65,59 @@ class SimulNek(SimulBase):
             """
 The sections are:
 
-* ``GENERAL`` (mandatory)
-* ``PROBLEMTYPE``
-* ``MESH``
-* ``VELOCITY``
-* ``PRESSURE`` (required for velocity)
-* ``TEMPERATURE``
-* ``SCALAR%%``
-* ``CVODE``
+* ``general`` (mandatory)
+* ``problemtype``
+* ``mesh``
+* ``velocity``
+* ``pressure`` (required for velocity)
+* ``temperature``
+* ``scalar%%``
+* ``cvode``
 
 When scalars are used, the keys of each scalar are defined under the section
-``SCALAR%%`` varying between ``SCALAR01`` and ``SCALAR99``.
+``scalar%%`` varying between ``scalar01`` and ``scalar99``.
 """
         )
-        params_nek.GENERAL._set_attribs(
+        params_nek.general._set_attribs(
             dict(
-                startFrom="",
-                stopAt="numSteps",
-                endTime=math.nan,
-                numSteps=1,
+                start_from="",
+                stop_at="numSteps",
+                end_time=math.nan,
+                num_steps=1,
                 dt=math.nan,
-                variableDT=True,
-                targetCFL=0.5,
-                writeControl="timeStep",
-                writeInterval=10,
+                variable_dt=True,
+                target_cfl=0.5,
+                write_control="timeStep",
+                write_interval=10,
                 filtering=None,
-                filterCutoffRatio=0.65,
-                filterWeight=12.0,
-                writeDoublePrecision=True,
+                filter_cutoff_ratio=0.65,
+                filter_weight=12.0,
+                write_double_precision=True,
                 dealiasing=True,
-                timeStepper="BDF2",
+                time_stepper="BDF2",
                 extrapolation="standard",
-                optLevel=2,
-                loglevel=2,
-                userParam03=1,
+                opt_level=2,
+                log_level=2,
+                user_param03=1,
             )
         )
-        params_nek.PROBLEMTYPE._set_attribs(
+        params_nek.problemtype._set_attribs(
             dict(
                 equation="incompNS",
-                variableProperties=False,
-                stressFormulation=False,
+                variable_properties=False,
+                stress_formulation=False,
             )
         )
-        common = dict(residualTol=math.nan, residualProj=False,)
-        params_nek.VELOCITY._set_attribs(common)
-        params_nek.PRESSURE._set_attribs(common)
-        params_nek.TEMPERATURE._set_attribs(common)
-        params_nek.SCALAR01._set_attribs(common)
+        common = dict(residual_tol=math.nan, residual_proj=False,)
+        params_nek.velocity._set_attribs(common)
+        params_nek.pressure._set_attribs(common)
+        params_nek.temperature._set_attribs(common)
+        params_nek.scalar01._set_attribs(common)
 
-        params_nek.VELOCITY._set_attribs(
+        params_nek.velocity._set_attribs(
             dict(viscosity=math.nan, density=math.nan)
         )
-        params_nek.PRESSURE._set_attrib("preconditioner", "semg_xxt")
+        params_nek.pressure._set_attrib("preconditioner", "semg_xxt")
         return params
 
     def __init__(self, params):

@@ -1,6 +1,7 @@
 snakemake
 fluidsim
 jinja2
+inflection
 ipython
 colorlog
 breathe
