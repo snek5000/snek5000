@@ -11,9 +11,7 @@ def test_properties(oper):
 def test_box_template(oper):
     from abl.templates import box
 
-    oper.write_box(
-        box, boundary=("P", "P", "W", "W", "P", "P"), comments=__name__
-    )
+    oper.write_box(box, comments=__name__)
 
 
 def test_size_template(sim):

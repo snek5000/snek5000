@@ -3,7 +3,7 @@
 
 """
 from snakemake import snakemake
-from .util import change_dir
+from snakemake.executors import change_working_directory as change_dir
 
 
 class Make:
