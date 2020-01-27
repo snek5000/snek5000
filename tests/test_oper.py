@@ -4,9 +4,21 @@ def test_init(oper):
 
 
 def test_properties(oper):
-    params = oper.params
-    params.oper.nx = params.oper.ny = params.oper.nz = 9
-    params.oper.nproc_min = 6
-
     assert oper.max_n_seq == 1024
     assert oper.max_n_loc == 171
+
+
+def test_box_template(oper):
+    from abl.templates import box
+
+    oper.write_box(
+        box, boundary=("P", "P", "W", "W", "P", "P"), comments=__name__
+    )
+
+
+def test_size_template(oper):
+    from abl.templates import size
+
+    oper.write_size(
+        size
+    )

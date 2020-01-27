@@ -37,4 +37,7 @@ def oper():
     from eturb.util import init_params
 
     params = init_params(Class)
+    params.oper.nx = params.oper.ny = params.oper.nz = 9
+    params.oper.nproc_min = 6
+
     return Class(params=params)
