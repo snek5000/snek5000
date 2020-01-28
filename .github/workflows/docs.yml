@@ -48,16 +48,19 @@ jobs:
       id: apt-cache
       uses: actions/cache@v1
       with:
-        path: ${{ env.APT_CACHE_DIR }}
-        key: ${{ runner.os }}-apt-${{ hashFiles( env.APT_CACHE_DIR + '/lists/*'}}
+        path: /var/cache/apt
+        key: ${{ runner.os }}-apt-${{ hashFiles('.github/workflows/*') }}
         restore-keys: |
           ${{ runner.os }}-apt-
+
+    - name: Update apt
+      if: steps.apt-cache.outputs.cache-hit != 'true'
+      run: sudo apt update
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install .[docs]
-        sudo apt update
         sudo apt install doxygen graphviz
 
     - name: Build docs
