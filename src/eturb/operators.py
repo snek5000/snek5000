@@ -56,40 +56,40 @@ class Operators:
     .. note:: Some values are not available as parameters and instead
               automatically computed for generating the SIZE file.
 
-    ==============  ============================= =====================================
-    SIZE            `properties`                  Comment
-    ==============  ============================= =====================================
-    ``lelg``        :any:`max_n_seq`              Max. number of elements globally
-    ``lelt``        :any:`max_n_loc`              | Max. number of elements per
-                                                    processor (should be not smaller
-                                                  | than ``lelg/lpmin``, i.e.
+    ==============  ======================== ==================================
+    SIZE            `properties`             Comment
+    ==============  ======================== ==================================
+    ``lelg``        :any:`max_n_seq`         Max. number of elements globally
+    ``lelt``        :any:`max_n_loc`         | Max. number of elements per
+                                               processor (should be not smaller
+                                             | than ``lelg/lpmin``, i.e.
 
-    ``lelx``        :any:`max_nx`                 | **Automatically computed**. Max.
-                                                    number of elements along x
-                                                  | direction for the global tensor
-                                                    product solver / dimensions.
+    ``lelx``        :any:`max_nx`            | **Automatically computed**. Max.
+                                               number of elements along x
+                                             | direction for the global tensor
+                                               product solver / dimensions.
 
-    ``lely``        :any:`max_ny`                 Same as above for ``y`` direction.
-    ``lelz``        :any:`max_nz`                 Same as above for ``z`` direction.
+    ``lely``        :any:`max_ny`            Same as above for ``y`` direction.
+    ``lelz``        :any:`max_nz`            Same as above for ``z`` direction.
 
-    ``lbelt``       :any:`order_mhd`              | **Automatically computed** as
-                                                  |  ``lelt`` if ``"MHD" in
-                                                    params.nek.problem_type.equation``.
-    ``lpelt``       :any:`order_linear`           | **Automatically computed** as
-                                                  |  ``lelt`` if ``"linear" in
-                                                    params.nek.problem_type.equation``.
-    ``lcvelt``      :any:`order_cvode`            | **Automatically computed** as
-                                                  |  ``lelt`` if
-                                                    ``params.nek.cvode._enabled is
-                                                    True``
+    ``lbelt``       :any:`order_mhd`         | **Automatically computed** as
+                                             |  ``lelt`` if ``"MHD" in
+                                               params.nek.problem_type.equation``.
+    ``lpelt``       :any:`order_linear`      | **Automatically computed** as
+                                             |  ``lelt`` if ``"linear" in
+                                               params.nek.problem_type.equation``.
+    ``lcvelt``      :any:`order_cvode`       | **Automatically computed** as
+                                             |  ``lelt`` if
+                                               ``params.nek.cvode._enabled is
+                                               True``
 
-    ``lx1m``        :any:`order_mesh_solver`      | p-order for mesh solver.
-                                                    **Automatically computed** based
-                                                  | ``params.nek.general.stress\
+    ``lx1m``        :any:`order_mesh_solver` | p-order for mesh solver.
+                                               **Automatically computed** based
+                                             | ``params.nek.general.stress\
 _formulation`` and whether
-                                                  | Arbitrary Lagrangian-Eulerian (ALE)
-                                                    methods are used or not.
-    ==============  ============================= =====================================
+                                             | Arbitrary Lagrangian-Eulerian
+                                               (ALE) methods are used or not.
+    ==============  ======================== ==================================
 
     """
 
@@ -168,6 +168,7 @@ SIZE            params.oper.max       Comment
 ``nsessmax``    ``sessions``          Max. sessions to NEKNEK
 
 ==============  ===================   =========================================
+
 """
         )
 
@@ -229,6 +230,7 @@ SIZE            params.oper.misc      Comment
                                       | diagonalization method). ``False``
                                         otherwise.
 ==========      ===================   =========================================
+
 """
         )
 
@@ -294,6 +296,7 @@ SIZE            params.oper.misc      Comment
 
         .. todo:: Must include a condition to check if ALE methods are used or
                   not.
+
         """
         return (
             self.order
@@ -373,13 +376,12 @@ SIZE            params.oper.misc      Comment
         """Write the .box file which is input for the ``genbox`` meshing
         tool.
 
-        :param jinja2.environment.Template template: Template instance like
-            :code:`abl.templates.box`
-
-        :param boundary: Boundary conditions
-        :type boundary: tuple[str]
-
-        :param fp: File pointer to write to
+        Parameters
+        ----------
+        template : jinja2.environment.Template
+            Template instance like :code:`abl.templates.box`
+        fp : io.TextIOWrapper
+            File handler to write to
 
         """
         params = self.params
@@ -458,4 +460,4 @@ Autogenerated using eturb.operators.Operators.write_size()
         fp.write(output)
 
 
-Operators.__doc__ += docstring_params(Operators)
+Operators.__doc__ += "\n" + docstring_params(Operators, indent_len=4)

@@ -7,7 +7,7 @@ au BufNewFile,BufRead *.usr,*.inc set filetype=fortran
 
 " Fuzzy search:
 " Use :fin[d] command
-set path+=src/**,lib/Nek5000/core/**
+set path=src/**,lib/Nek5000/core/**,tests,docs,.github/workflows
 set wildignore+=*.pyc,*.o,*.so
 
 " Ctags: https://ctags.io

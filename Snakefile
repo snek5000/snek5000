@@ -15,7 +15,7 @@ rule develop:
 
 rule docs:
     input: 'src/'
-    shell: 'cd docs && make html'
+    shell: 'cd docs && SPHINXOPTS="-W" make html'
 
 rule ctags:
     input:

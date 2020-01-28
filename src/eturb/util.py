@@ -123,7 +123,7 @@ def init_params(Class):
     return params
 
 
-def docstring_params(Class, sections=False):
+def docstring_params(Class, sections=False, indent_len=4):
     """Creates a parameter instance and generate formatted docs for it. The
     docs are defined by the ``params.<child>._set_doc`` method. Done only when
     ``sphinx`` is already imported.
@@ -137,13 +137,21 @@ def docstring_params(Class, sections=False):
 
     if not sections:
         lines = []
+        indent = " " * indent_len
+        prev_line = ""
+
         for line in doc.splitlines():
             if line.startswith("Documentation for"):
-                lines.append(f"**{line}**")
-            elif line.startswith("-----") or line.startswith("~~~~~"):
+                lines.append(f"{indent}**{line.lstrip()}**")
+            elif "Documentation for" in prev_line and any(
+                line.startswith(underline)
+                for underline in ("====", "----", "~~~~")
+            ):
                 continue
             else:
-                lines.append(line)
+                lines.append(indent + line)
+
+            prev_line = line
 
         doc = "\n".join((lines))
 

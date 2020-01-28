@@ -45,9 +45,7 @@ print("sys.path =\n   ", "\n    ".join(sys.path))
 
 project = "eturb"
 _today = date.today()
-copyright = (
-    f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
-)
+copyright = f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
 author = "Ashwin Vishnu Mohanan"
 
 version = ".".join(eturb.__version__.split(".")[:3])
@@ -63,8 +61,8 @@ release = eturb.__version__
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "recommonmark",
@@ -186,10 +184,12 @@ intersphinx_mapping = dict(
 autosummary_generate = True
 
 autodoc_default_options = {
-    'members': True,
+    "members": True,
     #  'member-order': 'bysource',
     #  'special-members': '__init__',
     #  'undoc-members': True,
     #  'exclude-members': '__weakref__'
 }
 todo_include_todos = True
+
+napoleon_numpy_docstring = True
