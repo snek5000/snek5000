@@ -43,6 +43,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
+    - name: Cache site packages
+      id: python-site
+      uses: actions/cache@v1
+      with:
+        path: ${{ env.RUNNER_TOOL_CACHE }}/Python
+        key: ${{ runner.os }}-site-${{ hashFiles('**/setup.*') }}
+        restore-keys: |
+          ${{ runner.os }}-site-
+
     - name: Install dependencies
       run: |
         python -m site
