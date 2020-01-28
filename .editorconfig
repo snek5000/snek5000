@@ -16,6 +16,10 @@ trim_trailing_whitespace = false
 [*.py]
 charset = utf-8
 
+# Nek5000 is full of trailing spaces
+[*.f]
+trim_trailing_whitespace = false
+
 # Shell scripts, yaml, toml etc.
 [*.{sh,yml,toml}]
 indent_size = 2
