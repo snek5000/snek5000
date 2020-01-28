@@ -4,7 +4,7 @@ on: [push]
 
 env:
   PIP_CACHE_DIR: ~/.cache/pip
-  DOXYGEN_VERSION: 1.8.17
+  APT_CACHE_DIR: /var/cache/apt
 
 jobs:
   build:
@@ -44,27 +44,24 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: Cache doxygen
-      id: doxygen-cache
+    - name: Cache apt
+      id: apt-cache
       uses: actions/cache@v1
       with:
-        path: ./doxygen-${{ env.DOXYGEN_VERSION }}
-        key: ${{ runner.os }}-doxygen-${{ env.DOXYGEN_VERSION }}
+        path: ${{ env.APT_CACHE_DIR }}
+        key: ${{ runner.os }}-apt-${{ hashFiles( env.APT_CACHE_DIR + '/lists/*'}}
         restore-keys: |
-          ${{ runner.os }}-doxygen-
+          ${{ runner.os }}-apt-
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install .[docs]
-        if [ ! -d "doxygen-${DOXYGEN_VERSION}" ]; then
-          curl -LO http://doxygen.nl/files/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
-          tar -xf doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
-        fi
+        sudo apt update
+        sudo apt install doxygen graphviz
 
     - name: Build docs
       run: |
-        export PATH="${GITHUB_WORKSPACE}/doxygen-${DOXYGEN_VERSION}/bin":${PATH}
         cd docs
         make html
         touch _build/html/.nojekyll
