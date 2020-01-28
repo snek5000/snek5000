@@ -53,7 +53,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ${{ steps.site.outputs.dir }}
-        key: ${{ runner.os }}-site-${{ hashFiles('**/setup.*') }}
+        key: ${{ runner.os }}-site-${{ hashFiles('**/requirements.*') }}
         restore-keys: |
           ${{ runner.os }}-site-
 
