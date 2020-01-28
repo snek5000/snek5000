@@ -43,11 +43,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
+    - name: Get path to site packages
+      id: site
+      run: |
+        python -c "import site; print('::set-output name=dir::' + site.getsitepackages().pop())"
+
     - name: Cache site packages
-      id: python-site
+      id: site-cache
       uses: actions/cache@v1
       with:
-        path: ${{ env.RUNNER_TOOL_CACHE }}/Python
+        path: ${{ steps.site.outputs.dir }}
         key: ${{ runner.os }}-site-${{ hashFiles('**/setup.*') }}
         restore-keys: |
           ${{ runner.os }}-site-
