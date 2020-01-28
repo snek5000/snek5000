@@ -48,14 +48,14 @@ jobs:
       run: |
         python -c "import site; print('::set-output name=dir::' + site.getsitepackages().pop())"
 
-    - name: Cache site packages
-      id: site-cache
+    - name: Cache python
+      id: python-cache
       uses: actions/cache@v1
       with:
-        path: ${{ steps.site.outputs.dir }}
-        key: ${{ runner.os }}-site-${{ hashFiles('**/requirements.*') }}
+        path: ${{ env.pythonLocation }}
+        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.*') }}
         restore-keys: |
-          ${{ runner.os }}-site-
+          ${{ runner.os }}-python-
 
     - name: Install dependencies
       run: |
