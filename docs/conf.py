@@ -190,6 +190,8 @@ autodoc_default_options = {
     #  'undoc-members': True,
     #  'exclude-members': '__weakref__'
 }
+autodoc_mock_imports = ["IPython"]
+
 todo_include_todos = True
 
 napoleon_numpy_docstring = True
