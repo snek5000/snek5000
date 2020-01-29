@@ -66,5 +66,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-* `Documentation produced with Doxygen <doxygen/files.html>`_
+* `Documentation produced with Doxygen <doxygen/modules.html>`_
 
