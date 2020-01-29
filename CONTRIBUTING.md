@@ -17,6 +17,13 @@
     * `stable`: main branch tracking the stable version 17
     * `develop`: development branch
 
+  The following make working with submodules easy and ensures consistency:
+  ```sh
+  # Enable recursion for relevant commands, such that
+  # regular commands recurse into submodules by default
+  git config submodule.recurse true
+  ```
+
 * **Testing**: [Run `pytest`](https://pytest.readthedocs.io/) from the
   top-level directory. The test-cases can be found under `tests/` directory.
 * **Debugging**: Set the environment variable:
