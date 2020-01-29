@@ -37,6 +37,7 @@
 # Nek5000 build files
 .state
 src/*/obj
+src/*/makefile_usr.inc
 src/*/*.f
 src/*/*.ma2
 src/*/*.re2
