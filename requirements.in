@@ -3,6 +3,7 @@ fluidsim
 jinja2
 inflection
 ipython
+click
 colorlog
 breathe
 sphinx-rtd-theme
