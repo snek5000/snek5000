@@ -8,15 +8,15 @@ from abl import get_root, templates
 
 from .. import logger, mpi
 from ..info import InfoSolverABL
-from .base import SimulNek
+from .kth import SimulKTH
 
 
-class SimulABL(SimulNek):
+class SimulABL(SimulKTH):
     InfoSolver = InfoSolverABL
 
     @staticmethod
     def _complete_params_with_default(params):
-        params = SimulNek._complete_params_with_default(params)
+        params = SimulKTH._complete_params_with_default(params)
 
         # Synchronize baseline parameters
         primary_par_file = get_root() / "abl.par"

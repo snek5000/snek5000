@@ -49,7 +49,7 @@ class Parameters(_Parameters):
         self._par_file.read(path)
 
         for section in self._par_file.sections():
-            params_section = getattr(params_nek, underscore(section))
+            params_section = getattr(params_nek, section.lower().lstrip('_'))
 
             for option, value in self._par_file.items(section):
                 if value in literal_nek2python:
@@ -59,7 +59,7 @@ class Parameters(_Parameters):
     def _update_par_section(self, section_name, section_dict):
         """Updates a section of the ``par_file`` object from a dictionary."""
         par = self._par_file
-        section_name_par = section_name.upper()
+        section_name_par = section_name.upper().lstrip("_")
 
         if section_name_par not in par.sections():
             par.add_section(section_name_par)
