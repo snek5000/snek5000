@@ -77,16 +77,16 @@ After setting up Python, you can do either of the following:
 
 ```sh
 # Build case
-cd src/abl_nek5000/
-CASE="3D_ABL"
+cd src/abl/
+CASE="abl"
 echo "$CASE.box" | genbox
-mv -f box.re2 3D_ABL.re2
+mv -f box.re2 abl.re2
 echo "$CASE\n0.01" | genmap
 FFLAGS="-mcmodel=medium -march=native" CFLAGS="-mcmodel=medium -march=native" makenek
 cd -
 
 # Run case
-cd src/abl_nek5000/
+cd src/abl/
 nekmpi $CASE <nb_procs> # foreground
 nekbmpi $CASE <nb_procs> # background
 cd -
