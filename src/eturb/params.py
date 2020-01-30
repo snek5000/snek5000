@@ -29,6 +29,10 @@ class Parameters(_Parameters):
 
     .. automethod: _read_par
 
+
+    :todo: Consolidate the logic of param to par file syncing in two methods!
+           More tests to see if it works.
+
     """
 
     def __init__(self, *args, **kwargs):
