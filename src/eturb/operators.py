@@ -311,7 +311,7 @@ SIZE            params.oper.misc      Comment
     def order_mhd(self):
         """Equivalent to ``lbelt``."""
         return (
-            self.order
+            self.max_n_loc
             if "mhd" in self.params.nek.problemtype.equation.lower()
             else 1
         )
@@ -320,7 +320,7 @@ SIZE            params.oper.misc      Comment
     def order_linear(self):
         """Equivalent to ``lpelt``."""
         return (
-            self.order
+            self.max_n_loc
             if "linear" in self.params.nek.problemtype.equation.lower()
             else 1
         )
@@ -328,7 +328,7 @@ SIZE            params.oper.misc      Comment
     @property
     def order_cvode(self):
         """Equivalent to ``lcvelt``."""
-        return self.order if self.params.nek.cvode._enabled else 1
+        return self.max_n_loc if self.params.nek.cvode._enabled else 1
 
     def memory_required(self):
         """According to FAQ_ the following estimate::
