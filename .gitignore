@@ -69,3 +69,9 @@ docs/_generated
 
 # Ctags
 .tags
+
+# Scripts
+bin/*.stdout
+bin/*.stderr
+bin/launcher_*.sh
+bin/*_JOB.md
