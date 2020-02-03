@@ -52,3 +52,10 @@ rule watch:
         rules='docs ctags'
     shell:
         'nohup watch -n {params.per_second} snakemake {params.rules} 2>&1 > /tmp/watch.log&'
+
+rule salloc:
+    params:
+        project='snic2019-1-2',
+        walltime='05:00'
+    shell:
+        'interactive -A {params.project} -t {params.walltime} -N 1'
