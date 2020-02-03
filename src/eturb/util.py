@@ -110,9 +110,9 @@ def activate_paths():
     return source_root, path
 
 
-def init_params(Class):
+def init_params(Class, isolated_unit=False):
     """Instantiate an isolated ``params`` for a specific class."""
-    if hasattr(Class, "create_default_params"):
+    if hasattr(Class, "create_default_params") and not isolated_unit:
         params = Class.create_default_params()
     else:
         from .params import Parameters
@@ -130,7 +130,7 @@ def docstring_params(Class, sections=False, indent_len=4):
 
     """
     if "sphinx" in sys.modules:
-        params = init_params(Class)
+        params = init_params(Class, isolated_unit=True)
         doc = params._get_formatted_docs()
     else:
         doc = ""

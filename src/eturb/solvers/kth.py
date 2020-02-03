@@ -1,3 +1,8 @@
+"""KTH base solver
+==================
+
+"""
+from ..util import docstring_params
 from .base import SimulNek
 
 
@@ -9,17 +14,15 @@ class SimulKTH(SimulNek):
         params = SimulNek._complete_params_with_default(params)
 
         for section in ("runpar", "monitor", "chkpoint", "stat"):
-            params.nek._set_child(section, {"_enabled": True})
-            section_name_par = "_" + section.upper()
-            params._par_file.add_section(section_name_par)
+            params.nek._set_child(section)
 
         attribs = {"parf_write": False, "parf_name": "outparfile"}
         params.nek.runpar._set_attribs(attribs)
         params.nek.runpar._set_doc(
             """
-[_RUNPAR]               # Runtime parameter section for rprm module
-PARFWRITE            = no                     # Do we write runtime parameter file
-PARFNAME             = outparfile             # Runtime parameter file name for output (without .par)
+    *Runtime parameter section for rprm module*
+    :parf_write: Do we write runtime parameter file
+    :parf_name: Runtime parameter file name for output (without .par)
 """
         )
 
@@ -27,9 +30,9 @@ PARFNAME             = outparfile             # Runtime parameter file name for 
         params.nek.monitor._set_attribs(attribs)
         params.nek.monitor._set_doc(
             """
-[_MONITOR]              # Runtime parameter section for monitor module
-LOGLEVEL             = 4                      # Logging threshold for toolboxes
-WALLTIME             = 23:45                  # Simulation wall time
+    *Runtime parameter section for monitor module*
+    :log_level: Logging threshold for toolboxes
+    :wall_time: Simulation wall time
 """
         )
 
@@ -37,10 +40,10 @@ WALLTIME             = 23:45                  # Simulation wall time
         params.nek.chkpoint._set_attribs(attribs)
         params.nek.chkpoint._set_doc(
             """
-[_CHKPOINT]             # Runtime paramere section for checkpoint module
-READCHKPT            = no                     # Restat from checkpoint
-CHKPFNUMBER          = 1                      # Restart file number
-CHKPINTERVAL         = 250                    # Checkpiont saving frequency (number of time steps)
+    *Runtime parameter section for checkpoint module*
+    :read_chkpt: Restart from checkpoint
+    :chkp_fnumber: Restart file number
+    :chkp_interval: Checkpiont saving frequency (number of time steps)
 """
         )
 
@@ -48,10 +51,19 @@ CHKPINTERVAL         = 250                    # Checkpiont saving frequency (num
         params.nek.stat._set_attribs(attribs)
         params.nek.stat._set_doc(
             """
-[_STAT]             # Runtime paramere section for statistics module
-AVSTEP               = 10
-IOSTEP               = 50
-
+    *Runtime parameter section for statistics module*
+    :av_step: Frequency of averaging
+    :io_step: Frequency of file saving
 """
         )
+
+        # Document all params
+        for child_name in params.nek._tag_children:
+            child = getattr(params.nek, child_name)
+            child._autodoc_par(indent=4)
+
         return params
+
+
+Simul = SimulKTH
+Simul.__doc__ += "\n" + docstring_params(Simul, indent_len=4)

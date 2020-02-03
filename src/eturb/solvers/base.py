@@ -42,16 +42,31 @@ class SimulNek(SimulBase):
 
     @staticmethod
     def _complete_params_with_default(params):
-        """A static method used to complete the *params* container."""
+        """A static method used to complete the *params* container.
+
+        The sections are:
+
+        * ``general`` (mandatory)
+        * ``problemtype``
+        * ``mesh``
+        * ``velocity``
+        * ``pressure`` (required for velocity)
+        * ``temperature``
+        * ``scalar%%``
+        * ``cvode``
+
+        When scalars are used, the keys of each scalar are defined under the section
+        ``scalar%%`` varying between ``scalar01`` and ``scalar99``.
+
+        """
 
         params._set_child("nek")
         params_nek = params.nek
 
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
         for section in ("general", "problemtype", "velocity", "pressure"):
-            params_nek._set_child(section, {"_enabled": True})
-            section_name_par = section.upper()
-            params._par_file.add_section(section_name_par)
+            params_nek._set_child(section)
+            getattr(params_nek, section)._set_internal_attr("_user", False)
 
         for section in (
             "mesh",
@@ -59,25 +74,10 @@ class SimulNek(SimulBase):
             "scalar01",
             "cvode",
         ):
-            params_nek._set_child(section, {"_enabled": False})
+            params_nek._set_child(section)
+            getattr(params_nek, section)._set_internal_attr("_enabled", False)
+            getattr(params_nek, section)._set_internal_attr("_user", False)
 
-        params_nek._set_doc(
-            """
-The sections are:
-
-* ``general`` (mandatory)
-* ``problemtype``
-* ``mesh``
-* ``velocity``
-* ``pressure`` (required for velocity)
-* ``temperature``
-* ``scalar%%``
-* ``cvode``
-
-When scalars are used, the keys of each scalar are defined under the section
-``scalar%%`` varying between ``scalar01`` and ``scalar99``.
-"""
-        )
         params_nek.general._set_attribs(
             dict(
                 start_from="",
@@ -101,6 +101,7 @@ When scalars are used, the keys of each scalar are defined under the section
                 user_param03=1,
             )
         )
+
         params_nek.problemtype._set_attribs(
             dict(
                 equation="incompNS",
@@ -157,7 +158,7 @@ When scalars are used, the keys of each scalar are defined under the section
             self.output.copy(self.path_run)
             par_file = self.path_run / f"{self.output.name_pkg}.par"
             with open(par_file, "w") as fp:
-                params._write_par(fp)
+                params.nek._write_par(fp)
         else:
             self.path_run = None
             if mpi.rank == 0:

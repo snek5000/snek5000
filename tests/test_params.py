@@ -12,7 +12,7 @@ def test_simul_params():
     from eturb.solvers.base import Simul
 
     params = Simul.create_default_params()
-    params._write_par()
+    params.nek._write_par()
 
 
 def test_oper_params(oper):

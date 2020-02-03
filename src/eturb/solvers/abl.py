@@ -8,10 +8,15 @@ from abl import get_root, templates
 
 from .. import logger, mpi
 from ..info import InfoSolverABL
+from ..util import docstring_params
 from .kth import SimulKTH
 
 
 class SimulABL(SimulKTH):
+    """ABL solver. Write box and SIZE files on initialization.
+
+    """
+
     InfoSolver = InfoSolverABL
 
     @staticmethod
@@ -22,8 +27,15 @@ class SimulABL(SimulKTH):
         primary_par_file = get_root() / "abl.par"
         if mpi.rank == 0:
             logger.info(f"Reading baseline parameters from {primary_par_file}")
-        params._read_par(primary_par_file)
 
+        params.nek._read_par(primary_par_file)
+        params.nek._set_doc(
+            f"Default parameters are overriden by {primary_par_file.name}"
+        )
+        for child in params.nek._tag_children:
+            param_child = getattr(params.nek, child)
+            param_child._set_doc("")
+            param_child._autodoc_par()
         return params
 
     def __init__(self, params):
@@ -45,3 +57,4 @@ class SimulABL(SimulKTH):
 
 
 Simul = SimulABL
+Simul.__doc__ += "\n" + docstring_params(Simul, indent_len=4)
