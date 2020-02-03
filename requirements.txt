@@ -7,84 +7,107 @@
 alabaster==0.7.12         # via sphinx
 appdirs==1.4.3            # via black, snakemake
 astunparse==1.6.3         # via transonic
-attrs==19.3.0             # via black, jsonschema
+attrs==19.3.0             # via black, jsonschema, pytest
 autopep8==1.5             # via transonic
 babel==2.8.0              # via sphinx
 backcall==0.1.0           # via ipython
 beniget==0.2.0            # via transonic
 black==19.10b0
-breathe==4.14.0
+bleach==3.1.0             # via readme-renderer
+breathe==4.14.1
 cached-property==1.5.1    # via fluiddyn
 certifi==2019.11.28       # via requests
+cffi==1.13.2              # via cmarkgfm, cryptography
 chardet==3.0.4            # via requests
 click==7.0
+cmarkgfm==0.4.2           # via readme-renderer
 colorlog==4.1.0
 commonmark==0.9.1         # via recommonmark
 configargparse==1.0       # via snakemake
+cryptography==2.8         # via secretstorage
 cycler==0.10.0            # via matplotlib
 datrie==0.8               # via snakemake
 decorator==4.4.1          # via ipython, traitlets
-docutils==0.16            # via breathe, recommonmark, snakemake, sphinx
+docutils==0.16            # via breathe, readme-renderer, recommonmark, snakemake, sphinx
 entrypoints==0.3          # via flake8
 fancycompleter==0.8       # via pdbpp
 flake8==3.7.9
-fluiddyn==0.3.1           # via fluidsim
+fluiddyn==0.3.1           # via fluidfft, fluidsim
+fluidfft==0.3.0           # via fluidsim
 fluidsim==0.3.2
 fortran-language-server==1.10.3
 gast==0.3.3               # via beniget, transonic
 gitdb2==2.0.6             # via gitpython
 gitpython==3.0.5          # via snakemake
+greenlet==0.4.15          # via pynvim
 h5netcdf==0.7.4           # via fluiddyn, fluidsim
 h5py==2.10.0              # via fluiddyn, fluidsim, h5netcdf
 idna==2.8                 # via requests
 imagesize==1.2.0          # via sphinx
-importlib-metadata==1.4.0  # via jsonschema, pluggy
+importlib-metadata==1.5.0  # via jsonschema, keyring, pluggy, pytest, twine
 inflection==0.3.1
-ipython-genutils==0.2.0   # via nbformat, traitlets
-ipython==7.11.1
+ipykernel==5.1.4          # via qtconsole
+ipython-genutils==0.2.0   # via nbformat, qtconsole, traitlets
+ipython==7.12.0
 jedi==0.15.2              # via ipython, python-language-server
-jinja2==2.11.0
+jeepney==0.4.2            # via keyring, secretstorage
+jinja2==2.11.1
 jsonschema==3.2.0         # via nbformat, snakemake
-jupyter-core==4.6.1       # via nbformat
+jupyter-client==5.3.4     # via ipykernel, qtconsole
+jupyter-core==4.6.1       # via jupyter-client, nbformat, qtconsole
+keyring==21.1.0           # via twine
 kiwisolver==1.1.0         # via matplotlib
 markupsafe==1.1.1         # via jinja2
-matplotlib==3.1.2         # via fluiddyn
+matplotlib==3.1.3         # via fluiddyn
 mccabe==0.6.1             # via flake8
+more-itertools==8.2.0     # via pytest
+msgpack==0.6.2            # via pynvim
 nbformat==5.0.4           # via snakemake
-numpy==1.18.1             # via fluiddyn, h5py, matplotlib, pandas, transonic, xarray
-packaging==20.1           # via sphinx
-pandas==0.25.3            # via xarray
+numpy==1.18.1             # via fluiddyn, h5py, matplotlib, pandas, pyfftw, transonic, xarray
+packaging==20.1           # via pytest, sphinx
+pandas==1.0.0             # via xarray
 parso==0.6.0              # via jedi
 pathspec==0.7.0           # via black
 pdbpp==0.10.2
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
-pluggy==0.13.1            # via python-language-server
+pkginfo==1.5.0.1          # via twine
+pluggy==0.13.1            # via pytest, python-language-server
 prompt-toolkit==3.0.3     # via ipython
 psutil==5.6.7             # via fluiddyn, snakemake
 ptyprocess==0.6.0         # via pexpect
+py==1.8.1                 # via pytest
 pycodestyle==2.5.0        # via autopep8, flake8
+pycparser==2.19           # via cffi
+pyfftw==0.11.1            # via fluidsim
 pyflakes==2.1.1           # via flake8
-pygments==2.5.2           # via ipython, pdbpp, sphinx
+pygments==2.5.2           # via ipython, pdbpp, qtconsole, readme-renderer, sphinx
+pynvim==0.4.1
 pyparsing==2.4.6          # via matplotlib, packaging
 pyrsistent==0.15.7        # via jsonschema
-python-dateutil==2.8.1    # via matplotlib, pandas
+pytest==5.3.5
+python-dateutil==2.8.1    # via jupyter-client, matplotlib, pandas
 python-jsonrpc-server==0.3.4  # via python-language-server
 python-language-server==0.31.7
 pytz==2019.3              # via babel, pandas
 pyyaml==5.3               # via snakemake
+pyzmq==18.1.1             # via jupyter-client
+qtconsole==4.6.0
 ratelimiter==1.2.0.post0  # via snakemake
+readme-renderer[md]==24.0
 recommonmark==0.6.0
 regex==2020.1.8           # via black
-requests==2.22.0          # via snakemake, sphinx
+requests-toolbelt==0.9.1  # via twine
+requests==2.22.0          # via requests-toolbelt, snakemake, sphinx, twine
 rope==0.16.0
+secretstorage==3.1.2      # via keyring
 setuptools-scm==3.4.3
-six==1.14.0               # via astunparse, breathe, cycler, h5py, jsonschema, packaging, pyrsistent, python-dateutil, traitlets
+six==1.14.0               # via astunparse, bleach, breathe, cryptography, cycler, h5py, jsonschema, packaging, pyrsistent, python-dateutil, readme-renderer, traitlets
 smmap2==2.0.5             # via gitdb2
 snakemake==5.10.0
 snowballstemmer==2.0.0    # via sphinx
 sphinx-rtd-theme==0.4.3
-sphinx==2.3.1             # via breathe, recommonmark, sphinx-rtd-theme
+sphinx==2.3.1
 sphinxcontrib-applehelp==1.0.1  # via sphinx
 sphinxcontrib-devhelp==1.0.1  # via sphinx
 sphinxcontrib-htmlhelp==1.0.2  # via sphinx
@@ -93,16 +116,20 @@ sphinxcontrib-qthelp==1.0.2  # via sphinx
 sphinxcontrib-serializinghtml==1.1.3  # via sphinx
 toml==0.10.0              # via black
 toposort==1.5             # via snakemake
-traitlets==4.3.3          # via ipython, jupyter-core, nbformat
-transonic==0.4.2          # via fluidsim
+tornado==6.0.3            # via ipykernel, jupyter-client
+tqdm==4.42.0              # via twine
+traitlets==4.3.3          # via ipykernel, ipython, jupyter-client, jupyter-core, nbformat, qtconsole
+transonic==0.4.2          # via fluidfft, fluidsim
+twine==3.1.1
 typed-ast==1.4.1          # via black
 ujson==1.35               # via python-jsonrpc-server, python-language-server
 urllib3==1.25.8           # via requests
-wcwidth==0.1.8            # via prompt-toolkit
-wheel==0.34.1             # via astunparse
+wcwidth==0.1.8            # via prompt-toolkit, pytest
+webencodings==0.5.1       # via bleach
+wheel==0.34.2             # via astunparse
 wmctrl==0.3               # via pdbpp
 wrapt==1.11.2             # via snakemake
-xarray==0.14.1            # via fluidsim
+xarray==0.15.0            # via fluidsim
 zipp==2.1.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
