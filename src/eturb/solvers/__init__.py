@@ -5,6 +5,7 @@ Solver framework
    :toctree:
 
    base
+   kth
    abl
 
 """
