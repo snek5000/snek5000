@@ -133,8 +133,6 @@ SIZE        params.oper           Comment
         attribs = {
             option: 1
             for option in (
-                "dim_krylov",
-                "dim_proj",
                 "hist",
                 "obj",
                 "perturb",
@@ -143,6 +141,8 @@ SIZE        params.oper           Comment
                 "sessions",
             )
         }
+        attribs["dim_proj"] = 20
+        attribs["dim_krylov"] = 30
         attribs["order_time"] = 2
 
         params.oper._set_child("max", attribs=attribs)
