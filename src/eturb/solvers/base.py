@@ -99,6 +99,7 @@ class SimulNek(SimulBase):
                 opt_level=2,
                 log_level=2,
                 user_param03=1,
+                user_param04=1e-4,
             )
         )
 
