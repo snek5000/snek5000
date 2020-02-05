@@ -53,9 +53,19 @@ rule watch:
     shell:
         'nohup watch -n {params.per_second} snakemake {params.rules} 2>&1 > /tmp/watch.log&'
 
+rule squeue:
+    params:
+        per_second=5,
+        rules='docs ctags'
+    shell:
+        'watch -n {params.per_second} squeue -u $USER --start'
+
 rule salloc:
     params:
-        project='snic2019-1-2',
-        walltime='05:00'
+        # project='snic2019-1-2',
+        # walltime='05:00',
+        project='snic2014-10-3 --reservation=dcs',
+        walltime='30:00',
+        nproc=8
     shell:
-        'interactive -A {params.project} -t {params.walltime} -N 1'
+        'interactive -A {params.project} -t {params.walltime} -n {params.nproc}'
