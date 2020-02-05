@@ -98,8 +98,8 @@ class SimulNek(SimulBase):
                 extrapolation="standard",
                 opt_level=2,
                 log_level=2,
-                user_param03=1,
-                user_param04=1e-4,
+                user_param03=1,  # dp/dx
+                user_param04=0.,  # Coriolis frequency
             )
         )
 
