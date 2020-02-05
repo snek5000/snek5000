@@ -45,6 +45,7 @@ src/*/box.tmp
 src/*/makefile
 src/*/nek5000
 # Nek5000 run output
+src/*/data
 src/*/*.f?????
 src/*/SESSION.NAME
 src/*/*.nek5000
@@ -73,5 +74,5 @@ docs/_generated
 # Scripts
 bin/*.stdout
 bin/*.stderr
-bin/launcher_*.sh
+bin/launcher_*.*
 bin/*_JOB.md
