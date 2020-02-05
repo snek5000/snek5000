@@ -12,7 +12,7 @@ import numpy as np
 from fluidsim.base.solvers.base import SimulBase
 from fluidsim.base.solvers.info_base import create_info_simul
 
-from .. import logger, mpi
+from .. import logger, mpi, __version__
 from ..info import InfoSolverNek
 from ..params import Parameters, create_params
 
@@ -160,6 +160,8 @@ class SimulNek(SimulBase):
             par_file = self.path_run / f"{self.output.name_pkg}.par"
             with open(par_file, "w") as fp:
                 params.nek._write_par(fp)
+
+            params._save_as_xml(self.path_run / "params.xml", f"eTurb version {__version__}")
         else:
             self.path_run = None
             if mpi.rank == 0:
