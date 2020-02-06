@@ -37,7 +37,6 @@ class Parameters(_Parameters):
     :param tag: A string representing name of case files (for example: provide
                  ``"abl"`` for files like ``abl.usr, abl.par`` etc).
 
-
     .. automethod: _read_par
 
 
