@@ -8,6 +8,7 @@ from configparser import ConfigParser
 from io import StringIO
 from math import nan
 from sys import stdout
+from pathlib import Path
 
 from fluiddyn.util import import_class
 from fluidsim.base.params import Parameters as _Parameters
@@ -154,7 +155,7 @@ class Parameters(_Parameters):
 
         """
         self._sync_par()
-        if isinstance(path, str):
+        if isinstance(path, (str, Path)):
             with open(path, "w") as fp:
                 self._par_file.write(fp)
         else:
