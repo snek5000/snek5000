@@ -98,8 +98,7 @@ class SimulNek(SimulBase):
                 extrapolation="standard",
                 opt_level=2,
                 log_level=2,
-                user_param03=1,  # dp/dx
-                user_param04=0.,  # Coriolis frequency
+                user_params={},
             )
         )
 
@@ -157,12 +156,8 @@ class SimulNek(SimulBase):
             # See self.output._init_name_run()
             self.path_run = Path(self.output.path_run)
             self.output.copy(self.path_run)
-            par_file = self.path_run / f"{self.output.name_pkg}.par"
-            with open(par_file, "w") as fp:
-                params.nek._write_par(fp)
-
-            params._save_as_xml(self.path_run / "params.xml", f"eTurb version {__version__}")
         else:
+            par_file = None
             self.path_run = None
             if mpi.rank == 0:
                 logger.warning("No output class initialized!")
@@ -173,6 +168,15 @@ class SimulNek(SimulBase):
             logger.info(f"solver: {self.__class__}")
             logger.info(f"path_run: {self.path_run}")
             logger.info("*" * _banner_length)
+            if self.path_run:
+                par_file = self.path_run / f"{self.output.name_pkg}.par"
+                logger.info(f"Writing params files... {par_file}, params.xml")
+                with open(par_file, "w") as fp:
+                    params.nek._write_par(fp)
+
+                params._save_as_xml(
+                    self.path_run / "params.xml", f"eTurb version {__version__}"
+                )
 
 
 Simul = SimulNek

@@ -29,6 +29,7 @@ class SimulABL(SimulKTH):
             logger.info(f"Reading baseline parameters from {primary_par_file}")
 
         params.nek._read_par(primary_par_file)
+
         params.nek._set_doc(
             f"Default parameters are overriden by {primary_par_file.name}"
         )
@@ -54,6 +55,13 @@ class SimulABL(SimulKTH):
                 self.oper.write_size(
                     templates.size, fp, comments=params.short_name_type_run
                 )
+
+    def sanity_check(self):
+        """Check params for errors"""
+        params = self.params
+        assert params.oper.Lx == params.nek.general.user_params[5]
+        assert params.oper.Ly == params.nek.general.user_params[6]
+        assert params.oper.Lz == params.nek.general.user_params[7]
 
 
 Simul = SimulABL
