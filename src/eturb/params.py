@@ -30,6 +30,11 @@ def camelcase(value):
     return camelize(str(value).lower(), uppercase_first_letter=False)
 
 
+def _check_user_param(idx):
+    if idx > 20:
+        raise ValueError(f"userParam {idx} > 20")
+
+
 class Parameters(_Parameters):
     """Container for reading, modifying and writing par_ files.
 
@@ -85,8 +90,14 @@ class Parameters(_Parameters):
                 if value in literal_nek2python:
                     value = literal_nek2python[value]
 
-                attrib = underscore(option)
-                setattr(params_child, attrib, value)
+                # userParam%% -> user_params
+                if option.lower().startswith("userparam"):
+                    idx_uparam = int(option[-2:])
+                    _check_user_param(idx_uparam)
+                    params_child.user_params.update({idx_uparam: float(value)})
+                else:
+                    attrib = underscore(option)
+                    setattr(params_child, attrib, value)
 
     def _update_par_section(self, section_name, section_dict):
         """Updates a section of the ``par_file`` object from a dictionary."""
@@ -113,9 +124,19 @@ class Parameters(_Parameters):
             if str(value) in section_dict:
                 value = camelcase(value)
 
-            par.set(
-                section_name_par, camelcase(option), str(value),
-            )
+            # user_params -> userParam%%
+            if option.lower().startswith("user_params") and isinstance(value, dict):
+                for idx_uparam, value_uparam in value.items():
+                    _check_user_param(idx_uparam)
+                    par.set(
+                        section_name_par,
+                        f"userParam{idx_uparam:02d}",
+                        str(value_uparam),
+                    )
+            else:
+                par.set(
+                    section_name_par, camelcase(option), str(value),
+                )
 
     def _sync_par(self):
         """Sync values in param children and attributes to ``self._par_file``
