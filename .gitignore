@@ -33,6 +33,7 @@
 
 # Tarballs
 *.tar.gz
+*.tar.zst
 
 # Nek5000 build files
 .state
@@ -48,6 +49,7 @@ src/*/*.f?????
 src/*/SESSION.NAME
 src/*/*.nek5000
 src/**/*.log
+makefile_usr.inc
 
 # Python
 venv/
@@ -62,6 +64,13 @@ pip-wheel-metadata
 # Doxygen / Sphinx
 docs/_build
 docs/_generated
+
+# HPC
+bin/*.stdout
+bin/*.stderr
+bin/*_JOB.md
+bin/launcher*.sh
+
 
 # VS Code
 .vscode
