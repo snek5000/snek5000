@@ -12,7 +12,7 @@ import numpy as np
 from fluidsim.base.solvers.base import SimulBase
 from fluidsim.base.solvers.info_base import create_info_simul
 
-from .. import logger, mpi
+from .. import logger, mpi, __version__
 from ..info import InfoSolverNek
 from ..params import Parameters, create_params
 
@@ -42,16 +42,31 @@ class SimulNek(SimulBase):
 
     @staticmethod
     def _complete_params_with_default(params):
-        """A static method used to complete the *params* container."""
+        """A static method used to complete the *params* container.
+
+        The sections are:
+
+        * ``general`` (mandatory)
+        * ``problemtype``
+        * ``mesh``
+        * ``velocity``
+        * ``pressure`` (required for velocity)
+        * ``temperature``
+        * ``scalar%%``
+        * ``cvode``
+
+        When scalars are used, the keys of each scalar are defined under the section
+        ``scalar%%`` varying between ``scalar01`` and ``scalar99``.
+
+        """
 
         params._set_child("nek")
         params_nek = params.nek
 
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
         for section in ("general", "problemtype", "velocity", "pressure"):
-            params_nek._set_child(section, {"_enabled": True})
-            section_name_par = section.upper()
-            params._par_file.add_section(section_name_par)
+            params_nek._set_child(section)
+            getattr(params_nek, section)._set_internal_attr("_user", False)
 
         for section in (
             "mesh",
@@ -59,25 +74,10 @@ class SimulNek(SimulBase):
             "scalar01",
             "cvode",
         ):
-            params_nek._set_child(section, {"_enabled": False})
+            params_nek._set_child(section)
+            getattr(params_nek, section)._set_internal_attr("_enabled", False)
+            getattr(params_nek, section)._set_internal_attr("_user", False)
 
-        params_nek._set_doc(
-            """
-The sections are:
-
-* ``general`` (mandatory)
-* ``problemtype``
-* ``mesh``
-* ``velocity``
-* ``pressure`` (required for velocity)
-* ``temperature``
-* ``scalar%%``
-* ``cvode``
-
-When scalars are used, the keys of each scalar are defined under the section
-``scalar%%`` varying between ``scalar01`` and ``scalar99``.
-"""
-        )
         params_nek.general._set_attribs(
             dict(
                 start_from="",
@@ -98,9 +98,10 @@ When scalars are used, the keys of each scalar are defined under the section
                 extrapolation="standard",
                 opt_level=2,
                 log_level=2,
-                user_param03=1,
+                user_params={},
             )
         )
+
         params_nek.problemtype._set_attribs(
             dict(
                 equation="incompNS",
@@ -155,10 +156,8 @@ When scalars are used, the keys of each scalar are defined under the section
             # See self.output._init_name_run()
             self.path_run = Path(self.output.path_run)
             self.output.copy(self.path_run)
-            par_file = self.path_run / f"{self.output.name_pkg}.par"
-            with open(par_file, "w") as fp:
-                params._write_par(fp)
         else:
+            par_file = None
             self.path_run = None
             if mpi.rank == 0:
                 logger.warning("No output class initialized!")
@@ -169,6 +168,15 @@ When scalars are used, the keys of each scalar are defined under the section
             logger.info(f"solver: {self.__class__}")
             logger.info(f"path_run: {self.path_run}")
             logger.info("*" * _banner_length)
+            if self.path_run:
+                par_file = self.path_run / f"{self.output.name_pkg}.par"
+                logger.info(f"Writing params files... {par_file}, params.xml")
+                with open(par_file, "w") as fp:
+                    params.nek._write_par(fp)
+
+                params._save_as_xml(
+                    self.path_run / "params.xml", f"eTurb version {__version__}"
+                )
 
 
 Simul = SimulNek

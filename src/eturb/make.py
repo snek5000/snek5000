@@ -28,9 +28,13 @@ class Make:
     def list(self):
         """List rules."""
         with change_dir(self.path_run):
-            snakemake(self.file, listrules=True)
+            return snakemake(self.file, listrules=True)
 
     def exec(self, rules=("run",), dryrun=False):
-        """Execute snakemake rules in sequence."""
+        """Execute snakemake rules in sequence.
+
+        :returns: True if workflow execution was successful.
+
+        """
         with change_dir(self.path_run):
-            snakemake(self.file, targets=rules, dryrun=dryrun)
+            return snakemake(self.file, targets=rules, dryrun=dryrun)

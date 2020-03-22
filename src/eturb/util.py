@@ -12,6 +12,8 @@ from tarfile import TarFile
 from zipfile import ZipFile
 
 from fluiddyn import util
+from .params import Parameters
+from .log import logger
 
 
 def isoformat(dt):
@@ -110,9 +112,9 @@ def activate_paths():
     return source_root, path
 
 
-def init_params(Class):
+def init_params(Class, isolated_unit=False):
     """Instantiate an isolated ``params`` for a specific class."""
-    if hasattr(Class, "create_default_params"):
+    if hasattr(Class, "create_default_params") and not isolated_unit:
         params = Class.create_default_params()
     else:
         from .params import Parameters
@@ -130,7 +132,7 @@ def docstring_params(Class, sections=False, indent_len=4):
 
     """
     if "sphinx" in sys.modules:
-        params = init_params(Class)
+        params = init_params(Class, isolated_unit=True)
         doc = params._get_formatted_docs()
     else:
         doc = ""
@@ -156,3 +158,44 @@ def docstring_params(Class, sections=False, indent_len=4):
         doc = "\n".join((lines))
 
     return doc
+
+
+def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
+    contents = os.listdir(path)
+    path = Path(path)
+
+    if verify_contents:
+        locks_dir = path / ".snakemake" / "locks"
+        if not locks_dir.exists():
+            raise IOError(f"Seems like snakemake was never executed: {path}")
+        else:
+            locks = tuple(locks_dir.iterdir())
+            if locks:
+                raise IOError(
+                    f"The path is currently locked by snakemake: {path}"
+                )
+
+        if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
+            raise IOError(
+                f"SIZE and/or nek5000 and/or SESSION.NAME files are missing: {path}"
+            )
+        if not tuple(path.glob("rs6*")):
+            raise IOError(f"No restart files found: {path}")
+
+    if "params.xml" in contents:
+        params = Parameters(tag="params", path_file=(path / "params.xml"))
+    else:
+        # FIXME: make this generic for all possible solvers
+        # Trying to read the par file
+        assert path.name.startswith("abl")
+        logger.warning("No params.xml found... Attempting to read abl.par")
+
+        from eturb.solvers.abl import Simul
+
+        params = Simul.create_default_params()
+        params.nek._read_par(path / "abl.par")
+
+    params.nek.chkpoint.chkp_fnumber = chkp_fnumber
+    params.nek.chkpoint.read_chkpt = True
+
+    return params
