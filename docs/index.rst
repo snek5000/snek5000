@@ -46,6 +46,7 @@ Welcome to project *eTurb*'s documentation!
    :caption: Help & Reference
 
    roadmap
+   boundary_cond
    CONTRIBUTING
    CHANGELOG
    AUTHORS

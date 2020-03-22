@@ -33,10 +33,12 @@
 
 # Tarballs
 *.tar.gz
+*.tar.zst
 
 # Nek5000 build files
 .state
 src/*/obj
+src/*/makefile_usr.inc
 src/*/*.f
 src/*/*.ma2
 src/*/*.re2
@@ -44,10 +46,12 @@ src/*/box.tmp
 src/*/makefile
 src/*/nek5000
 # Nek5000 run output
+src/*/data
 src/*/*.f?????
 src/*/SESSION.NAME
 src/*/*.nek5000
 src/**/*.log
+makefile_usr.inc
 
 # Python
 venv/
@@ -63,8 +67,21 @@ pip-wheel-metadata
 docs/_build
 docs/_generated
 
+# HPC
+bin/*.stdout
+bin/*.stderr
+bin/*_JOB.md
+bin/launcher*.sh
+
+
 # VS Code
 .vscode
 
 # Ctags
 .tags
+
+# Scripts
+bin/*.stdout
+bin/*.stderr
+bin/launcher_*.*
+bin/*_JOB.md
