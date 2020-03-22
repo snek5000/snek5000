@@ -28,6 +28,23 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+## [0.2.0] - 2020-03-22
+
+### Added
+- KTH toolbox
+- Coriolis force
+- Job submission in cluster
+- More user_params
+
+### Changed
+- Archives use zstd compression
+- user_params is a dictionary
+
+### Fixed
+- Initial condition bug in setting velocities in `useric`
+- Cs - Cs**2 in `eddy_visc`
+- Assert exit code of snakemake results in tests
+
 ## [0.1.1] - 2020-01-27
 
 ### Added
