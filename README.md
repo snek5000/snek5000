@@ -1,5 +1,8 @@
 # Project *eTurb*
 
+[![](https://github.com/exabl/eturb/workflows/Tests/badge.svg)](https://github.com/exabl/eturb/actions?workflow=Tests)
+[![](https://github.com/exabl/eturb/workflows/Docs/badge.svg)](https://github.com/exabl/eturb/actions?workflow=Docs)
+
 **Efficient** simulations of **turbulent** atmospheric boundary layer.
 
 

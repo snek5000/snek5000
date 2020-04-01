@@ -17,6 +17,9 @@ rule docs:
     input: 'src/'
     shell: 'cd docs && SPHINXOPTS="-W" make html'
 
+rule docs_clean:
+    shell: 'cd docs && SPHINXOPTS="-W" make cleanall'
+
 rule ctags:
     input:
         nek5000='lib/Nek5000/core',

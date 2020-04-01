@@ -132,7 +132,7 @@ else:
 
     # File types
     breathe_implementation_filename_extensions = [".md"]
-    breathe_domain_by_extension = {"usr": "f", "inc": "f"}
+    breathe_domain_by_extension = {"usr": "c", "inc": "c", "f": "c"}
     breathe_domain_by_file_pattern = {"SIZE": "f"}
 
     # Input sources
