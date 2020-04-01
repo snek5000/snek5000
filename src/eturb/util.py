@@ -161,6 +161,17 @@ def docstring_params(Class, sections=False, indent_len=4):
 
 
 def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
+    """Takes a directory in which a simulation was executed.
+
+    * If verify contents:
+      - check if snakemake was ever executed or check if directory is locked by snakemake
+      - ensures simulation files exist
+      - ensures restart files exist
+    * Reads params.xml if it exists, and if not falls back to abl.par. Hardcoded!
+    * Modifies checkpoint parameters with appropriate ``chkp_fnumber`` to
+      restart from KTH framework.
+
+    """ 
     contents = os.listdir(path)
     path = Path(path)
 
