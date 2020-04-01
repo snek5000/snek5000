@@ -1,9 +1,12 @@
-rule environment:
+rule env_export:
     shell:
         """
         conda env export -f environment.yml
         sed -i '/^prefix/d' environment.yml
         """
+
+rule env_update:
+    shell: 'conda env update --file environment.yml'
 
 rule requirements:
     input: 'requirements.in'
