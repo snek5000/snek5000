@@ -39,6 +39,7 @@ dependencies:
   - kiwisolver=1.1.0=py37h99015e2_1
   - krb5=1.16.4=h2fd8d38_0
   - ld_impl_linux-64=2.34=h53a641e_0
+  - libarchive=3.3.3=hc47fbbf_1007
   - libblas=3.8.0=16_openblas
   - libcblas=3.8.0=16_openblas
   - libclang=9.0.1=default_hde54327_0
@@ -69,6 +70,7 @@ dependencies:
   - libxml2=2.9.10=hee79883_0
   - llvm-openmp=9.0.1=hc9558a2_2
   - lz4-c=1.8.3=he1b5a44_1001
+  - lzo=2.10=h14c3975_1000
   - matplotlib-base=3.2.1=py37h30547a4_0
   - ncurses=6.1=hf484d3e_1002
   - nspr=4.25=he1b5a44_0
