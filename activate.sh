@@ -4,6 +4,12 @@ export PATH="$PATH:$SOURCE_ROOT/bin"
 
 alias smake="snakemake"
 # tarball utilities
+function tar-help() {
+  echo "tar-ls: List contents"
+  echo "tar-diff: Diff 2 archives"
+  echo "bsdtar xf: Extract archive"
+  echo "tar -xf --wildcards 'glob_pattern': Extract using a glob pattern"
+}
 function tar-ls() {
   bsdtar tvf $@
   # tar -tvf $@ --use-compress-program=zstdmt
