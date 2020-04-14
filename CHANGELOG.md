@@ -28,6 +28,20 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+## [0.2.1] - 2020-04-14
+
+### Added
+- Tar shell functions in activate script
+- Module `eturb.clusters` for job submission
+
+### Changed
+- Conda environment packages
+- Reduced pressure residual tolerance for divergence check
+
+### Fixed
+- Bugfixes for simulation parameter loading, restart
+- Snakefile dependencies for running a simulation
+
 ## [0.2.0] - 2020-03-22
 
 ### Added
@@ -44,6 +58,7 @@ Security in case of vulnerabilities.
 - Initial condition bug in setting velocities in `useric`
 - Cs - Cs**2 in `eddy_visc`
 - Assert exit code of snakemake results in tests
+- Subroutine `set_forcing` uses ux..  instead of vx
 
 ## [0.1.1] - 2020-01-27
 
