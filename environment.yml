@@ -140,7 +140,7 @@ dependencies:
     - fluiddyn==0.3.1
     - fluidfft==0.3.0
     - fluidsim==0.3.2
-    - fortran-language-server==1.10.3
+    - fortran-language-server==1.11.1
     - future==0.18.2
     - gast==0.3.3
     - gitdb2==2.0.6
