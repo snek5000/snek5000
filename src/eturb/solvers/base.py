@@ -44,7 +44,7 @@ class SimulNek(SimulBase):
     def load_params_from_file(cls, path_xml=None, path_par=None):
         if not (path_xml or path_par):
             raise IOError("Either path to params.xml or case.par should be provided")
-        
+
         params = Parameters(tag="params")
         if path_xml:
             params._load_from_xml_file(path_xml)
@@ -52,7 +52,7 @@ class SimulNek(SimulBase):
             logger.warn(
                 "Loading from a par file will not have full details of the simulation"
             )
-            params.nek._read_par()
+            params.nek._read_par(path_par)
 
         cls._set_internal_sections(params)
         return params
