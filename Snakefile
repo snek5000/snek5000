@@ -61,7 +61,7 @@ rule watch:
 
 rule squeue:
     params:
-        per_second=5,
+        per_second=59,
         rules='docs ctags'
     shell:
         'watch -n {params.per_second} squeue -u $USER --start'
