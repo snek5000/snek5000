@@ -171,7 +171,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     * Modifies checkpoint parameters with appropriate ``chkp_fnumber`` to
       restart from KTH framework.
 
-    """ 
+    """
     contents = os.listdir(path)
     path = Path(path)
 
@@ -193,15 +193,15 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
         if not tuple(path.glob("rs6*")):
             raise IOError(f"No restart files found: {path}")
 
-    if "params.xml" in contents:
-        params = Parameters(tag="params", path_file=(path / "params.xml"))
-    else:
-        # FIXME: make this generic for all possible solvers
-        # Trying to read the par file
-        assert path.name.startswith("abl")
-        logger.warning("No params.xml found... Attempting to read abl.par")
+    # FIXME: make this generic for all possible solvers
+    # Trying to read the par file
+    assert path.name.startswith("abl")
+    from eturb.solvers.abl import Simul
 
-        from eturb.solvers.abl import Simul
+    if "params.xml" in contents:
+        params = Simul.load_params_from_file(path_xml=(path / "params.xml"))
+    else:
+        logger.warning("No params.xml found... Attempting to read abl.par")
 
         params = Simul.create_default_params()
         params.nek._read_par(path / "abl.par")

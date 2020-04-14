@@ -18,12 +18,13 @@ from .info import InfoSolverBase
 
 literal_python2nek = {
     nan: "<real>",
+    "nan": "nan",
     "None": "none",
     "True": "yes",
     "False": "no",
 }
 literal_nek2python = {v: k for k, v in literal_python2nek.items()}
-literal_prune = ("<real>", "")
+literal_prune = ("<real>", "", "nan")
 
 
 def camelcase(value):
@@ -63,6 +64,12 @@ class Parameters(_Parameters):
         self._set_internal_attr("_enabled", True)
         # User parameters sections should begin with an underscore
         self._set_internal_attr("_user", True)
+
+        if "path_file" in kwargs:
+            raise ValueError(
+                "Loading directly from path_file is not supported. Use "
+                "Simul.load_params_from_file() instead."
+            )
 
         super().__init__(*args, **kwargs)
 
@@ -169,7 +176,7 @@ class Parameters(_Parameters):
                 par.remove_option(section_name, "_enabled")
             else:
                 par.remove_section(section_name)
-
+            
     def _write_par(self, path=stdout):
         """Write contents of ``self._par_file`` to file handler opened in disk
         or to stdout.

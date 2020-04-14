@@ -47,6 +47,7 @@ Welcome to project *eTurb*'s documentation!
 
    roadmap
    boundary_cond
+   filtering
    CONTRIBUTING
    CHANGELOG
    AUTHORS
