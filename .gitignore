@@ -37,14 +37,14 @@
 
 # Nek5000 build files
 .state
-src/*/obj
-src/*/makefile_usr.inc
-src/*/*.f
-src/*/*.ma2
-src/*/*.re2
-src/*/box.tmp
-src/*/makefile
-src/*/nek5000
+# src/*/obj
+# src/*/makefile_usr.inc
+# src/*/*.f
+# src/*/*.ma2
+# src/*/*.re2
+# src/*/box.tmp
+# src/*/makefile
+# src/*/nek5000
 # Nek5000 run output
 src/*/data
 src/*/*.f?????
