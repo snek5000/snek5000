@@ -40,6 +40,36 @@ class SimulNek(SimulBase):
         cls.info_solver.complete_with_classes()
         return create_params(cls.info_solver)
 
+    @classmethod
+    def load_params_from_file(cls, path_xml=None, path_par=None):
+        if not (path_xml or path_par):
+            raise IOError("Either path to params.xml or case.par should be provided")
+        
+        params = Parameters(tag="params")
+        if path_xml:
+            params._load_from_xml_file(path_xml)
+        else:
+            logger.warn(
+                "Loading from a par file will not have full details of the simulation"
+            )
+            params.nek._read_par()
+
+        cls._set_internal_sections(params)
+        return params
+
+    @classmethod
+    def _set_internal_sections(cls, params):
+        try:
+            info_solver = cls.info_solver
+        except AttributeError:
+            info_solver = cls.InfoSolver()
+
+        for section in info_solver.par_sections:
+            getattr(params.nek, section)._set_internal_attr("_user", False)
+
+        for section in info_solver.par_sections_disabled:
+            getattr(params.nek, section)._set_internal_attr("_enabled", False)
+
     @staticmethod
     def _complete_params_with_default(params):
         """A static method used to complete the *params* container.
@@ -66,7 +96,6 @@ class SimulNek(SimulBase):
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
         for section in ("general", "problemtype", "velocity", "pressure"):
             params_nek._set_child(section)
-            getattr(params_nek, section)._set_internal_attr("_user", False)
 
         for section in (
             "mesh",
@@ -76,7 +105,8 @@ class SimulNek(SimulBase):
         ):
             params_nek._set_child(section)
             getattr(params_nek, section)._set_internal_attr("_enabled", False)
-            getattr(params_nek, section)._set_internal_attr("_user", False)
+
+        SimulNek._set_internal_sections(params)
 
         params_nek.general._set_attribs(
             dict(
