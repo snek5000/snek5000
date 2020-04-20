@@ -1,8 +1,12 @@
+from glob import iglob
+from eturb.make import tar_name, archive
+
 rule env_export:
     shell:
         """
         conda env export -f environment.yml
         sed -i '/^prefix/d' environment.yml
+        sed -i '/eturb/d' environment.yml
         """
 
 rule env_update:
@@ -22,6 +26,19 @@ rule docs:
 
 rule docs_clean:
     shell: 'cd docs && SPHINXOPTS="-W" make cleanall'
+
+rule bin_archive:
+    input:
+        iglob('bin/SLURM*'),
+        iglob('bin/launcher_20*')
+    output:
+        tar_name(
+            Path.cwd(), "bin/SLURM*", subdir="bin",
+            default_prefix="archive"
+        )
+    run:
+        archive(output, input, remove=True)
+
 
 rule ctags:
     input:

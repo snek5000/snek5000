@@ -3,6 +3,8 @@ au BufNewFile,BufRead *.par set filetype=cfg
 au BufNewFile,BufRead * if &syntax == '' | set syntax=fortran | endif
 au BufNewFile,BufRead * if &filetype == '' | set ft=fortran | endif
 au BufNewFile,BufRead *.usr set filetype=fortran
+au BufNewFile,BufRead Snakefile set filetype=snakemake syntax=snakemake
+au BufNewFile,BufRead *.smk set filetype=snakemake syntax=snakemake
 "}}}
 
 " Fuzzy search:

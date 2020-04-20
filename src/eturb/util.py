@@ -160,6 +160,45 @@ def docstring_params(Class, sections=False, indent_len=4):
     return doc
 
 
+def get_status(path):
+    """Get status of a simulation run by verifying its contents.
+
+    :returns tuple(int, str): status code and message
+
+    """
+    locks_dir = path / ".snakemake" / "locks"
+    contents = os.listdir(path)
+
+    if not locks_dir.exists():
+        return (
+            425,
+            f"Too Early: Seems like snakemake was never executed: {path}"
+        )
+    else:
+        locks = tuple(locks_dir.iterdir())
+        if locks:
+            return(
+                423,
+                f"Locked: The path is currently locked by snakemake: {path}"
+            )
+
+    if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
+        return (
+            404,
+            (
+                "Not Found: SIZE and/or nek5000 and/or SESSION.NAME files are missing: "
+                f"{path}: Contents: {contents}"
+            )
+        )
+    if not tuple(path.glob("rs6*")):
+        return (
+            404,
+            f"Not Found: No restart files found: {path}"
+        )
+
+    return (200, f"OK: All prerequisities satisfied to restart: {path}")
+
+
 def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     """Takes a directory in which a simulation was executed.
 
@@ -176,22 +215,8 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     path = Path(path)
 
     if verify_contents:
-        locks_dir = path / ".snakemake" / "locks"
-        if not locks_dir.exists():
-            raise IOError(f"Seems like snakemake was never executed: {path}")
-        else:
-            locks = tuple(locks_dir.iterdir())
-            if locks:
-                raise IOError(
-                    f"The path is currently locked by snakemake: {path}"
-                )
-
-        if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
-            raise IOError(
-                f"SIZE and/or nek5000 and/or SESSION.NAME files are missing: {path}"
-            )
-        if not tuple(path.glob("rs6*")):
-            raise IOError(f"No restart files found: {path}")
+        status, msg = get_status(path)
+        raise IOError(f"{status}: {msg}")
 
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
