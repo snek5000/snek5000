@@ -13,16 +13,28 @@ from snakemake.executors import change_working_directory as change_dir
 from .util import modification_date
 
 
-def tar_cmd(compress_format="zst", remove=False, append=False):
+def compress_cmd(compress_format=""):
     compress_program = {
-        "gz": "tar --use-compress-program pigz",
-        "xz": "tar",
-        "lz4": "tar --use-compress-program lz4",
-        "zst": "tar --use-compress-program zstdmt",
+        ".gz": "pigz",
+        ".xz": "xz",
+        ".lz4": "lz4",
+        ".zst": "zstdmt --rm",
+    }
+    cmd = compress_program[compress_format]
+    return cmd
+
+
+def tar_cmd(compress_format="", remove=False, append=False):
+    archive_program = {
+        "": "tar",
+        ".gz": "tar --use-compress-program pigz",
+        ".xz": "tar",
+        ".lz4": "tar --use-compress-program lz4",
+        ".zst": "tar --use-compress-program zstdmt",
     }
     # For benchmarking ...
     # cmd = "time " +
-    cmd = compress_program[compress_format]
+    cmd = archive_program[compress_format]
     if remove:
         cmd += " --remove-files "
     else:
@@ -39,7 +51,7 @@ def tar_cmd(compress_format="zst", remove=False, append=False):
 def tar_name(
     root_name="abl",
     pattern="*.f?????",
-    compress_format="zst",
+    compress_format="",
     subdir="data",
     default_prefix="test",
 ):
@@ -56,17 +68,47 @@ def tar_name(
         else:
             basename = cwd
 
-        return f"{subdir}/{basename}.tar.{compress_format}"
+        return f"{subdir}/{basename}.tar{compress_format}"
     else:
         return ""
 
 
-def archive(tarball, items, remove=False):
-    """Archive simulation contents into a tarball."""
+def archive(tarball, items=(), remove=False, readonly=False):
+    """Archive simulation contents into a tarball / compress a tarball.
+
+    Examples
+    --------
+    >>> archive("test.tar.xz", ["file1", "file2"])
+    # runs tar -cvf test.tar.xz file1 file2
+
+    >>> archive("test.tar.gz")
+    # runs gzip test.tar
+
+    """
+    if not tarball:
+        raise IOError(
+            "Abort archiving because of illegal output tarball name! "
+            f"tarball: {tarball}, items: {items}"
+        )
+
+    tarpath = Path(tarball)
+    # split archive.tar.zst -> archive, .tar, .zst
+    name, dottar, compress_format = tarpath.name.partition('.tar')
+    tarpath = tarpath.parent / (name + dottar)
+
     # if the tarball already exists
-    tarball = str(tarball)
-    append = Path(tarball).exists()
-    tar = tar_cmd(remove=remove, append=append).split()
+    tarball_exists = tarpath.exists()
+
+    if not items and tarball_exists:
+        # If the tarball has to be compressed in place and
+        # no items are provided
+        main = compress_cmd(compress_format)
+    elif items and compress_format and tarball_exists:
+        raise IOError("Cannot append file items into a compressed archive!")
+    else:
+        main = tar_cmd(compress_format, remove=remove, append=tarball_exists)
+
+    main = main.split()
 
     # prepare output directory
     dest = Path.cwd() / "data"
@@ -74,9 +116,13 @@ def archive(tarball, items, remove=False):
 
     # run
     items = [str(i) for i in items]
-    if items:
-        cmd = [*tar, tarball, *items]
-        return subprocess.check_output(cmd)
+    cmd = [*main, str(tarpath), *items]
+    output = subprocess.check_output(cmd)
+
+    if readonly:
+        tarpath.chmod(0o444)
+
+    return output
 
 
 def clean_simul(case, tarball):
