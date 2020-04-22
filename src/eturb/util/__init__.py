@@ -12,8 +12,8 @@ from tarfile import TarFile
 from zipfile import ZipFile
 
 from fluiddyn import util
-from .params import Parameters
-from .log import logger
+
+from ..log import logger
 
 
 def isoformat(dt):
@@ -117,7 +117,7 @@ def init_params(Class, isolated_unit=False):
     if hasattr(Class, "create_default_params") and not isolated_unit:
         params = Class.create_default_params()
     else:
-        from .params import Parameters
+        from ..params import Parameters
 
         params = Parameters(tag="params")
         Class._complete_params_with_default(params)
