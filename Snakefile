@@ -1,5 +1,5 @@
 from glob import iglob
-from eturb.make import tar_name, archive
+from eturb.util.archive import tar_name, archive
 
 rule env_export:
     shell:
