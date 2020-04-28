@@ -92,3 +92,17 @@ rule salloc:
         nproc=8
     shell:
         'interactive -A {params.project} -t {params.walltime} -n {params.nproc}'
+
+rule ipykernel:
+    shell: 'ipython kernel install --user --name=$(basename $CONDA_PREFIX)'
+
+rule jlab:
+    shell:
+        """
+        echo '-----------------------------------------'
+        echo '        Setup an SSH tunnel to           '
+        printf '        '
+        hostname
+        echo '-----------------------------------------'
+        jupyter-lab --no-browser --port=5656
+        """
