@@ -18,7 +18,7 @@ class PrintStdOut:
 
     def __init__(self, output=None, file=None):
         self.output = output
-        self._file = None        
+        self._file = file
 
     @property
     def file(self):
