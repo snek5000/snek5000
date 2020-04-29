@@ -28,6 +28,10 @@ def sim():
 
     params = Simul.create_default_params()
     params.output.sub_directory = "test"
+
+    params.nek.general.stop_at = "numSteps"
+    params.nek.general.num_steps = 9
+
     return Simul(params)
 
 

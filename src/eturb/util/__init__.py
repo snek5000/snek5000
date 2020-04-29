@@ -216,11 +216,14 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
 
     if verify_contents:
         status, msg = get_status(path)
-        raise IOError(f"{status}: {msg}")
+        if status >= 400:
+            raise IOError(f"{status}: {msg}")
+        else:
+            logger.info(f"{status}: {msg}")
 
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
-    assert path.name.startswith("abl")
+    assert path.absolute().name.startswith("abl"), "Cannot detect simulation class"
     from eturb.solvers.abl import Simul
 
     if "params.xml" in contents:

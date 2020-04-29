@@ -39,6 +39,11 @@ class InfoSolverNek(InfoSolverBase):
 class InfoSolverABL(InfoSolverNek):
     """Contain the information on a :class:`eturb.solvers.abl.Simul`
     instance.
+    
+    .. todo::
+    
+        Move Output info to :class:`InfoSolverNek` and only override it in
+        :class:`InfoSolverABL`.
 
     """
 
