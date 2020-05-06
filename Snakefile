@@ -1,6 +1,9 @@
 from glob import iglob
 from eturb.util.archive import tar_name, archive
 
+PYTHON_DIRECTORIES = ["docs", "src", "tests"]
+
+
 rule env_export:
     shell:
         """
@@ -11,11 +14,6 @@ rule env_export:
 
 rule env_update:
     shell: 'conda env update --file environment.yml'
-
-rule requirements:
-    input: 'requirements.in'
-    output: 'requirements.txt'
-    shell: 'pip-compile'
 
 rule develop:
     shell: 'pip install -e .[dev]'
@@ -106,3 +104,11 @@ rule jlab:
         echo '-----------------------------------------'
         jupyter-lab --no-browser --port=5656
         """
+
+rule lint:
+    input: PYTHON_DIRECTORIES
+    shell: "black --check {input}"
+
+rule fix:
+    input: PYTHON_DIRECTORIES
+    shell: 'black {input}'
