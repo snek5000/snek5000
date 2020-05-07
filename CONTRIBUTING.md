@@ -14,8 +14,6 @@ pip install -e '.[dev]'
   code, the tool `black` is recommended. Also install `pipx` and `pre-commit`:
 
   ```sh
-  pip install --user pipx
-  pipx install pre-commit
   pre-commit install
   ```
 

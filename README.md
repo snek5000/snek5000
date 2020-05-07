@@ -30,17 +30,17 @@ cd -
 This workflow requires you to setup a Python environment. There are two ways to
 do this (and it has to be done only once):
 
-1. Using `venv`
+-  Using `venv`
    ```sh
    python -m venv venv
    source venv/bin/activate
-   pip install -r requirements.txt
    pip install -e .
    ```
-2. Using `conda`
+-  Using `conda`
    ```sh
    conda env create -n eturb -f environment.yml
    conda activate eturb
+   pip install -e .
    ```
 After setting up Python, you can do either of the following:
 
