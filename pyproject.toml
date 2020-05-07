@@ -5,6 +5,3 @@ requires = ["setuptools>=42.0.0", "wheel", "setuptools_scm[toml]>=3.4.2"]
 [tool.setuptools_scm]
 write_to = "src/eturb/_version.py"
 write_to_template = "__version__ = \"{version}\"\n"
-
-[tool.black]
-line_length = 82
