@@ -43,9 +43,7 @@ class SimulNek(SimulBase):
     @classmethod
     def load_params_from_file(cls, path_xml=None, path_par=None):
         if not (path_xml or path_par):
-            raise IOError(
-                "Either path to params.xml or case.par should be provided"
-            )
+            raise IOError("Either path to params.xml or case.par should be provided")
 
         params = Parameters(tag="params")
         if path_xml:
@@ -142,9 +140,7 @@ class SimulNek(SimulBase):
         params_nek.temperature._set_attribs(common)
         params_nek.scalar01._set_attribs(common)
 
-        params_nek.velocity._set_attribs(
-            dict(viscosity=math.nan, density=math.nan)
-        )
+        params_nek.velocity._set_attribs(dict(viscosity=math.nan, density=math.nan))
         params_nek.pressure._set_attrib("preconditioner", "semg_xxt")
         return params
 

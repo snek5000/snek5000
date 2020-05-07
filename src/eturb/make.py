@@ -17,13 +17,9 @@ class Make:
         self.sim = sim
         self.path_run = sim.output.path_run
         try:
-            self.file = next(
-                f for f in sim.output.get_paths() if f.name == "Snakefile"
-            )
+            self.file = next(f for f in sim.output.get_paths() if f.name == "Snakefile")
         except AttributeError:
-            raise AttributeError(
-                "Unable to get path of Snakefile via Output class."
-            )
+            raise AttributeError("Unable to get path of Snakefile via Output class.")
 
     def list(self):
         """List rules."""

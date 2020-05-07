@@ -45,7 +45,9 @@ print("sys.path =\n   ", "\n    ".join(sys.path))
 
 project = "eturb"
 _today = date.today()
-copyright = f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
+copyright = (
+    f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
+)
 author = "Ashwin Vishnu Mohanan"
 
 version = ".".join(eturb.__version__.split(".")[:3])
@@ -85,9 +87,7 @@ else:
     exec_doxygen = True
 
 # Modify Doxygen configuration or not
-modify_doxygen = any(
-    os.getenv(env) for env in ("CI", "GITHUB_ACTIONS", "READTHEDOCS")
-)
+modify_doxygen = any(os.getenv(env) for env in ("CI", "GITHUB_ACTIONS", "READTHEDOCS"))
 if modify_doxygen:
     print("Disabling source browser... ", end="")
 
@@ -105,9 +105,7 @@ try:
         print("Executing Doxygen... ", end="")
         if modify_doxygen:
             # Pass configuration via stdin
-            with subprocess.Popen(
-                ["doxygen", "-"], stdin=PIPE, stdout=PIPE
-            ) as proc:
+            with subprocess.Popen(["doxygen", "-"], stdin=PIPE, stdout=PIPE) as proc:
                 doxy_output = proc.communicate(input=doxy_cfg)[0]
         else:
             doxy_output = subprocess.check_output(["doxygen"])
@@ -121,9 +119,7 @@ try:
             f"Using old Doxygen XML output... Remove {timestamp} to force doxygen build."
         )
 except FileNotFoundError:
-    print(
-        "Can not find doxygen to generate the documentation of the Fortran code."
-    )
+    print("Can not find doxygen to generate the documentation of the Fortran code.")
 else:
     # -- Breathe configuration ---------------------------------------------------
     extensions.append("breathe")

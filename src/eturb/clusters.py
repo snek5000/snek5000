@@ -21,11 +21,7 @@ try:
         def _create_txt_launching_script(self, **kwargs):
             txt = super()._create_txt_launching_script(**kwargs)
             return "\n".join(
-                [
-                    line
-                    for line in txt.splitlines()
-                    if not line.startswith("_delete")
-                ]
+                [line for line in txt.splitlines() if not line.startswith("_delete")]
             )
 
 
@@ -34,4 +30,4 @@ except ImportError as e:
 
     logger.warning(str(e))
     logger.info("Using local machine as a cluster")
-    from fluiddyn.clusters.local import ClusterLocal as Cluster
+    from fluiddyn.clusters.local import ClusterLocal as Cluster  # noqa

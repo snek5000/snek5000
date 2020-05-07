@@ -2,7 +2,6 @@
 
 """
 import re
-import sys
 from pathlib import Path
 import numpy as np
 
@@ -60,7 +59,7 @@ class PrintStdOut:
     @property
     def text_steps(self):
         """Parse text starting with Step
-        
+
         https://regex101.com/r/enFOAg/1
         """
         pattern = re.compile(

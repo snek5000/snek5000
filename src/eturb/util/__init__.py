@@ -92,8 +92,7 @@ def last_modified(path):
 
     """
     return reduce(
-        lambda x, y: x if x.stat().st_mtime > y.stat().st_mtime else y,
-        scantree(path),
+        lambda x, y: x if x.stat().st_mtime > y.stat().st_mtime else y, scantree(path),
     )
 
 
@@ -146,8 +145,7 @@ def docstring_params(Class, sections=False, indent_len=4):
             if line.startswith("Documentation for"):
                 lines.append(f"{indent}**{line.lstrip()}**")
             elif "Documentation for" in prev_line and any(
-                line.startswith(underline)
-                for underline in ("====", "----", "~~~~")
+                line.startswith(underline) for underline in ("====", "----", "~~~~")
             ):
                 continue
             else:
@@ -220,9 +218,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
 
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
-    assert path.absolute().name.startswith(
-        "abl"
-    ), "Cannot detect simulation class"
+    assert path.absolute().name.startswith("abl"), "Cannot detect simulation class"
     from eturb.solvers.abl import Simul
 
     if "params.xml" in contents:

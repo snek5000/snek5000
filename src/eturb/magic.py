@@ -28,9 +28,7 @@ from .log import logger
 def available_solver_keys(package):
     package = import_module(package)
     modules = [
-        mod.name
-        for mod in pkgutil.walk_packages(package.__path__)
-        if not mod.ispkg
+        mod.name for mod in pkgutil.walk_packages(package.__path__) if not mod.ispkg
     ]
     return modules
 

@@ -30,12 +30,7 @@ class InfoSolverNek(InfoSolverBase):
                     "scalar01",
                     "cvode",
                 ),
-                "par_sections_disabled": (
-                    "mesh",
-                    "temperature",
-                    "scalar01",
-                    "cvode",
-                ),
+                "par_sections_disabled": ("mesh", "temperature", "scalar01", "cvode",),
             }
         )
         self._set_child("classes")
@@ -48,9 +43,9 @@ class InfoSolverNek(InfoSolverBase):
 class InfoSolverABL(InfoSolverNek):
     """Contain the information on a :class:`eturb.solvers.abl.Simul`
     instance.
-    
+
     .. todo::
-    
+
         Move Output info to :class:`InfoSolverNek` and only override it in
         :class:`InfoSolverABL`.
 

@@ -56,9 +56,7 @@ class Parameters(_Parameters):
         comments = ("#",)
         self._set_internal_attr(
             "_par_file",
-            ConfigParser(
-                comment_prefixes=comments, inline_comment_prefixes=comments
-            ),
+            ConfigParser(comment_prefixes=comments, inline_comment_prefixes=comments),
         )
         # Only enabled parameters would be written into par file
         self._set_internal_attr("_enabled", True)
@@ -132,9 +130,7 @@ class Parameters(_Parameters):
                 value = camelcase(value)
 
             # user_params -> userParam%%
-            if option.lower().startswith("user_params") and isinstance(
-                value, dict
-            ):
+            if option.lower().startswith("user_params") and isinstance(value, dict):
                 for idx_uparam, value_uparam in value.items():
                     _check_user_param(idx_uparam)
                     par.set(
