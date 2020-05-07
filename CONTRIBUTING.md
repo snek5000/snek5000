@@ -1,10 +1,24 @@
 # Developer guide
 
+To install in development mode:
+
+```sh
+pip install -e '.[dev]'
+```
+
 ## General guidelines
 
-
 * **Editor**: Use an editor which supports [EditorConfig](http://editorconfig.org/)
-* **Style guide**: Follow [Fortran best practices](https://www.fortran90.org/src/best-practices.html)
+* **Style guide**: Follow [Fortran best
+  practices](https://www.fortran90.org/src/best-practices.html). For the Python
+  code, the tool `black` is recommended. Also install `pipx` and `pre-commit`:
+
+  ```sh
+  pip install --user pipx
+  pipx install pre-commit
+  pre-commit install
+  ```
+
 * **Branching model**: The development uses branches and pull-requests for experimental features. We
   also rely on [git submodules](https://www.git-scm.com/docs/git-submodule) to
   track other libraries. The following branches are important:
