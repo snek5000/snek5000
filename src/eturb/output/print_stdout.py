@@ -12,8 +12,9 @@ from eturb.solvers.abl import Simul
 # Uses awkupy
 # %load_ext iawk
 
+
 class PrintStdOut:
-    
+
     _tag = "print_stdout"
 
     def __init__(self, output=None, file=None):
@@ -30,9 +31,10 @@ class PrintStdOut:
             if logfiles:
                 self._file = logfiles[-1]
             else:
-                raise FileNotFoundError(f"Cannot find a .log to parse in {path_run}: {logfiles}")
+                raise FileNotFoundError(
+                    f"Cannot find a .log to parse in {path_run}: {logfiles}"
+                )
 
-                
         return self._file
 
     @file.setter
@@ -43,14 +45,11 @@ class PrintStdOut:
     def text(self):
         with open(self.file) as fp:
             return fp.read()
-        
+
     @property
     def path_run(self):
         """Parse path_run from log file"""
-        par_file = re.findall(
-            'Reading.*par',
-            self.text
-        )[-1].split()[-1]
+        par_file = re.findall("Reading.*par", self.text)[-1].split()[-1]
         path = Path(par_file).parent
         return path
 
@@ -78,22 +77,22 @@ class PrintStdOut:
                 C=\s*          # C=spaces
                 (.+)           # 3: Capture C: any char
     """,
-            re.VERBOSE|re.MULTILINE
+            re.VERBOSE | re.MULTILINE,
         )
         return pattern.findall(self.text)
-    
+
     @property
     def dt(self):
         """Extract time step dt over the course of a simulation."""
         # Alternate implementations
         # 1. awkup
         # dts = %awk -F, -e '/Step/{print $3}' {self.file}
-        # 
+        #
         # 2. Basic regex
         # steps = re.findall("Step.*DT.*", self.text)
         # try:
         #     dt_strings = [step.split(',')[2] for step in steps if step]
-        #     dts = [float(s.split("= ")[1]) for s in dt_strings if s] 
+        #     dts = [float(s.split("= ")[1]) for s in dt_strings if s]
         # except IndexError:
         #     print(steps)
         dt = [float(field[2]) for field in self.text_steps]

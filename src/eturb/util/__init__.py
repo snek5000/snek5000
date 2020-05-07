@@ -172,14 +172,14 @@ def get_status(path):
     if not locks_dir.exists():
         return (
             425,
-            f"Too Early: Seems like snakemake was never executed: {path}"
+            f"Too Early: Seems like snakemake was never executed: {path}",
         )
     else:
         locks = tuple(locks_dir.iterdir())
         if locks:
-            return(
+            return (
                 423,
-                f"Locked: The path is currently locked by snakemake: {path}"
+                f"Locked: The path is currently locked by snakemake: {path}",
             )
 
     if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
@@ -188,13 +188,10 @@ def get_status(path):
             (
                 "Not Found: SIZE and/or nek5000 and/or SESSION.NAME files are missing: "
                 f"{path}: Contents: {contents}"
-            )
+            ),
         )
     if not tuple(path.glob("rs6*")):
-        return (
-            404,
-            f"Not Found: No restart files found: {path}"
-        )
+        return (404, f"Not Found: No restart files found: {path}")
 
     return (200, f"OK: All prerequisities satisfied to restart: {path}")
 
@@ -223,7 +220,9 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
 
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
-    assert path.absolute().name.startswith("abl"), "Cannot detect simulation class"
+    assert path.absolute().name.startswith(
+        "abl"
+    ), "Cannot detect simulation class"
     from eturb.solvers.abl import Simul
 
     if "params.xml" in contents:

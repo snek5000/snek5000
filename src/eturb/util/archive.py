@@ -96,15 +96,11 @@ def exec_tar(tarball, items, remove):
     if compress_format:
         output = tarball
         if tar.exists():
-            raise IOError(
-                "Cannot append file items into a compressed archive!"
-            )
+            raise IOError("Cannot append file items into a compressed archive!")
     else:
         output = tar
 
-    main = tar_cmd(
-        compress_format, remove=remove, append=output.exists()
-    ).split()
+    main = tar_cmd(compress_format, remove=remove, append=output.exists()).split()
 
     # run command
     items = [str(i) for i in items]
@@ -130,8 +126,8 @@ def next_path(old_path):
         # for example: remove .tar from the end, if any
         stem = p.stem
         for suffix in p.suffixes:
-            stem = re.sub(f'{suffix}$', '', p.stem)
-        p = p.parent / ''.join(stem, f"_{i:02d}", *p.suffixes)
+            stem = re.sub(f"{suffix}$", "", p.stem)
+        p = p.parent / "".join(stem, f"_{i:02d}", *p.suffixes)
 
     return p
 

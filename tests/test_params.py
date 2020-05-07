@@ -29,7 +29,7 @@ def test_oper_params(oper):
     logger.debug(params.oper.elem._doc)
 
 
-def  test_par_xml_match():
+def test_par_xml_match():
     from eturb.solvers.abl import Simul
 
     params = Simul.create_default_params()
@@ -41,6 +41,7 @@ def  test_par_xml_match():
 
     try:
         from eturb.params import Parameters
+
         nparams = Parameters(tag="params", path_file=params_xml)
     except ValueError:
         # Should raise an error
@@ -86,7 +87,7 @@ def  test_par_xml_match():
                         pass
 
                 ftext.append(line)
-        
+
         return sorted(ftext)
 
     assert format_par(par1) == format_par(par2)

@@ -43,7 +43,9 @@ class SimulNek(SimulBase):
     @classmethod
     def load_params_from_file(cls, path_xml=None, path_par=None):
         if not (path_xml or path_par):
-            raise IOError("Either path to params.xml or case.par should be provided")
+            raise IOError(
+                "Either path to params.xml or case.par should be provided"
+            )
 
         params = Parameters(tag="params")
         if path_xml:
@@ -97,12 +99,7 @@ class SimulNek(SimulBase):
         for section in ("general", "problemtype", "velocity", "pressure"):
             params_nek._set_child(section)
 
-        for section in (
-            "mesh",
-            "temperature",
-            "scalar01",
-            "cvode",
-        ):
+        for section in ("mesh", "temperature", "scalar01", "cvode"):
             params_nek._set_child(section)
             getattr(params_nek, section)._set_internal_attr("_enabled", False)
 
@@ -139,7 +136,7 @@ class SimulNek(SimulBase):
                 stress_formulation=False,
             )
         )
-        common = dict(residual_tol=math.nan, residual_proj=False,)
+        common = dict(residual_tol=math.nan, residual_proj=False)
         params_nek.velocity._set_attribs(common)
         params_nek.pressure._set_attribs(common)
         params_nek.temperature._set_attribs(common)

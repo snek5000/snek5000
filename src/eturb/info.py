@@ -21,11 +21,20 @@ class InfoSolverNek(InfoSolverBase):
                 "class_name": "SimulNek",
                 "short_name": "nek",
                 "par_sections": (
-                    "general", "problemtype", "velocity", "pressure",
-                    "mesh", "temperature", "scalar01", "cvode",
+                    "general",
+                    "problemtype",
+                    "velocity",
+                    "pressure",
+                    "mesh",
+                    "temperature",
+                    "scalar01",
+                    "cvode",
                 ),
                 "par_sections_disabled": (
-                    "mesh", "temperature", "scalar01", "cvode",
+                    "mesh",
+                    "temperature",
+                    "scalar01",
+                    "cvode",
                 ),
             }
         )

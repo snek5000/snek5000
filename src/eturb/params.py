@@ -132,7 +132,9 @@ class Parameters(_Parameters):
                 value = camelcase(value)
 
             # user_params -> userParam%%
-            if option.lower().startswith("user_params") and isinstance(value, dict):
+            if option.lower().startswith("user_params") and isinstance(
+                value, dict
+            ):
                 for idx_uparam, value_uparam in value.items():
                     _check_user_param(idx_uparam)
                     par.set(
@@ -141,9 +143,7 @@ class Parameters(_Parameters):
                         str(value_uparam),
                     )
             else:
-                par.set(
-                    section_name_par, camelcase(option), str(value),
-                )
+                par.set(section_name_par, camelcase(option), str(value))
 
     def _sync_par(self):
         """Sync values in param children and attributes to ``self._par_file``
@@ -176,7 +176,7 @@ class Parameters(_Parameters):
                 par.remove_option(section_name, "_enabled")
             else:
                 par.remove_section(section_name)
-            
+
     def _write_par(self, path=stdout):
         """Write contents of ``self._par_file`` to file handler opened in disk
         or to stdout.
