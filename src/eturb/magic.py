@@ -18,9 +18,10 @@ Usage example in an IPython console:
 import pkgutil
 from importlib import import_module
 
-from fluidsim import magic as fluidsim_magic
 from IPython.core import magic_arguments
 from IPython.core.magic import line_magic, magics_class
+
+from fluidsim import magic as fluidsim_magic
 
 from .log import logger
 

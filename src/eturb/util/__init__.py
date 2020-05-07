@@ -5,9 +5,9 @@
 """
 import os
 import sys
-from pathlib import Path
 from datetime import datetime
 from functools import reduce
+from pathlib import Path
 from tarfile import TarFile
 from zipfile import ZipFile
 

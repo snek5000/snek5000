@@ -10,10 +10,11 @@ Information regarding mesh, mathematical operators, and domain decomposition.
           those are ambiguously named.
 
 """
+import inspect
 import math
 import sys
-import inspect
 from math import pi
+
 from .util import docstring_params
 
 

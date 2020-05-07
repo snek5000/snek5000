@@ -9,10 +9,11 @@ from pathlib import Path
 from warnings import warn
 
 import numpy as np
+
 from fluidsim.base.solvers.base import SimulBase
 from fluidsim.base.solvers.info_base import create_info_simul
 
-from .. import logger, mpi, __version__
+from .. import __version__, logger, mpi
 from ..info import InfoSolverNek
 from ..params import Parameters, create_params
 

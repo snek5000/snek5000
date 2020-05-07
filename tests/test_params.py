@@ -2,9 +2,9 @@ import tempfile
 from io import StringIO
 from pathlib import Path
 
+from eturb.log import logger
 from eturb.params import Parameters
 from eturb.util import init_params
-from eturb.log import logger
 
 
 def test_empty_params():
