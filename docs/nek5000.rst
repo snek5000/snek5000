@@ -4,10 +4,8 @@ Nek5000 core library
 .. note::
 
     The following is auto-generated using Doxygen and represents a fork_ of
-    Nek5000 v17. Only subroutines relevant to eturb project are listed here.
+    Nek5000 v17. Only subroutines relevant to snek5000 project are listed here.
     The `official documentation`_ is hand-written and is more general.
-
-.. doxygengroup:: core
 
 .. _fork: https://github.com/exabl/Nek5000
 .. _official documentation: https://nek5000.github.io/NekDoc/appendix.html

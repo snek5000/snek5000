@@ -9,12 +9,12 @@ def test_properties(oper):
 
 
 def test_box_template(oper):
-    from abl.templates import box
+    from phill.templates import box
 
     oper.write_box(box, comments=__name__)
 
 
 def test_size_template(sim):
-    from abl.templates import size
+    from phill.templates import size
 
     sim.oper.write_size(size, comments=__name__)

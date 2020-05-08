@@ -5,11 +5,11 @@ Usage example in an IPython console:
 
 .. code-block:: ipython
 
-   In [1]: %load_ext eturb.magic
+   In [1]: %load_ext snek5000.magic
    WARNING  Activating this magic involves dirty monkey-patching of fluidsim.magic
 
-   In [2]: %eturb abl
-   INFO     Reading baseline parameters from /home/avmo/src/exabl/eturb/src/abl/abl.par
+   In [2]: %snek5000 abl
+   INFO     Reading baseline parameters from /home/avmo/src/exabl/snek5000/src/abl/abl.par
    Created Simul class and default parameters for abl -> Simul, params
 
    In [3]: sim = Simul(params)
@@ -18,10 +18,9 @@ Usage example in an IPython console:
 import pkgutil
 from importlib import import_module
 
+from fluidsim import magic as fluidsim_magic
 from IPython.core import magic_arguments
 from IPython.core.magic import line_magic, magics_class
-
-from fluidsim import magic as fluidsim_magic
 
 from .log import logger
 
@@ -50,7 +49,7 @@ class EturbMagics(fluidsim_magic.FluidsimMagics):
     @magic_arguments.argument("solver", nargs="?", default="")
     @magic_arguments.argument("-f", "--force-overwrite", action="store_true")
     @line_magic
-    def eturb(self, line):
+    def snek5000(self, line):
         super().fluidsim(line)
 
 
@@ -59,5 +58,5 @@ def load_ipython_extension(ipython):
     logger.warning(
         "Activating this magic involves dirty monkey-patching of fluidsim.magic"
     )
-    magics = EturbMagics(ipython, "eturb.solvers")
+    magics = EturbMagics(ipython, "snek5000.solvers")
     ipython.register_magics(magics)

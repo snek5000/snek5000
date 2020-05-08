@@ -18,7 +18,7 @@ class PhysFields:
     """Class for loading, plotting simulation files.
 
     :param sim: A simulation instance derived from
-                :class:`eturb.solvers.base.SimulNek`
+                :class:`snek5000.solvers.base.SimulNek`
     :param path: :class:`pathlib.Path` Path where simulation state files are
                  found.
 

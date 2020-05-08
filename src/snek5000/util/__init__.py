@@ -219,7 +219,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
     assert path.absolute().name.startswith("abl"), "Cannot detect simulation class"
-    from eturb.solvers.abl import Simul
+    from snek5000.solvers.abl import Simul
 
     if "params.xml" in contents:
         params = Simul.load_params_from_file(path_xml=(path / "params.xml"))

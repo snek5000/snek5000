@@ -21,7 +21,7 @@ pip install -e '.[dev]'
   also rely on [git submodules](https://www.git-scm.com/docs/git-submodule) to
   track other libraries. The following branches are important:
 
-  * `eturb`:
+  * `snek5000`:
     * `master`: main branch
     * `develop`: development branch
   * `lib/Nek5000`:
@@ -40,7 +40,7 @@ pip install -e '.[dev]'
   top-level directory. The test-cases can be found under `tests/` directory.
 * **Debugging**: Set the environment variable:
   ```bash
-  export ETURB_DEBUG=true
+  export SNEK_DEBUG=true
   ```
   to activate debugging logs and longer tests.
 

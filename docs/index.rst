@@ -1,4 +1,4 @@
-.. eturb documentation master file, created by
+.. snek5000 documentation master file, created by
    sphinx-quickstart on Wed Dec 25 01:55:26 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -16,11 +16,11 @@ Welcome to project *eTurb*'s documentation!
    -->
    <img style="float: right;" src="_static/icon.svg" width="100rem"/>
 
-+------------+--------------------------------+
-| Repository | https://github.com/exabl/eturb |
-+------------+--------------------------------+
-| Version    | |release|                      |
-+------------+--------------------------------+
++------------+-----------------------------------+
+| Repository | https://github.com/exabl/snek5000 |
++------------+-----------------------------------+
+| Version    | |release|                         |
++------------+-----------------------------------+
 
 .. toctree::
    :maxdepth: 2
@@ -32,14 +32,12 @@ Welcome to project *eTurb*'s documentation!
    :maxdepth: 2
    :caption: User Guide
 
-   abl
    nek5000
 
 .. autosummary::
    :toctree: _generated/
 
-   eturb
-   abl
+   snek5000
 
 .. toctree::
    :maxdepth: 1

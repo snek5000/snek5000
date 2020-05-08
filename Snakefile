@@ -1,5 +1,5 @@
 from glob import iglob
-from eturb.util.archive import tar_name, archive
+from snek5000.util.archive import tar_name, archive
 
 PYTHON_DIRECTORIES = ["docs", "src", "tests"]
 
@@ -9,7 +9,7 @@ rule env_export:
         """
         conda env export -f environment.yml
         sed -i '/^prefix/d' environment.yml
-        sed -i '/eturb/d' environment.yml
+        sed -i '/snek5000/d' environment.yml
         """
 
 rule env_update:
@@ -42,7 +42,7 @@ rule ctags:
     input:
         nek5000='lib/Nek5000/core',
         abl='src/abl',
-        eturb='src/eturb'
+        snek5000='src/snek5000'
     output:
         '.tags'
     params:
@@ -64,7 +64,7 @@ rule ctags:
         """
         ctags -f {output} --language-force=Fortran -R {input.nek5000}
         ctags -f {output} {params.excludes} --append --language-force=Fortran -R {input.abl}
-        ctags -f {output} {params.excludes} --append -R {input.eturb}
+        ctags -f {output} {params.excludes} --append -R {input.snek5000}
         """
 
 rule watch:

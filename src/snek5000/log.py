@@ -34,7 +34,7 @@ except ImportError:
     logger.info("Disabling color, you really want to install colorlog.")
 
 
-if os.getenv("ETURB_DEBUG"):
+if os.getenv("SNEK_DEBUG"):
     level = logging.DEBUG
 else:
     level = logging.INFO

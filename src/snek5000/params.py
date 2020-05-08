@@ -10,10 +10,9 @@ from math import nan
 from pathlib import Path
 from sys import stdout
 
-from inflection import camelize, underscore
-
 from fluiddyn.util import import_class
 from fluidsim.base.params import Parameters as _Parameters
+from inflection import camelize, underscore
 
 from .info import InfoSolverBase
 

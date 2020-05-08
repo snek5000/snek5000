@@ -56,7 +56,7 @@ Security in case of vulnerabilities.
 
 ### Added
 - Tar shell functions in activate script
-- Module `eturb.clusters` for job submission
+- Module `snek5000.clusters` for job submission
 
 ### Changed
 - Conda environment packages
@@ -100,7 +100,7 @@ Security in case of vulnerabilities.
 ### Added
 - Uses `fluidsim` framework for creating a scripting layer
 - Package `abl` with a single module and an `abl.Output` class
-- New sub-packages and modules under `eturb`: `solvers, output, info, log,
+- New sub-packages and modules under `snek5000`: `solvers, output, info, log,
   make, magic, operators`
 - Testing with `pytest`, and CI on GitHub actions
 - Detailed documentation
@@ -114,6 +114,6 @@ Security in case of vulnerabilities.
 ## [0.0.1] - 2020-01-17
 
 ### Added
-- Scripting for managing run parameters `eturb.params`
+- Scripting for managing run parameters `snek5000.params`
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation

@@ -1,7 +1,7 @@
 # Project *eTurb*
 
-[![](https://github.com/exabl/eturb/workflows/Tests/badge.svg)](https://github.com/exabl/eturb/actions?workflow=Tests)
-[![](https://github.com/exabl/eturb/workflows/Docs/badge.svg)](https://github.com/exabl/eturb/actions?workflow=Docs)
+[![](https://github.com/exabl/snek5000/workflows/Tests/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Tests)
+[![](https://github.com/exabl/snek5000/workflows/Docs/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Docs)
 
 **Efficient** simulations of **turbulent** atmospheric boundary layer.
 
@@ -10,10 +10,10 @@
 
 ```sh
 # Clone
-git clone --recursive git@github.com:exabl/eturb.git
+git clone --recursive git@github.com:exabl/snek5000.git
 
 # Activate paths: Start here. Always!
-cd eturb
+cd snek5000
 source activate.sh
 
 # Build Nek5000
@@ -38,8 +38,8 @@ do this (and it has to be done only once):
    ```
 -  Using `conda`
    ```sh
-   conda env create -n eturb -f environment.yml
-   conda activate eturb
+   conda env create -n snek5000 -f environment.yml
+   conda activate snek5000
    pip install -e .
    ```
 After setting up Python, you can do either of the following:
@@ -60,11 +60,11 @@ After setting up Python, you can do either of the following:
    snakemake clean
    cd -
 
-2. Use the **[`eturb` Python
-   API](https://exabl.github.io/eturb/_generated/eturb.html)**, based on
+2. Use the **[`snek5000` Python
+   API](https://exabl.github.io/snek5000/_generated/snek5000.html)**, based on
    [fluidsim](https://fluidsim.readthedocs.io)
    ```python
-   from eturb.solvers.abl import Simul
+   from snek5000.solvers.abl import Simul
 
    params = Simul.create_default_params()
 

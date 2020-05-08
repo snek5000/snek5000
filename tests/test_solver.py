@@ -1,4 +1,4 @@
-from eturb.solvers.base import Simul
+from snek5000.solvers.base import Simul
 
 
 def test_init():

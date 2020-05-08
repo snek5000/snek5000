@@ -5,9 +5,8 @@ import re
 from pathlib import Path
 
 import numpy as np
-
-from eturb.log import logger
-from eturb.solvers.abl import Simul
+from snek5000.log import logger
+from snek5000.solvers.base import Simul
 
 # Uses awkupy
 # %load_ext iawk

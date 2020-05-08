@@ -24,7 +24,7 @@ def pytest_collection_modifyitems(config, items):
 
 @pytest.fixture(scope="session")
 def sim():
-    from eturb.solvers.abl import Simul
+    from phill.solver import Simul
 
     params = Simul.create_default_params()
     params.output.sub_directory = "test"
@@ -37,8 +37,8 @@ def sim():
 
 @pytest.fixture(scope="session")
 def oper():
-    from eturb.operators import Operators as Class
-    from eturb.util import init_params
+    from snek5000.operators import Operators as Class
+    from snek5000.util import init_params
 
     params = init_params(Class)
     params.oper.nx = params.oper.ny = params.oper.nz = 9

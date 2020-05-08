@@ -9,7 +9,7 @@ from fluidsim.base.solvers.info_base import InfoSolverBase
 
 
 class InfoSolverNek(InfoSolverBase):
-    """Contain the information on a :class:`eturb.solvers.base.Simul`
+    """Contain the information on a :class:`snek5000.solvers.base.Simul`
     instance.
 
     """
@@ -17,7 +17,7 @@ class InfoSolverNek(InfoSolverBase):
     def _init_root(self):
         self._set_attribs(
             {
-                "module_name": "eturb.solvers.base",
+                "module_name": "snek5000.solvers.base",
                 "class_name": "SimulNek",
                 "short_name": "nek",
                 "par_sections": (
@@ -36,30 +36,22 @@ class InfoSolverNek(InfoSolverBase):
         self._set_child("classes")
         self.classes._set_child(
             "Oper",
-            attribs={"module_name": "eturb.operators", "class_name": "Operators"},
+            attribs={"module_name": "snek5000.operators", "class_name": "Operators"},
         )
 
 
-class InfoSolverABL(InfoSolverNek):
-    """Contain the information on a :class:`eturb.solvers.abl.Simul`
-    instance.
+class InfoSolverMake(InfoSolverNek):
+    """Contain the information on a solver which uses Snakemake.
 
-    .. todo::
-
-        Move Output info to :class:`InfoSolverNek` and only override it in
-        :class:`InfoSolverABL`.
 
     """
 
     def _init_root(self):
         super()._init_root()
-        self.module_name = "eturb.solvers.abl"
-        self.class_name = "SimulABL"
-        self.short_name = "abl"
-
         self.classes._set_child(
-            "Output", attribs={"module_name": "abl", "class_name": "Output"}
+            "Output",
+            attribs={"module_name": "snek5000.output.base", "class_name": "Output"},
         )
         self.classes._set_child(
-            "Make", attribs={"module_name": "eturb.make", "class_name": "Make"}
+            "Make", attribs={"module_name": "snek5000.make", "class_name": "Make"}
         )

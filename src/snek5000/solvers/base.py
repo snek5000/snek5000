@@ -9,7 +9,6 @@ from pathlib import Path
 from warnings import warn
 
 import numpy as np
-
 from fluidsim.base.solvers.base import SimulBase
 from fluidsim.base.solvers.info_base import create_info_simul
 
@@ -23,7 +22,7 @@ class SimulNek(SimulBase):
 
     .. code-block:: python
 
-       from eturb.solvers.base import Simul
+       from snek5000.solvers.base import Simul
        params = Simul.create_default_params()
        sim = Simul(params)
 

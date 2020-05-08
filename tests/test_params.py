@@ -2,9 +2,9 @@ import tempfile
 from io import StringIO
 from pathlib import Path
 
-from eturb.log import logger
-from eturb.params import Parameters
-from eturb.util import init_params
+from snek5000.log import logger
+from snek5000.params import Parameters
+from snek5000.util import init_params
 
 
 def test_empty_params():
@@ -13,14 +13,14 @@ def test_empty_params():
 
 
 def test_simul_params():
-    from eturb.solvers.base import Simul
+    from snek5000.solvers.base import Simul
 
     params = Simul.create_default_params()
     params.nek._write_par()
 
 
 def test_oper_params(oper):
-    from eturb.operators import Operators
+    from snek5000.operators import Operators
 
     params = init_params(Operators)
     logger.debug(params.oper.max)
@@ -30,17 +30,17 @@ def test_oper_params(oper):
 
 
 def test_par_xml_match():
-    from eturb.solvers.abl import Simul
+    from phill.solver import Simul
 
     params = Simul.create_default_params()
     output1 = StringIO()
     params.nek._write_par(output1)
 
-    tmp_dir = Path(tempfile.mkdtemp("eturb", __name__))
+    tmp_dir = Path(tempfile.mkdtemp("snek5000", __name__))
     params_xml = params._save_as_xml(str(tmp_dir / "params.xml"))
 
     try:
-        from eturb.params import Parameters
+        from snek5000.params import Parameters
 
         nparams = Parameters(tag="params", path_file=params_xml)
     except ValueError:
