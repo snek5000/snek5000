@@ -28,6 +28,30 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+## [0.2.2] - 2020-05-08
+
+### Added
+
+- Pre-commit: black, flake8, isort fixing and linting support
+- Jupyterlab and ipykernel configuration snakemake rules
+- Job management script - organize.py
+- New module: const
+
+### Changed
+
+- Parameters for Maronga case
+- Compilation is now parallel
+- Two-step archival, tar and compress
+
+### Fixed
+
+- Snakemake: gslib dependency before compiling
+- Snakemake: Tee output to log file
+
+### Removed
+
+- Requirements files produced using pip-tools
+
 ## [0.2.1] - 2020-04-14
 
 ### Added
