@@ -81,7 +81,8 @@ else:
     exec_doxygen = True
 
 # Modify Doxygen configuration or not
-modify_doxygen = any(os.getenv(env) for env in ("CI", "GITHUB_ACTIONS", "READTHEDOCS"))
+#  modify_doxygen = any(os.getenv(env) for env in ("CI", "GITHUB_ACTIONS", "READTHEDOCS"))
+modify_doxygen = False
 if modify_doxygen:
     print("Disabling source browser... ", end="")
 

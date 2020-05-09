@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to project *eTurb*'s documentation!
+Welcome to *snek5000*'s documentation!
 ===========================================
 
 .. raw:: html
@@ -51,20 +51,10 @@ Welcome to project *eTurb*'s documentation!
    AUTHORS
    license
 
-Links
-=====
-
-.. * :ref:`Upstream documentation for Nek5000 <nek:genindex>`
-.. Strange intersphinx bug: WARNING: undefined label: nek:genindex (if the link has no caption the label must precede a section header)
-
-* `Nek5000 documentation <https://nek5000.github.io/NekDoc/appendix.html>`_
-* `KTH framework documentation <https://kth-nek5000.github.io/KTH_Framework>`_
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-* `Documentation produced with Doxygen <doxygen/modules.html>`_
 

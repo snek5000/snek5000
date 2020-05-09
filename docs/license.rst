@@ -3,10 +3,7 @@ License
 
 .. note::
 
-   Similar to Nek5000_, project eTurb is also licensed under BSD-3-clause. The
-   Fortran code would be released in due-time when it is ready. The
-   Python code is only available (for now) along with the documentation (watch
-   out for the **[source]** hyperlinks).
+   Similar to Nek5000_, snek5000 is also licensed under BSD-3-clause.
 
 .. include:: LICENSE
 
