@@ -13,6 +13,7 @@ from snek5000.solvers.base import Simul
 
 
 class PrintStdOut:
+    """Parse standard output log files."""
 
     _tag = "print_stdout"
 

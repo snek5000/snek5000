@@ -1,3 +1,7 @@
+"""Manage user case files.
+
+
+"""
 import importlib.resources
 import inspect
 import os

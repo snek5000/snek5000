@@ -14,6 +14,7 @@ A Pythonic frontend to Nek5000.
 .. autosummary::
    :toctree:
 
+   assets
    info
    log
    magic
