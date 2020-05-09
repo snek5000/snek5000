@@ -14,7 +14,7 @@ Python framework for Nek5000.
 
 ```sh 
 # Clone
-git clone --recursive https://github.com:exabl/snek5000.git
+git clone --recursive https://github.com/exabl/snek5000.git
 
 # Activate paths: Start here. Always!
 cd snek5000
