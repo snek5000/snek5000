@@ -38,9 +38,13 @@ def source_root():
     """Path of Nek5000 source code."""
     with importlib.resources.path(__name__, "__init__.py") as f:
         root = f.parent
-    nek5000 = os.getenv("SOURCE_ROOT", str((root / "../../lib/Nek5000").absolute()))
+    nek5000 = os.path.expandvars(
+        os.path.expanduser(
+            os.getenv("SOURCE_ROOT", str((root / "../../lib/Nek5000").absolute()))
+        )
+    )
     if not os.path.exists(nek5000):
-        logger.error(nek5000)
+        logger.error("SOURCE_ROOT: " + nek5000)
         raise IOError(
             "Cannot find Nek5000 source code. Use environment variable "
             "SOURCE_ROOT to point to Nek5000 top level directory."
