@@ -19,11 +19,7 @@ source activate.sh
 
 ```
 
-## Workflow
-
-### Easy way
-
-This workflow requires you to setup a Python environment. There are two ways to
+Now you should setup a Python environment. There are two ways to
 do this (and it has to be done only once):
 
 -  Using `venv`
@@ -39,15 +35,16 @@ do this (and it has to be done only once):
    pip install -e .
    ```
 
-### Why use snek5000?
+## Why and why not use snek5000?
 
 The [`snek5000` Python
 API](https://exabl.github.io/snek5000/_generated/snek5000.html) is based on
 [fluidsim](https://fluidsim.readthedocs.io), which allows you to launch a
-simulation as follows.
+simulation using scripts. For example the [periodic hill
+example](https://github.com/exabl/snek5000-phill) can be launched as.
 
 ```python
-from snek5000.solvers.abl import Simul
+from phill.solver import Simul
 
 params = Simul.create_default_params()
 
@@ -64,10 +61,10 @@ sim.make.exec(["run"])  # actual simulation
 
 - Saves you from the trouble in setting up multiple source files (`.box`, `.par`, `SIZE`)
 - Checks for consistency of parameters
-- Out of source builds and runs
+- Out of source builds and runs, which can be inspected or executed using the conventional
+  makenek for debugging
 - Avoid typos and human errors
 - Better than bash scripting:
-
   ```sh
   # Build case
   cd src/phill/
@@ -89,7 +86,31 @@ sim.make.exec(["run"])  # actual simulation
   makenek clean
 
   ```
+- Use of [Snakemake](https://snakemake.readthedocs.io/en/stable/) which
+  is similar to GNU Make, but allows one to blend bash and python scripting and
+  uses simple YAML files for managing custom configurations of compilers and flags
+  for different computers.
 
-## Development
+#### Disadvantages
 
-See [contributing guidelines](CONTRIBUTING.md).
+- In development
+- Requires some basic knowledge of Python to use
+- Modification of the API requires learning
+- [Snakemake](https://snakemake.readthedocs.io/en/stable/) functions and [how
+  to write Jinja
+  templates](https://jinja.palletsprojects.com/en/2.11.x/templates/) (which is
+  not so hard, btw)
+
+
+## Roadmap
+
+### Short term
+- Implement post processing API: with matplotlib and Paraview
+
+### Long term
+- Interface Nek5000 states and time-integration event loop
+
+## Contributing
+
+Contributions are welcome! You can help by testing out the code, filing issues
+and submitting patches. See [contributing guidelines](CONTRIBUTING.md).

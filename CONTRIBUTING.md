@@ -9,9 +9,9 @@ pip install -e '.[dev]'
 ## General guidelines
 
 * **Editor**: Use an editor which supports [EditorConfig](http://editorconfig.org/)
-* **Style guide**: Follow [Fortran best
-  practices](https://www.fortran90.org/src/best-practices.html). For the Python
-  code, the tool `black` is recommended. Also install `pipx` and `pre-commit`:
+* **Style guide**: For Python code, `black`, `isort` and `flake8` are used to
+  check and lint. Installing `pre-commit` would enforce the style automatically
+  as a git hook.
 
   ```sh
   pre-commit install
@@ -23,10 +23,6 @@ pip install -e '.[dev]'
 
   * `snek5000`:
     * `master`: main branch
-    * `develop`: development branch
-  * `lib/Nek5000`:
-    * `master`: upstream branch
-    * `stable`: main branch tracking the stable version 17
     * `develop`: development branch
 
   The following make working with submodules easy and ensures consistency:
