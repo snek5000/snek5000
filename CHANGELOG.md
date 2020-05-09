@@ -28,6 +28,22 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+## [0.3.0a0] - 2020-05-09
+
+### Added
+
+- Sub-package `assets` and module `output.base`
+- Helper functions `source_root` and `get_asset`
+
+### Changed
+
+- Separate framework from the code and rename it to `snek5000`
+- Documentation and readme to reflect the package
+
+### Removed
+
+- ABL source code
+
 ## [0.2.2] - 2020-05-08
 
 ### Added
