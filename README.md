@@ -7,11 +7,13 @@ Python framework for Nek5000.
 
 **Warning:** This framework is experimental and of alpha-quality. The API can also change.
 
+**Documentation**: https://exabl.github.io/snek5000/
+
 ## Installation
 
 ```sh 
-# Clon e
-git clone --recursive git@github.com:exabl/snek5000.git
+# Clone
+git clone --recursive https://github.com:exabl/snek5000.git
 
 # Activate paths: Start here. Always!
 cd snek5000
@@ -62,9 +64,9 @@ sim.make.exec(["run"])  # actual simulation
 - Saves you from the trouble in setting up multiple source files (`.box`, `.par`, `SIZE`)
 - Checks for consistency of parameters
 - Out of source builds and runs, which can be inspected or executed using the conventional
-  makenek for debugging
+  `makenek` for debugging
 - Avoid typos and human errors
-- Better than bash scripting:
+- Better than bash scripting like:
   ```sh
   # Build case
   cd src/phill/
@@ -95,12 +97,11 @@ sim.make.exec(["run"])  # actual simulation
 
 - In development
 - Requires some basic knowledge of Python to use
-- Modification of the API requires learning
-- [Snakemake](https://snakemake.readthedocs.io/en/stable/) functions and [how
+- Modification of the API requires learning how
+  [Snakemake](https://snakemake.readthedocs.io/en/stable/) functions and [how
   to write Jinja
-  templates](https://jinja.palletsprojects.com/en/2.11.x/templates/) (which is
+  templates](https://jinja.palletsprojects.com/en/2.11.x/templates/) (which are
   not so hard, btw)
-
 
 ## Roadmap
 
