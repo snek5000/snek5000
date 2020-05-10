@@ -78,6 +78,9 @@ bin/*.stderr
 bin/*_JOB.md
 bin/launcher*.sh
 
+# Coverage.py
+htmlcov
+.coverage
 
 # VS Code
 .vscode

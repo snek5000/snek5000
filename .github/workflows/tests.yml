@@ -28,7 +28,7 @@ jobs:
         done
         git submodule sync
         git submodule update --init --recursive
-  
+
     - name: Install apt packages
       run: |
         sudo apt-get update
@@ -56,4 +56,4 @@ jobs:
     - name: Run tests
       run: |
         source activate.sh
-        pytest -s
+        pytest -s --cov=src
