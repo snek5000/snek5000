@@ -28,6 +28,14 @@ Security in case of vulnerabilities.
 ## [Unreleased]
 - Paraview I/O for loading and plotting functions
 
+## [0.3.1a0] - 2020-05-10
+
+### Added
+- More assets: templates, default snakemake config
+
+### Fixed
+- Source root path expands ~ and environment variables
+
 ## [0.3.0a0] - 2020-05-09
 
 ### Added
