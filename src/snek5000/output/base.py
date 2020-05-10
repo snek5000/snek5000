@@ -11,7 +11,7 @@ from pathlib import Path
 from socket import gethostname
 
 from fluidsim.base.output.base import OutputBase
-from snek5000 import logger, mpi
+from snek5000 import get_asset, logger, mpi
 
 
 class Output(OutputBase):
@@ -68,7 +68,17 @@ class Output(OutputBase):
                 "SNIC_RESOURCE", os.getenv("GITHUB_WORKFLOW", gethostname())
             )
         root = cls.get_root()
-        return root / "etc" / f"{host}.yml"
+        configfile = root / "etc" / f"{host}.yml"
+
+        if not configfile.exists():
+            logger.warning(
+                "Expected a configuration file describing compilers and flags: "
+                f"{configfile}"
+            )
+            configfile = Path(get_asset("default_configfile.yml"))
+            logger.info(f"Using default configuration instead: {configfile}")
+
+        return configfile
 
     def __init__(self, sim=None):
         self.sim = sim
@@ -80,6 +90,8 @@ class Output(OutputBase):
         # Same as package name __name__
         self.name_pkg = sim.info.solver.classes.Output.module_name.split(".")[0]
         self.root = self.get_root()
+        # Check configfile early
+        self.get_configfile()
 
         self._blacklist = {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py")}
         if sim:
