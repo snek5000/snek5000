@@ -7,6 +7,7 @@ import inspect
 import os
 import pkgutil
 import shutil
+from itertools import chain
 from pathlib import Path
 from socket import gethostname
 
@@ -21,6 +22,37 @@ class Output(OutputBase):
     case files.
 
     """
+
+    @property
+    def excludes(self):
+        """Prefixes and suffixes of files which should be excluded from being
+        copied."""
+        return {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py")}
+
+    @property
+    def makefile_usr_sources(self):
+        """
+        Sources for inclusion to makefile_usr.inc
+        Dict[directory]  -> list of source files
+        """
+        return {
+            # "source_directory": [
+            #    (src1a.f, src1b.f)
+            #    (src2a.f, src2b.f, src2c.f), ...
+            # ]
+        }
+
+    @property
+    def makefile_usr_obj(self):
+        """Object files to be included in compilation. Should be exported as USR
+        environment variable.
+
+        """
+        makefile_usr_obj = [
+            sources[0].replace(".f", ".o")
+            for sources in chain.from_iterable(self.makefile_usr_sources.values())
+        ]
+        return makefile_usr_obj
 
     @staticmethod
     def _complete_info_solver(info_solver):
@@ -87,14 +119,13 @@ class Output(OutputBase):
         except AttributeError:
             pass
 
-        # Same as package name __name__
-        self.name_pkg = sim.info.solver.classes.Output.module_name.split(".")[0]
         self.root = self.get_root()
         # Check configfile early
         self.get_configfile()
 
-        self._blacklist = {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py")}
         if sim:
+            # Same as package name __name__
+            self.name_pkg = sim.info.solver.classes.Output.module_name.split(".")[0]
             super().__init__(sim)
 
     def _get_resources(self, name_pkg=None):
@@ -104,7 +135,7 @@ class Output(OutputBase):
         :returns: generator
 
         """
-        blacklist = self._blacklist
+        excludes = self.excludes
         if not name_pkg:
             name_pkg = self.name_pkg
         try:
@@ -116,8 +147,8 @@ class Output(OutputBase):
             for f in contents_pkg
             if (
                 importlib.resources.is_resource(name_pkg, f)
-                and not any(f.startswith(ext) for ext in blacklist["prefix"])
-                and not any(f.endswith(ext) for ext in blacklist["suffix"])
+                and not any(f.startswith(ext) for ext in excludes["prefix"])
+                and not any(f.endswith(ext) for ext in excludes["suffix"])
             )
         )
 
@@ -236,6 +267,7 @@ class Output(OutputBase):
             logger.info(f"Copied: {root} -> {new_root}")
 
     def write_box(self, template):
+        """Write <case name>.box file from box.j2 template."""
         if mpi.rank == 0:
             box_file = self.sim.path_run / f"{self.name_pkg}.box"
             logger.info(f"Writing box file... {box_file}")
@@ -245,6 +277,7 @@ class Output(OutputBase):
                 )
 
     def write_size(self, template):
+        """Write SIZE file from SIZE.j2 template."""
         if mpi.rank == 0:
             size_file = self.sim.path_run / "SIZE"
             logger.info(f"Writing SIZE file... {size_file}")
@@ -252,3 +285,24 @@ class Output(OutputBase):
                 self.oper.write_size(
                     template, fp, comments=self.sim.params.short_name_type_run
                 )
+
+    def write_makefile_usr(self, template):
+        """Write the makefile_usr.inc file which gets included in the main
+        makefile.
+
+        """
+
+        paths_of_sources = []
+
+        for path_dir, list_of_sources in self.makefile_usr_sources.items():
+            for sources in list_of_sources:
+                paths_of_sources.append([f"{path_dir}/{file}" for file in sources])
+
+        if mpi.rank == 0 and paths_of_sources:
+            makefile_usr = self.sim.path_run / "makefile_usr.inc"
+            output = template.render(
+                list_of_sources=paths_of_sources,
+                comments=self.sim.params.short_name_type_run,
+            )
+            with open(makefile_usr, "w") as fp:
+                fp.write(output)

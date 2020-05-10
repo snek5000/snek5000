@@ -1,0 +1,61 @@
+{# A template for generating SIZE files.
+
+A SIZE file contains a collection of Fortran parameters (fortran_var) and their
+values (python_var). The values are initialized as parameters in Python. The
+template is rendered by the write_size method of the Output class.
+#}
+{% macro parameter(fortran_var, python_var) -%}
+{# A cosmetic macro to indent comments nicely #}
+{%- set parameter_string = "parameter ({}={})".format(fortran_var, python_var) -%}
+{{ parameter_string.ljust(32) -}}
+{% endmacro -%}
+c
+c     Include file to dimension static arrays
+c     and to set some hardwired run-time parameters
+c
+{% for comment in comments.splitlines() -%}
+c     {{ comment }}
+{% endfor -%}
+c
+c
+      integer ldim,lx1,lxd,lx2,lx1m,lelg,lelt,lpmin,lpmax,ldimt
+      integer lpelt,lbelt,toteq,lcvelt
+      integer lelx,lely,lelz,mxprev,lgmres,lorder,lhis
+      integer maxobj,lpert,nsessmax,lxo
+      integer lfdm,ldimt_proj
+
+      ! BASIC
+      {{ parameter("ldim", params.oper.dim) }}  ! domain dimension (2 or 3)
+      {{ parameter("lx1", params.oper.elem.order) }}  ! GLL points per element along each direction
+      {{ parameter("lxd", order_dealiasing) }}  ! GL  points for over-integration (dealiasing)
+      {{ parameter("lx2", order_pressure) }}  ! GLL points for pressure (lx1 or lx1-2)
+
+      {{ parameter("lelg", max_n_seq) }}  ! max total number of elements
+      {{ parameter("lpmin", params.oper.nproc_min) }}  ! min MPI ranks
+      {{ parameter("lpmax", params.oper.nproc_max) }}  ! max MPI ranks
+      {{ parameter("ldimt", params.oper.scalars) }}  ! max auxiliary fields (temperature + scalars)
+
+      ! OPTIONAL
+      {{ parameter("ldimt_proj", params.oper.max.scalars_proj) }}  ! max auxiliary fields residual projection
+      {{ parameter("lhis", params.oper.max.hist) }}  ! max history/monitoring points
+      {{ parameter("maxobj", params.oper.max.obj) }}  ! max number of objects
+      {{ parameter("lpert", params.oper.max.perturb) }}  ! max number of perturbations
+      {{ parameter("toteq", params.oper.max.scalars_cons) }}  ! max number of conserved scalars in CMT
+      {{ parameter("nsessmax", params.oper.max.sessions) }}  ! max sessions to NEKNEK
+      {{ parameter("lxo", params.oper.elem.order_out) }}  ! max GLL points on output (lxo>=lx1)
+      {{ parameter("mxprev", params.oper.max.dim_proj) | trim }}
+      {{ parameter("lgmres", params.oper.max.dim_krylov) }}  ! max dim of projection & Krylov space
+      {{ parameter("lorder", params.oper.max.order_time) }}  ! max order in time
+      {{ parameter("lx1m", order_mesh_solver) }}  ! GLL points mesh solver
+      {{ parameter("lfdm", params.oper.misc.fast_diag | int) }}  ! set to 1 for fast diagonalization method
+      {{ parameter("lelx", max_nx) | trim }}
+      {{ parameter("lely", max_ny) | trim }}
+      {{ parameter("lelz", max_nz) }}  ! global tensor mesh dimensions
+      {{ parameter("lelt", max_n_loc) }}  ! max number of local elements per MPI rank
+      {{ parameter("lbelt", order_mhd) }}  ! set to lelt for mhd
+      {{ parameter("lpelt", order_linear) }}  ! set to lelt for linear stability
+      {{ parameter("lcvelt", order_cvode) }}  ! set to lelt for cvode
+
+      ! INTERNALS
+      include 'SIZE.inc'
+c vim: set ft=fortran
