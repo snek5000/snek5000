@@ -208,4 +208,8 @@ def remove(items):
         if item.is_dir():
             rmtree(item, ignore_errors=True)
         else:
-            item.unlink(missing_ok=True)
+            try:
+                item.unlink(missing_ok=True)
+            except TypeError:
+                # python < 3.8
+                pass

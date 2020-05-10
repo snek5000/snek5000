@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 
@@ -45,3 +47,33 @@ def oper():
     params.oper.nproc_min = 6
 
     return Class(params=params)
+
+
+@pytest.fixture(scope="session")
+def sim_data(tmpdir_factory):
+    """Generate fake simulation data."""
+    files = """box.tmp
+makefile
+makefile_usr.inc
+nek5000
+params.xml
+phill0.f00001
+phill.box
+phill.f
+phill.log
+phill.ma2
+phill.par
+phill.re2
+phill.usr
+rs6phill0.f00001
+rs6phill0.f00002
+rs6phill0.f00003
+SESSION.NAME
+SIZE
+Snakefile""".splitlines()
+
+    path_run = Path(tmpdir_factory.mktemp("sim_data"))
+    for f in files:
+        (path_run / f).touch()
+
+    return path_run

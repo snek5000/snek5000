@@ -16,7 +16,14 @@ def test_simul_params():
     from snek5000.solvers.base import Simul
 
     params = Simul.create_default_params()
-    params.nek._write_par()
+
+    buffer = StringIO()
+    params.nek._write_par(buffer)
+    params.nek._read_par(buffer)
+    buffer2 = StringIO()
+    params.nek._write_par(buffer2)
+
+    assert buffer.getvalue() == buffer2.getvalue()
 
 
 def test_oper_params(oper):
