@@ -17,17 +17,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    - name: Fetch all history for all tags and branches
-      run: git fetch --prune --unshallow
-
-    - name: Clone private submodules
-      run: |
-        git config --file .gitmodules --get-regexp url | while read url; do
-         git config --file .gitmodules $(echo "$url" | sed -E "s|git@github.com:\|https://github.com/|https://${{ secrets.GITHUB_ACTIONS_PAT }}:${{ secrets.GITHUB_ACTIONS_PAT }}@github.com/|")
-        done
-        git submodule sync
-        git submodule update --init --recursive
+      with:
+        submodules: recursive
 
     - name: Install apt packages
       run: |
