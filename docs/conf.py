@@ -23,6 +23,7 @@ from subprocess import PIPE
 
 import breathe
 import snek5000
+from snek5000 import util
 
 
 def root(module):
@@ -71,7 +72,7 @@ extensions = [
 os.makedirs("_build/html/doxygen", exist_ok=True)
 
 # Inspect whether to run doxygen or not
-last_modified = snek5000.util.last_modified("../lib").stat().st_mtime
+last_modified = util.last_modified("../lib").stat().st_mtime
 timestamp = Path("_build/.doxygen_timestamp")
 if timestamp.exists() and Path("_build/xml").exists():
     with open(timestamp) as fp:
