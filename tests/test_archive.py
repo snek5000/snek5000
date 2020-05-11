@@ -18,7 +18,5 @@ def test_compress(sim_data):
     archive(sim_data / "ark.tar", contents[half:])
     archive(sim_data / "ark.tar.gz", readonly=True)
 
-
-def test_clean(sim_data):
     os.chdir(str(sim_data))
     clean_simul("phill", "ark.tar.gz")

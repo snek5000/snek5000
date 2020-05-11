@@ -1,4 +1,5 @@
 import re
+import shutil
 import subprocess
 from glob import iglob
 from pathlib import Path
@@ -165,7 +166,8 @@ def tar_cmd(compress_format="", remove=False, append=False):
     cmd = archive_program[compress_format]
     if remove:
         cmd += " --remove-files "
-    else:
+    elif shutil.which("bsdtar"):
+        # Use bsdtar if available
         # bsdtar is faster, but does not support --remove-files option
         cmd = "bsdtar"
 

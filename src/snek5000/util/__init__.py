@@ -13,6 +13,7 @@ from zipfile import ZipFile
 
 from fluiddyn import util
 
+from .. import source_root
 from ..log import logger
 
 
@@ -98,17 +99,13 @@ def last_modified(path):
 
 def activate_paths():
     """Setup environment variables in preparation for Nek5000 build."""
-    here = Path(__file__).parent
-    if not os.getenv("SOURCE_ROOT"):
-        os.environ["SOURCE_ROOT"] = source_root = str(
-            (here / "../../../lib/Nek5000").absolute()
-        )
+    env_source_root = os.environ["SOURCE_ROOT"] = source_root()
 
     env_path = str(os.getenv("PATH"))
-    if source_root not in env_path:
-        os.environ["PATH"] = path = ":".join((source_root, env_path))
+    if env_source_root not in env_path:
+        os.environ["PATH"] = ":".join((env_source_root + "/bin", env_path))
 
-    return source_root, path
+    return env_source_root, env_path
 
 
 def init_params(Class, isolated_unit=False):
