@@ -27,7 +27,7 @@ if [ -d venv ]; then
   source venv/bin/activate
 elif [[ -z "$CONDA_PREFIX" ]] && [[ -z "$VIRTUAL_ENV" ]]; then
   echo 'WARNING: no venv / conda environment present.'
-  echo 'Read the docs on how to setup your Python environment: https://exabl.github.io/snek5000/README.html#easy-way'
+  echo 'Read the docs on how to setup your Python environment: https://exabl.github.io/snek5000/README.html#installation'
 fi
 
 if [ "$BASH_VERSION" ]; then
