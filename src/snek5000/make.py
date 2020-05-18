@@ -21,10 +21,12 @@ class Make:
         except AttributeError:
             raise AttributeError("Unable to get path of Snakefile via Output class.")
 
+        self.log_handler = []
+
     def list(self):
         """List rules."""
         with change_dir(self.path_run):
-            return snakemake(self.file, listrules=True)
+            return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
     def exec(self, rules=("run",), dryrun=False):
         """Execute snakemake rules in sequence.
@@ -33,4 +35,6 @@ class Make:
 
         """
         with change_dir(self.path_run):
-            return snakemake(self.file, targets=rules, dryrun=dryrun)
+            return snakemake(
+                self.file, targets=rules, dryrun=dryrun, log_handler=self.log_handler
+            )
