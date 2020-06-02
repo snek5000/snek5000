@@ -102,6 +102,12 @@ _formulation`` and whether
             "nx": 8,
             "ny": 8,
             "nz": 8,
+            "origin_x": 0.0,
+            "origin_y": 0.0,
+            "origin_z": 0.0,
+            "ratio_x": 1.0,
+            "ratio_y": 1.0,
+            "ratio_z": 1.0,
             "Lx": 2 * pi,
             "Ly": 2 * pi,
             "Lz": 2 * pi,
@@ -398,7 +404,7 @@ Note that the character bcs _must_ have 3 spaces.
 """
 
         def _str_grid(*args):
-            fmt = "{:.1f} {:.4f} {:.1f}"
+            fmt = "{:.4f} {:.4f} {:.4f}"
             args = (float(value) for value in args)
             return fmt.format(*args)
 
@@ -415,9 +421,15 @@ Note that the character bcs _must_ have 3 spaces.
             "nelx nely nelz": " ".join(
                 str(-n) for n in (params.oper.nx, params.oper.ny, params.oper.nz)
             ),
-            "x0 x1 ratio": _str_grid(0, params.oper.Lx, 1),
-            "y0 y1 ratio": _str_grid(0, params.oper.Ly, 1),
-            "z0 z1 ratio": _str_grid(0, params.oper.Lz, 1),
+            "x0 x1 ratio": _str_grid(
+                params.oper.origin_x, params.oper.Lx, params.oper.ratio_x
+            ),
+            "y0 y1 ratio": _str_grid(
+                params.oper.origin_y, params.oper.Ly, params.oper.ratio_y
+            ),
+            "z0 z1 ratio": _str_grid(
+                params.oper.origin_z, params.oper.Lz, params.oper.ratio_z
+            ),
             "BCs: (cbx0, cbx1, cby0, cby1, cbz0, cbz1)": ",".join(
                 bc.ljust(3) for bc in boundary
             ),
