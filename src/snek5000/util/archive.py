@@ -65,7 +65,8 @@ def exec_compress(tarball):
     tar, tarball, compress_format = parse_args_from_filename(tarball)
 
     if not compress_format:
-        raise IOError(f"Cannot compress: {tar} -> {tarball}")
+        logger.error(f"Cannot compress: {tar} -> {tarball}")
+        return "", tarball
 
     # tarball will be compressed in place when no items are provided
     main = compress_cmd(compress_format).split()
