@@ -164,12 +164,12 @@ def get_status(path):
     locks_dir = path / ".snakemake" / "locks"
     contents = os.listdir(path)
 
-    if not locks_dir.exists():
+    if not (path / ".snakemake").exists():
         return (
             425,
             f"Too Early: Seems like snakemake was never executed: {path}",
         )
-    else:
+    elif locks_dir.exists():
         locks = tuple(locks_dir.iterdir())
         if locks:
             return (
@@ -216,7 +216,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
     assert path.absolute().name.startswith("abl"), "Cannot detect simulation class"
-    from snek5000.solvers.abl import Simul
+    from abl.solver import Simul
 
     if "params.xml" in contents:
         params = Simul.load_params_from_file(path_xml=(path / "params.xml"))
