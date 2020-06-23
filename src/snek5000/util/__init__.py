@@ -99,7 +99,7 @@ def last_modified(path):
 
 def activate_paths():
     """Setup environment variables in preparation for Nek5000 build."""
-    env_source_root = os.environ["SOURCE_ROOT"] = source_root()
+    env_source_root = os.environ["NEK_SOURCE_ROOT"] = source_root()
 
     env_path = str(os.getenv("PATH"))
     if env_source_root not in env_path:
