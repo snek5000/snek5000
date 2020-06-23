@@ -198,7 +198,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
       - check if snakemake was ever executed or check if directory is locked by snakemake
       - ensures simulation files exist
       - ensures restart files exist
-    * Reads params.xml if it exists, and if not falls back to abl.par. Hardcoded!
+    * Reads params.xml if it exists, and if not falls back to .par file.
     * Modifies checkpoint parameters with appropriate ``chkp_fnumber`` to
       restart from KTH framework.
 
@@ -209,22 +209,27 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     if verify_contents:
         status, msg = get_status(path)
         if status >= 400:
-            raise IOError(f"{status}: {msg}")
+            logger.error(f"{status}: {msg}")
         else:
             logger.info(f"{status}: {msg}")
 
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
-    assert path.absolute().name.startswith("abl"), "Cannot detect simulation class"
-    from snek5000.solvers.abl import Simul
+    solver_prefix = path.absolute().name.split("_")[0]
+    try:
+        from importlib import import_module
+
+        Simul = import_module(f"{solver_prefix}.solver").Simul
+    except ImportError:
+        raise ImportError("Cannot import simulation class")
 
     if "params.xml" in contents:
-        params = Simul.load_params_from_file(path_xml=(path / "params.xml"))
+        params = Simul.load_params_from_file(path_xml=str(path / "params.xml"))
     else:
-        logger.warning("No params.xml found... Attempting to read abl.par")
+        logger.warning(f"No params.xml found... Attempting to read {solver_prefix}.par")
 
         params = Simul.create_default_params()
-        params.nek._read_par(path / "abl.par")
+        params.nek._read_par(path / f"{solver_prefix}.par")
 
     params.nek.chkpoint.chkp_fnumber = chkp_fnumber
     params.nek.chkpoint.read_chkpt = True
