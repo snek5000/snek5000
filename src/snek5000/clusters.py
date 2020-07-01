@@ -2,7 +2,7 @@ try:
     from fluiddyn.clusters.snic import ClusterSNIC as Base, _venv
 
     class Cluster(Base):
-        default_project = "snic2019-1-2"
+        default_project = "snic2020-1-31"
         cmd_run = "_delete"
         cmd_run_interactive = "_delete"
 
