@@ -1,4 +1,5 @@
 import re
+import shlex
 import shutil
 import subprocess
 from glob import iglob
@@ -102,7 +103,9 @@ def exec_tar(tarball, items, remove):
     else:
         output = tar
 
-    main = tar_cmd(compress_format, remove=remove, append=output.exists()).split()
+    main = shlex.split(
+        tar_cmd(compress_format, remove=remove, append=output.exists())
+    )
 
     # run command
     items = [str(i) for i in items]
@@ -128,14 +131,18 @@ def next_path(old_path):
         # for example: remove .tar from the end, if any
         stem = p.stem
         for suffix in p.suffixes:
-            stem = re.sub(f"{suffix}$", "", p.stem)
-        p = p.parent / "".join(stem, f"_{i:02d}", *p.suffixes)
+            stem = re.sub(f"{suffix}$", "", stem)
+
+        p = p.parent / "".join([stem, f"_{i:02d}", *p.suffixes])
+        logger.info(f"Checking if path exists: {p}")
+
+    logger.info(f"Output path: {p}")
 
     return p
 
 
 def parse_args_from_filename(tarball):
-    tarball = Path(tarball)
+    tarball = Path(str(tarball))
 
     # split archive.tar.zst -> archive, .tar, .zst
     name, dottar, compress_format = tarball.name.partition(".tar")
