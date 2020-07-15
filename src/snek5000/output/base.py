@@ -227,7 +227,7 @@ class Output(OutputBase):
         try:
             logger.info("Copying with shutil.copytree ...")
             copytree_kwargs = dict(
-                src=root, dst=new_root, symlinks=True, ignore=conditional_ignore
+                src=root, dst=new_root, symlinks=False, ignore=conditional_ignore
             )
             # Python 3.8+
             shutil.copytree(**copytree_kwargs, dirs_exist_ok=True)
