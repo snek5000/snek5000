@@ -35,8 +35,15 @@ from .log import logger  # noqa: F401
 
 def source_root():
     """Path of Nek5000 source code."""
+    if os.getenv("SOURCE_ROOT"):
+        logger.warning(
+            "The environment variable "
+            "SOURCE_ROOT is deprecated in v19, use NEK_SOURCE_ROOT instead."
+        )
+
     with importlib.resources.path(__name__, "__init__.py") as f:
         root = f.parent
+
     nek5000 = os.path.expandvars(
         os.path.expanduser(
             os.getenv("NEK_SOURCE_ROOT", str((root / "../../lib/Nek5000").absolute()))
