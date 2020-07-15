@@ -26,7 +26,21 @@ Security in case of vulnerabilities.
 -->
 
 ## [Unreleased]
-- Paraview I/O for loading and plotting functions
+
+## [0.4.0b0] - 2020-07-15
+
+### Added
+- Parameters for specifying mesh origin and ratio
+- Coverage tests
+
+### Changed
+- Support for Nek5000 v19
+- Cluster's default project
+
+### Fixed
+- Activate `$PATH` logic, added tests
+- No error raised by `prepare_for_restart` after unlock
+- Bug fixes while archiving: choosing paths of new tarball
 
 ## [0.3.1a0] - 2020-05-10
 
@@ -141,3 +155,14 @@ Security in case of vulnerabilities.
 - Scripting for managing run parameters `snek5000.params`
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
+
+[Unreleased]: https://github.com/exabl/snek5000/compare/0.4.0b0...HEAD
+[0.4.0b0]: https://github.com/exabl/snek5000/compare/0.3.1a0...0.4.0b0
+[0.3.1a0]: https://github.com/exabl/snek5000/compare/0.3.0a0...0.3.1a0
+[0.3.0a0]: https://github.com/exabl/snek5000/compare/0.2.2...0.3.0a0
+[0.2.2]: https://github.com/exabl/snek5000/compare/0.2.1...0.2.2
+[0.2.1]: https://github.com/exabl/snek5000/compare/0.2.0...0.2.1
+[0.2.0]: https://github.com/exabl/snek5000/compare/0.1.1...0.2.0
+[0.1.1]: https://github.com/exabl/snek5000/compare/0.1.0...0.1.1
+[0.1.0]: https://github.com/exabl/snek5000/compare/0.0.1...0.1.0
+[0.0.1]: https://github.com/exabl/snek5000/releases/tag/0.0.1

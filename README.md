@@ -6,7 +6,7 @@
 
 Python framework for Nek5000.
 
-**Warning:** This framework is experimental and of alpha-quality. The API can also change.
+**Warning:** This framework is experimental and of beta-quality. The API can also change.
 
 **Documentation**: https://exabl.github.io/snek5000/
 
