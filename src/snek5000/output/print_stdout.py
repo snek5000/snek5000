@@ -29,7 +29,13 @@ class PrintStdOut:
             path_run = Path(output.path_run)
             logfiles = sorted(path_run.glob("*.log"))
             if logfiles:
-                self._file = logfiles[-1]
+                try:
+                    self._file = next(
+                        file for file in logfiles
+                        if file.name == f"{self.output.name_solver}.log"
+                    )
+                except StopIteration:
+                    self._file = logfiles[-1]
             else:
                 raise FileNotFoundError(
                     f"Cannot find a .log to parse in {path_run}: {logfiles}"
