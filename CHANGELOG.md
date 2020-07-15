@@ -27,7 +27,7 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
-## [0.4.0b0] - 2020-07-15
+## [0.4.0b1] - 2020-07-15
 
 ### Added
 - Parameters for specifying mesh origin and ratio
@@ -156,8 +156,8 @@ Security in case of vulnerabilities.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
-[Unreleased]: https://github.com/exabl/snek5000/compare/0.4.0b0...HEAD
-[0.4.0b0]: https://github.com/exabl/snek5000/compare/0.3.1a0...0.4.0b0
+[Unreleased]: https://github.com/exabl/snek5000/compare/0.4.0b1...HEAD
+[0.4.0b1]: https://github.com/exabl/snek5000/compare/0.3.1a0...0.4.0b1
 [0.3.1a0]: https://github.com/exabl/snek5000/compare/0.3.0a0...0.3.1a0
 [0.3.0a0]: https://github.com/exabl/snek5000/compare/0.2.2...0.3.0a0
 [0.2.2]: https://github.com/exabl/snek5000/compare/0.2.1...0.2.2
