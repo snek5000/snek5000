@@ -231,7 +231,7 @@ class Output(OutputBase):
             )
             # Python 3.8+
             shutil.copytree(**copytree_kwargs, dirs_exist_ok=True)
-        except TypeError:
+        except (TypeError, shutil.Error):
             try:
                 logger.warning(
                     "Python < 3.8: shutil.copytree may not proceed if directories exist."
