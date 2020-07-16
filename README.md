@@ -6,4 +6,4 @@
 
 Python framework for Nek5000.
 
-**Documentation**: https://snek5000.readthedocs.io/
+**Documentation**: <https://snek5000.readthedocs.io/>
