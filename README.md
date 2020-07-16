@@ -1,14 +1,14 @@
 # snek5000
 
 [![PyPI](https://img.shields.io/pypi/v/snek5000)](https://pypi.org/project/snek5000/)
-[![](https://github.com/exabl/snek5000/workflows/Tests/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Tests)
-[![](https://github.com/exabl/snek5000/workflows/Docs/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Docs)
+[![Tests Status](https://github.com/exabl/snek5000/workflows/Tests/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Tests)
+[![Documentation Status](https://readthedocs.org/projects/snek5000/badge/?version=latest)](https://snek5000.readthedocs.io/en/latest/?badge=latest)
 
 Python framework for Nek5000.
 
 **Warning:** This framework is experimental and of beta-quality. The API can also change.
 
-**Documentation**: https://exabl.github.io/snek5000/
+**Documentation**: https://snek5000.readthedocs.io/
 
 ## Installation
 
@@ -41,7 +41,7 @@ do this (and it has to be done only once):
 ## Why and why not use snek5000?
 
 The [`snek5000` Python
-API](https://exabl.github.io/snek5000/_generated/snek5000.html) is based on
+API](https://snek5000.readthedocs.io/en/latest/_generated/snek5000.html) is based on
 [fluidsim](https://fluidsim.readthedocs.io), which allows you to launch a
 simulation using scripts. For example the [periodic hill
 example](https://github.com/exabl/snek5000-phill) can be launched as.
