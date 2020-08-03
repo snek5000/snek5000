@@ -105,13 +105,6 @@ sim.make.exec(["run"])  # actual simulation
   not so hard, btw)
 
 ## Roadmap
-
-### Short term
-- Implement post processing API: with matplotlib and Paraview
-
-### Long term
-- Interface Nek5000 states and time-integration event loop
-
 ## Contributing
 
 Contributions are welcome! You can help by testing out the code, filing issues

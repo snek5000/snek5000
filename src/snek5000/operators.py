@@ -3,9 +3,6 @@
 
 Information regarding mesh, mathematical operators, and domain decomposition.
 
-.. todo:: Move length to abl.par file and extrude it to allow double precision
-          values.
-
 .. note:: We deliberately try not to use the variable names used in Nek5000, as
           those are ambiguously named.
 

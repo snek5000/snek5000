@@ -6,22 +6,22 @@ A Pythonic frontend to Nek5000.
 .. autosummary::
    :toctree:
 
+   assets
    output
    solvers
+   util
 
 **Modules**
 
 .. autosummary::
    :toctree:
 
-   assets
    info
    log
    magic
    make
    operators
    params
-   util
 
 """
 import importlib.resources

@@ -1,3 +1,6 @@
+Notes on Nek5000 internals
+##########################
+
 Boundary condition
 ==================
 
@@ -52,13 +55,13 @@ Also if ``igeom=2``:
       -  bdry?
       -  ``opmask``: set 0 to dirichlet BC, masked from the update
 
-Boundary conditions
--------------------
+Boundary condition subroutines
+------------------------------
 
 Periodicity: node numbering
 
-``bcdirvc``
-~~~~~~~~~~~
+``bcdirvc``: Dirichlet
+~~~~~~~~~~~~~~~~~~~~~~
 
 -  ``CB = V (Constant Dirichlet in rea file)``
 -  ``CB = v (user provided Dirichlet in userbc)``:
@@ -102,19 +105,15 @@ No mask
 
 Velocity should be ``v=0``
 
-Caution: Pressure preconditioner BC are related
+Caution: Pressure preconditioner and BC are related
 
-To Do
-~~~~~
+.. todo::
 
-Set velocity v=0, normal component of velocity is zero, opposite of
-``on`` boundary condition.
-
-FAQ
-===
+   Set velocity v=0, normal component of velocity is zero, opposite of ``on``
+   boundary condition.
 
 Time-stepping algebra
----------------------
+=====================
 
 Mass matrix requires time levels (n, n-1, n-2): extrapolated Conv /
 Stiffness requires time levels (n-1, n-2): explicit
@@ -133,4 +132,4 @@ correction in each sub-step.
 CFL number
 ~~~~~~~~~~
 
-BDF3/EXT3: CFL=0.6. Characteristic emthod
+BDF3/EXT3: CFL=0.6. Characteristic method

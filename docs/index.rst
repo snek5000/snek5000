@@ -44,7 +44,7 @@ Welcome to *snek5000*'s documentation!
    :caption: Help & Reference
 
    roadmap
-   boundary_cond
+   internals
    filtering
    CONTRIBUTING
    CHANGELOG
