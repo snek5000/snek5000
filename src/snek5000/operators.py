@@ -10,6 +10,7 @@ Information regarding mesh, mathematical operators, and domain decomposition.
 import inspect
 import math
 import sys
+from collections import OrderedDict
 from math import pi
 
 from .util import docstring_params
@@ -93,7 +94,7 @@ _formulation`` and whether
 
     @staticmethod
     def _complete_params_with_default(params):
-        """This static method is used to complete the *params* container.
+        """This static method is used to complete the *params.oper* container.
         """
         attribs = {
             "nx": 8,
@@ -374,16 +375,12 @@ SIZE            params.oper.misc      Comment
             string += f"- {key} = {value}\n"
         return f"Nek5000 operator:\n{string}"
 
-    def write_box(self, template, fp=sys.stdout, comments=""):
-        """Write the .box file which is input for the ``genbox`` meshing
-        tool.
+    def info_box(self, comments=""):
+        """Gather information for writing a box file.
 
-        Parameters
-        ----------
-        template : jinja2.environment.Template
-            Template instance like :code:`abl.templates.box`
-        fp : io.TextIOWrapper
-            File handler to write to
+        Returns
+        -------
+        dict
 
         """
         params = self.params
@@ -399,7 +396,6 @@ If nelx (y or z) < 0, then genbox automatically generates the
 
 Note that the character bcs _must_ have 3 spaces.
 """
-
         def _str_grid(*args):
             fmt = "{:.4f} {:.4f} {:.4f}"
             args = (float(value) for value in args)
@@ -431,13 +427,47 @@ Note that the character bcs _must_ have 3 spaces.
                 bc.ljust(3) for bc in boundary
             ),
         }
-        options = {
+        info = {
             "comments": comments,
             "dim": str(-params.oper.dim),
             "grid_info": grid_info,
             "nb_fields": str(self.nb_fields),  # scalars + velocity
         }
+        return info
 
+    def write_box(self, template, fp=sys.stdout, comments=""):
+        """Write the .box file which is input for the ``genbox`` meshing
+        tool.
+
+        Parameters
+        ----------
+        template : jinja2.environment.Template
+            Template instance like :code:`abl.templates.box`
+        fp : io.TextIOWrapper
+            File handler to write to
+
+        """
+        options = self.info_box(comments)
+
+        # A hack to ensure that the rows are ordered properly. Deduced from the
+        # keys of the dictionary grid_info
+        #
+        # nelx nely nelz
+        # x0 x1 ratio
+        # y0 y1 ratio
+        # z0 z1 ratio
+        # BCs: (cbx0, cbx1, cby0, cby1, cbz0, cbz1)
+
+        grid_info = options['grid_info']
+        ordered_keys =  sorted(
+            grid_info.keys(),
+            key=lambda k: {'n': 0, 'x': 1, 'y': 2, 'z': 3, 'B': 4}[k.strip()[0]]
+        )
+        options["grid_info"] = OrderedDict([
+            (key, grid_info[key]) for key in ordered_keys
+        ])
+
+        # Write the box file
         output = template.render(**options)
         fp.write(output)
 
