@@ -47,7 +47,7 @@ jobs:
     - name: Run tests
       run: |
         source activate.sh
-        pytest -s --cov=src --cov=tests
+        pytest -s
 
     - name: Upload coverage to codecov
       if: ${{ success() }}
