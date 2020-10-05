@@ -65,8 +65,31 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
-    "recommonmark",
+    #  "recommonmark",
+    #  "myst_parser",
+    "myst_nb",
+    "sphinx_copybutton"
 ]
+
+# Execute ipynb files into with a cache ...
+jupyter_execute_notebooks = "cache"
+# ... except these ipynb files
+execution_excludepatterns = ['ipynb/executed/*']
+
+# CSS selector which modifies the sphinx-copybutton feature
+copybutton_selector = ",".join(
+    [
+        f"div.highlight-{css_class} div.highlight pre"
+        for css_class in ("python", "ipython3", "sh", "ini", "default")
+    ]
+)
+
+# The suffix of source filenames.
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.ipynb': 'myst-nb',
+    '.myst': 'myst-nb',
+}
 
 # Execute Doxygen
 os.makedirs("_build/html/doxygen", exist_ok=True)
@@ -142,7 +165,7 @@ templates_path = ["_templates"]
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = [".rst", ".md"]
+#  source_suffix = [".rst", ".md"]
 
 
 # List of patterns, relative to source directory, that match files and

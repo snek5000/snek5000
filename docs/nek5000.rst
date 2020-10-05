@@ -8,8 +8,8 @@ Nek5000 core library
 
 * `Documentation produced with Doxygen <doxygen/index.html>`_
 
-Links
------
+External links
+--------------
 
 .. * :ref:`Upstream documentation for Nek5000 <nek:genindex>`
 .. Strange intersphinx bug: WARNING: undefined label: nek:genindex (if the link has no caption the label must precede a section header)

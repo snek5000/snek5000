@@ -12,6 +12,14 @@ Python framework for Nek5000.
 
 ## Installation
 
+Install it as follows:
+
+```sh
+pip install snek5000
+```
+
+Something does not work and you wish to fix it? Are you curious to see how it
+works? For development:
 ```sh 
 # Clone
 git clone --recursive https://github.com/exabl/snek5000.git
@@ -97,14 +105,14 @@ sim.make.exec(["run"])  # actual simulation
 #### Disadvantages
 
 - In development
-- Requires some basic knowledge of Python to use
+- Requires some basic knowledge of Python to use (*not really a big issue, to
+  be honest*).
 - Modification of the API requires learning how
   [Snakemake](https://snakemake.readthedocs.io/en/stable/) functions and [how
   to write Jinja
   templates](https://jinja.palletsprojects.com/en/2.11.x/templates/) (which are
   not so hard, btw)
 
-## Roadmap
 ## Contributing
 
 Contributions are welcome! You can help by testing out the code, filing issues

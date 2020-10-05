@@ -27,15 +27,14 @@ Welcome to *snek5000*'s documentation!
    :caption: Getting Started
 
    README
+   tutorials
 
-.. toctree::
-   :maxdepth: 2
-   :caption: User Guide
-
-   nek5000
+User Guide
+----------
 
 .. autosummary::
    :toctree: _generated/
+   :caption: User Guide
 
    snek5000
 
@@ -44,6 +43,7 @@ Welcome to *snek5000*'s documentation!
    :caption: Help & Reference
 
    roadmap
+   nek5000
    internals
    filtering
    CONTRIBUTING
