@@ -172,7 +172,9 @@ class SimulNek(SimulBase):
 
         # initialize objects
         for cls_name, Class in dict_classes.items():
-            setattr(self, cls_name.lower(), Class(self))
+            # only initialize if Class is not the Simul class
+            if not isinstance(self, Class):
+                setattr(self, cls_name.lower(), Class(self))
 
         if "Output" in dict_classes:
             # path_run would be initialized by the Output instance if available

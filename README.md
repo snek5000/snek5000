@@ -15,7 +15,7 @@ Python framework for Nek5000.
 Install it as follows:
 
 ```sh
-pip install snek5000
+FLUIDSIM_TRANSONIC_BACKEND=python pip install snek5000
 ```
 
 Something does not work and you wish to fix it? Are you curious to see how it

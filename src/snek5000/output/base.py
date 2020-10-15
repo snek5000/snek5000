@@ -2,7 +2,6 @@
 
 
 """
-import importlib.resources
 import inspect
 import os
 import pkgutil
@@ -12,7 +11,7 @@ from pathlib import Path
 from socket import gethostname
 
 from fluidsim.base.output.base import OutputBase
-from snek5000 import get_asset, logger, mpi
+from snek5000 import get_asset, logger, mpi, resources
 
 
 class Output(OutputBase):
@@ -83,9 +82,12 @@ class Output(OutputBase):
     def get_root(cls):
         """Get the path to the current package."""
         # Better than
-        # >>> root = Path(__file__).parent?
-        # >>> with importlib.resources.path(__name__, "__init__.py") as f:
-        # ...     return f.parent
+
+        # root = Path(__file__).parent?
+
+        #  with resources.path(__name__, "__init__.py") as f:
+        #      root = f.parent
+
         root = Path(inspect.getmodule(cls).__file__).parent
         return root
 
@@ -139,14 +141,18 @@ class Output(OutputBase):
         if not name_pkg:
             name_pkg = self.name_pkg
         try:
-            contents_pkg = importlib.resources.contents(name_pkg)
+            contents_pkg = resources.contents(name_pkg)
         except TypeError:
             return ()
+        except ImportError:
+            raise FileNotFoundError(
+                f"Cannot resolve subpackage name_pkg={name_pkg} at root={self.root}")
+
         return (
             f
             for f in contents_pkg
             if (
-                importlib.resources.is_resource(name_pkg, f)
+                resources.is_resource(name_pkg, f)
                 and not any(f.startswith(ext) for ext in excludes["prefix"])
                 and not any(f.endswith(ext) for ext in excludes["suffix"])
             )
@@ -161,10 +167,12 @@ class Output(OutputBase):
         """
         root = self.root
         name_pkg = self.name_pkg
-        return {
+        subpackages = {
             subpkg.name.replace(f"{root.name}.", ""): self._get_resources(subpkg.name)
             for subpkg in pkgutil.walk_packages([str(root)], prefix=f"{name_pkg}.")
         }
+
+        return subpackages
 
     def get_paths(self):
         """Get a list of paths to all case files.
@@ -197,6 +205,7 @@ class Output(OutputBase):
 
         abs_paths = self.get_paths()
         subpackages = self._get_subpackages()
+
         root = self.root
 
         def conditional_ignore(src, names):

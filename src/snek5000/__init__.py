@@ -24,7 +24,11 @@ A Pythonic frontend to Nek5000.
    params
 
 """
-import importlib.resources
+try:
+    from importlib import resources
+except ImportError:
+    import importlib_resources as resources
+
 import os
 
 from fluiddyn.util import mpi  # noqa: F401
@@ -41,7 +45,7 @@ def source_root():
             "SOURCE_ROOT is deprecated in v19, use NEK_SOURCE_ROOT instead."
         )
 
-    with importlib.resources.path(__name__, "__init__.py") as f:
+    with resources.path(__name__, "__init__.py") as f:
         root = f.parent
 
     nek5000 = os.path.expandvars(
@@ -60,5 +64,5 @@ def source_root():
 
 def get_asset(asset_name):
     """Fetches path of an asset from subpackage ``snek5000.assets``."""
-    asset = next(importlib.resources.path("snek5000.assets", asset_name).gen)
+    asset = next(resources.path("snek5000.assets", asset_name).gen)
     return asset

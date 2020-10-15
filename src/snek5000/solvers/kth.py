@@ -2,12 +2,16 @@
 ==================
 
 """
+from ..info import InfoSolverMake
 from ..util import docstring_params
 from .base import SimulNek
 
 
 class SimulKTH(SimulNek):
     """A base class which incorporates parameters for KTH toolbox also."""
+
+    # FIXME: This breaks because a different layout is used?
+    # InfoSolver = InfoSolverMake
 
     @staticmethod
     def _complete_params_with_default(params):

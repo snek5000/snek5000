@@ -8,6 +8,7 @@ on:
 
 env:
   PIP_CACHE_DIR: ~/.cache/pip
+  FLUIDSIM_TRANSONIC_BACKEND: python
 
 jobs:
   build:
@@ -16,7 +17,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - name: Checkout
