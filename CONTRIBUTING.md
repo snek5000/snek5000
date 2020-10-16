@@ -45,13 +45,14 @@ pip install -e '.[dev]'
 
 * **Branching model**: The development uses branches and pull-requests for experimental features. We
   also rely on [git submodules](https://www.git-scm.com/docs/git-submodule) to
-  track other libraries. The following branches are important:
+  track `Nek5000`. You may find the following git branches when you clone
+  `snek5000`:
 
-  * `snek5000`:
     * `master`: main branch
-    * `develop`: development branch
+    * `fix/...`, `enh/...`: feature branches
 
-  The following make working with submodules easy and ensures consistency:
+  Executing the following command would configure git to work with submodules
+  easily and ensures consistency:
   ```sh
   # Enable recursion for relevant commands, such that
   # regular commands recurse into submodules by default
