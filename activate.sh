@@ -1,6 +1,7 @@
 DIR="$(pwd)"
 export NEK_SOURCE_ROOT="$DIR/lib/Nek5000"
 export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
+export FLUIDSIM_TRANSONIC_BACKEND=python
 
 alias smake="snakemake"
 # tarball utilities

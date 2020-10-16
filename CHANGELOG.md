@@ -27,6 +27,11 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+## [0.4.1b1] - 2020-10-26
+
+### Changed
+* Rewrite README and docs for better onboarding
+
 ## [0.4.1b0] - 2020-10-26
 
 ### Fixed
@@ -163,7 +168,8 @@ Security in case of vulnerabilities.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
-[Unreleased]: https://github.com/exabl/snek5000/compare/0.4.0b1...HEAD
+[Unreleased]: https://github.com/exabl/snek5000/compare/0.4.1b1...HEAD
+[0.4.1b1]: https://github.com/exabl/snek5000/compare/0.4.1b0...0.4.1b1
 [0.4.1b0]: https://github.com/exabl/snek5000/compare/0.4.0b1...0.4.1b0
 [0.4.0b1]: https://github.com/exabl/snek5000/compare/0.3.1a0...0.4.0b1
 [0.3.1a0]: https://github.com/exabl/snek5000/compare/0.3.0a0...0.3.1a0

@@ -1,7 +1,33 @@
-# Developer guide
+# Contributing
 
-To install in development mode:
+## Installation for development
 
+Something does not work and you wish to fix it? Are you curious to see how it
+works? For development:
+```sh
+# Clone
+git clone --recursive https://github.com/exabl/snek5000.git
+
+# Activate paths: Start here. Always!
+cd snek5000
+source activate.sh
+```
+
+Now you should setup a Python environment. There are two ways to
+do this (and it has to be done only once):
+
+-  Using `venv`
+   ```sh
+   python -m venv venv
+   source venv/bin/activate
+   ```
+-  Using `conda`
+   ```sh
+   conda env create -n snek5000 -f environment.yml
+   conda activate snek5000
+   ```
+
+Finally, to install in development mode:
 ```sh
 pip install -e '.[dev]'
 ```

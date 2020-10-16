@@ -15,38 +15,14 @@ Python framework for Nek5000.
 Install it as follows:
 
 ```sh
-FLUIDSIM_TRANSONIC_BACKEND=python pip install snek5000
+export NEK_SOURCE_ROOT="/path/to/Nek5000"
+export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
+export FLUIDSIM_TRANSONIC_BACKEND=python
+
+pip install snek5000
 ```
 
-Something does not work and you wish to fix it? Are you curious to see how it
-works? For development:
-```sh 
-# Clone
-git clone --recursive https://github.com/exabl/snek5000.git
-
-# Activate paths: Start here. Always!
-cd snek5000
-source activate.sh
-
-```
-
-Now you should setup a Python environment. There are two ways to
-do this (and it has to be done only once):
-
--  Using `venv`
-   ```sh
-   python -m venv venv
-   source venv/bin/activate
-   pip install -e .
-   ```
--  Using `conda`
-   ```sh
-   conda env create -n snek5000 -f environment.yml
-   conda activate snek5000
-   pip install -e .
-   ```
-
-## Why and why not use snek5000?
+### Why snek5000?
 
 The [`snek5000` Python
 API](https://snek5000.readthedocs.io/en/latest/_generated/snek5000.html) is based on
@@ -67,6 +43,10 @@ sim.make.exec(["mesh", "compile"])  # run rules in order
 sim.make.exec(["run"], dryrun=True)  # simulate simulation
 sim.make.exec(["run"])  # actual simulation
 ```
+
+Check out the
+[tutorials](https://snek5000.readthedocs.io/en/latest/tutorials.html) to learn
+how to use `snek5000`.
 
 #### Advantages
 
@@ -101,6 +81,7 @@ sim.make.exec(["run"])  # actual simulation
   is similar to GNU Make, but allows one to blend bash and python scripting and
   uses simple YAML files for managing custom configurations of compilers and flags
   for different computers.
+
 
 #### Disadvantages
 
