@@ -20,17 +20,20 @@ Jinja templates
     :any:`snek5000.output.base.Output.write_box`.
 
 .. literalinclude:: ../../src/snek5000/assets/box.j2
+    :language: jinja
 
 - ``makefile_usr.inc.j2``: See also
     :any:`snek5000.output.base.Output.write_makefile_usr`.
 
 .. literalinclude:: ../../src/snek5000/assets/makefile_usr.inc.j2
+    :language: jinja
 
 - ``SIZE.j2``: See also
     :any:`snek5000.operators.Operators.write_size`,
     :any:`snek5000.output.base.Output.write_size`.
 
 .. literalinclude:: ../../src/snek5000/assets/SIZE.j2
+    :language: jinja
 
 
 """
