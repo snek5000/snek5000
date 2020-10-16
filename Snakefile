@@ -112,3 +112,17 @@ rule lint:
 rule fix:
     input: PYTHON_DIRECTORIES
     shell: 'black {input}'
+
+rule release:
+    shell:
+        """
+        rm -rf build dist
+        python setup.py sdist
+        twine check dist/*
+        """
+
+rule testpypi:
+    shell:
+        """
+        twine upload --repository testpypi dist/*
+        """
