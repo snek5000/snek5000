@@ -27,6 +27,13 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+## [0.4.1b0] - 2020-10-26
+
+### Fixed
+* Support for Python 3.6.x
+* Support for FluidSim 0.3.3
+* Descriptive error messages when class Output cannot resolve resources
+
 ## [0.4.0b1] - 2020-07-15
 
 ### Added
@@ -157,6 +164,7 @@ Security in case of vulnerabilities.
 - Sphinx + Doxygen + Breathe documentation
 
 [Unreleased]: https://github.com/exabl/snek5000/compare/0.4.0b1...HEAD
+[0.4.1b0]: https://github.com/exabl/snek5000/compare/0.4.0b1...0.4.1b0
 [0.4.0b1]: https://github.com/exabl/snek5000/compare/0.3.1a0...0.4.0b1
 [0.3.1a0]: https://github.com/exabl/snek5000/compare/0.3.0a0...0.3.1a0
 [0.3.0a0]: https://github.com/exabl/snek5000/compare/0.2.2...0.3.0a0
