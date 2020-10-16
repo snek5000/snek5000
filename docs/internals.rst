@@ -119,17 +119,17 @@ Mass matrix requires time levels (n, n-1, n-2): extrapolated Conv /
 Stiffness requires time levels (n-1, n-2): explicit
 
 Comparison with Adams-Bashforth
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 AB2: needs previous RHS BDF: needs previous LHS
 
 Why not: Runge-Kutta?
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 According to mathematicians, it is not clear because you have a pressure
 correction in each sub-step.
 
 CFL number
-~~~~~~~~~~
+----------
 
 BDF3/EXT3: CFL=0.6. Characteristic method
