@@ -187,6 +187,37 @@ html_static_path = ["_static"]
 
 html_favicon = "_static/favicon.ico"
 
+# Values to pass into the template engine's context for all pages.
+html_context = {
+    "sidebar_external_links_caption": "Links",
+    "sidebar_external_links": [
+        (
+            '<i class="fa fa-cube fa-fw"></i> PyPI',
+            f"https://pypi.org/project/{project.lower()}",
+        ),
+        #  (
+        #      '<i class="fa fa-cube fa-fw"></i> Conda forge',
+        #      f"https://anaconda.org/conda-forge/{project.lower()}",
+        #  ),
+        (
+            '<i class="fa fa-code fa-fw"></i> Source code',
+            f"https://github.com/exabl/{project.lower()}",
+        ),
+        (
+            '<i class="fa fa-bug fa-fw"></i> Issue tracker',
+            f"https://github.com/exabl/{project.lower()}/issues",
+        ),
+        #  ('<i class="fa fa-rss fa-fw"></i> Blog', 'https://...'),
+        #  (
+        #      '<i class="fa fa-comments fa-fw"></i> Chat',
+        #      "https://matrix.to/#/#snek5000:matrix.org",
+        #  ),
+        #  (
+        #      '<i class="fa fa-file-text fa-fw"></i> Citation',
+        #      "https://doi.org/10.5334/jors.237",
+        #  ),
+    ],
+}
 # -- Options for Intersphinx -------------------------------------------------
 
 intersphinx_mapping = dict(
