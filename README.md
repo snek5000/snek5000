@@ -3,6 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/snek5000)](https://pypi.org/project/snek5000/)
 [![Tests Status](https://github.com/exabl/snek5000/workflows/Tests/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Tests)
 [![Documentation Status](https://readthedocs.org/projects/snek5000/badge/?version=latest)](https://snek5000.readthedocs.io/en/latest/?badge=latest)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=exabl_snek5000&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=exabl_snek5000)
 
 Python framework for Nek5000.
 
