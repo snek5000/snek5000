@@ -28,7 +28,7 @@ class Make:
         with change_dir(self.path_run):
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
-    def exec(self, rules=("run",), dryrun=False):
+    def exec(self, rules=("run",), dryrun=False, **kwargs):
         """Execute snakemake rules in sequence.
 
         :returns: True if workflow execution was successful.
@@ -36,5 +36,9 @@ class Make:
         """
         with change_dir(self.path_run):
             return snakemake(
-                self.file, targets=rules, dryrun=dryrun, log_handler=self.log_handler
+                self.file,
+                targets=rules,
+                dryrun=dryrun,
+                log_handler=self.log_handler,
+                **kwargs
             )
