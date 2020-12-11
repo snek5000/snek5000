@@ -160,7 +160,7 @@ class SimulNek(SimulBase):
         params_nek.scalar01._set_attribs(dict(density=math.nan, diffusivity=math.nan))
         return params
 
-    def __init__(self, params):
+    def __init__(self, params, write_files=True):
         np.seterr(all="warn")
         np.seterr(under="ignore")
 
@@ -209,7 +209,7 @@ class SimulNek(SimulBase):
             logger.info(f"solver: {self.__class__}")
             logger.info(f"path_run: {self.path_run}")
             logger.info("*" * _banner_length)
-            if self.path_run:
+            if self.path_run and write_files:
                 par_file = self.path_run / f"{self.output.name_pkg}.par"
                 logger.info(f"Writing params files... {par_file}, params.xml")
                 with open(par_file, "w") as fp:
