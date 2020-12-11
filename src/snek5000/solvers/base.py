@@ -20,11 +20,19 @@ from ..params import Parameters, create_params
 class SimulNek(SimulBase):
     """Simulation class
 
-    .. code-block:: python
+    Parameters
+    ----------
+    params: Parameters
+        Input parameters for the simulation run.
+    write_files: bool, optional
+        Write simulation files, including usr, box, SIZE files. By default
+        all files are written.
 
-       from snek5000.solvers.base import Simul
-       params = Simul.create_default_params()
-       sim = Simul(params)
+    Example
+    -------
+    >>> from snek5000.solvers.base import Simul
+    >>> params = Simul.create_default_params()
+    >>> sim = Simul(params)
 
     """
 
