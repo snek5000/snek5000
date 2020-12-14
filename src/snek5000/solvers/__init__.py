@@ -17,13 +17,9 @@ def available_solvers():
     _entrypoint: https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata
 
     """
-    import pkg_resources
+    import entrypoints
 
-    solvers = {
-        entry_point.name: entry_point
-        for entry_point in pkg_resources.iter_entry_points("snek5000.solvers")
-    }
-    return solvers
+    return entrypoints.get_group_named("snek5000.solvers")
 
 
 def import_solver(name):
