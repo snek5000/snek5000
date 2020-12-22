@@ -1,13 +1,16 @@
-# snek5000
+<div align="center">
+<h1>snek5000</h1>
 
 [![PyPI](https://img.shields.io/pypi/v/snek5000)](https://pypi.org/project/snek5000/)
 [![Tests Status](https://github.com/exabl/snek5000/workflows/Tests/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Tests)
 [![Documentation Status](https://readthedocs.org/projects/snek5000/badge/?version=latest)](https://snek5000.readthedocs.io/en/latest/?badge=latest)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=exabl_snek5000&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=exabl_snek5000)
+[![Code coverage](https://codecov.io/gh/exabl/snek5000/branch/master/graph/badge.svg?token=WzGnN0dfbw)](https://codecov.io/gh/exabl/snek5000)
 
-Python framework for Nek5000.
+Python framework for Nek5000
+</div>
 
-**Warning:** This framework is experimental and of beta-quality. The API can also change.
+**Warning:** This framework is experimental and of beta-quality.
 
 **Documentation**: https://snek5000.readthedocs.io/
 
@@ -48,6 +51,13 @@ sim.make.exec(["run"])  # actual simulation
 Check out the
 [tutorials](https://snek5000.readthedocs.io/en/latest/tutorials.html) to learn
 how to use `snek5000`.
+
+<details>
+<summary>
+<b>
+Need more reasons to use snek5000?
+</b>
+</summary>
 
 #### Advantages
 
@@ -94,6 +104,8 @@ how to use `snek5000`.
   to write Jinja
   templates](https://jinja.palletsprojects.com/en/2.11.x/templates/) (which are
   not so hard, btw)
+
+</details>
 
 ## Contributing
 
