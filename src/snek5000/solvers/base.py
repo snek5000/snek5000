@@ -20,11 +20,19 @@ from ..params import Parameters, create_params
 class SimulNek(SimulBase):
     """Simulation class
 
-    .. code-block:: python
+    Parameters
+    ----------
+    params: Parameters
+        Input parameters for the simulation run.
+    write_files: bool, optional
+        Write simulation files, including usr, box, SIZE files. By default
+        all files are written.
 
-       from snek5000.solvers.base import Simul
-       params = Simul.create_default_params()
-       sim = Simul(params)
+    Example
+    -------
+    >>> from snek5000.solvers.base import Simul
+    >>> params = Simul.create_default_params()
+    >>> sim = Simul(params)
 
     """
 
@@ -115,6 +123,7 @@ class SimulNek(SimulBase):
                 write_control="timeStep",
                 write_interval=10,
                 filtering=None,
+                filter_modes=2,
                 filter_cutoff_ratio=0.65,
                 filter_weight=12.0,
                 write_double_precision=True,
@@ -134,17 +143,32 @@ class SimulNek(SimulBase):
                 stress_formulation=False,
             )
         )
-        common = dict(residual_tol=math.nan, residual_proj=False)
+        common = dict(
+            residual_tol=math.nan, residual_proj=False, write_to_field_file=True
+        )
         params_nek.velocity._set_attribs(common)
         params_nek.pressure._set_attribs(common)
         params_nek.temperature._set_attribs(common)
         params_nek.scalar01._set_attribs(common)
 
+        common_ts = dict(solver="helm", advection=True, absolute_tol=math.nan)
+        params_nek.temperature._set_attribs(common_ts)
+        params_nek.scalar01._set_attribs(common_ts)
+
+        params_nek.mesh._set_attrib("write_to_field_file", True)
         params_nek.velocity._set_attribs(dict(viscosity=math.nan, density=math.nan))
         params_nek.pressure._set_attrib("preconditioner", "semg_xxt")
+        params_nek.temperature._set_attribs(
+            dict(
+                conjugate_heat_transfer=False,
+                conductivity=math.nan,
+                rho_cp=math.nan,
+            )
+        )
+        params_nek.scalar01._set_attribs(dict(density=math.nan, diffusivity=math.nan))
         return params
 
-    def __init__(self, params):
+    def __init__(self, params, existing_path_run=None):
         np.seterr(all="warn")
         np.seterr(under="ignore")
 
@@ -177,10 +201,14 @@ class SimulNek(SimulBase):
                 setattr(self, cls_name.lower(), Class(self))
 
         if "Output" in dict_classes:
-            # path_run would be initialized by the Output instance if available
-            # See self.output._init_name_run()
-            self.path_run = Path(self.output.path_run)
-            self.output.copy(self.path_run)
+            if existing_path_run:
+                self.path_run = self.output.path_run = Path(existing_path_run)
+            else:
+                # path_run would be initialized by the Output instance if available
+                # See self.output._init_name_run()
+                self.path_run = Path(self.output.path_run)
+                if mpi.rank == 0:
+                    self.output.copy(self.path_run)
         else:
             par_file = None
             self.path_run = None
@@ -193,14 +221,15 @@ class SimulNek(SimulBase):
             logger.info(f"solver: {self.__class__}")
             logger.info(f"path_run: {self.path_run}")
             logger.info("*" * _banner_length)
-            if self.path_run:
+            if self.path_run and not existing_path_run:
                 par_file = self.path_run / f"{self.output.name_pkg}.par"
                 logger.info(f"Writing params files... {par_file}, params.xml")
                 with open(par_file, "w") as fp:
                     params.nek._write_par(fp)
 
                 params._save_as_xml(
-                    self.path_run / "params.xml", f"eTurb version {__version__}"
+                    self.path_run / "params.xml",
+                    f"snek5000 version {__version__}",
                 )
 
 

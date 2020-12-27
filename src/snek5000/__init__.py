@@ -30,6 +30,7 @@ except ImportError:
     import importlib_resources as resources
 
 import os
+from pathlib import Path
 
 from fluiddyn.util import mpi  # noqa: F401
 
@@ -66,3 +67,36 @@ def get_asset(asset_name):
     """Fetches path of an asset from subpackage ``snek5000.assets``."""
     asset = next(resources.path("snek5000.assets", asset_name).gen)
     return asset
+
+
+def load_simul(path_dir):
+    path_dir = Path(path_dir)
+
+    from warnings import warn
+
+    info_solver_xml = path_dir / "info_solver.xml"
+    if info_solver_xml.exists():
+        from snek5000.info import InfoSolverNek
+
+        info_solver = InfoSolverNek(path_file=info_solver_xml)
+        solver = info_solver.short_name
+    else:
+        warn(f"The {info_solver_xml} file is missing!")
+        solver = path_dir.name.split("_")[0]
+
+    # Load simulation class
+    from snek5000.solvers import import_solver
+
+    Simul = import_solver(solver)
+
+    # Load parameters
+    params_xml = path_dir / "params.xml"
+    try:
+        params_par = next(path_dir.glob("*.par"))
+    except StopIteration:
+        warn(f"The {path_dir}/*.par file is missing!")
+        params_par = None
+
+    params = Simul.load_params_from_file(path_xml=params_xml, path_par=params_par)
+    sim = Simul(params, existing_path_run=path_dir)
+    return sim

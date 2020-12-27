@@ -103,9 +103,7 @@ def exec_tar(tarball, items, remove):
     else:
         output = tar
 
-    main = shlex.split(
-        tar_cmd(compress_format, remove=remove, append=output.exists())
-    )
+    main = shlex.split(tar_cmd(compress_format, remove=remove, append=output.exists()))
 
     # run command
     items = [str(i) for i in items]
@@ -152,7 +150,7 @@ def parse_args_from_filename(tarball):
 
 def compress_cmd(compress_format):
     compress_program = {
-        ".gz": "pigz",
+        ".gz": "pigz" if shutil.which("pigz") else "gzip",
         ".xz": "xz",
         ".lz4": "lz4",
         ".zst": "zstdmt --rm",
@@ -164,7 +162,7 @@ def compress_cmd(compress_format):
 def tar_cmd(compress_format="", remove=False, append=False):
     archive_program = {
         "": "tar",
-        ".gz": "tar --use-compress-program pigz",
+        ".gz": f"tar --use-compress-program {compress_cmd('.gz')}",
         ".xz": "tar",
         ".lz4": "tar --use-compress-program lz4",
         ".zst": "tar --use-compress-program zstdmt",

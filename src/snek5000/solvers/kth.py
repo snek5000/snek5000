@@ -2,16 +2,30 @@
 ==================
 
 """
-from ..info import InfoSolverMake
+# FIXME: This breaks because a different layout is used?
+# from ..info import InfoSolverMake as _InfoSolver
+from ..info import InfoSolverNek as _InfoSolver
 from ..util import docstring_params
 from .base import SimulNek
+
+
+class InfoSolverKTH(_InfoSolver):
+    """Contain the information on a :class:`snek5000.solvers.kth.SimulKTH`
+    instance.
+
+    """
+
+    def _init_root(self):
+        super()._init_root()
+        self.module_name = "snek5000.solvers.kth"
+        self.class_name = "Simul"
+        self.short_name = "kth"
 
 
 class SimulKTH(SimulNek):
     """A base class which incorporates parameters for KTH toolbox also."""
 
-    # FIXME: This breaks because a different layout is used?
-    # InfoSolver = InfoSolverMake
+    InfoSolver = InfoSolverKTH
 
     @staticmethod
     def _complete_params_with_default(params):
