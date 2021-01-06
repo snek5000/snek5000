@@ -85,9 +85,9 @@ def load_simul(path_dir):
         solver = path_dir.name.split("_")[0]
 
     # Load simulation class
-    from snek5000.solvers import import_solver
+    from snek5000.solvers import import_cls_simul
 
-    Simul = import_solver(solver)
+    Simul = import_cls_simul(solver)
 
     # Load parameters
     params_xml = path_dir / "params.xml"
