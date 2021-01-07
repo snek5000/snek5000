@@ -9,6 +9,7 @@ from io import StringIO
 from math import nan
 from pathlib import Path
 from sys import stdout
+from warnings import warn
 
 from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
@@ -61,8 +62,8 @@ class Parameters(_Parameters):
         self._set_internal_attr("_user", True)
 
         if "path_file" in kwargs:
-            raise ValueError(
-                "Loading directly from path_file is not supported. Use "
+            warn(
+                "Loading directly from path_file is an experimental feature. Use "
                 "Simul.load_params_from_file() instead."
             )
 

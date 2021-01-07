@@ -208,6 +208,8 @@ class SimulNek(SimulCore):
                 self.path_run = Path(self.output.path_run)
                 if mpi.rank == 0:
                     self.output.copy(self.path_run)
+
+            self.output.post_init()
         else:
             par_file = None
             self.path_run = None

@@ -98,5 +98,6 @@ def load_simul(path_dir):
         params_par = None
 
     params = Simul.load_params_from_file(path_xml=params_xml, path_par=params_par)
+    params.NEW_DIR_RESULTS = False
     sim = Simul(params, existing_path_run=path_dir)
     return sim
