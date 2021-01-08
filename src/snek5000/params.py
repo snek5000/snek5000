@@ -9,12 +9,10 @@ from io import StringIO
 from math import nan
 from pathlib import Path
 from sys import stdout
+from warnings import warn
 
-from fluiddyn.util import import_class
-from fluidsim.base.params import Parameters as _Parameters
+from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
-
-from .info import InfoSolverBase
 
 literal_python2nek = {
     nan: "<real>",
@@ -64,8 +62,8 @@ class Parameters(_Parameters):
         self._set_internal_attr("_user", True)
 
         if "path_file" in kwargs:
-            raise ValueError(
-                "Loading directly from path_file is not supported. Use "
+            warn(
+                "Loading directly from path_file is an experimental feature. Use "
                 "Simul.load_params_from_file() instead."
             )
 
@@ -199,31 +197,4 @@ class Parameters(_Parameters):
             self._set_doc(self._doc + textwrap.indent(docstring, " " * indent))
 
 
-def create_params(input_info_solver):
-    """Create a Parameters instance from an InfoSolverBase instance."""
-    if isinstance(input_info_solver, InfoSolverBase):
-        info_solver = input_info_solver
-    elif hasattr(input_info_solver, "Simul"):
-        info_solver = input_info_solver.Simul.create_default_params()
-    else:
-        raise ValueError("Can not create params from input input_info_solver.")
-
-    params = Parameters(tag="params")
-    dict_classes = info_solver.import_classes()
-
-    dict_classes["Solver"] = import_class(
-        info_solver.module_name, info_solver.class_name
-    )
-
-    for Class in list(dict_classes.values()):
-        if hasattr(Class, "_complete_params_with_default"):
-            try:
-                Class._complete_params_with_default(params)
-            except TypeError:
-                try:
-                    Class._complete_params_with_default(params, info_solver)
-                except TypeError as e:
-                    e.args += ("for class: " + repr(Class),)
-                    raise
-
-    return params
+create_params = Parameters._create_params

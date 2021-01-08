@@ -1,5 +1,5 @@
 from snek5000 import load_simul
-from snek5000.solvers import available_solvers, import_solver
+from snek5000.solvers import available_solvers, import_cls_simul
 
 
 def test_entrypoints():
@@ -26,7 +26,7 @@ def test_init_kth():
 def test_import_solver():
     from phill.solver import Simul
 
-    assert Simul is import_solver("phill")
+    assert Simul is import_cls_simul("phill")
     params = Simul.create_default_params()
     sim1 = Simul(params)
     sim2 = load_simul(sim1.path_run)

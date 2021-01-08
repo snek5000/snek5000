@@ -8,22 +8,14 @@ Solver framework
    kth
 
 """
+from functools import partial
 
+from fluidsim_core import loader
 
-def available_solvers():
-    """Returns a dictionary of all registered solvers registered as an
-    entrypoint_.
+available_solvers = partial(loader.available_solvers, entrypoint_grp="snek5000.solvers")
+available_solvers.__doc__ = """\
+Returns a dictionary of all registered solvers registered as an entrypoint.
+"""
 
-    _entrypoint: https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata
-
-    """
-    import entrypoints
-
-    return entrypoints.get_group_named("snek5000.solvers")
-
-
-def import_solver(name):
-    """Import the Simul class of a solver."""
-    solvers = available_solvers()
-    module = solvers[name].load()
-    return module.Simul
+import_cls_simul = partial(loader.import_cls_simul, entrypoint_grp="snek5000.solvers")
+import_cls_simul.__doc__ = """Import the Simul class of a solver."""

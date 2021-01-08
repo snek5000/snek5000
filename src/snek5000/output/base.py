@@ -10,11 +10,11 @@ from itertools import chain
 from pathlib import Path
 from socket import gethostname
 
-from fluidsim.base.output.base import OutputBase
+from fluidsim_core.output import OutputCore
 from snek5000 import get_asset, logger, mpi, resources
 
 
-class Output(OutputBase):
+class Output(OutputCore):
     """Container and methods for getting paths of and copying case files.
 
     A path object :code:`self.root` points to the directory containing the
@@ -56,19 +56,21 @@ class Output(OutputBase):
     @staticmethod
     def _complete_info_solver(info_solver):
         """Complete the ParamContainer info_solver."""
-        OutputBase._complete_info_solver(info_solver)
+        OutputCore._complete_info_solver(info_solver)
 
         classes = info_solver.classes.Output.classes
-
-        classes.PrintStdOut.module_name = "snek5000.output.print_stdout"
-        classes.PrintStdOut.class_name = "PrintStdOut"
-        classes.PhysFields.module_name = "snek5000.output.phys_fields"
-        classes.PhysFields.class_name = "PhysFields"
+        classes._set_attrib(
+            "PrintStdOut",
+            dict(module_name="snek5000.output.print_stdout", class_name="PrintStdOut"),
+        )
+        classes._set_attrib(
+            "PhysFields",
+            dict(module_name="snek5000.output.phys_fields", class_name="PhysFields"),
+        )
 
     @staticmethod
     def _complete_params_with_default(params, info_solver):
-        """This static method is used to complete the *params* container.
-        """
+        """This static method is used to complete the *params* container."""
         # Bare minimum
         attribs = {
             "ONLINE_PLOT_OK": True,
@@ -146,7 +148,8 @@ class Output(OutputBase):
             return ()
         except ImportError:
             raise FileNotFoundError(
-                f"Cannot resolve subpackage name_pkg={name_pkg} at root={self.root}")
+                f"Cannot resolve subpackage name_pkg={name_pkg} at root={self.root}"
+            )
 
         return (
             f
@@ -185,11 +188,11 @@ class Output(OutputBase):
         # abl.usr -> /path/to/abl/abl.usr
         paths += [self.root / resource for resource in self._get_resources()]
 
-        for subpkg, resources in self._get_subpackages().items():
+        for subpkg, res in self._get_subpackages().items():
             # toolbox -> /path/to/abl/toolbox
             subpkg_root = self.root / subpkg.replace(".", os.sep)
             # main.f -> /path/to/abl/toolbox/main.f
-            paths += [subpkg_root / resource for resource in resources]
+            paths += [subpkg_root / resource for resource in res]
         return paths
 
     def copy(self, new_dir, force=False):
@@ -315,3 +318,7 @@ class Output(OutputBase):
             )
             with open(makefile_usr, "w") as fp:
                 fp.write(output)
+
+    def post_init(self):
+        super().post_init()
+        self.oper = self.sim.oper

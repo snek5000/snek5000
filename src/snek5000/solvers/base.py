@@ -9,15 +9,15 @@ from pathlib import Path
 from warnings import warn
 
 import numpy as np
-from fluidsim.base.solvers.base import SimulBase
-from fluidsim.base.solvers.info_base import create_info_simul
+from fluidsim_core.info import create_info_simul
+from fluidsim_core.solver import SimulCore
 
 from .. import __version__, logger, mpi
 from ..info import InfoSolverNek
-from ..params import Parameters, create_params
+from ..params import Parameters
 
 
-class SimulNek(SimulBase):
+class SimulNek(SimulCore):
     """Simulation class
 
     Parameters
@@ -37,6 +37,7 @@ class SimulNek(SimulBase):
     """
 
     InfoSolver = InfoSolverNek
+    Parameters = Parameters
 
     @classmethod
     def create_default_params(cls):
@@ -44,9 +45,7 @@ class SimulNek(SimulBase):
         parameters consumed by Nek5000.
 
         """
-        cls.info_solver = cls.InfoSolver()
-        cls.info_solver.complete_with_classes()
-        return create_params(cls.info_solver)
+        return super().create_default_params()
 
     @classmethod
     def load_params_from_file(cls, path_xml=None, path_par=None):
@@ -209,6 +208,8 @@ class SimulNek(SimulBase):
                 self.path_run = Path(self.output.path_run)
                 if mpi.rank == 0:
                     self.output.copy(self.path_run)
+
+            self.output.post_init()
         else:
             par_file = None
             self.path_run = None

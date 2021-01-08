@@ -5,10 +5,10 @@ Store information regarding modules and class names of simulation class and
 dependent objects.
 
 """
-from fluidsim.base.solvers.info_base import InfoSolverBase
+from fluidsim_core.info import InfoSolverCore
 
 
-class InfoSolverNek(InfoSolverBase):
+class InfoSolverNek(InfoSolverCore):
     """Contain the information on a :class:`snek5000.solvers.base.Simul`
     instance.
 
@@ -30,7 +30,12 @@ class InfoSolverNek(InfoSolverBase):
                     "scalar01",
                     "cvode",
                 ),
-                "par_sections_disabled": ("mesh", "temperature", "scalar01", "cvode",),
+                "par_sections_disabled": (
+                    "mesh",
+                    "temperature",
+                    "scalar01",
+                    "cvode",
+                ),
             }
         )
         self._set_child("classes")
@@ -41,10 +46,7 @@ class InfoSolverNek(InfoSolverBase):
 
 
 class InfoSolverMake(InfoSolverNek):
-    """Contain the information on a solver which uses Snakemake.
-
-
-    """
+    """Contain the information on a solver which uses Snakemake."""
 
     def _init_root(self):
         super()._init_root()
