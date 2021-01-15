@@ -6,13 +6,11 @@ A bare Nek5000 solver which does not rely on any user parameters.
 """
 import math
 from pathlib import Path
-from warnings import warn
 
-import numpy as np
-from fluidsim_core.info import create_info_simul
 from fluidsim_core.solver import SimulCore
+from inflection import underscore
 
-from .. import __version__, logger, mpi
+from .. import logger, mpi
 from ..info import InfoSolverNek
 from ..params import Parameters
 
@@ -167,71 +165,30 @@ class SimulNek(SimulCore):
         params_nek.scalar01._set_attribs(dict(density=math.nan, diffusivity=math.nan))
         return params
 
-    def __init__(self, params, existing_path_run=None):
-        np.seterr(all="warn")
-        np.seterr(under="ignore")
-
-        if (
-            not hasattr(self, "info_solver")
-            or self.info_solver.__class__ is not self.InfoSolver
-        ):
-            if hasattr(self, "info_solver"):
-                warn(
-                    "Creating a new info_solver instance "
-                    f"due to type mismatch  {self.InfoSolver}"
-                )
-            self.info_solver = self.InfoSolver()
-            self.info_solver.complete_with_classes()
+    def __init__(self, params):
+        super().__init__(params)
 
         dict_classes = self.info_solver.import_classes()
-
-        if not isinstance(params, Parameters):
-            raise TypeError(
-                f"params should be a Parameters instance, not {type(params)}"
-            )
-
-        self.params = params
-        self.info = create_info_simul(self.info_solver, params)
 
         # initialize objects
         for cls_name, Class in dict_classes.items():
             # only initialize if Class is not the Simul class
             if not isinstance(self, Class):
-                setattr(self, cls_name.lower(), Class(self))
+                setattr(self, underscore(cls_name), Class(self))
 
         if "Output" in dict_classes:
-            if existing_path_run:
-                self.path_run = self.output.path_run = Path(existing_path_run)
+            if not params.NEW_DIR_RESULTS:
+                self.path_run = self.output.path_run = Path(params.path_run)
             else:
                 # path_run would be initialized by the Output instance if available
                 # See self.output._init_name_run()
                 self.path_run = Path(self.output.path_run)
-                if mpi.rank == 0:
-                    self.output.copy(self.path_run)
 
             self.output.post_init()
         else:
-            par_file = None
             self.path_run = None
             if mpi.rank == 0:
                 logger.warning("No output class initialized!")
-
-        _banner_length = 42
-        if mpi.rank == 0:
-            logger.info("*" * _banner_length)
-            logger.info(f"solver: {self.__class__}")
-            logger.info(f"path_run: {self.path_run}")
-            logger.info("*" * _banner_length)
-            if self.path_run and not existing_path_run:
-                par_file = self.path_run / f"{self.output.name_pkg}.par"
-                logger.info(f"Writing params files... {par_file}, params.xml")
-                with open(par_file, "w") as fp:
-                    params.nek._write_par(fp)
-
-                params._save_as_xml(
-                    self.path_run / "params.xml",
-                    f"snek5000 version {__version__}",
-                )
 
 
 Simul = SimulNek

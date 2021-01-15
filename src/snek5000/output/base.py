@@ -1,6 +1,5 @@
 """Manage user case files.
 
-
 """
 import inspect
 import os
@@ -11,7 +10,8 @@ from pathlib import Path
 from socket import gethostname
 
 from fluidsim_core.output import OutputCore
-from snek5000 import get_asset, logger, mpi, resources
+from inflection import underscore
+from snek5000 import __version__, get_asset, logger, mpi, resources
 
 
 class Output(OutputCore):
@@ -61,7 +61,10 @@ class Output(OutputCore):
         classes = info_solver.classes.Output.classes
         classes._set_attrib(
             "PrintStdOut",
-            dict(module_name="snek5000.output.print_stdout", class_name="PrintStdOut"),
+            dict(
+                module_name="snek5000.output.print_stdout",
+                class_name="PrintStdOut",
+            ),
         )
         classes._set_attrib(
             "PhysFields",
@@ -129,10 +132,17 @@ class Output(OutputCore):
 
         if sim:
             # Same as package name __name__
-            self.name_pkg = sim.info.solver.classes.Output.module_name.split(".")[0]
             super().__init__(sim)
 
-    def _get_resources(self, name_pkg=None):
+            dict_classes = sim.info.solver.classes.Output.import_classes()
+
+            # initialize objects
+            for cls_name, Class in dict_classes.items():
+                # only initialize if Class is not the Simul class
+                if not isinstance(self, Class):
+                    setattr(self, underscore(cls_name), Class(self))
+
+    def _get_resources(self, name_solver=None):
         """Get a generator of resources (files) in a package, excluding
         directories (subpackages).
 
@@ -140,22 +150,22 @@ class Output(OutputCore):
 
         """
         excludes = self.excludes
-        if not name_pkg:
-            name_pkg = self.name_pkg
+        if not name_solver:
+            name_solver = self.name_solver
         try:
-            contents_pkg = resources.contents(name_pkg)
+            contents_pkg = resources.contents(name_solver)
         except TypeError:
             return ()
         except ImportError:
             raise FileNotFoundError(
-                f"Cannot resolve subpackage name_pkg={name_pkg} at root={self.root}"
+                f"Cannot resolve subpackage name_solver={name_solver} at root={self.root}"
             )
 
         return (
             f
             for f in contents_pkg
             if (
-                resources.is_resource(name_pkg, f)
+                resources.is_resource(name_solver, f)
                 and not any(f.startswith(ext) for ext in excludes["prefix"])
                 and not any(f.endswith(ext) for ext in excludes["suffix"])
             )
@@ -169,10 +179,10 @@ class Output(OutputCore):
 
         """
         root = self.root
-        name_pkg = self.name_pkg
+        name_solver = self.name_solver
         subpackages = {
             subpkg.name.replace(f"{root.name}.", ""): self._get_resources(subpkg.name)
-            for subpkg in pkgutil.walk_packages([str(root)], prefix=f"{name_pkg}.")
+            for subpkg in pkgutil.walk_packages([str(root)], prefix=f"{name_solver}.")
         }
 
         return subpackages
@@ -246,7 +256,8 @@ class Output(OutputCore):
         except (TypeError, shutil.Error):
             try:
                 logger.warning(
-                    "Python < 3.8: shutil.copytree may not proceed if directories exist."
+                    "Python < 3.8: shutil.copytree may not proceed if "
+                    "directories exist."
                 )
                 # Hoping that new_root has not been created
                 shutil.copytree(**copytree_kwargs)
@@ -281,7 +292,7 @@ class Output(OutputCore):
     def write_box(self, template):
         """Write <case name>.box file from box.j2 template."""
         if mpi.rank == 0:
-            box_file = self.sim.path_run / f"{self.name_pkg}.box"
+            box_file = self.sim.path_run / f"{self.name_solver}.box"
             logger.info(f"Writing box file... {box_file}")
             with open(box_file, "w") as fp:
                 self.sim.oper.write_box(
@@ -320,5 +331,32 @@ class Output(OutputCore):
                 fp.write(output)
 
     def post_init(self):
+        if mpi.rank == 0:
+            _banner_length = 42
+            logger.info("*" * _banner_length)
+            logger.info(f"solver: {self.__class__}")
+            logger.info(f"path_run: {self.path_run}")
+            logger.info("*" * _banner_length)
+
+        # This also calls _save_info_solver_params_xml
         super().post_init()
-        self.oper = self.sim.oper
+
+        if not hasattr(self, "oper"):
+            self.oper = self.sim.oper
+
+        # Write source files to compile the simulation
+        if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
+            self.copy(self.path_run)
+
+    def _save_info_solver_params_xml(self, replace=False):
+        """Saves the par file, along with FluidSim's params.xml and info.xml"""
+        params = self.sim.params
+        if mpi.rank == 0 and self._has_to_save and params.NEW_DIR_RESULTS:
+            par_file = Path(self.path_run) / f"{self.name_solver}.par"
+            logger.info(
+                f"Writing params files... {par_file}, params.xml, " "info_solver.xml"
+            )
+            with open(par_file, "w") as fp:
+                params.nek._write_par(fp)
+
+        super()._save_info_solver_params_xml(replace, comment=f"snek5000 {__version__}")
