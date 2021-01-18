@@ -131,6 +131,8 @@ class Output(OutputCore):
         self.get_configfile()
 
         if sim:
+            self.oper = sim.oper
+
             # Same as package name __name__
             super().__init__(sim)
 
@@ -141,6 +143,14 @@ class Output(OutputCore):
                 # only initialize if Class is not the Simul class
                 if not isinstance(self, Class):
                     setattr(self, underscore(cls_name), Class(self))
+
+    def _init_sim_repr_maker(self):
+        """Adds mesh description to name of the simulation. Called by the
+        ``_init_name_run`` method"""
+        sim_repr_maker = super()._init_sim_repr_maker()
+        self.oper._modify_sim_repr_maker(sim_repr_maker)
+
+        return sim_repr_maker
 
     def _get_resources(self, name_solver=None):
         """Get a generator of resources (files) in a package, excluding
@@ -340,9 +350,6 @@ class Output(OutputCore):
 
         # This also calls _save_info_solver_params_xml
         super().post_init()
-
-        if not hasattr(self, "oper"):
-            self.oper = self.sim.oper
 
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
