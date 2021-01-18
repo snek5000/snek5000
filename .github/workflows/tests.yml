@@ -53,6 +53,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install .[tests]
+        pip install "phill @ git+https://github.com/exabl/snek5000-phill.git"
 
     - name: Run tests
       run: |
