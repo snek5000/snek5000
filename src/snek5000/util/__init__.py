@@ -93,7 +93,8 @@ def last_modified(path):
 
     """
     return reduce(
-        lambda x, y: x if x.stat().st_mtime > y.stat().st_mtime else y, scantree(path),
+        lambda x, y: x if x.stat().st_mtime > y.stat().st_mtime else y,
+        scantree(path),
     )
 
 
@@ -198,7 +199,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
       - check if snakemake was ever executed or check if directory is locked by snakemake
       - ensures simulation files exist
       - ensures restart files exist
-    * Reads params.xml if it exists, and if not falls back to .par file.
+    * Reads params_simul.xml if it exists, and if not falls back to .par file.
     * Modifies checkpoint parameters with appropriate ``chkp_fnumber`` to
       restart from KTH framework.
 
@@ -223,10 +224,12 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     except ImportError:
         raise ImportError("Cannot import simulation class")
 
-    if "params.xml" in contents:
-        params = Simul.load_params_from_file(path_xml=str(path / "params.xml"))
+    if "params_simul.xml" in contents:
+        params = Simul.load_params_from_file(path_xml=str(path / "params_simul.xml"))
     else:
-        logger.warning(f"No params.xml found... Attempting to read {solver_prefix}.par")
+        logger.warning(
+            f"No params_simul.xml found... Attempting to read {solver_prefix}.par"
+        )
 
         params = Simul.create_default_params()
         params.nek._read_par(path / f"{solver_prefix}.par")

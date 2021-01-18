@@ -44,7 +44,7 @@ def test_par_xml_match():
     params.nek._write_par(output1)
 
     tmp_dir = Path(tempfile.mkdtemp("snek5000", __name__))
-    params_xml = params._save_as_xml(str(tmp_dir / "params.xml"))
+    params_xml = params._save_as_xml(str(tmp_dir / "params_simul.xml"))
 
     try:
         from snek5000.params import Parameters

@@ -349,12 +349,13 @@ class Output(OutputCore):
             self.copy(self.path_run)
 
     def _save_info_solver_params_xml(self, replace=False):
-        """Saves the par file, along with FluidSim's params.xml and info.xml"""
+        """Saves the par file, along with FluidSim's params_simul.xml and info.xml"""
         params = self.sim.params
         if mpi.rank == 0 and self._has_to_save and params.NEW_DIR_RESULTS:
             par_file = Path(self.path_run) / f"{self.name_solver}.par"
             logger.info(
-                f"Writing params files... {par_file}, params.xml, " "info_solver.xml"
+                f"Writing params files... {par_file}, params_simul.xml, "
+                "info_solver.xml"
             )
             with open(par_file, "w") as fp:
                 params.nek._write_par(fp)

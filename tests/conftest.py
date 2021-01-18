@@ -56,7 +56,7 @@ def sim_data(tmpdir_factory):
 makefile
 makefile_usr.inc
 nek5000
-params.xml
+params_simul.xml
 phill0.f00001
 phill.box
 phill.f

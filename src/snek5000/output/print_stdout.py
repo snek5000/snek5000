@@ -31,7 +31,8 @@ class PrintStdOut:
             if logfiles:
                 try:
                     self._file = next(
-                        file for file in logfiles
+                        file
+                        for file in logfiles
                         if file.name == f"{self.output.name_solver}.log"
                     )
                 except StopIteration:
@@ -61,7 +62,7 @@ class PrintStdOut:
 
     @property
     def params(self):
-        return Simul.load_params_from_file(path_xml=self.path_run / "params.xml")
+        return Simul.load_params_from_file(path_xml=self.path_run / "params_simul.xml")
 
     @property
     def text_steps(self):

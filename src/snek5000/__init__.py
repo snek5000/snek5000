@@ -90,7 +90,7 @@ def load_simul(path_dir):
     Simul = import_cls_simul(solver)
 
     # Load parameters
-    params_xml = path_dir / "params.xml"
+    params_xml = path_dir / "params_simul.xml"
     try:
         params_par = next(path_dir.glob("*.par"))
     except StopIteration:

@@ -48,7 +48,9 @@ class SimulNek(SimulCore):
     @classmethod
     def load_params_from_file(cls, path_xml=None, path_par=None):
         if not (path_xml or path_par):
-            raise IOError("Either path to params.xml or case.par should be provided")
+            raise IOError(
+                "Either path to params_simul.xml or case.par should be provided"
+            )
 
         params = Parameters(tag="params")
         if path_xml:
