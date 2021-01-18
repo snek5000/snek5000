@@ -27,6 +27,18 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Added
+
+- Nek parameter `filter_modes` for HPFRT and `write_to_field_file`
+- Function `load_simul` to load simulations from a directory.
+
+### Changed
+
+- Depend on `fluidsim-core` instead of `fluidsim`
+- Parameters, entry points and magic implementation from fluidsim-core (#15)
+- Output class now conforms to `fluidsim-core` API. File `params.xml` renamed
+  to `params_simul.xml` (#16)
+
 ## [0.4.1b1] - 2020-10-26
 
 ### Changed

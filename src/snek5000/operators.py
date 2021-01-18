@@ -94,8 +94,7 @@ _formulation`` and whether
 
     @staticmethod
     def _complete_params_with_default(params):
-        """This static method is used to complete the *params.oper* container.
-        """
+        """This static method is used to complete the *params.oper* container."""
         attribs = {
             "nx": 8,
             "ny": 8,
@@ -360,6 +359,10 @@ SIZE            params.oper.misc      Comment
         str_n = map(str, (params.nx, params.ny, params.nz))
         return str_L, str_n
 
+    def _modify_sim_repr_maker(self, sim_repr_maker):
+        repr_oper = self.produce_str_describing_oper()
+        sim_repr_maker.add_word(repr_oper)
+
     def produce_str_describing_oper(self):
         """Produce a string describing the operator."""
         str_L, str_n = self._str_Ln()
@@ -396,6 +399,7 @@ If nelx (y or z) < 0, then genbox automatically generates the
 
 Note that the character bcs _must_ have 3 spaces.
 """
+
         def _str_grid(*args):
             fmt = "{:.4f} {:.4f} {:.4f}"
             args = (float(value) for value in args)
@@ -458,14 +462,14 @@ Note that the character bcs _must_ have 3 spaces.
         # z0 z1 ratio
         # BCs: (cbx0, cbx1, cby0, cby1, cbz0, cbz1)
 
-        grid_info = options['grid_info']
-        ordered_keys =  sorted(
+        grid_info = options["grid_info"]
+        ordered_keys = sorted(
             grid_info.keys(),
-            key=lambda k: {'n': 0, 'x': 1, 'y': 2, 'z': 3, 'B': 4}[k.strip()[0]]
+            key=lambda k: {"n": 0, "x": 1, "y": 2, "z": 3, "B": 4}[k.strip()[0]],
         )
-        options["grid_info"] = OrderedDict([
-            (key, grid_info[key]) for key in ordered_keys
-        ])
+        options["grid_info"] = OrderedDict(
+            [(key, grid_info[key]) for key in ordered_keys]
+        )
 
         # Write the box file
         output = template.render(**options)

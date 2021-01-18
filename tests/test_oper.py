@@ -18,3 +18,9 @@ def test_size_template(sim):
     from phill.templates import size
 
     sim.oper.write_size(size, comments=__name__)
+
+
+def test_sim_path_run(sim):
+    params = sim.params
+    assert params.oper.Lx == params.oper.Ly == params.oper.Lz == 1.0
+    assert sim.oper.produce_str_describing_oper() in sim.name_run
