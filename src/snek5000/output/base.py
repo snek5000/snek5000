@@ -56,17 +56,16 @@ class Output(OutputCore):
     @staticmethod
     def _complete_info_solver(info_solver):
         """Complete the ParamContainer info_solver."""
-        OutputCore._complete_info_solver(info_solver)
+        classes = info_solver.classes.Output._set_child("classes")
 
-        classes = info_solver.classes.Output.classes
-        classes._set_attrib(
-            "PrintStdOut",
+        classes._set_child(
+            "PrintStdout",
             dict(
                 module_name="snek5000.output.print_stdout",
                 class_name="PrintStdOut",
             ),
         )
-        classes._set_attrib(
+        classes._set_child(
             "PhysFields",
             dict(module_name="snek5000.output.phys_fields", class_name="PhysFields"),
         )
@@ -140,7 +139,7 @@ class Output(OutputCore):
 
             # initialize objects
             for cls_name, Class in dict_classes.items():
-                # only initialize if Class is not the Simul class
+                # only initialize if Class is not the Output class
                 if not isinstance(self, Class):
                     setattr(self, underscore(cls_name), Class(self))
 

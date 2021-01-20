@@ -25,12 +25,19 @@ class PhysFields:
 
     """
 
-    def __init__(self, sim=None, path=None):
-        self.sim = sim
-        if not path and sim:
-            self.path_run = sim.output.path_run
+    def __init__(self, output=None, path=None):
+        if output:
+            self.sim = output.sim
+            self.output = output
+
+        self._path_run = path
+
+    @property
+    def path_run(self):
+        if self.sim:
+            return self.sim.path_run
         else:
-            self.path_run = path
+            return self._path_run
 
     def read(self):
         path = self.path_run

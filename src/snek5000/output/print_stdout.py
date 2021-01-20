@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 
 import numpy as np
+from snek5000 import mpi
 from snek5000.log import logger
 from snek5000.solvers.base import Simul
 
@@ -33,14 +34,13 @@ class PrintStdOut:
                     self._file = next(
                         file
                         for file in logfiles
-                        if file.name == f"{self.output.name_solver}.log"
+                        if file.name == f"{output.name_solver}.log"
                     )
                 except StopIteration:
                     self._file = logfiles[-1]
             else:
-                raise FileNotFoundError(
-                    f"Cannot find a .log to parse in {path_run}: {logfiles}"
-                )
+                logger.info(f"Cannot find a .log to parse in {path_run}.")
+                self._file = path_run / f"{output.name_solver}.log"
 
         return self._file
 
@@ -104,3 +104,10 @@ class PrintStdOut:
         #     print(steps)
         dt = [float(field[2]) for field in self.text_steps]
         return np.array(dt)
+
+    def __call__(self, *args):
+        """Print to stdout and log file simultaneously."""
+        mpi.printby0(*args)
+        if mpi.rank == 0:
+            with self.file.open("a") as f:
+                f.write(" ".join(str(a) for a in args) + "\n")

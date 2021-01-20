@@ -31,3 +31,12 @@ def test_import_solver():
     sim1 = Simul(params)
     sim2 = load_simul(sim1.path_run)
     assert isinstance(sim1, Simul) and isinstance(sim2, Simul)
+
+
+def test_output(sim_data):
+    sim = load_simul(sim_data)
+
+    assert (
+        sim.output.print_stdout.file.exists()
+    ), "Cannot find .log file for print_stdout"
+    assert sim.output.phys_fields.path_run.exists(), "Cannot initialize phys_fields"

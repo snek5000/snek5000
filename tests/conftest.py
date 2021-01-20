@@ -49,14 +49,13 @@ def oper():
     return Class(params=params)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def sim_data(tmpdir_factory):
     """Generate fake simulation data."""
     files = """box.tmp
 makefile
 makefile_usr.inc
 nek5000
-params_simul.xml
 phill0.f00001
 phill.box
 phill.f
@@ -72,8 +71,16 @@ SESSION.NAME
 SIZE
 Snakefile""".splitlines()
 
-    path_run = Path(tmpdir_factory.mktemp("sim_data"))
+    path_run = Path(tmpdir_factory.mktemp("phill_sim_data"))
     for f in files:
         (path_run / f).touch()
+
+    from phill.solver import Simul
+
+    info = Simul.InfoSolver()
+    params = Simul.create_default_params()
+
+    info._save_as_xml(path_run / "info_solver.xml")
+    params._save_as_xml(path_run / "params_simul.xml")
 
     return path_run
