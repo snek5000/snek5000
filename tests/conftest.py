@@ -81,6 +81,7 @@ Snakefile""".splitlines()
     params = Simul.create_default_params()
 
     info._save_as_xml(path_run / "info_solver.xml")
+    params._set_attrib("path_run", path_run)
     params._save_as_xml(path_run / "params_simul.xml")
 
     return path_run

@@ -90,14 +90,18 @@ def load_simul(path_dir):
     Simul = import_cls_simul(solver)
 
     # Load parameters
-    params_xml = path_dir / "params_simul.xml"
-    try:
-        params_par = next(path_dir.glob("*.par"))
-    except StopIteration:
-        warn(f"The {path_dir}/*.par file is missing!")
-        params_par = None
+    from snek5000.params import Parameters
 
-    params = Simul.load_params_from_file(path_xml=params_xml, path_par=params_par)
+    params = Parameters._load_params_simul(path_dir)
+
+    # try:
+    #     params_par = next(path_dir.glob("*.par"))
+    # except StopIteration:
+    #     warn(f"The {path_dir}/*.par file is missing!")
+    #     params_par = None
+    #
+    # params_xml = path_dir / "params_simul.xml"
+    # params = Simul.load_params_from_file(path_xml=params_xml, path_par=params_par)
     # Modify parameters prior to loading
     params.NEW_DIR_RESULTS = False
     params.output.HAS_TO_SAVE = False
