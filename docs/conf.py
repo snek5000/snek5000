@@ -68,13 +68,13 @@ extensions = [
     #  "recommonmark",
     #  "myst_parser",
     "myst_nb",
-    "sphinx_copybutton"
+    "sphinx_copybutton",
 ]
 
 # Execute ipynb files into with a cache ...
 jupyter_execute_notebooks = "cache"
 # ... except these ipynb files
-execution_excludepatterns = ['ipynb/executed/*']
+execution_excludepatterns = ["ipynb/executed/*"]
 
 # CSS selector which modifies the sphinx-copybutton feature
 copybutton_selector = ",".join(
@@ -86,9 +86,9 @@ copybutton_selector = ",".join(
 
 # The suffix of source filenames.
 source_suffix = {
-    '.rst': 'restructuredtext',
-    '.ipynb': 'myst-nb',
-    '.myst': 'myst-nb',
+    ".rst": "restructuredtext",
+    ".ipynb": "myst-nb",
+    ".myst": "myst-nb",
 }
 
 # Execute Doxygen
@@ -147,7 +147,7 @@ else:
 
     # File types
     breathe_implementation_filename_extensions = [".md"]
-    breathe_domain_by_extension = {"usr": "c", "inc": "c", "f": "c"}
+    breathe_domain_by_extension = {"usr": "fortran", "f": "fortran"}
     breathe_domain_by_file_pattern = {"SIZE": "f"}
 
     # Input sources
@@ -178,14 +178,50 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_material"
+
+
+# Set link name generated in the top bar.
+html_title = "main docs"
+
+html_sidebars = {
+    "*[!index]": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
+
+html_favicon = "_static/favicon.ico"
+
+# Material theme options (see theme.conf for more information)
+html_theme_options = {
+    # Set the name of the project to appear in the navigation.
+    "nav_title": f"{project} documentation",
+    # ??
+    "touch_icon": html_favicon,
+    # Logo to the left of the title
+    "logo_icon": "&#x1F30A",  # https://emojipedia.org/water-wave/
+    #
+    "nav_links": [{"href": "doxygen/index", "title": "fortran docs", "internal": True}],
+    # Specify a base_url used to generate sitemap.xml. If not
+    # specified, then no sitemap will be built.
+    "base_url": f"https://{project}.readthedocs.io",
+    # Set the color and the accent color
+    "color_primary": "indigo",
+    "color_accent": "deep-purple",
+    # Set the repo location to get a badge with stats
+    "repo_url": f"https://github.com/exabl/{project}/",
+    "repo_name": project,
+    # Visible levels of the global TOC; -1 means unlimited
+    "globaltoc_depth": 1,
+    # If False, expand all TOC entries
+    "globaltoc_collapse": True,
+    # If True, show hidden TOC entries
+    "globaltoc_includehidden": False,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-html_favicon = "_static/favicon.ico"
 
 # Values to pass into the template engine's context for all pages.
 html_context = {
