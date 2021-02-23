@@ -106,7 +106,7 @@ Need more reasons to use snek5000?
 
 </details>
 
-## Contributing
+### Contributing
 
 Contributions are welcome! You can help by testing out the code, filing issues
 and submitting patches. See [contributing guidelines](CONTRIBUTING.md).
