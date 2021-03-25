@@ -128,7 +128,7 @@ class Output(OutputCore):
 
         if sim:
             self.oper = sim.oper
-            self.params = sim.params
+            self.params = sim.params.output
 
             # Same as package name __name__
             super().__init__(sim)
@@ -142,8 +142,9 @@ class Output(OutputCore):
                     setattr(self, underscore(cls_name), Class(self))
         elif params:
             # At least initialize params
-            self.params = params
+            self.params = params.output
         else:
+            self.params = None
             logger.warning(
                 "Initializing Output class without sim or params might lead to errors."
             )
