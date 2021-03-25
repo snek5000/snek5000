@@ -100,7 +100,9 @@ class SimulNek(SimulCore):
         params._set_child("nek")
         params_nek = params.nek
 
-        params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
+        params._set_attribs(
+            dict(NEW_DIR_RESULTS=True, short_name_type_run="run", compile_in_place=True)
+        )
         for section in ("general", "problemtype", "velocity", "pressure"):
             params_nek._set_child(section)
 
@@ -158,11 +160,7 @@ class SimulNek(SimulCore):
         params_nek.velocity._set_attribs(dict(viscosity=math.nan, density=math.nan))
         params_nek.pressure._set_attrib("preconditioner", "semg_xxt")
         params_nek.temperature._set_attribs(
-            dict(
-                conjugate_heat_transfer=False,
-                conductivity=math.nan,
-                rho_cp=math.nan,
-            )
+            dict(conjugate_heat_transfer=False, conductivity=math.nan, rho_cp=math.nan,)
         )
         params_nek.scalar01._set_attribs(dict(density=math.nan, diffusivity=math.nan))
         return params
@@ -181,6 +179,20 @@ class SimulNek(SimulCore):
         if "Output" in dict_classes:
             if not params.NEW_DIR_RESULTS:
                 self.path_run = self.output.path_run = Path(params.path_run)
+            elif params.compile_in_place:
+                # Save the newly generated path
+                new_path_run = Path(self.output.path_run)
+
+                # Temporarily assign package root as path_run
+                self.path_run = self.output.path_run = self.output.get_root()
+                self.output.post_init()
+                # Compile in place!
+                self.make.exec(["compile"])
+
+                # Restore the newly generated path
+                self.path_run = self.output.path_run = new_path_run
+                # And copy also compiled artifacts
+                self.output.copy(self.path_run)
             else:
                 # path_run would be initialized by the Output instance if available
                 # See self.output._init_name_run()

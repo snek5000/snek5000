@@ -15,17 +15,20 @@ class Make:
 
     def __init__(self, sim):
         self.sim = sim
-        self.path_run = sim.output.path_run
+        self.log_handler = []
+
+    @property
+    def file(self):
         try:
-            self.file = next(f for f in sim.output.get_paths() if f.name == "Snakefile")
+            file = next(f for f in self.sim.output.get_paths() if f.name == "Snakefile")
         except AttributeError:
             raise AttributeError("Unable to get path of Snakefile via Output class.")
-
-        self.log_handler = []
+        else:
+            return file
 
     def list(self):
         """List rules."""
-        with change_dir(self.path_run):
+        with change_dir(self.sim.path_run):
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
     def exec(self, rules=("run",), dryrun=False, **kwargs):
@@ -34,7 +37,7 @@ class Make:
         :returns: True if workflow execution was successful.
 
         """
-        with change_dir(self.path_run):
+        with change_dir(self.sim.path_run):
             return snakemake(
                 self.file,
                 targets=rules,

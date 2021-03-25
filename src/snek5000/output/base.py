@@ -368,8 +368,18 @@ class Output(OutputCore):
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with FluidSim's params_simul.xml and info.xml"""
         params = self.sim.params
+        path_run = Path(self.path_run)
+
+        if params.compile_in_place and any(
+            (path_run / xml).exists() for xml in ("params_simul.xml", "info_solver.xml")
+        ):
+            logger.info(
+                "Using params.compile_in_place, params_simul.xml and info_solver.xml could get replaced."
+            )
+            replace = True
+
         if mpi.rank == 0 and self._has_to_save and params.NEW_DIR_RESULTS:
-            par_file = Path(self.path_run) / f"{self.name_solver}.par"
+            par_file = path_run / f"{self.name_solver}.par"
             logger.info(
                 f"Writing params files... {par_file}, params_simul.xml, "
                 "info_solver.xml"
