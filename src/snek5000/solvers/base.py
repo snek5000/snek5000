@@ -101,7 +101,9 @@ class SimulNek(SimulCore):
         params_nek = params.nek
 
         params._set_attribs(
-            dict(NEW_DIR_RESULTS=True, short_name_type_run="run", compile_in_place=True)
+            dict(
+                NEW_DIR_RESULTS=True, short_name_type_run="run", compile_in_place=False
+            )
         )
         for section in ("general", "problemtype", "velocity", "pressure"):
             params_nek._set_child(section)
