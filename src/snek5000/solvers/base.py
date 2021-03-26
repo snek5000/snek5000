@@ -193,6 +193,7 @@ class SimulNek(SimulCore):
                 compilation_success = self.make.exec(["compile"])
 
                 if not compilation_success:
+                    self.output.compiler_errors()
                     raise RuntimeError("Failed to compile!")
 
                 # Restore the newly generated path

@@ -4,6 +4,7 @@
 import inspect
 import os
 import pkgutil
+import re
 import shutil
 from itertools import chain
 from pathlib import Path
@@ -389,3 +390,35 @@ class Output(OutputCore):
                 params.nek._write_par(fp)
 
         super()._save_info_solver_params_xml(replace, comment=f"snek5000 {__version__}")
+
+    def print_file(self, file_name, regex_pattern=None):
+        """Print the contents of a file and optionally parse it through a regex
+        pattern with a few matching groups.
+
+        Parameters
+        ----------
+        file_name : str
+
+        regex_pattern : str
+
+        """
+        file = self.sim.path_run / file_name
+        if file.exists():
+            content = file.read_text()
+
+            if regex_pattern:
+                content = "\n".join(
+                    " => ".join(groups) for groups in re.findall(regex_pattern, content)
+                )
+
+            print(content)
+        else:
+            raise FileNotFoundError(str(file))
+
+    def compiler_errors(self):
+        """Print error summary from a gcc / gfortran compiler """
+        self.print_file("build.log", r"Error:(.*)\n(.*)")
+
+    def compiler_warnings(self):
+        """Print warning summary from a gcc / gfortran compiler """
+        self.print_file("build.log", r"Warning:(.*)\n(.*)")
