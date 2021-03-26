@@ -190,6 +190,10 @@ class SimulNek(SimulCore):
                 self.output.post_init()
                 # Compile in place!
                 self.make.exec(["compile"])
+                compilation_success = self.make.exec(["compile"])
+
+                if not compilation_success:
+                    raise RuntimeError("Failed to compile!")
 
                 # Restore the newly generated path
                 self.path_run = self.output.path_run = new_path_run
