@@ -241,6 +241,9 @@ class Output(OutputCore):
             """Ignore if not found in ``abs_paths``."""
             src = Path(src)
             include = abs_paths + [root / subpkg for subpkg in subpackages]
+            if self.sim.params.nek.general.start_from:
+                include.append(self.sim.params.nek.general.start_from)
+
             exclude = tuple(
                 name
                 for name in names
