@@ -32,6 +32,7 @@ internals rely on FluidSim's core_ to build its API.
 
    README
    tutorials
+   packaging
 
 User Guide
 ----------
