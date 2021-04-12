@@ -8,6 +8,7 @@ Information regarding mesh, mathematical operators, and domain decomposition.
 
 """
 import inspect
+import itertools
 import math
 import sys
 from collections import OrderedDict
@@ -109,6 +110,7 @@ _formulation`` and whether
             "Ly": 2 * pi,
             "Lz": 2 * pi,
             "boundary": ["P", "P", "W", "W", "P", "P"],
+            "boundary_scalars": [],
             "dim": 3,
             "nproc_min": 4,
             "nproc_max": 32,
@@ -117,6 +119,23 @@ _formulation`` and whether
         params._set_child("oper", attribs=attribs)
         params.oper._set_doc(
             """
+Parameters for mesh description:
+
+- ``nx``, ``ny``, ``nz``: int
+    Number of elements in each directions
+- ``origin_x``, ``origin_y, ``origin_z``: float
+    Starting coordinate of the mesh (default: 0.0)
+- ``ratio_x``, ``ratio_y``, ``ratio_z``: float
+    Mesh stretching ratio (default: 1.0)
+- ``Lx``, ``Ly``, ``Lz``: float
+    Length of the domain
+
+Parameters for boundary conditions:
+
+- ``boundary``: list[str]
+    `Velocity boundary conditions <https://nek5000.github.io/NekDoc/problem_setup/boundary_conditions.html#fluid-velocity>`__
+- ``boundary_scalars``: list[str]
+    `Temperature and passive scalar boundary conditions <https://nek5000.github.io/NekDoc/problem_setup/boundary_conditions.html#temperature-and-passive-scalars>`__
 
 The following table matches counterpart of mandatory ``SIZE`` variables.
 
@@ -406,8 +425,9 @@ Note that the character bcs _must_ have 3 spaces.
             return fmt.format(*args)
 
         boundary = self.params.oper.boundary
+        boundary_scalars = self.params.oper.boundary_scalars
 
-        for bc in boundary:
+        for bc in itertools.chain(boundary, boundary_scalars):
             if len(bc) > 3:
                 raise ValueError(
                     f"Length of boundary condition {bc} shall not exceed 3 characters"
@@ -427,10 +447,18 @@ Note that the character bcs _must_ have 3 spaces.
             "z0 z1 ratio": _str_grid(
                 params.oper.origin_z, params.oper.Lz, params.oper.ratio_z
             ),
-            "BCs: (cbx0, cbx1, cby0, cby1, cbz0, cbz1)": ",".join(
-                bc.ljust(3) for bc in boundary
-            ),
+            "Velocity BCs": ",".join(bc.ljust(3) for bc in boundary),
         }
+
+        if boundary_scalars:
+            grid_info.update(
+                {
+                    "Temperature / scalar BCs": ",".join(
+                        bc.ljust(3) for bc in boundary_scalars
+                    )
+                }
+            )
+
         info = {
             "comments": comments,
             "dim": str(-params.oper.dim),
@@ -465,7 +493,9 @@ Note that the character bcs _must_ have 3 spaces.
         grid_info = options["grid_info"]
         ordered_keys = sorted(
             grid_info.keys(),
-            key=lambda k: {"n": 0, "x": 1, "y": 2, "z": 3, "B": 4}[k.strip()[0]],
+            key=lambda k: {"n": 0, "x": 1, "y": 2, "z": 3, "V": 4, "T": 5}[
+                k.strip()[0]
+            ],
         )
         options["grid_info"] = OrderedDict(
             [(key, grid_info[key]) for key in ordered_keys]
