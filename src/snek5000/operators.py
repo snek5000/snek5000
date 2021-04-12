@@ -220,7 +220,7 @@ SIZE            params.oper.elem      Comment
 ``lx1``         ``order``             p-order (avoid uneven and values <6).
 
 ``lxo``         ``order_out``         Max. p-order on output (should be ``>=
-                                      order``)
+                                      order``. See :any:`order_out`)
 
 ``lx2``         ``staggered``         | p-order for pressure. **Automatically
                                         computed** from boolean
@@ -296,6 +296,18 @@ SIZE            params.oper.misc      Comment
     def order(self):
         """Equivalent to ``lx1``."""
         return self.params.oper.elem.order
+
+    @property
+    def order_out(self):
+        """Equivalent to ``lxo``."""
+        elem = self.params.oper.elem
+        if elem.order_out < elem.order:
+            raise ValueError(
+                f"Max GLL points on output should not be less than element "
+                f"order. {elem.order_out} < {elem.order}"
+            )
+
+        return elem.order_out
 
     @property
     def order_dealiasing(self):

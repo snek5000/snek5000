@@ -60,19 +60,43 @@ def oper():
     return Class(params=params)
 
 
-@pytest.fixture(scope="session")
-def oper2d():
-    from snek5000.operators import Operators as Class
-    from snek5000.util import init_params
-
-    params = init_params(Class)
+def set_params_oper2d(params):
     params.oper.nx = params.oper.ny = 16
     params.oper.Lx = params.oper.Ly = 1
     params.oper.dim = 2
     params.oper.boundary = ["W"] * 4
     params.oper.boundary_scalars = ["t"] * 2 + ["I"] * 2
 
+    params.oper.nproc_min = 4
+    params.oper.nproc_max = 32
+
+    elem = params.oper.elem
+    elem.order = elem.order_out = 15
+    elem.coef_dealiasing = 1.0 / 1.6
+    elem.staggered = False
+
+    params.oper.max.hist = 100
+
+
+@pytest.fixture(scope="session")
+def oper2d():
+    from snek5000.operators import Operators as Class
+    from snek5000.util import init_params
+
+    params = init_params(Class)
+    set_params_oper2d(params)
     return Class(params=params)
+
+
+@pytest.fixture(scope="session")
+def sim2d():
+    from phill.solver import Simul
+
+    params = Simul.create_default_params()
+    params.output.sub_directory = "test"
+
+    set_params_oper2d(params)
+    return Simul(params)
 
 
 @pytest.fixture(scope="function")

@@ -38,6 +38,15 @@ def test_size_template(sim, jinja_env, datadir):
         assert buffer.getvalue().splitlines() == expected.splitlines()
 
 
+def test_size_2d(sim2d, jinja_env, datadir):
+    size = jinja_env.get_template("SIZE.j2")
+    expected = (datadir / "test_size_2d.f").read_text()
+
+    with StringIO() as buffer:
+        sim2d.oper.write_size(size, fp=buffer, comments=__name__)
+        assert buffer.getvalue().splitlines() == expected.splitlines()
+
+
 def test_sim_path_run(sim):
     params = sim.params
     assert params.oper.Lx == params.oper.Ly == params.oper.Lz == 1.0

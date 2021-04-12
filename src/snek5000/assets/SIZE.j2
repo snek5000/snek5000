@@ -42,15 +42,17 @@ c
       {{ parameter("lpert", params.oper.max.perturb) }}  ! max number of perturbations
       {{ parameter("toteq", params.oper.max.scalars_cons) }}  ! max number of conserved scalars in CMT
       {{ parameter("nsessmax", params.oper.max.sessions) }}  ! max sessions to NEKNEK
-      {{ parameter("lxo", params.oper.elem.order_out) }}  ! max GLL points on output (lxo>=lx1)
+      {{ parameter("lxo", order_out) }}  ! max GLL points on output (lxo>=lx1)
       {{ parameter("mxprev", params.oper.max.dim_proj) | trim }}
       {{ parameter("lgmres", params.oper.max.dim_krylov) }}  ! max dim of projection & Krylov space
       {{ parameter("lorder", params.oper.max.order_time) }}  ! max order in time
       {{ parameter("lx1m", order_mesh_solver) }}  ! GLL points mesh solver
       {{ parameter("lfdm", params.oper.misc.fast_diag | int) }}  ! set to 1 for fast diagonalization method
-      {{ parameter("lelx", max_nx) | trim }}
+      {{ parameter("lelx", max_nx) }}  ! global tensor mesh dimensions
       {{ parameter("lely", max_ny) | trim }}
-      {{ parameter("lelz", max_nz) }}  ! global tensor mesh dimensions
+{%- if params.oper.dim == 3 %}
+      {{ parameter("lelz", max_nz) | trim }}
+{%- endif %}
       {{ parameter("lelt", max_n_loc) }}  ! max number of local elements per MPI rank
       {{ parameter("lbelt", order_mhd) }}  ! set to lelt for mhd
       {{ parameter("lpelt", order_linear) }}  ! set to lelt for linear stability

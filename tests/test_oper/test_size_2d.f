@@ -14,33 +14,32 @@ c
       integer lfdm,ldimt_proj
 
       ! BASIC
-      parameter (ldim=3)                ! domain dimension (2 or 3)
-      parameter (lx1=6)                 ! GLL points per element along each direction
-      parameter (lxd=9)                 ! GL  points for over-integration (dealiasing)
-      parameter (lx2=4)                 ! GLL points for pressure (lx1 or lx1-2)
+      parameter (ldim=2)                ! domain dimension (2 or 3)
+      parameter (lx1=15)                ! GLL points per element along each direction
+      parameter (lxd=24)                ! GL  points for over-integration (dealiasing)
+      parameter (lx2=15)                ! GLL points for pressure (lx1 or lx1-2)
 
       parameter (lelg=8192)             ! max total number of elements
-      parameter (lpmin=8)               ! min MPI ranks
+      parameter (lpmin=4)               ! min MPI ranks
       parameter (lpmax=32)              ! max MPI ranks
       parameter (ldimt=1)               ! max auxiliary fields (temperature + scalars)
 
       ! OPTIONAL
       parameter (ldimt_proj=1)          ! max auxiliary fields residual projection
-      parameter (lhis=1)                ! max history/monitoring points
+      parameter (lhis=100)              ! max history/monitoring points
       parameter (maxobj=1)              ! max number of objects
       parameter (lpert=1)               ! max number of perturbations
       parameter (toteq=1)               ! max number of conserved scalars in CMT
       parameter (nsessmax=1)            ! max sessions to NEKNEK
-      parameter (lxo=6)                 ! max GLL points on output (lxo>=lx1)
+      parameter (lxo=15)                ! max GLL points on output (lxo>=lx1)
       parameter (mxprev=20)
       parameter (lgmres=30)             ! max dim of projection & Krylov space
       parameter (lorder=3)              ! max order in time
       parameter (lx1m=1)                ! GLL points mesh solver
       parameter (lfdm=0)                ! set to 1 for fast diagonalization method
-      parameter (lelx=32)               ! global tensor mesh dimensions
+      parameter (lelx=16)               ! global tensor mesh dimensions
       parameter (lely=16)
-      parameter (lelz=32)
-      parameter (lelt=1024)             ! max number of local elements per MPI rank
+      parameter (lelt=2048)             ! max number of local elements per MPI rank
       parameter (lbelt=1)               ! set to lelt for mhd
       parameter (lpelt=1)               ! set to lelt for linear stability
       parameter (lcvelt=1)              ! set to lelt for cvode
