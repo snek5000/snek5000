@@ -263,7 +263,10 @@ SIZE            params.oper.misc      Comment
     def max_n_seq(self):
         """Equivalent to ``lelg``."""
         params = self.params
-        return next_power(params.oper.nx * params.oper.ny * params.oper.nz)
+        if params.oper.dim == 2:
+            return next_power(params.oper.nx * params.oper.ny)
+        else:
+            return next_power(params.oper.nx * params.oper.ny * params.oper.nz)
 
     @property
     def max_n_loc(self):
