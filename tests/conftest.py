@@ -25,6 +25,17 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(scope="session")
+def jinja_env():
+    import jinja2
+
+    env = jinja2.Environment(
+        loader=jinja2.PackageLoader("snek5000", "assets"),
+        undefined=jinja2.StrictUndefined,
+    )
+    return env
+
+
+@pytest.fixture(scope="session")
 def sim():
     from phill.solver import Simul
 
@@ -45,6 +56,21 @@ def oper():
     params = init_params(Class)
     params.oper.nx = params.oper.ny = params.oper.nz = 9
     params.oper.nproc_min = 6
+
+    return Class(params=params)
+
+
+@pytest.fixture(scope="session")
+def oper2d():
+    from snek5000.operators import Operators as Class
+    from snek5000.util import init_params
+
+    params = init_params(Class)
+    params.oper.nx = params.oper.ny = 16
+    params.oper.Lx = params.oper.Ly = 1
+    params.oper.dim = 2
+    params.oper.boundary = ["W"] * 4
+    params.oper.boundary_scalars = ["t"] * 2 + ["I"] * 2
 
     return Class(params=params)
 

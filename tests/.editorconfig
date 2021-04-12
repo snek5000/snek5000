@@ -1,0 +1,3 @@
+# EditorConfig is awesome: https://EditorConfig.org
+[*.py]
+trim_trailing_whitespace = false

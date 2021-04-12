@@ -424,8 +424,9 @@ Note that the character bcs _must_ have 3 spaces.
             args = (float(value) for value in args)
             return fmt.format(*args)
 
-        boundary = self.params.oper.boundary
-        boundary_scalars = self.params.oper.boundary_scalars
+        dim = params.oper.dim
+        boundary = params.oper.boundary
+        boundary_scalars = params.oper.boundary_scalars
 
         for bc in itertools.chain(boundary, boundary_scalars):
             if len(bc) > 3:
@@ -440,7 +441,7 @@ Note that the character bcs _must_ have 3 spaces.
                     "nelx nely nelz",
                     " ".join(
                         str(-n)
-                        for n in (params.oper.nx, params.oper.ny, params.oper.nz)
+                        for n in (params.oper.nx, params.oper.ny, params.oper.nz)[:dim]
                     ),
                 ),
                 (
@@ -455,15 +456,25 @@ Note that the character bcs _must_ have 3 spaces.
                         params.oper.origin_y, params.oper.Ly, params.oper.ratio_y
                     ),
                 ),
-                (
-                    "z0 z1 ratio",
-                    _str_grid(
-                        params.oper.origin_z, params.oper.Lz, params.oper.ratio_z
-                    ),
-                ),
-                ("Velocity BCs", ",".join(bc.ljust(3) for bc in boundary),),
             ]
         )
+
+        if params.oper.dim == 3:
+            grid_info.update(
+                [
+                    (
+                        "z0 z1 ratio",
+                        _str_grid(
+                            params.oper.origin_z, params.oper.Lz, params.oper.ratio_z,
+                        ),
+                    ),
+                ]
+            )
+
+        if boundary:
+            grid_info.update(
+                [("Velocity BCs", ",".join(bc.ljust(3) for bc in boundary),)]
+            )
 
         if boundary_scalars:
             grid_info.update(
