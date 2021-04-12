@@ -434,29 +434,45 @@ Note that the character bcs _must_ have 3 spaces.
                 )
 
         # A dictionary mapping a comment to grid
-        grid_info = {
-            "nelx nely nelz": " ".join(
-                str(-n) for n in (params.oper.nx, params.oper.ny, params.oper.nz)
-            ),
-            "x0 x1 ratio": _str_grid(
-                params.oper.origin_x, params.oper.Lx, params.oper.ratio_x
-            ),
-            "y0 y1 ratio": _str_grid(
-                params.oper.origin_y, params.oper.Ly, params.oper.ratio_y
-            ),
-            "z0 z1 ratio": _str_grid(
-                params.oper.origin_z, params.oper.Lz, params.oper.ratio_z
-            ),
-            "Velocity BCs": ",".join(bc.ljust(3) for bc in boundary),
-        }
+        grid_info = OrderedDict(
+            [
+                (
+                    "nelx nely nelz",
+                    " ".join(
+                        str(-n)
+                        for n in (params.oper.nx, params.oper.ny, params.oper.nz)
+                    ),
+                ),
+                (
+                    "x0 x1 ratio",
+                    _str_grid(
+                        params.oper.origin_x, params.oper.Lx, params.oper.ratio_x
+                    ),
+                ),
+                (
+                    "y0 y1 ratio",
+                    _str_grid(
+                        params.oper.origin_y, params.oper.Ly, params.oper.ratio_y
+                    ),
+                ),
+                (
+                    "z0 z1 ratio",
+                    _str_grid(
+                        params.oper.origin_z, params.oper.Lz, params.oper.ratio_z
+                    ),
+                ),
+                ("Velocity BCs", ",".join(bc.ljust(3) for bc in boundary),),
+            ]
+        )
 
         if boundary_scalars:
             grid_info.update(
-                {
-                    "Temperature / scalar BCs": ",".join(
-                        bc.ljust(3) for bc in boundary_scalars
+                [
+                    (
+                        "Temperature / scalar BCs",
+                        ",".join(bc.ljust(3) for bc in boundary_scalars),
                     )
-                }
+                ]
             )
 
         info = {
@@ -480,26 +496,6 @@ Note that the character bcs _must_ have 3 spaces.
 
         """
         options = self.info_box(comments)
-
-        # A hack to ensure that the rows are ordered properly. Deduced from the
-        # keys of the dictionary grid_info
-        #
-        # nelx nely nelz
-        # x0 x1 ratio
-        # y0 y1 ratio
-        # z0 z1 ratio
-        # BCs: (cbx0, cbx1, cby0, cby1, cbz0, cbz1)
-
-        grid_info = options["grid_info"]
-        ordered_keys = sorted(
-            grid_info.keys(),
-            key=lambda k: {"n": 0, "x": 1, "y": 2, "z": 3, "V": 4, "T": 5}[
-                k.strip()[0]
-            ],
-        )
-        options["grid_info"] = OrderedDict(
-            [(key, grid_info[key]) for key in ordered_keys]
-        )
 
         # Write the box file
         output = template.render(**options)
