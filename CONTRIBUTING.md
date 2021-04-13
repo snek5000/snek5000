@@ -23,7 +23,7 @@ do this (and it has to be done only once):
    ```
 -  Using `conda`
    ```sh
-   conda env create -n snek5000 -f environment.yml
+   conda env create -n snek5000
    conda activate snek5000
    ```
 
@@ -74,5 +74,5 @@ Vim users could benefit by setting:
 ```vim
 set secure exrc
 ```
-This sources the `.vimrc` file which comes along with the repository and
+This sources the `.exrc` file which comes along with the repository and
 enables syntax highlighting for file extensions used in `lib/Nek5000`.
