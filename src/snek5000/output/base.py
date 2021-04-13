@@ -373,7 +373,7 @@ class Output(OutputCore):
         Parameters
         ----------
         template: jinja2.environment.Template
-            Template similar to ``snek5000/assets/compile
+            Template similar to ``snek5000/assets/compiler_sh.j2``
         config: dict
             Snakemake configuration
         fp: io.TextIOWrapper
