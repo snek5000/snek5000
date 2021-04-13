@@ -63,6 +63,20 @@ def source_root():
     return nek5000
 
 
+def ensure_env():
+    """Ensure environment variables ``NEK_SOURCE_ROOT`` and ``PATH`` are
+    intact.
+
+    """
+    NEK_SOURCE_ROOT = source_root()
+
+    if not os.getenv("NEK_SOURCE_ROOT"):
+        os.environ["NEK_SOURCE_ROOT"] = NEK_SOURCE_ROOT
+
+    if NEK_SOURCE_ROOT not in os.getenv("PATH"):
+        os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")])
+
+
 def get_asset(asset_name):
     """Fetches path of an asset from subpackage ``snek5000.assets``."""
     asset = next(resources.path("snek5000.assets", asset_name).gen)
