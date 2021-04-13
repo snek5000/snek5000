@@ -27,17 +27,8 @@ class Output(OutputCore):
     - attribute ``name_solver`` initialized from ``sim.info.solver.short_name``
       used to discover source code files, such as usr, box, par files. The
       value of ``name_solver`` is also used to identify the entrypoint pointing
-      to the solver module.
-
-    For example assume ``short_name / name_solver`` is ``canonical`` packaged
-    in a Python package named ``snek5000_canonical``. The package should
-    contain a ``Simul`` class in ``snek5000_canonical/solver.py``. The
-    entrypoint should be defined in ``setup.cfg`` as follows:
-
-    .. code-block:: cfg
-
-        [options.entry_points]
-        canonical = snek5000_canonical.solver
+      to the solver module. Have a look at the :ref:`packaging tutorial
+      <packaging>`.
 
     """
 

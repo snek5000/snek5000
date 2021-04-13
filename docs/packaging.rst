@@ -1,3 +1,5 @@
+.. _packaging:
+
 Packaging your Nek5000 user source code
 =======================================
 
@@ -7,8 +9,9 @@ get started.  Assume your files are named ``canonical.usr``, ``canonical.par``
 etc. and you wish to package it under a name say ``snek5000_canonical``.
 
 .. note::
-   The package name can does not have to contain `snek5000` or `canonical`.
-   It could be anything.
+   The package does not have to contain `snek5000` or `canonical`.
+   It could be anything. Make sure the ``short_name`` variable (in solver.py_ )
+   and entry point key (in setup.cfg_) matches.
 
 First create a directory structure, (preferably in a git / mercurial
 repository) like this::
@@ -41,6 +44,8 @@ setup.py
    setup()
 
 
+.. _setup.cfg:
+
 setup.cfg
 ---------
 
@@ -72,6 +77,8 @@ setup.cfg
    [options.package_data]
    snek5000_canonical = templates/*.j2, *.usr, Snakefile, etc/*.yml
 
+
+.. _solver.py:
 
 src/snek5000_canonical/solver.py
 --------------------------------
