@@ -5,6 +5,7 @@ import inspect
 import os
 import pkgutil
 import shutil
+import stat
 from itertools import chain
 from pathlib import Path
 from socket import gethostname
@@ -62,6 +63,10 @@ class Output(OutputCore):
             for sources in chain.from_iterable(self.makefile_usr_sources.values())
         ]
         return makefile_usr_obj
+
+    @property
+    def fortran_inc_flags(self):
+        return (f"-I{inc_dir}" for inc_dir in self.makefile_usr_sources)
 
     @staticmethod
     def _complete_info_solver(info_solver):
@@ -359,6 +364,37 @@ class Output(OutputCore):
                 makefile_usr = self.sim.path_run / "makefile_usr.inc"
                 with open(makefile_usr, "w") as fp:
                     fp.write(output)
+
+    @staticmethod
+    def write_compile_sh(template, config, fp=None, path=None):
+        """Write a standalone ``compile.sh`` shell script to compile the user
+        code.
+
+        Parameters
+        ----------
+        template: jinja2.environment.Template
+            Template similar to ``snek5000/assets/compile
+        config: dict
+            Snakemake configuration
+        fp: io.TextIOWrapper
+            File pointer
+        path: str or Path
+            Path to write the file to
+
+        """
+        output = template.render(
+            CASE=config["CASE"], INC=config["includes"], USR=config["objects"], **config
+        )
+        if fp:
+            fp.write(output)
+        elif path:
+            with open(path, "w") as fp:
+                fp.write(output)
+        else:
+            raise ValueError("Either file pointer or the path to it must be provided.")
+
+        if path:
+            os.chmod(path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
 
     def post_init(self):
         if mpi.rank == 0:
