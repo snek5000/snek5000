@@ -159,6 +159,7 @@ class Output(OutputCore):
             # At least initialize params
             self.params = params
         else:
+            self.params = None
             logger.warning(
                 "Initializing Output class without sim or params might lead to errors."
             )

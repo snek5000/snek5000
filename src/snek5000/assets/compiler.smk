@@ -1,8 +1,16 @@
+from pprint import pprint
+
 import snek5000
 from snek5000.util import now
 
 
 NEK_SOURCE_ROOT = snek5000.source_root()
+
+
+# Snakemake configuration
+rule show_config:
+    run:
+        pprint(config)
 
 
 # gslib, lapack ...
