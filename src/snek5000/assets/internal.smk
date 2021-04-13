@@ -4,13 +4,6 @@ import snek5000
 NEK_SOURCE_ROOT = snek5000.source_root()
 
 
-if not os.getenv("NEK_SOURCE_ROOT"):
-    os.environ["NEK_SOURCE_ROOT"] = NEK_SOURCE_ROOT
-
-if NEK_SOURCE_ROOT not in os.getenv("PATH"):
-    os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT, os.getenv("PATH")])
-
-
 subworkflow Nek5000:
     workdir:
         NEK_SOURCE_ROOT
