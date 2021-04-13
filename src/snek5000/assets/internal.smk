@@ -12,9 +12,12 @@ if NEK_SOURCE_ROOT not in os.getenv("PATH"):
 
 
 subworkflow Nek5000:
-    workdir: NEK_SOURCE_ROOT
-    snakefile: snek5000.get_asset("nek5000.smk")
-    configfile: config["file"]
+    workdir:
+        NEK_SOURCE_ROOT
+    snakefile:
+        snek5000.get_asset("nek5000.smk")
+    configfile:
+        config["file"]
 
 
 # generate a box mesh
@@ -71,6 +74,7 @@ rule generate_makefile:
             USR="{config[objects]}"
         {input.cmd} {config[CASE]}
         """
+
 
 # generate sessionfile
 rule generate_session:

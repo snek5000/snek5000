@@ -77,6 +77,21 @@ def ensure_env():
         os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")])
 
 
+def append_gcc_debug_flags(config):
+    """Append to commonly used gcc / gfortran debug flags if ``SNEK_DEBUG``
+    environment is activated.
+
+    Parameters
+    ----------
+    config: dict
+        Snakemake configuration. Should contain ``CFLAGS`` and ``FFLAGS`` keys.
+
+    """
+    if os.getenv("SNEK_DEBUG"):
+        config["CFLAGS"] += " -O0 -g"
+        config["FFLAGS"] += " -O0 -g -ffpe-trap=invalid,zero,overflow,underflow -Wall"
+
+
 def get_asset(asset_name):
     """Fetches path of an asset from subpackage ``snek5000.assets``."""
     asset = next(resources.path("snek5000.assets", asset_name).gen)
