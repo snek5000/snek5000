@@ -1,3 +1,4 @@
+# isort: skip_file
 """
 A Pythonic frontend to Nek5000.
 
@@ -28,7 +29,6 @@ try:
     from importlib import resources
 except ImportError:
     import importlib_resources as resources
-
 import os
 from pathlib import Path
 
@@ -108,3 +108,6 @@ def load_simul(path_dir):
     params.path_run = path_dir
     sim = Simul(params)
     return sim
+
+
+from .util.smake import append_debug_flags, ensure_env  # noqa: F401, E402

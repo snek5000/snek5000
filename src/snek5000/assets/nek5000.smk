@@ -1,27 +1,29 @@
-MAKETOOLS=f"CC={config['CC']} FC={config['FC']} CFLAGS='{config['CFLAGS']}' FFLAGS='{config['FFLAGS']}' ./maketools"
+MAKETOOLS = f"CC={config['CC']} FC={config['FC']} CFLAGS='{config['CFLAGS']}' FFLAGS='{config['FFLAGS']}' ./maketools"
 
 
 rule tools:
     params:
-        maketools=MAKETOOLS
+        maketools=MAKETOOLS,
     shell:
         """
         pushd tools/
         {params.maketools} all
         """
 
+
 rule _tool:
     input:
-        "tools/{tool}"
+        "tools/{tool}",
     output:
-        "bin/{tool}"
+        "bin/{tool}",
     params:
-        maketools=MAKETOOLS
+        maketools=MAKETOOLS,
     shell:
         """
         pushd tools/
         {params.maketools} {wildcards.tool}
         """
+
 
 rule tools_clean:
     shell:
@@ -31,11 +33,12 @@ rule tools_clean:
         ./maketools clean
         """
 
+
 # NOTE: May not compile as needed unless proper flags are supplied. The command
 # makenek takes care of gslib building using the bash function make_3rd_party
 rule gslib:
     output:
-        "3rd_party/gslib/lib/libgs.a"
+        "3rd_party/gslib/lib/libgs.a",
     shell:
         """
         source core/makenek.inc

@@ -225,8 +225,6 @@ src/snek5000_canonical/Snakefile
 
 .. code-block:: python
 
-   import os
-
    import snek5000
    from snek5000_canonical.output import OutputCanonical as Output
 
@@ -234,23 +232,58 @@ src/snek5000_canonical/Snakefile
    # Case name
    CASE = "canonical"
    CONFIG = Output.get_configfile()
-   ROOT = Output.get_root()
-   NEK_SOURCE_ROOT = snek5000.source_root()
+
+   snek5000.ensure_env()
 
    configfile: CONFIG
 
-   if os.getenv("SNEK_DEBUG"):
-       config["CFLAGS"] += " -O0 -g"
-       config["FFLAGS"] += " -O0 -g -ffpe-trap=invalid,zero,overflow,underflow -Wall"
+   # Necessary to pass configuration to other Snakemake modules
+   Output.update_snakemake_config(config, CASE)
 
-   if not os.getenv("NEK_SOURCE_ROOT"):
-       os.environ["NEK_SOURCE_ROOT"] = NEK_SOURCE_ROOT
-
-   if NEK_SOURCE_ROOT not in os.getenv("PATH"):
-       os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT, os.getenv("PATH")])
+   # default rule
+   rule all:
+       input:
+           "nek5000",
 
 
-   subworkflow Nek5000:
-       workdir: NEK_SOURCE_ROOT
-       snakefile: snek5000.get_asset('nek5000.smk')
-       configfile: CONFIG
+   # shorthand for mesh
+   rule mesh:
+       input:
+           f"{CASE}.re2",
+           f"{CASE}.ma2",
+
+
+   # compiler and run rules
+   # ======================
+   module compiler:
+       snakefile:
+           snek5000.get_asset("compiler.smk")
+       config:
+           config
+
+
+   use rule * from compiler
+
+
+   # I/O rules
+   # =========
+   module io:
+       snakefile:
+           snek5000.get_asset("io.smk")
+       config:
+           config
+
+
+   use rule * from io
+
+
+   # internal rules
+   # ==============
+   module internal:
+       snakefile:
+           snek5000.get_asset("internal.smk")
+       config:
+           config
+
+
+   use rule * from internal as internal_*

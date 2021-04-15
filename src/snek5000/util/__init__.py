@@ -1,6 +1,11 @@
 """Miscellaneous utilities
 ==========================
 
+.. autosummary::
+   :toctree:
+
+   archive
+   smake
 
 """
 import os
@@ -99,7 +104,23 @@ def last_modified(path):
 
 
 def activate_paths():
-    """Setup environment variables in preparation for Nek5000 build."""
+    """Setup environment variables in preparation for Nek5000 build.
+
+    .. deprecated:: 0.6.0
+       Use :func:`snek5000.source_root`
+       and :func:`snek5000.util.smake.ensure_env` instead.
+
+    """
+    import warnings
+
+    warnings.warn(
+        (
+            "Function activate_paths will be removed on a later release. Use "
+            "source_root and ensure_env instead"
+        ),
+        DeprecationWarning,
+    )
+
     env_source_root = os.environ["NEK_SOURCE_ROOT"] = source_root()
 
     env_path = str(os.getenv("PATH"))
