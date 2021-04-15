@@ -85,3 +85,12 @@ Snakefile""".splitlines()
     params._save_as_xml(path_run / "params_simul.xml")
 
     return path_run
+
+
+@pytest.fixture(autouse=True, scope="session")
+def shared_datadir_remove():
+    """Removes empty data directory as a result of pytest-datadir"""
+    yield  # Execute all tests
+    shared_datadir = Path(__file__).parent.parent / "data"
+    if shared_datadir.exists():
+        shared_datadir.rmdir()
