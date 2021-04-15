@@ -62,6 +62,8 @@ jobs:
 
     - name: Upload coverage to codecov
       if: ${{ success() }}
-      uses: codecov/codecov-action@v1
-      with:
-        fail_ci_if_error: true
+      run: |
+        pip install codecov
+        codecov
+      env:
+        super_secret: ${{ secrets.CODECOV_TOKEN }}
