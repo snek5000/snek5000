@@ -110,4 +110,4 @@ def load_simul(path_dir):
     return sim
 
 
-from .util.smake import append_gcc_debug_flags, ensure_env  # noqa: F401, E402
+from .util.smake import append_debug_flags, ensure_env  # noqa: F401, E402

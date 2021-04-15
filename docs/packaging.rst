@@ -235,22 +235,10 @@ src/snek5000_canonical/Snakefile
 
    snek5000.ensure_env()
 
-
    configfile: CONFIG
 
-
    # Necessary to pass configuration to other Snakemake modules
-   config.update(
-       {
-           "CASE": CASE,
-           "file": CONFIG,
-           "includes": " ".join(Output().fortran_inc_flags),
-           "objects": " ".join(Output().makefile_usr_obj),
-       }
-   )
-
-   snek5000.append_gcc_debug_flags(config)
-
+   Output.update_snakemake_config(config, CASE)
 
    # default rule
    rule all:

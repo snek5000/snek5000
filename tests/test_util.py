@@ -2,7 +2,7 @@ import os
 import shutil
 from collections import defaultdict
 
-from snek5000.util.smake import append_gcc_debug_flags, ensure_env
+from snek5000.util.smake import append_debug_flags, ensure_env
 
 
 def test_ensure_env():
@@ -21,7 +21,7 @@ def test_debug_flags():
     os.environ["SNEK_DEBUG"] = "1"
 
     config = defaultdict(str)
-    append_gcc_debug_flags(config)
+    append_debug_flags(config)
 
     assert all("-O0 -g" in config[k] for k in ("CFLAGS", "FFLAGS"))
 

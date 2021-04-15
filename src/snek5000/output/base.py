@@ -2,6 +2,7 @@
 
 """
 import inspect
+import logging
 import os
 import pkgutil
 import shutil
@@ -12,8 +13,10 @@ from socket import gethostname
 
 from fluidsim_core.output import OutputCore
 from inflection import underscore
+
 from snek5000 import __version__, get_asset, logger, mpi, resources
 from snek5000.solvers import get_solver_package, is_package
+from snek5000.util.smake import append_debug_flags
 
 
 class Output(OutputCore):
@@ -75,7 +78,10 @@ class Output(OutputCore):
 
         classes._set_child(
             "PrintStdout",
-            dict(module_name="snek5000.output.print_stdout", class_name="PrintStdOut",),
+            dict(
+                module_name="snek5000.output.print_stdout",
+                class_name="PrintStdOut",
+            ),
         )
         classes._set_child(
             "PhysFields",
@@ -129,6 +135,36 @@ class Output(OutputCore):
             logger.info(f"Using default configuration instead: {configfile}")
 
         return configfile
+
+    @classmethod
+    def update_snakemake_config(cls, config, name_solver):
+        """Update snakemake config in-place with name of the solver / case,
+        path to configfile and compiler flags
+
+        Parameters
+        ----------
+        name_solver: str
+            Short name of the solver, also known as case name
+
+        """
+        try:
+            # Supress warnings for not instantiating Output with sim or params
+            logging_level = logger.getEffectiveLevel()
+            logger.setLevel(logging.ERROR)
+            temp = cls()
+
+            config.update(
+                {
+                    "CASE": name_solver,
+                    "file": cls.get_configfile(),
+                    "includes": " ".join(temp.fortran_inc_flags),
+                    "objects": " ".join(temp.makefile_usr_obj),
+                }
+            )
+
+            append_debug_flags(config)
+        finally:
+            logger.setLevel(logging_level)
 
     def __init__(self, sim=None, params=None):
         self.sim = sim

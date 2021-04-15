@@ -18,7 +18,7 @@ def ensure_env():
         os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")])
 
 
-def append_gcc_debug_flags(config):
+def append_debug_flags(config):
     """Append to commonly used gcc / gfortran debug flags if ``SNEK_DEBUG``
     environment is activated.
 
