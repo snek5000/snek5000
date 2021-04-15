@@ -1,3 +1,4 @@
+# isort: skip_file
 """
 A Pythonic frontend to Nek5000.
 
@@ -28,7 +29,6 @@ try:
     from importlib import resources
 except ImportError:
     import importlib_resources as resources
-
 import os
 from pathlib import Path
 
@@ -61,35 +61,6 @@ def source_root():
             "NEK_SOURCE_ROOT to point to Nek5000 top level directory."
         )
     return nek5000
-
-
-def ensure_env():
-    """Ensure environment variables ``NEK_SOURCE_ROOT`` and ``PATH`` are
-    intact.
-
-    """
-    NEK_SOURCE_ROOT = source_root()
-
-    if not os.getenv("NEK_SOURCE_ROOT"):
-        os.environ["NEK_SOURCE_ROOT"] = NEK_SOURCE_ROOT
-
-    if NEK_SOURCE_ROOT not in os.getenv("PATH"):
-        os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")])
-
-
-def append_gcc_debug_flags(config):
-    """Append to commonly used gcc / gfortran debug flags if ``SNEK_DEBUG``
-    environment is activated.
-
-    Parameters
-    ----------
-    config: dict
-        Snakemake configuration. Should contain ``CFLAGS`` and ``FFLAGS`` keys.
-
-    """
-    if os.getenv("SNEK_DEBUG"):
-        config["CFLAGS"] += " -O0 -g"
-        config["FFLAGS"] += " -O0 -g -ffpe-trap=invalid,zero,overflow,underflow -Wall"
 
 
 def get_asset(asset_name):
@@ -137,3 +108,6 @@ def load_simul(path_dir):
     params.path_run = path_dir
     sim = Simul(params)
     return sim
+
+
+from .util.smake import append_gcc_debug_flags, ensure_env  # noqa: F401, E402

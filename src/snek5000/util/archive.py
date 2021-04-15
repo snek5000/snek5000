@@ -1,3 +1,4 @@
+"""Post simulation archive-creation utilities"""
 import re
 import shlex
 import shutil
