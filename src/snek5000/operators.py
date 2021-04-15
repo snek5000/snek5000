@@ -8,6 +8,7 @@ Information regarding mesh, mathematical operators, and domain decomposition.
 
 """
 import inspect
+import itertools
 import math
 import sys
 from collections import OrderedDict
@@ -109,6 +110,7 @@ _formulation`` and whether
             "Ly": 2 * pi,
             "Lz": 2 * pi,
             "boundary": ["P", "P", "W", "W", "P", "P"],
+            "boundary_scalars": [],
             "dim": 3,
             "nproc_min": 4,
             "nproc_max": 32,
@@ -117,6 +119,23 @@ _formulation`` and whether
         params._set_child("oper", attribs=attribs)
         params.oper._set_doc(
             """
+Parameters for mesh description:
+
+- ``nx``, ``ny``, ``nz``: int
+    Number of elements in each directions
+- ``origin_x``, ``origin_y, ``origin_z``: float
+    Starting coordinate of the mesh (default: 0.0)
+- ``ratio_x``, ``ratio_y``, ``ratio_z``: float
+    Mesh stretching ratio (default: 1.0)
+- ``Lx``, ``Ly``, ``Lz``: float
+    Length of the domain
+
+Parameters for boundary conditions:
+
+- ``boundary``: list[str]
+    `Velocity boundary conditions <https://nek5000.github.io/NekDoc/problem_setup/boundary_conditions.html#fluid-velocity>`__
+- ``boundary_scalars``: list[str]
+    `Temperature and passive scalar boundary conditions <https://nek5000.github.io/NekDoc/problem_setup/boundary_conditions.html#temperature-and-passive-scalars>`__
 
 The following table matches counterpart of mandatory ``SIZE`` variables.
 
@@ -201,7 +220,7 @@ SIZE            params.oper.elem      Comment
 ``lx1``         ``order``             p-order (avoid uneven and values <6).
 
 ``lxo``         ``order_out``         Max. p-order on output (should be ``>=
-                                      order``)
+                                      order``. See :any:`order_out`)
 
 ``lx2``         ``staggered``         | p-order for pressure. **Automatically
                                         computed** from boolean
@@ -244,7 +263,10 @@ SIZE            params.oper.misc      Comment
     def max_n_seq(self):
         """Equivalent to ``lelg``."""
         params = self.params
-        return next_power(params.oper.nx * params.oper.ny * params.oper.nz)
+        if params.oper.dim == 2:
+            return next_power(params.oper.nx * params.oper.ny)
+        else:
+            return next_power(params.oper.nx * params.oper.ny * params.oper.nz)
 
     @property
     def max_n_loc(self):
@@ -277,6 +299,18 @@ SIZE            params.oper.misc      Comment
     def order(self):
         """Equivalent to ``lx1``."""
         return self.params.oper.elem.order
+
+    @property
+    def order_out(self):
+        """Equivalent to ``lxo``."""
+        elem = self.params.oper.elem
+        if elem.order_out < elem.order:
+            raise ValueError(
+                f"Max GLL points on output should not be less than element "
+                f"order. {elem.order_out} < {elem.order}"
+            )
+
+        return elem.order_out
 
     @property
     def order_dealiasing(self):
@@ -405,32 +439,68 @@ Note that the character bcs _must_ have 3 spaces.
             args = (float(value) for value in args)
             return fmt.format(*args)
 
-        boundary = self.params.oper.boundary
+        dim = params.oper.dim
+        boundary = params.oper.boundary
+        boundary_scalars = params.oper.boundary_scalars
 
-        for bc in boundary:
+        for bc in itertools.chain(boundary, boundary_scalars):
             if len(bc) > 3:
                 raise ValueError(
                     f"Length of boundary condition {bc} shall not exceed 3 characters"
                 )
 
         # A dictionary mapping a comment to grid
-        grid_info = {
-            "nelx nely nelz": " ".join(
-                str(-n) for n in (params.oper.nx, params.oper.ny, params.oper.nz)
-            ),
-            "x0 x1 ratio": _str_grid(
-                params.oper.origin_x, params.oper.Lx, params.oper.ratio_x
-            ),
-            "y0 y1 ratio": _str_grid(
-                params.oper.origin_y, params.oper.Ly, params.oper.ratio_y
-            ),
-            "z0 z1 ratio": _str_grid(
-                params.oper.origin_z, params.oper.Lz, params.oper.ratio_z
-            ),
-            "BCs: (cbx0, cbx1, cby0, cby1, cbz0, cbz1)": ",".join(
-                bc.ljust(3) for bc in boundary
-            ),
-        }
+        grid_info = OrderedDict(
+            [
+                (
+                    "nelx nely nelz",
+                    " ".join(
+                        str(-n)
+                        for n in (params.oper.nx, params.oper.ny, params.oper.nz)[:dim]
+                    ),
+                ),
+                (
+                    "x0 x1 ratio",
+                    _str_grid(
+                        params.oper.origin_x, params.oper.Lx, params.oper.ratio_x
+                    ),
+                ),
+                (
+                    "y0 y1 ratio",
+                    _str_grid(
+                        params.oper.origin_y, params.oper.Ly, params.oper.ratio_y
+                    ),
+                ),
+            ]
+        )
+
+        if params.oper.dim == 3:
+            grid_info.update(
+                [
+                    (
+                        "z0 z1 ratio",
+                        _str_grid(
+                            params.oper.origin_z, params.oper.Lz, params.oper.ratio_z,
+                        ),
+                    ),
+                ]
+            )
+
+        if boundary:
+            grid_info.update(
+                [("Velocity BCs", ",".join(bc.ljust(3) for bc in boundary),)]
+            )
+
+        if boundary_scalars:
+            grid_info.update(
+                [
+                    (
+                        "Temperature / scalar BCs",
+                        ",".join(bc.ljust(3) for bc in boundary_scalars),
+                    )
+                ]
+            )
+
         info = {
             "comments": comments,
             "dim": str(-params.oper.dim),
@@ -452,24 +522,6 @@ Note that the character bcs _must_ have 3 spaces.
 
         """
         options = self.info_box(comments)
-
-        # A hack to ensure that the rows are ordered properly. Deduced from the
-        # keys of the dictionary grid_info
-        #
-        # nelx nely nelz
-        # x0 x1 ratio
-        # y0 y1 ratio
-        # z0 z1 ratio
-        # BCs: (cbx0, cbx1, cby0, cby1, cbz0, cbz1)
-
-        grid_info = options["grid_info"]
-        ordered_keys = sorted(
-            grid_info.keys(),
-            key=lambda k: {"n": 0, "x": 1, "y": 2, "z": 3, "B": 4}[k.strip()[0]],
-        )
-        options["grid_info"] = OrderedDict(
-            [(key, grid_info[key]) for key in ordered_keys]
-        )
 
         # Write the box file
         output = template.render(**options)

@@ -1,0 +1,4 @@
+# EditorConfig is awesome: https://EditorConfig.org
+[*.box,*.f]
+trim_trailing_whitespace = false
+insert_final_newline = false
