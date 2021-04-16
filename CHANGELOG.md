@@ -25,6 +25,8 @@ Security in case of vulnerabilities.
 
 -->
 
+(changelog/unreleased)=
+
 ## [Unreleased]
 
 ## [0.6.0b0] - 2021-04-16

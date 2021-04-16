@@ -50,6 +50,7 @@ User Guide
    nek5000
    internals
    filtering
+   release
    CONTRIBUTING
    CHANGELOG
    AUTHORS
