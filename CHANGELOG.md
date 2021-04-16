@@ -25,6 +25,33 @@ Security in case of vulnerabilities.
 
 -->
 
+## [Unreleased]
+
+## [0.6.0b0] - 2021-04-16
+
+### Added
+
+- Tutorial and Snakemake workflows for packaging user code, see {ref}`packaging`
+- Module {mod}`snek5000.util.smake` with helper utilities to set env, flags etc.
+
+### Changed
+
+- Much less boilerplate code for user code!
+- Updated pre-commit hooks for development
+
+### Deprecated
+
+- Function {func}`snek5000.util.activate_paths`
+
+### Removed
+
+- Unused Snakemake rules from the top project level
+
+### Fixed
+
+- Support for 2D solvers and temp / scalar boundary conditions in Operators class.
+- Attribute `sim.output.params` points to `params.output` as in FluidSim
+
 ## [0.5.0b0] - 2021-01-18
 
 ### Added
@@ -180,7 +207,8 @@ Security in case of vulnerabilities.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
-[Unreleased]: https://github.com/exabl/snek5000/compare/0.5.0b0...HEAD
+[Unreleased]: https://github.com/exabl/snek5000/compare/0.6.0b0...HEAD
+[0.6.0b0]: https://github.com/exabl/snek5000/compare/0.5.0b0...0.6.0b0
 [0.5.0b0]: https://github.com/exabl/snek5000/compare/0.4.1b1...0.5.0b0
 [0.4.1b1]: https://github.com/exabl/snek5000/compare/0.4.1b0...0.4.1b1
 [0.4.1b0]: https://github.com/exabl/snek5000/compare/0.4.0b1...0.4.1b0
