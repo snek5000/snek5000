@@ -24,7 +24,7 @@ rule build_third_party:
     shell:
         """
         export CC="{config[MPICC]}" FC="{config[MPIFC]}" \
-            CFLAGS="{config[CFLAGS]}" FC="{config[FFLAGS]}"
+            CFLAGS="{config[CFLAGS]}" FFLAGS="{config[FFLAGS]}"
         {input.nekconfig} -build-dep
         """
 
