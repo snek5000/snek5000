@@ -30,4 +30,4 @@ def append_debug_flags(config):
     """
     if os.getenv("SNEK_DEBUG"):
         config["CFLAGS"] += " -O0 -g"
-        config["FFLAGS"] += " -O0 -g -ffpe-trap=invalid,zero,overflow -Wall"
+        config["FFLAGS"] += " -O0 -g -ffpe-trap=invalid,zero,overflow -Wall -DDEBUG"
