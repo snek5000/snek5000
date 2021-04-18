@@ -29,6 +29,10 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove `underflow` from debug flags
+
 ## [0.6.0b0] - 2021-04-16
 
 ### Added
