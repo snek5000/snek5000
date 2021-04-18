@@ -16,12 +16,17 @@ rule show_config:
 # gslib, lapack ...
 rule build_third_party:
     input:
+        ".state",
         nekconfig=NEK_SOURCE_ROOT + "/bin/nekconfig",
     output:
         NEK_SOURCE_ROOT + "/3rd_party/gslib/lib/libgs.a",
         NEK_SOURCE_ROOT + "/3rd_party/blasLapack/libblasLapack.a",
     shell:
-        "{input.nekconfig} -build-dep"
+        """
+        export CC="{config[MPICC]}" FC="{config[MPIFC]}" \
+            CFLAGS="{config[CFLAGS]}" FC="{config[FFLAGS]}"
+        {input.nekconfig} -build-dep
+        """
 
 
 # compile

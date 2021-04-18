@@ -28,7 +28,7 @@ rule _tool:
 rule tools_clean:
     shell:
         """
-        rm -rf 3rd_party/gslib/lib 3rd_party/gslib/gslib-1.0.1
+        rm -rf 3rd_party/gslib/lib 3rd_party/gslib/gslib
         pushd tools/
         ./maketools clean
         """
