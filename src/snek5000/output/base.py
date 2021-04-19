@@ -420,7 +420,10 @@ class Output(OutputCore):
 
         """
         output = template.render(
-            CASE=config["CASE"], INC=config["includes"], USR=config["objects"], **config
+            CASE=config["CASE"],
+            INC=config["includes"],
+            USR=config["objects"],
+            **config,
         )
         if fp:
             fp.write(output)
@@ -431,7 +434,7 @@ class Output(OutputCore):
             raise ValueError("Either file pointer or the path to it must be provided.")
 
         if path:
-            os.chmod(path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+            os.chmod(path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH)
 
     def post_init(self):
         if mpi.rank == 0:
