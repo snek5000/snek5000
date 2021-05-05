@@ -18,7 +18,7 @@ def ensure_env():
         os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")])
 
 
-def append_debug_flags(config, warnings=True):
+def append_debug_flags(config, warnings):
     """Append to commonly used gcc / gfortran debug flags if ``SNEK_DEBUG``
     environment is activated.
 
@@ -27,7 +27,7 @@ def append_debug_flags(config, warnings=True):
     config: dict
         Snakemake configuration. Should contain ``CFLAGS`` and ``FFLAGS`` keys.
     warnings: bool
-        Show most warnings (default) or suppress them.
+        Show most compiler warnings or suppress them.
 
     """
     warnings_option = "-Wall" if warnings else "-w"

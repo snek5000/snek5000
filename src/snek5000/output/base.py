@@ -137,14 +137,18 @@ class Output(OutputCore):
         return configfile
 
     @classmethod
-    def update_snakemake_config(cls, config, name_solver):
+    def update_snakemake_config(cls, config, name_solver, warnings=True):
         """Update snakemake config in-place with name of the solver / case,
         path to configfile and compiler flags
 
         Parameters
         ----------
+        config: dict
+            Snakemake configuration
         name_solver: str
             Short name of the solver, also known as case name
+        warnings: bool
+            Show most compiler warnings (default) or suppress them.
 
         """
         try:
@@ -162,7 +166,7 @@ class Output(OutputCore):
                 }
             )
 
-            append_debug_flags(config)
+            append_debug_flags(config, warnings)
         finally:
             logger.setLevel(logging_level)
 
