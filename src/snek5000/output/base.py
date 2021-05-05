@@ -378,9 +378,20 @@ class Output(OutputCore):
                     template, fp, comments=self.sim.params.short_name_type_run
                 )
 
-    def write_makefile_usr(self, template, fp=None):
+    def write_makefile_usr(self, template, fp=None, **template_vars):
         """Write the makefile_usr.inc file which gets included in the main
         makefile.
+
+        Parameters
+        ----------
+        template : jinja2.environment.Template
+            Template instance loaded from something like ``makefile_usr.inc.j2``
+        fp : io.TextIOWrapper
+            File handler to write to
+        comments: str
+            Comments on top of the box file
+        template_vars: dict
+            Keyword arguments passed while rendering the Jinja templates
 
         """
 
@@ -395,9 +406,10 @@ class Output(OutputCore):
             if self.sim is not None:
                 comments += self.sim.params.short_name_type_run
 
-            output = template.render(
-                list_of_sources=paths_of_sources, comments=comments
+            template_vars.update(
+                {"list_of_sources": paths_of_sources, "comments": comments}
             )
+            output = template.render(**template_vars)
             if fp:
                 fp.write(output)
             else:
