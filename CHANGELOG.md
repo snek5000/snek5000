@@ -29,6 +29,14 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Changed
+
+- {meth}`update_snakemake_config` and {func}`append_debug_flags` has a new
+  parameter to optionally suppress
+  compiler warnings during debug.
+- Keyword arguments to pass optional template variables via `write_...` methods
+  which render templates.
+
 ### Fixed
 
 - Remove `underflow` from debug flags
