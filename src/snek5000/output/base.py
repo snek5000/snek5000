@@ -301,11 +301,10 @@ class Output(OutputCore):
                 "".join(
                     (
                         f"- src: {src}",
-                        "\n- include:\n",
-                        "\n ".join(str(name) for name in include),
-                        "\n- exclude:\n",
-                        "\n ".join(exclude),
-                        "\n----",
+                        "\n- include:",
+                        " ".join(Path(i).name for i in include),
+                        "\n- exclude:",
+                        " ".join(Path(i).name for i in exclude),
                     )
                 )
             )
