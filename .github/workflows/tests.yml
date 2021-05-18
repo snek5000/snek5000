@@ -78,6 +78,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
     - name: Cache pip requirements
       id: pip-cache-docs
@@ -103,6 +105,9 @@ jobs:
         python-version: [3.8]
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - name: Package
       run: |
         python setup.py sdist bdist_wheel
