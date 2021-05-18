@@ -60,16 +60,8 @@ jobs:
         source activate.sh
         pytest -s --cov-report=xml --cov-report=term-missing
 
-  coverage:
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.8]
-
-    steps:
     - name: Upload coverage to codecov
+      if: ${{ success() }}
       run: |
         pip install codecov
         codecov
@@ -84,6 +76,9 @@ jobs:
         python-version: [3.8]
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - name: Cache pip requirements
       id: pip-cache-docs
       uses: actions/cache@v2
