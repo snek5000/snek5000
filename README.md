@@ -1,5 +1,6 @@
 <div align="center">
-<h1>snek5000</h1>
+
+# snek5000
 
 [![PyPI](https://img.shields.io/pypi/v/snek5000)](https://pypi.org/project/snek5000/)
 [![Tests Status](https://github.com/exabl/snek5000/workflows/Tests/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Tests)
@@ -106,7 +107,7 @@ Need more reasons to use snek5000?
 
 </details>
 
-### Contributing
+## Contributing
 
 Contributions are welcome! You can help by testing out the code, filing issues
 and submitting patches. See [contributing guidelines](CONTRIBUTING.md).
