@@ -3,8 +3,9 @@ Release checklist for maintainers
 
 .. note::
 
-   For demonstration's sake, we assume that the next version is ``$VERSION``
-   and the package name is ``$PACKAGE``::
+   For demonstration's sake, we assume that the you have installed all
+   dependencies in the ``[dev]`` extras group and the next version is
+   ``$VERSION`` and the package name is ``$PACKAGE``::
 
       PACKAGE=snek5000; VERSION=...
 
@@ -36,7 +37,7 @@ Release checklist for maintainers
 - Prepare source distribution package and wheel::
 
       rm -rf dist
-      python setup.py sdist bdist_wheel
+      python -m build
 
 - Verify the package with twine::
 
