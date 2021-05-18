@@ -38,7 +38,7 @@ jobs:
 
     - name: Cache pip requirements
       id: pip-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ${{ env.PIP_CACHE_DIR }}
         key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.*') }}
@@ -60,10 +60,65 @@ jobs:
         source activate.sh
         pytest -s --cov-report=xml --cov-report=term-missing
 
+  coverage:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8]
+
+    steps:
     - name: Upload coverage to codecov
-      if: ${{ success() }}
       run: |
         pip install codecov
         codecov
       env:
         super_secret: ${{ secrets.CODECOV_TOKEN }}
+
+  docs:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8]
+
+    steps:
+    - name: Cache pip requirements
+      id: pip-cache-docs
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.PIP_CACHE_DIR }}
+        key: ${{ runner.os }}-pip-docs-${{ hashFiles('**/setup.*') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-docs-
+
+    - name: Install dependencies
+      run: pip install .[docs]
+
+    - name: Build docs
+      run: make -C docs html
+
+  deploy:
+    needs: [docs, build]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8]
+
+    steps:
+    - name: Package
+      run: |
+        python setup.py sdist bdist_wheel
+        twine check dist/*
+
+    - name: Publish package
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
+        # password: ${{ secrets.PYPI_API_TOKEN }}
+
