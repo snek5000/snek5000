@@ -111,6 +111,10 @@ jobs:
     - name: Package
       run: |
         python setup.py sdist bdist_wheel
+
+    - name: Check
+      run: |
+        pip install twine
         twine check dist/*
 
     - name: Publish package
