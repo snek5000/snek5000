@@ -29,13 +29,14 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+## [0.6.1b0] - 2021-05-18
+
 ### Changed
 
 - {meth}`update_snakemake_config` and {func}`append_debug_flags` has a new
-  parameter to optionally suppress
-  compiler warnings during debug.
+  parameter to optionally suppress compiler warnings during debug.
 - Keyword arguments to pass optional template variables via `write_...` methods
-  which render templates.
+  which render templates for `.box`, `SIZE` and `makefile_usr.inc` files.
 
 ### Fixed
 
@@ -222,6 +223,7 @@ Security in case of vulnerabilities.
 - Sphinx + Doxygen + Breathe documentation
 
 [Unreleased]: https://github.com/exabl/snek5000/compare/0.6.0b0...HEAD
+[0.6.1b0]: https://github.com/exabl/snek5000/compare/0.6.0b0...0.6.1b0
 [0.6.0b0]: https://github.com/exabl/snek5000/compare/0.5.0b0...0.6.0b0
 [0.5.0b0]: https://github.com/exabl/snek5000/compare/0.4.1b1...0.5.0b0
 [0.4.1b1]: https://github.com/exabl/snek5000/compare/0.4.1b0...0.4.1b1
