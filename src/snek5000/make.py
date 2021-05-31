@@ -19,7 +19,9 @@ class Make:
         try:
             self.file = next(f for f in sim.output.get_paths() if f.name == "Snakefile")
         except AttributeError:
-            raise AttributeError("Unable to get path of Snakefile via Output class.")
+            raise AttributeError("Unable to get path of Snakefile via Output class")
+        except StopIteration:
+            raise FileNotFoundError(f"No Snakefile in {self.path_run}")
 
         self.log_handler = []
 
@@ -40,5 +42,5 @@ class Make:
                 targets=rules,
                 dryrun=dryrun,
                 log_handler=self.log_handler,
-                **kwargs
+                **kwargs,
             )

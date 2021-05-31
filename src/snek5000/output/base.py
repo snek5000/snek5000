@@ -436,11 +436,11 @@ class Output(OutputCore):
 
         """
         output = template.render(
-            CASE=config["CASE"],
             INC=config["includes"],
             USR=config["objects"],
             **config,
         )
+        path = str(path)
         if fp:
             fp.write(output)
         elif path:
