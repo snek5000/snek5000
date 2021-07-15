@@ -61,7 +61,7 @@ class SimulKTH(SimulNek):
     *Runtime parameter section for checkpoint module*
     :read_chkpt: Restart from checkpoint
     :chkp_fnumber: Restart file number
-    :chkp_interval: Checkpiont saving frequency (number of time steps)
+    :chkp_interval: Checkpoint saving frequency (number of time steps)
 """
         )
 

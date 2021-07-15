@@ -176,6 +176,8 @@ class Output(OutputCore):
             self.name_solver = sim.info.solver.short_name
         except AttributeError:
             pass
+        else:
+            self.package = get_solver_package(self.name_solver)
 
         self.root = self.get_root()
         # Check configfile early
@@ -221,7 +223,7 @@ class Output(OutputCore):
         """
         excludes = self.excludes
         if not package:
-            package = get_solver_package(self.name_solver)
+            package = self.package
 
         try:
             contents_pkg = resources.contents(package)
@@ -248,10 +250,9 @@ class Output(OutputCore):
 
         """
         root = self.root
-        name_solver = self.name_solver
         subpackages = {
             subpkg.name.replace(f"{root.name}.", ""): self._get_resources(subpkg.name)
-            for subpkg in pkgutil.walk_packages([str(root)], prefix=f"{name_solver}.")
+            for subpkg in pkgutil.walk_packages([str(root)], prefix=f"{self.package}.")
             if is_package(subpkg)
         }
 
