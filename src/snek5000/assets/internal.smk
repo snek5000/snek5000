@@ -21,8 +21,7 @@ rule generate_box:
     output:
         "box.re2",
     shell:
-        "echo {input.box} | "
-        "{input.genbox}"
+        "{input.genbox} <<< {input.box}"
 
 
 # rename mesh file re2
