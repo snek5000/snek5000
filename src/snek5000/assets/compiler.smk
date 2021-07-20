@@ -42,7 +42,6 @@ rule compile:
     params:
         make="make",
     output:
-        f"{config['CASE']}.f",
         exe="nek5000",
     shell:
         """
