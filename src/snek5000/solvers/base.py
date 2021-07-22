@@ -77,8 +77,8 @@ class SimulNek(SimulCore):
         for section in info_solver.par_sections_disabled:
             getattr(params.nek, section)._set_internal_attr("_enabled", False)
 
-    @staticmethod
-    def _complete_params_with_default(params):
+    @classmethod
+    def _complete_params_with_default(cls, params):
         """A static method used to complete the *params* container.
 
         The sections are:
@@ -101,14 +101,19 @@ class SimulNek(SimulCore):
         params_nek = params.nek
 
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
-        for section in ("general", "problemtype", "velocity", "pressure"):
+        for section in (
+            "general",
+            "problemtype",
+            "velocity",
+            "pressure",
+            "mesh",
+            "temperature",
+            "scalar01",
+            "cvode",
+        ):
             params_nek._set_child(section)
 
-        for section in ("mesh", "temperature", "scalar01", "cvode"):
-            params_nek._set_child(section)
-            getattr(params_nek, section)._set_internal_attr("_enabled", False)
-
-        SimulNek._set_internal_sections(params)
+        cls._set_internal_sections(params)
 
         params_nek.general._set_attribs(
             dict(
