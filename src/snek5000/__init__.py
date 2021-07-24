@@ -69,8 +69,11 @@ def get_asset(asset_name):
     return asset
 
 
-def load_simul(path_dir):
-    path_dir = Path(path_dir)
+def load_simul(path_dir=None):
+    if path_dir is None:
+        path_dir = Path.cwd()
+    else:
+        path_dir = Path(path_dir)
 
     from warnings import warn
 
@@ -108,6 +111,10 @@ def load_simul(path_dir):
     params.path_run = path_dir
     sim = Simul(params)
     return sim
+
+
+# for consistency with fluidsim
+load = load_simul
 
 
 from .util.smake import append_debug_flags, ensure_env  # noqa: F401, E402
