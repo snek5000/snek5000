@@ -82,7 +82,7 @@ use rule mpiexec as run with:
 
 
 # run in foreground
-use rule mpiexec as srun with:
+use rule mpiexec as run_fg with:
     params:
         redirect="| tee",
         end="",
