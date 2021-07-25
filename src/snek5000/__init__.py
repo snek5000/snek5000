@@ -8,6 +8,7 @@ A Pythonic frontend to Nek5000.
    :toctree:
 
    assets
+   clusters
    output
    solvers
    util

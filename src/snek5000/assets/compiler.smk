@@ -1,6 +1,7 @@
 from pprint import pprint
 
 import snek5000
+from snek5000.clusters import nproc_available
 from snek5000.util import now
 
 
@@ -59,8 +60,9 @@ rule mpiexec:
         "nek5000",
     log:
         "logs/run_" + now() + ".log",
+    resources:
+        nproc=nproc_available(),
     params:
-        nproc=str(os.cpu_count()),
         redirect=">",
         end="",
     shell:
@@ -68,14 +70,13 @@ rule mpiexec:
         ln -sf {log} {config[CASE]}.log
         echo "Log file:"
         realpath {config[CASE]}.log
-        {config[MPIEXEC]} -n {params.nproc} ./nek5000 {params.redirect} {log} {params.end}
+        {config[MPIEXEC]} -n {resources.nproc} ./nek5000 {params.redirect} {log} {params.end}
         """
 
 
 # run in background
 use rule mpiexec as run with:
     params:
-        nproc=str(os.cpu_count()),
         redirect=">",
         end="&",
 
@@ -83,6 +84,5 @@ use rule mpiexec as run with:
 # run in foreground
 use rule mpiexec as srun with:
     params:
-        nproc=str(os.cpu_count()),
         redirect="| tee",
         end="",

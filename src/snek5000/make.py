@@ -33,7 +33,20 @@ class Make:
     def exec(self, rules=("run",), dryrun=False, **kwargs):
         """Execute snakemake rules in sequence.
 
+        :param iterable rules: Snakemake rules to be executed
+        :param bool dryrun: Dry run snakemake without executing
+
+        For more on available keyword arguments refer to `snakemake API documentation`_.
+
         :returns: True if workflow execution was successful.
+
+        .. _snakemake API documentation: https://snakemake.readthedocs.io/en/stable/api_reference/snakemake.html
+
+        Examples
+        --------
+
+        >>> sim.make.exec(['compile'])
+        >>> sim.make.exec(['run'], resources={'nproc': 4})
 
         """
         with change_dir(self.path_run):
