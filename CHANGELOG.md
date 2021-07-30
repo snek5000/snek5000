@@ -29,6 +29,10 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Changed
+
+- `params.oper.max.order_time` is now a property {any}`snek5000.operators.Operators.max_order_time`
+
 ## [0.6.1b0] - 2021-05-18
 
 ### Changed
