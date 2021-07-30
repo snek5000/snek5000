@@ -72,6 +72,11 @@ class Operators:
     ``lely``        :any:`max_ny`            Same as above for ``y`` direction.
     ``lelz``        :any:`max_nz`            Same as above for ``z`` direction.
 
+    ``lorder``      :any:`max_order_time``   | Max. temporal order
+                                             | **Automatically computed** based
+                                             | ``params.nek.general.\
+time_stepper``
+
     ``lbelt``       :any:`order_mhd`         | **Automatically computed** as
                                              |  ``lelt`` if ``"MHD" in
                                                params.nek.problem_type.equation``.
@@ -166,7 +171,6 @@ SIZE        params.oper           Comment
         }
         attribs["dim_proj"] = 20
         attribs["dim_krylov"] = 30
-        attribs["order_time"] = 2
 
         params.oper._set_child("max", attribs=attribs)
         params.oper.max._set_doc(
@@ -184,7 +188,7 @@ SIZE            params.oper.max       Comment
                                       points.
 
 ``maxobj``      ``obj``               Max. number of objects?
-``lorder``      ``order_time``        Max. temporal order (minimum: 2)
+
 ``lpert``       ``perturb``           Max. number of perturbations
 ``toteq``       ``scalars_cons``      Max. conserved scalars
 ``ldimt_proj``  ``scalars_proj``      Max. scalars for residual projection
@@ -289,6 +293,19 @@ SIZE            params.oper.misc      Comment
     def max_nz(self):
         """Equivalent to ``lelz``."""
         return next_power(self.params.oper.nz)
+
+    @property
+    def max_order_time(self):
+        """Equivalent to ``lorder``."""
+        (
+            _,
+            time_scheme,
+            order_time,
+        ) = self.params.nek.general.time_stepper.upper().partition("BDF")
+        if time_scheme != "BDF":
+            raise ValueError("Unsupported time integration scheme")
+
+        return int(order_time)
 
     @property
     def nb_fields(self):
