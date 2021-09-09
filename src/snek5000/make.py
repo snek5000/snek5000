@@ -36,17 +36,30 @@ class Make:
         :param iterable rules: Snakemake rules to be executed
         :param bool dryrun: Dry run snakemake without executing
 
-        For more on available keyword arguments refer to `snakemake API documentation`_.
+        For more on available keyword arguments refer to `Snakemake API documentation`_.
 
         :returns: True if workflow execution was successful.
 
-        .. _snakemake API documentation: https://snakemake.readthedocs.io/en/stable/api_reference/snakemake.html
+        .. _Snakemake API documentation: https://snakemake.readthedocs.io/en/stable/api_reference/snakemake.html
 
         Examples
         --------
 
         >>> sim.make.exec(['compile'])
         >>> sim.make.exec(['run'], resources={'nproc': 4})
+
+        It is also possible to do the same directly from command line
+        by changing to the simulation directory and executing::
+
+            snakemake -j compile
+            snakemake -j1 --resources nproc=2 run
+
+        The flag ``-j`` is short for ``--jobs`` and sets the number of
+        threads available for snakemake rules to execute.
+
+        .. seealso:: Useful Snakemake `command line arguments`_
+
+        .. _command line arguments: https://snakemake.readthedocs.io/en/stable/executing/cli.html#useful-command-line-arguments
 
         """
         with change_dir(self.path_run):
