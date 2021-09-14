@@ -148,7 +148,9 @@ class Output(OutputCore):
         return configfile
 
     @classmethod
-    def update_snakemake_config(cls, config, name_solver, warnings=True):
+    def update_snakemake_config(
+        cls, config, name_solver, warnings=True, env_sensitive=False
+    ):
         """Update snakemake config in-place with name of the solver / case,
         path to configfile and compiler flags
 
@@ -160,6 +162,10 @@ class Output(OutputCore):
             Short name of the solver, also known as case name
         warnings: bool
             Show most compiler warnings (default) or suppress them.
+        env_sensitive: bool
+            Kept ``False`` by default to allow for reproducible runs. If
+            ``True`` modifies values of the ``config`` dictionary based on
+            environment variables.
 
         """
         try:
@@ -178,6 +184,15 @@ class Output(OutputCore):
             )
 
             append_debug_flags(config, warnings)
+
+            if env_sensitive:
+                config.update(
+                    {
+                        key: os.getenv(key, original_value)
+                        for key, original_value in config.items()
+                    }
+                )
+
         finally:
             logger.setLevel(logging_level)
 
