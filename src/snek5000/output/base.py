@@ -118,6 +118,11 @@ class Output(OutputCore):
         """Get path of the Snakemake configuration file for the current machine.
         All configuration files are stored under ``etc`` sub-package.
 
+        Parameters
+        ----------
+        host: str
+            Override hostname detection and specify it instead
+
         """
         if not host:
             host = os.getenv(

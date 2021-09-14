@@ -1,7 +1,6 @@
 import logging
 import os
 
-import snek5000
 from snek5000.output.base import Output
 
 
@@ -24,8 +23,7 @@ def test_update_snakemake_config():
 def test_get_configfile(monkeypatch, caplog):
     hostname = "test_config"
 
-    monkeypatch.setattr(snek5000.output.base, "gethostname", lambda: hostname)
-    Output.get_configfile()
+    Output.get_configfile(host=hostname)
 
     for logger_name, level, message in caplog.record_tuples:
         if (
@@ -36,4 +34,6 @@ def test_get_configfile(monkeypatch, caplog):
             assert f"{hostname}.yml" in message
             break
     else:
-        raise IOError("Expected a warning message when configuration file is missing")
+        raise IOError(
+            "Expected a warning message " "when configuration file is missing"
+        )
