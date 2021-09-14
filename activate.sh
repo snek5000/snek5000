@@ -3,7 +3,7 @@ export NEK_SOURCE_ROOT="$DIR/lib/Nek5000"
 export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
 export FLUIDSIM_TRANSONIC_BACKEND=python
 
-alias smake="snakemake"
+alias smake="snakemake -j all"
 # tarball utilities
 function tar-help() {
   echo "tar-ls: List contents"
