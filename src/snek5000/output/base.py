@@ -136,19 +136,22 @@ class Output(OutputCore):
         configfile_xdg_config = xdg_config / "snek5000" / f"{host}.yml"
         configfile_default = Path(get_asset("default_configfile.yml"))
 
-        for configfile in (configfile_root, configfile_xdg_config):
+        custom_configfiles = (configfile_xdg_config, configfile_root)
+
+        for configfile in custom_configfiles:
             if configfile.exists():
                 break
         else:
             logger.warning(
-                "Missing a configuration file describing compilers and flags. "
-                "Create one at either of the following paths to avoid future "
-                "warnings:\n"
-                f"{configfile_root}\n"
-                f"{configfile_xdg_config}"
+                (
+                    "Missing a configuration file describing compilers and "
+                    "flags. Create one at either of the following paths to "
+                    "avoid future warnings:\n"
+                )
+                + "\n".join(map(str, custom_configfiles))
             )
             configfile = configfile_default
-            logger.info(f"Using default configuration for now: {configfile}")
+            logger.info(f"Using default configuration for now:\n{configfile}")
 
         return configfile
 

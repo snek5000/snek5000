@@ -218,6 +218,7 @@ if you may.
    size = env.get_template("SIZE.j2")
    makefile_usr = env.get_template("makefile_usr.inc.j2")
 
+.. _user_snakefile:
 
 src/snek5000_canonical/Snakefile
 --------------------------------

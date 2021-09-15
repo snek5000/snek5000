@@ -28,6 +28,9 @@ intersphinx-nek:
 intersphinx-jinja2:
 	@python -msphinx.ext.intersphinx https://jinja.palletsprojects.com/en/2.10.x/objects.inv
 
+autobuild:
+	@sphinx-autobuild "$(SOURCEDIR)" "$(BUILDDIR)/html"
+
 cleanall: clean
 	@echo "Removing everything under '_generated'..."
 	@rm -rf _generated/*
