@@ -25,6 +25,14 @@ A Pythonic frontend to Nek5000.
    operators
    params
 
+**Functions**
+
+.. autosummary::
+   :toctree:
+
+   source_root
+   load_simul
+
 """
 try:
     from importlib import resources
@@ -71,6 +79,20 @@ def get_asset(asset_name):
 
 
 def load_simul(path_dir=None):
+    """Loads a simulation
+
+    .. todo::
+
+        Now only the parameters are loaded. Load state too.
+
+    Parameters
+    ----------
+    path_dir: str or path-like
+
+        Path to a directory containing a simulation. If not provided the
+        current directory is used.
+
+    """
     if path_dir is None:
         path_dir = Path.cwd()
     else:
