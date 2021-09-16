@@ -32,14 +32,12 @@ As the warnings suggest, there are two possible paths where you can save your co
 
 .. note::
 
-   ``<hostname>`` is usually the output of:
+   ``<hostname>`` is usually the output of the ``hostname`` command in POSIX,
+   or alternatively::
 
-   .. code-block:: python
+      python -c 'import socket; print(socket.gethostname())'
 
-      import socket
-      print(socket.gethostname())
-
-   See :meth:`snek5000.output.base.Output.get_configfile` for more details
+   See :meth:`snek5000.output.base.Output.get_configfile` for more details.
 
 Overriding configuration with environment variable
 --------------------------------------------------
