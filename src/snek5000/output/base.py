@@ -118,26 +118,47 @@ class Output(OutputCore):
         """Get path of the Snakemake configuration file for the current machine.
         All configuration files are stored under ``etc`` sub-package.
 
+        Parameters
+        ----------
+        host: str
+            Override hostname detection and specify it instead
+
         """
         if not host:
             host = os.getenv(
                 "SNIC_RESOURCE", os.getenv("GITHUB_WORKFLOW", gethostname())
             )
         root = cls.get_root()
-        configfile = root / "etc" / f"{host}.yml"
+        xdg_config = Path(
+            os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config"))
+        )
+        configfile_root = root / "etc" / f"{host}.yml"
+        configfile_xdg_config = xdg_config / "snek5000" / f"{host}.yml"
+        configfile_default = Path(get_asset("default_configfile.yml"))
 
-        if not configfile.exists():
+        custom_configfiles = (configfile_xdg_config, configfile_root)
+
+        for configfile in custom_configfiles:
+            if configfile.exists():
+                break
+        else:
             logger.warning(
-                "Expected a configuration file describing compilers and flags: "
-                f"{configfile}"
+                (
+                    "Missing a configuration file describing compilers and "
+                    "flags. Create one at either of the following paths to "
+                    "avoid future warnings:\n"
+                )
+                + "\n".join(map(str, custom_configfiles))
             )
-            configfile = Path(get_asset("default_configfile.yml"))
-            logger.info(f"Using default configuration instead: {configfile}")
+            configfile = configfile_default
+            logger.info(f"Using default configuration for now:\n{configfile}")
 
         return configfile
 
     @classmethod
-    def update_snakemake_config(cls, config, name_solver, warnings=True):
+    def update_snakemake_config(
+        cls, config, name_solver, warnings=True, env_sensitive=False
+    ):
         """Update snakemake config in-place with name of the solver / case,
         path to configfile and compiler flags
 
@@ -149,6 +170,10 @@ class Output(OutputCore):
             Short name of the solver, also known as case name
         warnings: bool
             Show most compiler warnings (default) or suppress them.
+        env_sensitive: bool
+            Kept ``False`` by default to allow for reproducible runs. If
+            ``True`` modifies values of the ``config`` dictionary based on
+            environment variables.
 
         """
         try:
@@ -167,6 +192,15 @@ class Output(OutputCore):
             )
 
             append_debug_flags(config, warnings)
+
+            if env_sensitive:
+                config.update(
+                    {
+                        key: os.getenv(key, original_value)
+                        for key, original_value in config.items()
+                    }
+                )
+
         finally:
             logger.setLevel(logging_level)
 

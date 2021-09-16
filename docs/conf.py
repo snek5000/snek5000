@@ -22,6 +22,7 @@ from pathlib import Path
 from subprocess import PIPE
 
 import breathe
+
 import snek5000
 from snek5000 import util
 
@@ -185,9 +186,8 @@ html_theme = "sphinx_material"
 html_title = "main docs"
 
 html_sidebars = {
-    "*[!index]": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
 }
-
 html_favicon = "_static/favicon.ico"
 
 # Material theme options (see theme.conf for more information)
@@ -210,7 +210,7 @@ html_theme_options = {
     "repo_url": f"https://github.com/exabl/{project}/",
     "repo_name": project,
     # Visible levels of the global TOC; -1 means unlimited
-    "globaltoc_depth": 1,
+    "globaltoc_depth": 2,
     # If False, expand all TOC entries
     "globaltoc_collapse": True,
     # If True, show hidden TOC entries

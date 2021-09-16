@@ -3,7 +3,7 @@ Nek5000 core library
 
 .. note::
 
-    The following is auto-generated using Doxygen and represents Nek5000 v17.
+    The following is auto-generated using Doxygen and represents Nek5000 v19.
     The official `Nek5000 documentation`_ is hand-written and is more general.
 
 * `Documentation produced with Doxygen <doxygen/index.html>`_
