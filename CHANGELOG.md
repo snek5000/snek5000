@@ -41,7 +41,7 @@ Security in case of vulnerabilities.
 - Use rich for logging
 - No need to wait for `<case>.f` file which is deleted by new Nek5000 version
 - {func}`snek5000.load` alias for {func}`snek5000.load_simul` which also loads from current directory when no argument is passed
-- Fix {meth}`snek5000.solvers.base.InfoSolver._complete_params_with_default` into a classmethod (thanks @paugier)
+- Fix {meth}`snek5000.solvers.base.InfoSolver._complete_params_with_default` into a classmethod (thanks [@paugier])
 - `params.oper.max.order_time` is now a property {any}`snek5000.operators.Operators.max_order_time`
 
 ### Removed
@@ -50,7 +50,7 @@ Security in case of vulnerabilities.
 
 ### Fixed
 
-- Allow ``name_solver`` to be different from the "package name" (thanks @paugier)
+- Allow ``name_solver`` to be different from the "package name" (thanks [@paugier])
 
 ## [0.6.1b0] - 2021-05-18
 
@@ -261,3 +261,4 @@ Security in case of vulnerabilities.
 [0.1.1]: https://github.com/exabl/snek5000/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/exabl/snek5000/compare/0.0.1...0.1.0
 [0.0.1]: https://github.com/exabl/snek5000/releases/tag/0.0.1
+[@paugier]: https://github.com/paugier
