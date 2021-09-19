@@ -1,6 +1,6 @@
 # isort: skip_file
 """
-A Pythonic frontend to Nek5000.
+API reference
 
 **Sub-packages**
 

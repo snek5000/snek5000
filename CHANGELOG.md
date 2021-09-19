@@ -41,7 +41,7 @@ Security in case of vulnerabilities.
 - Use rich for logging
 - No need to wait for `<case>.f` file which is deleted by new Nek5000 version
 - {func}`snek5000.load` alias for {func}`snek5000.load_simul` which also loads from current directory when no argument is passed
-- Fix {meth}`snek5000.solvers.base.InfoSolver._complete_params_with_default` into a classmethod (thanks [@paugier][@paugier])
+- Fix {meth}`snek5000.solvers.base.InfoSolver._complete_params_with_default` into a classmethod (thanks [@paugier])
 - `params.oper.max.order_time` is now a property {any}`snek5000.operators.Operators.max_order_time`
 
 ### Removed

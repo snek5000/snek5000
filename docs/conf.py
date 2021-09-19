@@ -186,7 +186,11 @@ html_theme = "furo"
 # Set link name generated in the top bar.
 html_title = ""
 
-html_theme_options = runpy.run_path("html_theme_options.py")
+html_theme_options = {
+    k: v
+    for k, v in runpy.run_path("html_theme_options.py").items()
+    if not k.startswith("__")
+}
 #  html_sidebars = {
 #      "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
 #  }
