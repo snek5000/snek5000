@@ -18,7 +18,6 @@ internals rely on FluidSim's core_ to build its API.
       https://game-icons.net/1x1/lorc/wind-slap.html .
       License: https://creativecommons.org/licenses/by/3.0/
    -->
-   <img style="float: right;" src="_static/icon.svg" width="100rem"/>
 
 +------------+-----------------------------------+
 | Repository | https://github.com/exabl/snek5000 |
@@ -30,7 +29,7 @@ internals rely on FluidSim's core_ to build its API.
    :maxdepth: 1
    :caption: Getting Started
 
-   README
+   intro
    tutorials
 
 User Guide
@@ -49,7 +48,6 @@ User Guide
    roadmap
    nek5000
    internals
-   filtering
    release
    CONTRIBUTING
    CHANGELOG

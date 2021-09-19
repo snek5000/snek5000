@@ -133,3 +133,6 @@ CFL number
 ----------
 
 BDF3/EXT3: CFL=0.6. Characteristic method
+
+.. include:: filtering.rst
+
