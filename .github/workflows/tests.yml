@@ -51,6 +51,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        python -m pip install --upgrade pip
         pip install .[tests]
         pip install "phill @ git+https://github.com/exabl/snek5000-phill.git"
 
