@@ -93,11 +93,11 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
     path = Path(path)
 
     if verify_contents:
-        status, msg = get_status(path)
-        if status >= 400:
-            logger.error(f"{status}: {msg}")
+        status = get_status(path)
+        if status.code >= 400:
+            logger.error(f"{status.code}: {status.message}")
         else:
-            logger.info(f"{status}: {msg}")
+            logger.info(f"{status.code}: {status.message}")
 
     # FIXME: make this generic for all possible solvers
     # Trying to read the par file
