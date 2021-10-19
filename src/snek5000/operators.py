@@ -13,7 +13,6 @@ import math
 import sys
 from collections import OrderedDict
 from math import pi
-from .log import logger
 
 from .util import docstring_params
 
@@ -179,7 +178,12 @@ SIZE        params.oper           Comment
 The following table matches counterpart of optional ``SIZE`` variables. These
 refer to upper bound number of `something`. The parameters are considered
 "optional" and would be ignored with the default values.
-problemtypeof Krylov space for GMRES
+
+==============  ===================   =========================================
+SIZE            params.oper.max       Comment
+==============  ===================   =========================================
+``mxprev``      ``dim_proj``          Max. dimension of projection space
+``lgmres``      ``dim_krylov``        Max. dimension of Krylov space for GMRES
 ``lhis``        ``hist``              Max. number of history (i.e. monitoring)
                                       points.
 
@@ -337,14 +341,16 @@ SIZE            params.oper.misc      Comment
         pn = self.order
         staggered = self.params.oper.elem.staggered
 
-        if "Lin" in self.params.nek.problemtype.equation and not staggered:
+        problemtype_equation = self.params.nek.problemtype.equation.lower()
+
+        if "lin" in problemtype_equation and staggered == False:
             logger.warning(
-                """The linear equations are solved on Pn Pn-2 formulation, automating params.oper.elem.staggered = True """
+                "Linear equation type and staggered == False leads to undefined behaviour in Nek5000"
             )
 
-        if "Lin" in self.params.nek.problemtype.equation:
+        if "lin" in problemtype_equation and staggered in (True, "auto"):
             return pn - 2
-        elif ("Lin" in self.params.nek.problemtype.equation) and staggered:
+        elif ("lin" in problemtype_equation) and staggered:
             return pn - 2
         else:
             return pn - 2 if staggered else pn
@@ -370,12 +376,20 @@ SIZE            params.oper.misc      Comment
     @property
     def order_mhd(self):
         """Equivalent to ``lbelt``."""
-        return self.max_n_loc if "MHD" in self.params.nek.problemtype.equation else 1
+        return (
+            self.max_n_loc
+            if "mhd" in self.params.nek.problemtype.equation.lower()
+            else 1
+        )
 
     @property
     def order_linear(self):
         """Equivalent to ``lpelt``."""
-        return self.max_n_loc if "Lin" in self.params.nek.problemtype.equation else 1
+        return (
+            self.max_n_loc
+            if "lin" in self.params.nek.problemtype.equation.lower()
+            else 1
+        )
 
     @property
     def order_cvode(self):
