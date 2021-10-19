@@ -14,6 +14,7 @@ import sys
 from collections import OrderedDict
 from math import pi
 
+from .log import logger
 from .util import docstring_params
 
 
@@ -227,13 +228,20 @@ SIZE            params.oper.elem      Comment
                                       order``. See :any:`order_out`)
 
 ``lx2``         ``staggered``         | p-order for pressure. **Automatically
-                                        computed** from boolean
-                                      | ``staggered`` (`True` implies
-                                        :math:`\mathbb{P}_N - \mathbb{P}_{N-2}`
-                                        and `False` implies
+                                        computed** when equation type is linear
+                                        and  
+                                      | ``staggered`` `True` or `"auto"`
+                                        implies
+                                      | :math:`\mathbb{P}_N - \mathbb{P}_{N-2}`
+                                        and when equation type is not linear, 
+                                      | ``staggered`` `False` or `"auto"` 
+                                        implies
                                       | :math:`\mathbb{P}_N
                                         - \mathbb{P}_{N}` or a collocated
-                                        grid). See :any:`order_pressure`
+                                      | grid and ``staggered`` `True`
+                                        implies
+                                        :math:`\mathbb{P}_N - \mathbb{P}_{N-2}`
+                                        See :any:`order_pressure`
 
 ==========      ===================   =========================================
 
@@ -337,7 +345,10 @@ SIZE            params.oper.misc      Comment
 
     @property
     def order_pressure(self):
-        """Equivalent to ``lx2``."""
+        """Equivalent to ``lx2``
+        "lin" in problemtype_equation and staggered == "auto" or True => pn - 2
+        staggered in (True, False) => (pn - 2, pn)."""
+
         pn = self.order
         staggered = self.params.oper.elem.staggered
 
