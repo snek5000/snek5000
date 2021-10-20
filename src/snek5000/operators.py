@@ -230,12 +230,13 @@ SIZE            params.oper.elem      Comment
 ``lx2``         ``staggered``         | p-order for pressure. **Automatically
                                         computed** when equation type is linear
                                         and  
-                                      | ``staggered`` `True` or `"auto"`
-                                        implies
+                                      | ``staggered`` `"auto"` and linear 
+                                        equation type implies
                                       | :math:`\mathbb{P}_N - \mathbb{P}_{N-2}`
-                                        and when equation type is not linear, 
-                                      | ``staggered`` `False` or `"auto"` 
-                                        implies
+                                      | ``staggered`` `"auto"` and nonlinear 
+                                        equation type implies
+                                      | :math:`\mathbb{P}_N - \mathbb{P}_{N}`   
+                                      | ``staggered`` `False` implies
                                       | :math:`\mathbb{P}_N
                                         - \mathbb{P}_{N}` or a collocated
                                       | grid and ``staggered`` `True`
@@ -346,8 +347,10 @@ SIZE            params.oper.misc      Comment
     @property
     def order_pressure(self):
         """Equivalent to ``lx2``
-        "lin" in problemtype_equation and staggered == "auto" or True => pn - 2
-        staggered in (True, False) => (pn - 2, pn)."""
+        Staggered == "auto" if "lin" in problemtype_equation => pn - 2
+                            else => pn
+        Staggered == True => pn - 2
+        Staggered == Flase => pn"""
 
         pn = self.order
         staggered = self.params.oper.elem.staggered
@@ -356,15 +359,25 @@ SIZE            params.oper.misc      Comment
 
         if "lin" in problemtype_equation and staggered == False:
             logger.warning(
-                "Linear equation type and staggered == False leads to undefined behaviour in Nek5000"
+                """Linear equation type and staggered == False leads to undefined behaviour in Nek5000.
+                User should put params.oper.elem.staggered = True or "auto" to have evolution of 
+                perturabation field."""
             )
 
-        if "lin" in problemtype_equation and staggered in (True, "auto"):
+        if staggered == "auto":
+            if "lin" in problemtype_equation:
+                return pn - 2
+            else:
+                return pn
+        elif staggered == True:
             return pn - 2
-        elif ("lin" in problemtype_equation) and staggered:
-            return pn - 2
+        elif staggered == False:
+            return pn
         else:
-            return pn - 2 if staggered else pn
+            raise ValueError(
+                'params.nek have to be in [True, False, "auto"]. '
+                f"staggered = {staggered}"
+            )
 
     @property
     def order_mesh_solver(self):
