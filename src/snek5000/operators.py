@@ -347,17 +347,17 @@ SIZE            params.oper.misc      Comment
     @property
     def order_pressure(self):
         """Equivalent to ``lx2``
-        Staggered == "auto" if "lin" in problemtype_equation => pn - 2
+        Staggered is "auto" if "lin" in problemtype_equation => pn - 2
                             else => pn
-        Staggered == True => pn - 2
-        Staggered == Flase => pn"""
+        Staggered is True => pn - 2
+        Staggered is Flase => pn"""
 
         pn = self.order
         staggered = self.params.oper.elem.staggered
 
         problemtype_equation = self.params.nek.problemtype.equation.lower()
 
-        if "lin" in problemtype_equation and staggered == False:
+        if "lin" in problemtype_equation and staggered is False:
             logger.warning(
                 """Linear equation type and staggered == False leads to undefined behaviour in Nek5000.
                 User should put params.oper.elem.staggered = True or "auto" to have evolution of 
@@ -369,9 +369,9 @@ SIZE            params.oper.misc      Comment
                 return pn - 2
             else:
                 return pn
-        elif staggered == True:
+        elif staggered is True:
             return pn - 2
-        elif staggered == False:
+        elif staggered is False:
             return pn
         else:
             raise ValueError(
