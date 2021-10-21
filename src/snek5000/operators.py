@@ -228,21 +228,7 @@ SIZE            params.oper.elem      Comment
                                       order``. See :any:`order_out`)
 
 ``lx2``         ``staggered``         | p-order for pressure. **Automatically
-                                        computed** when equation type is linear
-                                        and  
-                                      | ``staggered`` `"auto"` and linear 
-                                        equation type implies
-                                      | :math:`\mathbb{P}_N - \mathbb{P}_{N-2}`
-                                      | ``staggered`` `"auto"` and nonlinear 
-                                        equation type implies
-                                      | :math:`\mathbb{P}_N - \mathbb{P}_{N}`   
-                                      | ``staggered`` `False` implies
-                                      | :math:`\mathbb{P}_N
-                                        - \mathbb{P}_{N}` or a collocated
-                                      | grid and ``staggered`` `True`
-                                        implies
-                                        :math:`\mathbb{P}_N - \mathbb{P}_{N-2}`
-                                        See :any:`order_pressure`
+                                        computed**. See :any:`order_pressure`
 
 ==========      ===================   =========================================
 
@@ -323,7 +309,15 @@ SIZE            params.oper.misc      Comment
 
     @property
     def order(self):
-        """Equivalent to ``lx1``."""
+        r"""Equivalent to ``lx1``. Controls the polynomial order of the
+        velocity field.
+
+        .. note::
+
+            True polynomial order of the element is given by
+            :math:`\mathbb{P}_N` = ``lx1`` - 1 = :any:`order` - 1
+
+        """
         return self.params.oper.elem.order
 
     @property
@@ -346,11 +340,24 @@ SIZE            params.oper.misc      Comment
 
     @property
     def order_pressure(self):
-        """Equivalent to ``lx2``
-        Staggered is "auto" if "lin" in problemtype_equation => pn - 2
-                            else => pn
-        Staggered is True => pn - 2
-        Staggered is Flase => pn"""
+        r"""Equivalent to ``lx2``. Controls the order for the pressure field.
+
+        .. note::
+
+            The property :any:`order_pressure` is determined by
+            the value of :attr:`params.oper.elem.staggered`.
+
+            - If staggered == "auto":
+
+              * If "lin" in problemtype_equation
+                :math:`\implies \mathbb{P}_{N-2}`
+              * Else
+                :math:`\implies \mathbb{P}_N`
+
+            - If staggered is True :math:`\implies \mathbb{P}_{N-2}`
+            - If staggered is False :math:`\implies \mathbb{P}_N`
+
+        """
 
         pn = self.order
         staggered = self.params.oper.elem.staggered
@@ -359,9 +366,10 @@ SIZE            params.oper.misc      Comment
 
         if "lin" in problemtype_equation and staggered is False:
             logger.warning(
-                """Linear equation type and staggered == False leads to undefined behaviour in Nek5000.
-                User should put params.oper.elem.staggered = True or "auto" to have evolution of 
-                perturabation field."""
+                "Linear equation type and staggered == False leads to "
+                "undefined behaviour in Nek5000.  User should put "
+                'params.oper.elem.staggered = True or "auto" to have evolution'
+                "of perturbation field."
             )
 
         if staggered == "auto":
@@ -452,12 +460,18 @@ SIZE            params.oper.misc      Comment
         sim_repr_maker.add_word(repr_oper)
 
     def produce_str_describing_oper(self):
-        """Produce a string describing the operator."""
+        """Produce a string describing the mesh volume and number of
+        elements.
+
+        """
         str_L, str_n = self._str_Ln()
         return f"{'x'.join(str_n)}_V{'x'.join(str_L)}"
 
     def produce_long_str_describing_oper(self, oper_method="Base"):
-        """Produce a string describing the operator."""
+        """Produce a multi-line string describing the mesh volume and number of
+        elements.
+
+        """
         str_L, str_n = self._str_Ln()
         string = ""
         for key, value in zip(("Lx", "Ly", "Lz"), str_L):

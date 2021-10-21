@@ -53,7 +53,7 @@ User Guide
    CHANGELOG
    AUTHORS
    license
-   Source code <https://github.com/exabl/snek5000>
+   Source code on GitHub <https://github.com/exabl/snek5000>
 
 Indices and tables
 ==================
