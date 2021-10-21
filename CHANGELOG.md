@@ -29,6 +29,17 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Changed
+
+- `params.oper.elem.staggered` has a new default value `auto`, which sets
+  staggered grid if a linear solver is used and a collocated one if some other
+  solver is used. Explicitly setting `params.oper.elem.staggered = True` is
+  required to maintain previous default behaviour.
+
+### Fixed
+
+- Detection of linear Nek5000 solvers
+
 ## [0.7.0b0] - 2021-09-16
 
 ### Added
