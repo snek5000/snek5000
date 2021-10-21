@@ -2,7 +2,8 @@
 ==================
 
 """
-# FIXME: This breaks because a different layout is used?
+# NOTE: Ideally InfoSolverMake should be used. Here, this won't work because
+# user files are missing.
 # from ..info import InfoSolverMake as _InfoSolver
 from ..info import InfoSolverNek as _InfoSolver
 from ..util import docstring_params
