@@ -21,6 +21,13 @@ class SimStatus(Enum):
         404,
         "Not Found: SIZE and/or nek5000 and/or SESSION.NAME files are missing.",
     )
+    CONFLICT = (
+        409,
+        (
+            "Conflict: Restarting in the same session would overwrite files. "
+            "Consider archiving current session or restarting in a new session."
+        ),
+    )
     EXPECTATION_FAILED = (417, "Expectation Failed: No restart files found")
     LOCKED = (
         423,
@@ -70,6 +77,9 @@ def get_status(path, verbose=False):
 
     if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
         return SimStatus.NOT_FOUND
+
+    if tuple(path.glob("*0.f?????")):
+        return SimStatus.CONFLICT
 
     if not tuple(path.glob("rs6*")):
         return SimStatus.EXPECTATION_FAILED
