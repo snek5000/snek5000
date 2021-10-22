@@ -130,7 +130,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
 
 
 def load_for_restart(
-    path_dir=None, use_start_from=None, use_checkpoint=None, verify_contents=True
+    path_dir=".", use_start_from=None, use_checkpoint=None, verify_contents=True
 ):
     """Load params and Simul for a restart.
 
