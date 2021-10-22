@@ -98,22 +98,10 @@ def load_simul(path_dir=None):
     else:
         path_dir = Path(path_dir)
 
-    from warnings import warn
-
-    info_solver_xml = path_dir / "info_solver.xml"
-    if info_solver_xml.exists():
-        from snek5000.info import InfoSolverNek
-
-        info_solver = InfoSolverNek(path_file=info_solver_xml)
-        solver = info_solver.short_name
-    else:
-        warn(f"The {info_solver_xml} file is missing!")
-        solver = path_dir.name.split("_")[0]
-
     # Load simulation class
-    from snek5000.solvers import import_cls_simul
+    from snek5000.solvers import import_cls_simul, get_solver_short_name
 
-    Simul = import_cls_simul(solver)
+    Simul = import_cls_simul(get_solver_short_name(path_dir))
 
     # Load parameters
     from snek5000.params import Parameters
