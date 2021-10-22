@@ -34,6 +34,4 @@ def test_get_configfile(monkeypatch, caplog):
             assert f"{hostname}.yml" in message
             break
     else:
-        raise IOError(
-            "Expected a warning message " "when configuration file is missing"
-        )
+        raise IOError("Expected a warning message when configuration file is missing")

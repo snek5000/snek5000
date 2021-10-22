@@ -11,8 +11,6 @@ try:
 except ImportError as e:
     logger.warning(e)
 
-#  from vtktools import vtkio
-
 
 class PhysFields:
     """Class for loading, plotting simulation files.

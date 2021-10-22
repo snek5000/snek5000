@@ -145,8 +145,6 @@ else:
     # -- Breathe configuration ---------------------------------------------------
     extensions.append("breathe")
 
-    # breathe_default_members = ('members', 'undoc-members')
-
     # File types
     breathe_implementation_filename_extensions = [".md"]
     breathe_domain_by_extension = {"usr": "fortran", "f": "fortran"}
@@ -154,9 +152,6 @@ else:
 
     # Input sources
     breathe_projects = {"snek5000": "_build/xml/"}
-    #  breathe_projects_source = {
-    #      "abl": ("../src/abl", ["SIZE", "abl.usr"]),
-    #  }
     breathe_default_project = "snek5000"
 
 # ----------------------------------------------------------------------------
