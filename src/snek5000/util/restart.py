@@ -124,7 +124,7 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
         DeprecationWarning,
     )
     params, _ = load_for_restart(
-        path, checkpoint=chkp_fnumber, verify_contents=verify_contents
+        path, use_checkpoint=chkp_fnumber, verify_contents=verify_contents
     )
     return params
 
