@@ -514,7 +514,7 @@ class Output(OutputCore):
 
         pattern = f"{prefix}{case}0.f?????"
         try:
-            file = sorted(self.sim.path_run.glob(pattern))[index]
+            file = sorted(path_run.glob(pattern))[index]
         except IndexError:
             raise FileNotFoundError(f"Cannot index {index} in {path_run}/{pattern} ")
         else:

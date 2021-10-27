@@ -69,7 +69,6 @@ def test_restart(sim_executed):
         params.nek.general.dt
     )  # In phill for some reason dt is negative
 
-    # TODO: overwrite params xml and par file
     sim = Simul(params)
     sim.make.exec(["run_fg"])
 
