@@ -62,6 +62,8 @@ pip install "phill @ git+https://github.com/exabl/snek5000-phill.git"
 
 * **Testing**: [Run `pytest`](https://pytest.readthedocs.io/) from the
   top-level directory. The test-cases can be found under `tests/` directory.
+  To run the slow tests too execute `pytest --runslow`.
+
 * **Debugging**: Set the environment variable:
   ```bash
   export SNEK_DEBUG=true

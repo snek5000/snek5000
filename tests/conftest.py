@@ -99,6 +99,26 @@ def sim2d():
     return Simul(params)
 
 
+@pytest.fixture(scope="module")
+def sim_executed():
+    from phill.solver import Simul
+
+    params = Simul.create_default_params()
+    params.output.sub_directory = "test"
+
+    params.nek.general.stop_at = "endTime"
+    params.nek.general.end_time = 10 * abs(params.nek.general.dt)
+    params.nek.general.write_interval = 5
+
+    params.oper.nproc_min = 2
+    params.oper.nproc_max = 12
+    params.oper.nx = params.oper.ny = params.oper.nz = 3
+
+    sim = Simul(params)
+    sim.make.exec(["run_fg"])
+    return sim
+
+
 @pytest.fixture(scope="function")
 def sim_data(tmpdir_factory):
     """Generate fake simulation data."""

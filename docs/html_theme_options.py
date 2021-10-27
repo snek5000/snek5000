@@ -1,6 +1,6 @@
 light_css_variables = {
-    #  "color-brand-primary": "red",
-    #  "color-brand-content": "#536dfe", #hover 7c4dff
+    "color-brand-primary": "#1954a6",
+    "color-brand-content": "#1954a6",
 }
 
 #  # Material theme options (see theme.conf for more information)

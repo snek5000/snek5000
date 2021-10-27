@@ -25,14 +25,6 @@ API reference
    operators
    params
 
-**Functions**
-
-.. autosummary::
-   :toctree:
-
-   source_root
-   load_simul
-
 """
 try:
     from importlib import resources
@@ -98,22 +90,10 @@ def load_simul(path_dir=None):
     else:
         path_dir = Path(path_dir)
 
-    from warnings import warn
-
-    info_solver_xml = path_dir / "info_solver.xml"
-    if info_solver_xml.exists():
-        from snek5000.info import InfoSolverNek
-
-        info_solver = InfoSolverNek(path_file=info_solver_xml)
-        solver = info_solver.short_name
-    else:
-        warn(f"The {info_solver_xml} file is missing!")
-        solver = path_dir.name.split("_")[0]
-
     # Load simulation class
-    from snek5000.solvers import import_cls_simul
+    from snek5000.solvers import import_cls_simul, get_solver_short_name
 
-    Simul = import_cls_simul(solver)
+    Simul = import_cls_simul(get_solver_short_name(path_dir))
 
     # Load parameters
     from snek5000.params import Parameters
@@ -137,7 +117,13 @@ def load_simul(path_dir=None):
 
 
 # for consistency with fluidsim
-load = load_simul
+load = load_simul  #: Alias for :func:`load_simul`
 
 
 from .util.smake import append_debug_flags, ensure_env  # noqa: F401, E402
+from .util import restart  # noqa: F401, E402
+
+get_status = restart.get_status  #: Alias for :func:`snek5000.util.restart.get_status`
+load_for_restart = (
+    restart.load_for_restart
+)  #: Alias for :func:`snek5000.util.restart.load_for_restart`

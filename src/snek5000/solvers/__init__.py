@@ -15,6 +15,8 @@ from types import ModuleType
 
 from fluidsim_core import loader
 
+from ..log import logger
+
 available_solvers = partial(loader.available_solvers, entrypoint_grp="snek5000.solvers")
 available_solvers.__doc__ = """\
 Returns a dictionary of all registered solvers registered as an entrypoint.
@@ -54,6 +56,11 @@ def get_solver_package(name_solver):
     """Return name of the solver package by checking the ``snek5000.solvers``
     entrypoint group.
 
+    Parameters
+    ----------
+    name_solver: str
+        Short name of the solver
+
     Returns
     -------
     str
@@ -65,3 +72,30 @@ def get_solver_package(name_solver):
         return module
     else:
         return module.rpartition(".")[0]
+
+
+def get_solver_short_name(path_dir):
+    """Detects short name of the solver from ``info_solver.xml`` if present or
+    the path.
+
+    Parameters
+    ----------
+    path_dir: path-like
+        Path to a simulation directory
+
+    Returns
+    -------
+    short_name: str
+
+    """
+    info_solver_xml = path_dir / "info_solver.xml"
+    if info_solver_xml.exists():
+        from snek5000.info import InfoSolverNek
+
+        info_solver = InfoSolverNek(path_file=info_solver_xml)
+        short_name = info_solver.short_name
+    else:
+        logger.warning(f"The {info_solver_xml} file is missing!")
+        short_name = path_dir.absolute().name.split("_")[0]
+
+    return short_name

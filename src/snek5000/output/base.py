@@ -486,6 +486,40 @@ class Output(OutputCore):
         if path:
             os.chmod(path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH)
 
+    def get_field_file(self, prefix="", index=-1):
+        """Get a field file of format ``{prefix}case0.f{index:05d}``
+
+        Parameters
+        ----------
+        prefix: str
+            Prefix for special field files; for examples KTH statistics files use prefix `sts`.
+
+        index: int
+            Index to match a specific field file
+
+        """
+        case = self.name_solver
+        path_run = self.sim.path_run
+
+        if index > 0:
+            pattern = f"{prefix}{case}0.f{index:05d}"
+            file = path_run / pattern
+            if file.exists():
+                return file
+            else:
+                logger.warning(
+                    f"{file} not found. Attempting to index a file from a "
+                    "sorted list of field files"
+                )
+
+        pattern = f"{prefix}{case}0.f?????"
+        try:
+            file = sorted(path_run.glob(pattern))[index]
+        except IndexError:
+            raise FileNotFoundError(f"Cannot index {index} in {path_run}/{pattern} ")
+        else:
+            return Path(file)
+
     def post_init(self):
         if mpi.rank == 0:
             _banner_length = 42
@@ -504,13 +538,19 @@ class Output(OutputCore):
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with FluidSim's params_simul.xml and info.xml"""
         params = self.sim.params
-        if mpi.rank == 0 and self._has_to_save and params.NEW_DIR_RESULTS:
+        if mpi.rank == 0:
             par_file = Path(self.path_run) / f"{self.name_solver}.par"
-            logger.info(
-                f"Writing params files... {par_file}, params_simul.xml, "
-                "info_solver.xml"
-            )
-            with open(par_file, "w") as fp:
-                params.nek._write_par(fp)
+
+            if self._has_to_save and params.NEW_DIR_RESULTS:
+                logger.info(
+                    f"Writing params files... {par_file}, params_simul.xml, "
+                    "info_solver.xml"
+                )
+                with open(par_file, "x") as fp:
+                    params.nek._write_par(fp)
+            elif self._has_to_save:
+                logger.info(f"Updating {par_file}")
+                with open(par_file, "w") as fp:
+                    params.nek._write_par(fp)
 
         super()._save_info_solver_params_xml(replace, comment=f"snek5000 {__version__}")

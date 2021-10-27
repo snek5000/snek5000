@@ -29,16 +29,30 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Added
+
+- {func}`snek5000.util.restart.load_for_restart` function
+- {mod}`snek5000.util.files`
+- {meth}`snek50000.output.base.Output.get_field_file` to locate a field file
+
 ### Changed
 
 - `params.oper.elem.staggered` has a new default value `auto`, which sets
   staggered grid if a linear solver is used and a collocated one if some other
   solver is used. Explicitly setting `params.oper.elem.staggered = True` is
   required to maintain previous default behaviour.
+- {func}`snek5000.util.files.next_path` gets a `force_suffix` parameter
+- {meth}`snek5000.output.base.Output._save_info_solver_params_xml` updates
+- `.par` file on loading for restart
+
+### Deprecated
+
+- {func}`snek5000.util.restart.prepare_for_restart`
 
 ### Fixed
 
 - Detection of linear Nek5000 solvers
+- Append debug flags to config, even if CFLAGS and FFLAGS are missing
 
 ## [0.7.0b0] - 2021-09-16
 

@@ -1,5 +1,4 @@
 """Post simulation archive-creation utilities"""
-import re
 import shlex
 import shutil
 import subprocess
@@ -9,6 +8,7 @@ from shutil import rmtree
 
 from .. import logger
 from . import modification_date
+from .files import next_path
 
 
 def archive(tarball, items=(), remove=False, readonly=False):
@@ -111,33 +111,6 @@ def exec_tar(tarball, items, remove):
     cmd = [*main, str(tar), *items]
     cmd_output = subprocess.check_output(cmd)
     return cmd_output, output
-
-
-def next_path(old_path):
-    """Generate a new path with an integer suffix
-
-    Example
-    -------
-    >>> Path("test.txt").touch()
-    >>> next_path("test.txt")
-    test_1.txt # if path exists
-    test.txt # if path does not exists
-
-    """
-    i = 1
-    p = Path(old_path)
-    while p.exists():
-        # for example: remove .tar from the end, if any
-        stem = p.stem
-        for suffix in p.suffixes:
-            stem = re.sub(f"{suffix}$", "", stem)
-
-        p = p.parent / "".join([stem, f"_{i:02d}", *p.suffixes])
-        logger.info(f"Checking if path exists: {p}")
-
-    logger.info(f"Output path: {p}")
-
-    return p
 
 
 def parse_args_from_filename(tarball):
