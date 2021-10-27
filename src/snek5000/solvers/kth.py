@@ -77,7 +77,7 @@ class SimulKTH(SimulNek):
         )
 
         # Document all params
-        for child_name in params.nek._tag_children:
+        for child_name in ("runpar", "monitor", "chkpoint", "stat"):
             child = getattr(params.nek, child_name)
             child._autodoc_par(indent=4)
 

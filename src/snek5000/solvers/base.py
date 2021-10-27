@@ -13,6 +13,7 @@ from inflection import underscore
 from .. import logger, mpi
 from ..info import InfoSolverNek
 from ..params import Parameters
+from ..util import docstring_params
 
 
 class SimulNek(SimulCore):
@@ -170,6 +171,12 @@ class SimulNek(SimulCore):
             )
         )
         params_nek.scalar01._set_attribs(dict(density=math.nan, diffusivity=math.nan))
+
+        # Document all params
+        for child_name in params.nek._tag_children:
+            child = getattr(params.nek, child_name)
+            child._autodoc_par(indent=4)
+
         return params
 
     def __init__(self, params):
@@ -199,3 +206,4 @@ class SimulNek(SimulCore):
 
 
 Simul = SimulNek
+Simul.__doc__ += "\n" + docstring_params(Simul, indent_len=4)

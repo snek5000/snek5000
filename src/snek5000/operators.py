@@ -73,7 +73,7 @@ class Operators:
     ``lely``        :any:`max_ny`            Same as above for ``y`` direction.
     ``lelz``        :any:`max_nz`            Same as above for ``z`` direction.
 
-    ``lorder``      :any:`max_order_time``   | Max. temporal order
+    ``lorder``      :any:`max_order_time`    | Max. temporal order
                                              | **Automatically computed** based
                                              | ``params.nek.general.\
 time_stepper``

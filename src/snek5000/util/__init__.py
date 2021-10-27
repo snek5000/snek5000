@@ -154,7 +154,7 @@ def docstring_params(Class, sections=False, indent_len=4):
     """
     if "sphinx" in sys.modules:
         params = init_params(Class, isolated_unit=True)
-        doc = params._get_formatted_docs()
+        doc = "\n" + params._get_formatted_docs()
     else:
         doc = ""
 
