@@ -13,6 +13,8 @@ from pathlib import Path
 from socket import gethostname
 
 from fluidsim_core.output import OutputCore
+from fluidsim_core.params import iter_complete_params
+
 from inflection import underscore
 
 from snek5000 import __version__, get_asset, logger, mpi, resources
@@ -115,6 +117,13 @@ class Output(OutputCore):
             dict(module_name="snek5000.output.phys_fields", class_name="PhysFields"),
         )
 
+        classes._set_child(
+            "HistoryPoints",
+            dict(
+                module_name="snek5000.output.history_points", class_name="HistoryPoints"
+            ),
+        )
+
     @staticmethod
     def _complete_params_with_default(params, info_solver):
         """This static method is used to complete the *params* container."""
@@ -145,6 +154,9 @@ class Output(OutputCore):
 """
             )
         )
+
+        dict_classes = info_solver.classes.Output.import_classes()
+        iter_complete_params(params, info_solver, dict_classes.values())
 
     @classmethod
     def get_root(cls):
