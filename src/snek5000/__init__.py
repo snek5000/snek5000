@@ -25,14 +25,6 @@ API reference
    operators
    params
 
-**Functions**
-
-.. autosummary::
-   :toctree:
-
-   source_root
-   load_simul
-
 """
 try:
     from importlib import resources
@@ -125,7 +117,13 @@ def load_simul(path_dir=None):
 
 
 # for consistency with fluidsim
-load = load_simul
+load = load_simul  #: Alias for :func:`load_simul`
 
 
 from .util.smake import append_debug_flags, ensure_env  # noqa: F401, E402
+from .util import restart  # noqa: F401, E402
+
+get_status = restart.get_status  #: Alias for :func:`snek5000.util.restart.get_status`
+load_for_restart = (
+    restart.load_for_restart
+)  #: Alias for :func:`snek5000.util.restart.load_for_restart`

@@ -61,7 +61,7 @@ class SimStatus(Enum):
         self.message = message  #: helpful description
 
 
-def get_status(path, verbose=False):
+def get_status(path_dir, verbose=False):
     """Get status of a simulation run by verifying its contents. It checks if:
 
     - snakemake was ever executed
@@ -83,7 +83,7 @@ def get_status(path, verbose=False):
         Enumeration indicating status code and message
 
     """
-    path = Path(path)
+    path = Path(path_dir)
     locks_dir = path / ".snakemake" / "locks"
     contents = os.listdir(path)
 
@@ -156,19 +156,19 @@ def load_for_restart(
     verify_contents: bool
         Verify directory contents to avoid runtime errors.
 
-    .. todo::
-
-        Possibility to make a new session
-
-
     Notes
     -----
     How it works:
 
     - If ``verify contents`` is `True`, do so using :func:`get_status`
     - Reads ``params_simul.xml`` if it exists, and if not falls back to ``.par`` file.
-    - Modifies ``start_from`` (Nek5000) or checkpoint module (requires KTH
-      framework) parameters with appropriate ``chkp_fnumber`` to restart from.
+    - Modifies parameters (in memory, but does not write into the filesystem,
+      yet) ``start_from`` (Nek5000) or checkpoint module (requires KTH
+      framework) with appropriate ``chkp_fnumber`` to restart from.
+
+    .. todo::
+
+        Possibility to make a new session
 
     """
     contents = os.listdir(path_dir)
