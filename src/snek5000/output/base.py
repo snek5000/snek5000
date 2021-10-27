@@ -538,13 +538,19 @@ class Output(OutputCore):
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with FluidSim's params_simul.xml and info.xml"""
         params = self.sim.params
-        if mpi.rank == 0 and self._has_to_save and params.NEW_DIR_RESULTS:
+        if mpi.rank == 0:
             par_file = Path(self.path_run) / f"{self.name_solver}.par"
-            logger.info(
-                f"Writing params files... {par_file}, params_simul.xml, "
-                "info_solver.xml"
-            )
-            with open(par_file, "w") as fp:
-                params.nek._write_par(fp)
+
+            if self._has_to_save and params.NEW_DIR_RESULTS:
+                logger.info(
+                    f"Writing params files... {par_file}, params_simul.xml, "
+                    "info_solver.xml"
+                )
+                with open(par_file, "x") as fp:
+                    params.nek._write_par(fp)
+            elif self._has_to_save:
+                logger.info(f"Updating {par_file}")
+                with open(par_file, "w") as fp:
+                    params.nek._write_par(fp)
 
         super()._save_info_solver_params_xml(replace, comment=f"snek5000 {__version__}")

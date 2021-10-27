@@ -53,19 +53,24 @@ def test_restart_error(tmpdir):
 
 @pytest.mark.slow
 def test_restart(sim_executed):
-    params, Simul = load_for_restart(sim_executed.path_run)
+    # In real workflows, to pre load data in preperation for restart, use:
+    # >>> sim_executed = snek5000.load()
+    fld_file = sim_executed.output.get_field_file()
 
-    # TODO: overwrite params xml and par file
-    sim = Simul(params)
-    case = sim.info_solver.short_name
+    fld = pm.readnek(fld_file)
+    params, Simul = load_for_restart(
+        sim_executed.path_run, use_start_from=fld_file.name
+    )
 
-    fld = pm.readnek(sim.output.get_field_file())
+    assert params.output.HAS_TO_SAVE
+    assert not params.NEW_DIR_RESULTS
+
     t_end = params.nek.general.end_time = fld.time + 10 * abs(
         params.nek.general.dt
     )  # In phill for some reason dt is negative
 
-    params.nek._write_par(sim.path_run / f"{case}.par")
-
+    # TODO: overwrite params xml and par file
+    sim = Simul(params)
     sim.make.exec(["run_fg"])
 
     fld = pm.readnek(sim.output.get_field_file())

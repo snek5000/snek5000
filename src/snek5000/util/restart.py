@@ -227,7 +227,9 @@ def load_for_restart(
                 f"Restart checkpoint {use_checkpoint} is invalid / does not exist"
             )
 
-    params.nek._write_par(path / f"{short_name}.par")
+    if hasattr(params, "output") and hasattr(params.output, "HAS_TO_SAVE"):
+        params.output.HAS_TO_SAVE = True
+
     params.NEW_DIR_RESULTS = False
 
     return params, Simul
