@@ -1,0 +1,2 @@
+# Extra dependencies to install after executing `pip install .[docs]` in the project root directory
+phill @ git+https://github.com/exabl/snek5000-phill.git
