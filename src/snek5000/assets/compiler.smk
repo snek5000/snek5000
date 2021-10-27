@@ -70,7 +70,7 @@ rule mpiexec:
         ln -sf {log} {config[CASE]}.log
         echo "Log file:"
         realpath {config[CASE]}.log
-        {config[MPIEXEC]} -n {resources.nproc} ./nek5000 {params.redirect} {log} {params.end}
+        {config[MPIEXEC]} -n {resources.nproc} {config[MPIEXEC_FLAGS]} ./nek5000 {params.redirect} {log} {params.end}
         """
 
 

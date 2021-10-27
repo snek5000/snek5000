@@ -2,7 +2,8 @@ CC: gcc
 FC: gfortran
 MPICC: mpicc
 MPIFC: mpif77
-MPIEXEC: "mpiexec --oversubscribe"
+MPIEXEC: "mpiexec"
+MPIEXEC_FLAGS: "--oversubscribe"
 CFLAGS: "-march=native"
 FFLAGS: "-march=native -mcmodel=medium -std=legacy"
 
