@@ -7,7 +7,7 @@ write_to = "src/snek5000/_version.py"
 write_to_template = "__version__ = \"{version}\"\n"
 
 [tool.pytest.ini_options]
-addopts = "--cov=snek5000 --cov=tests"
+addopts = "--cov=snek5000 --cov=tests --no-cov-on-fail"
 
 [tool.isort]
 known_first_party = ["fluiddyn", "fluidsim", "snek5000"]

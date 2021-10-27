@@ -72,7 +72,7 @@ def get_status(path, verbose=False):
 
     Parameters
     ----------
-    path : str
+    path : str or path-like
         Path to an existing simulation directory
     verbose : bool
         Print out the path and its contents
@@ -83,6 +83,7 @@ def get_status(path, verbose=False):
         Enumeration indicating status code and message
 
     """
+    path = Path(path)
     locks_dir = path / ".snakemake" / "locks"
     contents = os.listdir(path)
 

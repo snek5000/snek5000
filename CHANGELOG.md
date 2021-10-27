@@ -29,12 +29,18 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Added
+
+- {func}`snek5000.util.restart.load_for_restart` function
+- {mod}`snek5000.util.files`
+
 ### Changed
 
 - `params.oper.elem.staggered` has a new default value `auto`, which sets
   staggered grid if a linear solver is used and a collocated one if some other
   solver is used. Explicitly setting `params.oper.elem.staggered = True` is
   required to maintain previous default behaviour.
+- {func}`snek5000.util.files.next_path` gets a `force_suffix` parameter
 
 ### Fixed
 

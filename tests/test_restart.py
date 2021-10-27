@@ -1,3 +1,4 @@
+import pymech as pm
 import pytest
 
 from snek5000.util.restart import SnekRestartError, get_status, load_for_restart
@@ -45,5 +46,28 @@ def test_partial_content(sim_data):
     assert get_status(sim_data).code == 206
 
 
-def test_restart(sim_data):
-    pass
+def test_restart_error(tmpdir):
+    with pytest.raises(SnekRestartError, match="425: Too Early"):
+        load_for_restart(tmpdir)
+
+
+@pytest.mark.slow
+def test_restart(sim_executed):
+    params, Simul = load_for_restart(sim_executed.path_run)
+
+    # TODO: overwrite params xml and par file
+    sim = Simul(params)
+    case = sim.info_solver.short_name
+
+    # TODO: easier mechanism to load the last file
+    fld = pm.readnek(sorted(sim.path_run.glob(f"{case}0.f?????"))[-1])
+    t_end = params.nek.general.end_time = fld.time + 10 * abs(
+        params.nek.general.dt
+    )  # In phill for some reason dt is negative
+
+    params.nek._write_par(sim.path_run / f"{case}.par")
+
+    sim.make.exec(["run_fg"])
+
+    fld = pm.readnek(sorted(sim.path_run.glob(f"{case}0.f?????"))[-1])
+    assert fld.time == t_end
