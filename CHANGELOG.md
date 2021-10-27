@@ -45,9 +45,14 @@ Security in case of vulnerabilities.
 - {meth}`snek5000.output.base.Output._save_info_solver_params_xml` updates
 - `.par` file on loading for restart
 
+### Deprecated
+
+- {func}`snek5000.util.restart.prepare_for_restart`
+
 ### Fixed
 
 - Detection of linear Nek5000 solvers
+- Append debug flags to config, even if CFLAGS and FFLAGS are missing
 
 ## [0.7.0b0] - 2021-09-16
 

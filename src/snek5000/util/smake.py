@@ -32,7 +32,9 @@ def append_debug_flags(config, warnings):
     """
     warnings_option = "-Wall" if warnings else "-w"
     if os.getenv("SNEK_DEBUG"):
-        config["CFLAGS"] += " -O0 -g"
-        config["FFLAGS"] += (
-            " -O0 -g -ffpe-trap=invalid,zero,overflow -DDEBUG " + warnings_option
+        config["CFLAGS"] = config.get("CFLAGS", "") + " -O0 -g"
+        config["FFLAGS"] = (
+            config.get("FFLAGS", "")
+            + " -O0 -g -ffpe-trap=invalid,zero,overflow -DDEBUG "
+            + warnings_option
         )
