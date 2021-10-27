@@ -486,6 +486,40 @@ class Output(OutputCore):
         if path:
             os.chmod(path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH)
 
+    def get_field_file(self, prefix="", index=-1):
+        """Get a field file of format ``{prefix}case0.f{index:05d}``
+
+        Parameters
+        ----------
+        prefix: str
+            Prefix for special field files; for examples KTH statistics files use prefix `sts`.
+
+        index: int
+            Index to match a specific field file
+
+        """
+        case = self.name_solver
+        path_run = self.sim.path_run
+
+        if index > 0:
+            pattern = f"{prefix}{case}0.f{index:05d}"
+            file = path_run / pattern
+            if file.exists():
+                return file
+            else:
+                logger.warning(
+                    f"{file} not found. Attempting to index a file from a "
+                    "sorted list of field files"
+                )
+
+        pattern = f"{prefix}{case}0.f?????"
+        try:
+            file = sorted(self.sim.path_run.glob(pattern))[index]
+        except IndexError:
+            raise FileNotFoundError(f"Cannot index {index} in {path_run}/{pattern} ")
+        else:
+            return Path(file)
+
     def post_init(self):
         if mpi.rank == 0:
             _banner_length = 42

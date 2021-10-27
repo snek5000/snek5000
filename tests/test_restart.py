@@ -59,8 +59,7 @@ def test_restart(sim_executed):
     sim = Simul(params)
     case = sim.info_solver.short_name
 
-    # TODO: easier mechanism to load the last file
-    fld = pm.readnek(sorted(sim.path_run.glob(f"{case}0.f?????"))[-1])
+    fld = pm.readnek(sim.output.get_field_file())
     t_end = params.nek.general.end_time = fld.time + 10 * abs(
         params.nek.general.dt
     )  # In phill for some reason dt is negative
@@ -69,5 +68,5 @@ def test_restart(sim_executed):
 
     sim.make.exec(["run_fg"])
 
-    fld = pm.readnek(sorted(sim.path_run.glob(f"{case}0.f?????"))[-1])
+    fld = pm.readnek(sim.output.get_field_file())
     assert fld.time == t_end

@@ -33,6 +33,7 @@ Security in case of vulnerabilities.
 
 - {func}`snek5000.util.restart.load_for_restart` function
 - {mod}`snek5000.util.files`
+- {meth}`snek50000.output.Output.get_field_file` to locate a field file
 
 ### Changed
 
