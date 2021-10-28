@@ -10,6 +10,7 @@
 
 """
 import os
+import re
 import sys
 from datetime import datetime
 from functools import reduce
@@ -158,6 +159,9 @@ def docstring_params(Class, sections=False, indent_len=4):
     else:
         doc = ""
 
+    # Remove the first heading: typically no content
+    doc = re.sub(r"^\s+Documentation\ for\ params$", "", doc, flags=re.MULTILINE)
+
     if not sections:
         lines = []
         indent = " " * indent_len
@@ -165,7 +169,11 @@ def docstring_params(Class, sections=False, indent_len=4):
 
         for line in doc.splitlines():
             if line.startswith("Documentation for"):
-                lines.append(f"{indent}**{line.lstrip()}**")
+                heading = line.lstrip()
+                idx = heading.index(" for ") + 5
+                # Add target for cross referencing
+                lines.append(f"{indent}.. _{heading[idx:]}:\n")
+                lines.append(f"{indent}**{heading}**")
             elif "Documentation for" in prev_line and any(
                 line.startswith(underline) for underline in ("====", "----", "~~~~")
             ):
