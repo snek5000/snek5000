@@ -23,7 +23,7 @@ help:
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
-	@echo "Build finished.\nfile://"$(shell pwd)"/_build/html/index.html"
+	@printf "Build finished.\nfile://"$(shell pwd)"/_build/html/index.html\n"
 
 intersphinx-python:
 	@python -msphinx.ext.intersphinx https://docs.python.org/3/objects.inv
