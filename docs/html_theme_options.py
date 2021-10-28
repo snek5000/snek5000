@@ -1,7 +1,12 @@
+__common_css_variables = {
+    "font-size--small--2": "84%",
+}
 light_css_variables = {
     "color-brand-primary": "#1954a6",
     "color-brand-content": "#1954a6",
+    **__common_css_variables,
 }
+dark_css_variables = {**__common_css_variables}
 
 #  # Material theme options (see theme.conf for more information)
 #  html_theme_options = {
