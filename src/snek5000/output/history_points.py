@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 class HistoryPoints:
@@ -49,3 +51,40 @@ class HistoryPoints:
             "history_points",
             attribs={"coords": None},
         )
+
+    def load(self):
+        with open(self.path_file) as file:
+            line = file.readline()
+            nb_points = int(line.split(" ", 1)[0])
+            coords = np.loadtxt(file, max_rows=nb_points)
+
+        df = pd.read_fwf(self.path_file, skiprows=nb_points + 1, header=None)
+        df.columns = list("tABDC")
+
+        nb_times = len(df) // 25
+
+        index_points = list(range(nb_points)) * nb_times
+        df["index_points"] = index_points
+        coords = pd.DataFrame(coords, columns=list("xy"))
+
+        return coords, df
+
+    def plot(self, key, data=None):
+        if data is None:
+            coords, df = self.load()
+        else:
+            coords, df = data
+
+        fig, ax = plt.subplots()
+
+        for index in range(self.nb_points):
+            df_point = df[df.index_points == index]
+            signal = df_point[key]
+            times = df_point["t"]
+
+            ax.plot(times, signal, label=str(tuple(coords.iloc[index])))
+
+        ax.set_xlabel("time")
+        fig.legend()
+
+        return ax
