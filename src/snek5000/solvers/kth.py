@@ -24,7 +24,15 @@ class InfoSolverKTH(_InfoSolver):
 
 
 class SimulKTH(SimulNek):
-    """A base class which incorporates parameters for KTH toolbox also."""
+    """A base class which incorporates parameters for KTH toolbox also.
+
+    Example
+    -------
+    >>> from snek5000.solvers.kth import Simul
+    >>> params = Simul.create_default_params()
+    >>> sim = Simul(params)
+
+    """
 
     InfoSolver = InfoSolverKTH
 
@@ -39,9 +47,10 @@ class SimulKTH(SimulNek):
         params.nek.runpar._set_attribs(attribs)
         params.nek.runpar._set_doc(
             """
-    *Runtime parameter section for rprm module*
-    :parf_write: Do we write runtime parameter file
-    :parf_name: Runtime parameter file name for output (without .par)
+    Runtime parameter section for rprm module (`KTH toolbox <https://github.com/KTH-Nek5000/KTH_Toolbox>`__)
+
+    - ``parf_write``: Do we write runtime parameter file
+    - ``parf_name``: Runtime parameter file name for output (without .par)
 """
         )
 
@@ -49,9 +58,10 @@ class SimulKTH(SimulNek):
         params.nek.monitor._set_attribs(attribs)
         params.nek.monitor._set_doc(
             """
-    *Runtime parameter section for monitor module*
-    :log_level: Logging threshold for toolboxes
-    :wall_time: Simulation wall time
+    Runtime parameter section for monitor module (`KTH toolbox <https://github.com/KTH-Nek5000/KTH_Toolbox>`__)
+
+    - ``log_level``: Logging threshold for toolboxes
+    - ``wall_time``: Simulation wall time
 """
         )
 
@@ -59,10 +69,11 @@ class SimulKTH(SimulNek):
         params.nek.chkpoint._set_attribs(attribs)
         params.nek.chkpoint._set_doc(
             """
-    *Runtime parameter section for checkpoint module*
-    :read_chkpt: Restart from checkpoint
-    :chkp_fnumber: Restart file number
-    :chkp_interval: Checkpoint saving frequency (number of time steps)
+    Runtime parameter section for checkpoint module (`KTH toolbox <https://github.com/KTH-Nek5000/KTH_Toolbox>`__)
+
+    - ``read_chkpt``: Restart from checkpoint
+    - ``chkp_fnumber``: Restart file number
+    - ``chkp_interval``: Checkpoint saving frequency (number of time steps)
 """
         )
 
@@ -70,9 +81,10 @@ class SimulKTH(SimulNek):
         params.nek.stat._set_attribs(attribs)
         params.nek.stat._set_doc(
             """
-    *Runtime parameter section for statistics module*
-    :av_step: Frequency of averaging
-    :io_step: Frequency of file saving
+    Runtime parameter section for statistics module (`KTH toolbox <https://github.com/KTH-Nek5000/KTH_Toolbox>`__)
+
+    - ``av_step``: Frequency of averaging
+    - ``io_step``: Frequency of file saving
 """
         )
 
@@ -85,4 +97,14 @@ class SimulKTH(SimulNek):
 
 
 Simul = SimulKTH
-Simul.__doc__ += "\n" + docstring_params(Simul, indent_len=4)
+Simul.__doc__ += """
+
+    Notes
+    -----
+
+    Here, only the documention for ``params.nek`` is displayed. For the
+    documentation on ``params.oper`` see :mod:`snek5000.operators`.
+
+""" + docstring_params(
+    Simul, indent_len=4
+)

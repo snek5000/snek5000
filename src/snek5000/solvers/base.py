@@ -6,6 +6,7 @@ A bare Nek5000 solver which does not rely on any user parameters.
 """
 import math
 from pathlib import Path
+import textwrap
 
 from fluidsim_core.solver import SimulCore
 from inflection import underscore
@@ -101,7 +102,50 @@ class SimulNek(SimulCore):
         params._set_child("nek")
         params_nek = params.nek
 
+        params_nek._set_doc(
+            textwrap.dedent(
+                """
+    The parameters in ``params.nek`` are used by Snek to produce the Nek file
+    .par, which is documented here:
+    https://nek5000.github.io/NekDoc/problem_setup/case_files.html#parameter-file-par
+
+    For these parameters, there is nearly a direct correspondance between Nek
+    and Snek parameter names, with only CamelCase <->
+    lower_case_with_underscores conversions (see :mod:`snek5000.params`).
+
+    The sections are:
+
+    * ``general`` (mandatory)
+    * ``problemtype``
+    * ``mesh``
+    * ``velocity``
+    * ``pressure`` (required for velocity)
+    * ``temperature``
+    * ``scalar%%``
+    * ``cvode``
+
+    When scalars are used, the keys of each scalar are defined under the section
+    ``scalar%%`` varying between ``scalar01`` and ``scalar99``.
+
+    There is a mechanism to enable/disable these sections so that they are used
+    or not to produce the .par file (TODO: is it already described somewhere?).
+"""
+            )
+        )
+
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
+
+        index_table_in_nek_doc = {
+            "general": 2,
+            "problemtype": 3,
+            "velocity": 6,
+            "pressure": 7,
+            "mesh": 5,
+            "temperature": 9,
+            "scalar01": 10,
+            "cvode": 11,
+        }
+
         for section in (
             "general",
             "problemtype",
@@ -112,7 +156,13 @@ class SimulNek(SimulCore):
             "scalar01",
             "cvode",
         ):
-            params_nek._set_child(section)
+            child = params_nek._set_child(section)
+
+            child._set_doc(
+                f"""
+    See table https://nek5000.github.io/NekDoc/problem_setup/case_files.html#id{index_table_in_nek_doc[section]}
+"""
+            )
 
         cls._set_internal_sections(params)
 
@@ -206,4 +256,14 @@ class SimulNek(SimulCore):
 
 
 Simul = SimulNek
-Simul.__doc__ += "\n" + docstring_params(Simul, indent_len=4)
+Simul.__doc__ += """
+
+    Notes
+    -----
+
+    Here, only the documention for ``params.nek`` is displayed. For the
+    documentation on ``params.oper`` see :mod:`snek5000.operators`.
+
+""" + docstring_params(
+    Simul, indent_len=4
+)

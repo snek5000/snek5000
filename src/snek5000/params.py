@@ -95,7 +95,9 @@ class Parameters(_Parameters):
                     attrib = underscore(option)
                     setattr(params_child, attrib, value)
 
-    def _update_par_section(self, section_name, section_dict):
+    def _update_par_section(
+        self, section_name, section_dict, has_to_prune_literals=True
+    ):
         """Updates a section of the ``par_file`` object from a dictionary."""
         par = self._par_file
 
@@ -112,7 +114,7 @@ class Parameters(_Parameters):
             if literal in literal_python2nek:
                 value = literal_python2nek[literal]
 
-            if value in literal_prune:
+            if has_to_prune_literals and value in literal_prune:
                 continue
 
             # Make everything consistent where values refer to option names
@@ -132,7 +134,7 @@ class Parameters(_Parameters):
             else:
                 par.set(section_name_par, camelcase(option), str(value))
 
-    def _sync_par(self):
+    def _sync_par(self, has_to_prune_literals=True):
         """Sync values in param children and attributes to ``self._par_file``
         object.
 
@@ -148,7 +150,7 @@ class Parameters(_Parameters):
 
         for child, d in data:
             section_name = child.upper()
-            self._update_par_section(section_name, d)
+            self._update_par_section(section_name, d, has_to_prune_literals=has_to_prune_literals)
 
         self._tidy_par()
 
@@ -178,7 +180,7 @@ class Parameters(_Parameters):
 
     def _autodoc_par(self, indent=0):
         """Autodoc a code block with ``ini`` syntax and set docstring."""
-        self._sync_par()
+        self._sync_par(has_to_prune_literals=False)
         docstring = "\n.. code-block:: ini\n\n"
         with StringIO() as output:
             self._par_file.write(output)
