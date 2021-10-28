@@ -71,6 +71,7 @@ rule mpiexec:
         echo "Log file:"
         realpath {config[CASE]}.log
         {config[MPIEXEC]} -n {resources.nproc} {config[MPIEXEC_FLAGS]} ./nek5000 {params.redirect} {log} {params.end}
+        echo $PWD
         """
 
 
