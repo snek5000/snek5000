@@ -143,7 +143,14 @@ def init_params(Class, isolated_unit=False):
         from ..params import Parameters
 
         params = Parameters(tag="params")
-        Class._complete_params_with_default(params)
+        try:
+            Class._complete_params_with_default(params)
+        except TypeError:
+            from snek5000.info import InfoSolverMake
+
+            info_solver = InfoSolverMake()
+
+            Class._complete_params_with_default(params, info_solver)
 
     return params
 

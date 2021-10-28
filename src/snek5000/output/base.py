@@ -7,6 +7,7 @@ import os
 import pkgutil
 import shutil
 import stat
+import textwrap
 from itertools import chain
 from pathlib import Path
 from socket import gethostname
@@ -16,6 +17,7 @@ from inflection import underscore
 
 from snek5000 import __version__, get_asset, logger, mpi, resources
 from snek5000.solvers import get_solver_package, is_package
+from snek5000.util import docstring_params
 from snek5000.util.smake import append_debug_flags
 
 
@@ -96,12 +98,25 @@ class Output(OutputCore):
         """This static method is used to complete the *params* container."""
         # Bare minimum
         attribs = {
-            "ONLINE_PLOT_OK": True,
-            "period_refresh_plots": 1,
             "HAS_TO_SAVE": True,
             "sub_directory": "",
+            "session_id": 0,
         }
         params._set_child("output", attribs=attribs)
+        params.output._set_doc(
+            textwrap.dedent(
+                """
+    - ``HAS_TO_SAVE``: bool (default: True) If False, nothing new is saved in
+      the directory of the simulation.
+    - ``sub_directory``: str (default: "") A name of a sub-directory (relative
+      to $FLUIDDYN_PATH_SCRATCH) wherein the directory of the simulation
+      (``path_run``) is saved.
+    - ``session_id``: int (default: 0) Determines the sub-directory (relative
+      to ``path_run``) in which the field files would be generated during
+      runtime. The session directory takes the form `session_{session_id}`.
+"""
+            )
+        )
 
     @classmethod
     def get_root(cls):
@@ -591,3 +606,18 @@ class Output(OutputCore):
                     params.nek._write_par(fp)
 
         super()._save_info_solver_params_xml(replace, comment=f"snek5000 {__version__}")
+
+
+Output.__doc__ += """
+    Notes
+    -----
+    Here, only the documention for ``params.output`` is displayed.
+
+    .. seealso::
+
+        - ``params.oper`` at :mod:`snek5000.operators`
+        - ``params.nek`` at :mod:`snek5000.solvers.base`
+
+""" + docstring_params(
+    Output
+)
