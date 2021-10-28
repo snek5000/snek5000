@@ -33,7 +33,7 @@ Security in case of vulnerabilities.
 
 - {func}`snek5000.util.restart.load_for_restart` function
 - {mod}`snek5000.util.files`
-- {meth}`snek50000.output.base.Output.get_field_file` to locate a field file
+- {meth}`snek5000.output.base.Output.get_field_file` to locate a field file
 - Mandatory key `MPIEXEC_FLAGS` in Snakemake config
 
 ### Changed
@@ -44,7 +44,7 @@ Security in case of vulnerabilities.
   required to maintain previous default behaviour.
 - {func}`snek5000.util.files.next_path` gets a `force_suffix` parameter
 - {meth}`snek5000.output.base.Output._save_info_solver_params_xml` updates
-- `.par` file on loading for restart
+  `.par` file on loading for restart
 
 ### Deprecated
 

@@ -553,6 +553,10 @@ class Output(OutputCore):
             return Path(file)
 
     def post_init(self):
+        """Logs info on instantiated classes and finally :meth:`copy` all
+        source code to simulation directory
+
+        """
         if mpi.rank == 0:
             _banner_length = 42
             logger.info("*" * _banner_length)
@@ -568,7 +572,8 @@ class Output(OutputCore):
             self.copy(self.path_run)
 
     def _save_info_solver_params_xml(self, replace=False):
-        """Saves the par file, along with FluidSim's params_simul.xml and info.xml"""
+        """Saves the par file, along with ``params_simul.xml`` and
+        ``info_solver.xml``"""
         params = self.sim.params
         if mpi.rank == 0:
             par_file = Path(self.path_run) / f"{self.name_solver}.par"

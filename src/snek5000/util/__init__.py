@@ -5,6 +5,7 @@
    :toctree:
 
    archive
+   files
    restart
    smake
 
