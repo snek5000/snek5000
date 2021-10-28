@@ -34,15 +34,10 @@ def _check_user_param(idx):
 
 
 class Parameters(_Parameters):
-    """Container for reading, modifying and writing par_ files.
-
-    .. _par: https://nek5000.github.io/NekDoc/problem_setup/case_files.html#parameter-file-par
+    """Container for reading, modifying and writing :ref:`par files <nek:case_files_par>`.
 
     :param tag: A string representing name of case files (for example: provide
                  ``"abl"`` for files like ``abl.usr, abl.par`` etc).
-
-    .. automethod: _read_par
-
 
     :todo: Consolidate the logic of param to par file syncing in two methods!
            More tests to see if it works.

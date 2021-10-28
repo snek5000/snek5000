@@ -5,8 +5,8 @@ A bare Nek5000 solver which does not rely on any user parameters.
 
 """
 import math
-from pathlib import Path
 import textwrap
+from pathlib import Path
 
 from fluidsim_core.solver import SimulCore
 from inflection import underscore
@@ -106,12 +106,14 @@ class SimulNek(SimulCore):
             textwrap.dedent(
                 """
     The parameters in ``params.nek`` are used by Snek to produce the Nek file
-    .par, which is documented here:
-    https://nek5000.github.io/NekDoc/problem_setup/case_files.html#parameter-file-par
+    .par, which is documented here :ref:`nek:case_files_par`.
 
-    For these parameters, there is nearly a direct correspondance between Nek
-    and Snek parameter names, with only CamelCase <->
-    lower_case_with_underscores conversions (see :mod:`snek5000.params`).
+    .. note::
+
+        For these parameters, there is nearly a direct correspondance between
+        Nek5000 par file keys and Snek5000 parameter variable names, with only
+        *camelCase* <-> *snake_case* conversions. This is
+        implemented in :mod:`snek5000.params`.
 
     The sections are:
 
@@ -136,15 +138,16 @@ class SimulNek(SimulCore):
 
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
 
-        index_table_in_nek_doc = {
-            "general": 2,
-            "problemtype": 3,
-            "velocity": 6,
-            "pressure": 7,
-            "mesh": 5,
-            "temperature": 9,
-            "scalar01": 10,
-            "cvode": 11,
+        # Referenced using Sphinx extension intersphinx. Run make intersphinx-nek in docs to see available labels
+        table_in_nek_doc = {
+            "general": "tab:generalparams",
+            "problemtype": "tab:probtypeparams",
+            "velocity": "tab:velocityparams",
+            "pressure": "tab:pressureparams",
+            "mesh": "tab:meshparams",
+            "temperature": "tab:temperatureparams",
+            "scalar01": "tab:scalarparams",
+            "cvode": "tab:cvodeparams",
         }
 
         for section in (
@@ -161,7 +164,7 @@ class SimulNek(SimulCore):
 
             child._set_doc(
                 f"""
-    See table https://nek5000.github.io/NekDoc/problem_setup/case_files.html#id{index_table_in_nek_doc[section]}
+    See table :ref:`nek:{table_in_nek_doc[section]}`
 """
             )
 

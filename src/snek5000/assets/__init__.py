@@ -37,6 +37,7 @@ Jinja templates
 - ``box.j2``: See also
     :any:`snek5000.operators.Operators.write_box`,
     :any:`snek5000.output.base.Output.write_box`.
+    :ref:`nek:mesh_gen`
 
 .. literalinclude:: ../../src/snek5000/assets/box.j2
     :language: jinja
@@ -55,7 +56,8 @@ Jinja templates
 
 - ``SIZE.j2``: See also
     :any:`snek5000.operators.Operators.write_size`,
-    :any:`snek5000.output.base.Output.write_size`.
+    :any:`snek5000.output.base.Output.write_size`,
+    Nek5000 docs on :ref:`nek:case_files_size` file.
 
 .. literalinclude:: ../../src/snek5000/assets/SIZE.j2
     :language: jinja

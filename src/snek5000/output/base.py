@@ -394,7 +394,12 @@ class Output(OutputCore):
             logger.info(f"Copied: {root} -> {new_root}")
 
     def write_box(self, template):
-        """Write <case name>.box file from box.j2 template."""
+        """Write <case name>.box file from box.j2 template.
+
+        .. seealso::
+            :ref:`nek:mesh_gen`
+
+        """
         if mpi.rank == 0:
             box_file = self.sim.path_run / f"{self.name_solver}.box"
             logger.info(f"Writing box file... {box_file}")
@@ -404,7 +409,13 @@ class Output(OutputCore):
                 )
 
     def write_size(self, template):
-        """Write SIZE file from SIZE.j2 template."""
+        """Write SIZE file from SIZE.j2 template.
+
+        .. seealso::
+
+            Nek5000 docs on :ref:`nek:case_files_size`
+
+        """
         if mpi.rank == 0:
             size_file = self.sim.path_run / "SIZE"
             logger.info(f"Writing SIZE file... {size_file}")
