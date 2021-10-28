@@ -5,7 +5,20 @@ from snek5000.output.base import Output
 
 
 def test_update_snakemake_config():
-    config = {}
+    # Dummy config values
+    config = {
+        key: ""
+        for key in (
+            "CC",
+            "FC",
+            "MPICC",
+            "MPIFC",
+            "MPIEXEC",
+            "MPIEXEC_FLAGS",
+            "CFLAGS",
+            "FFLAGS",
+        )
+    }
     name_solver = "base"
     Output.update_snakemake_config(config, name_solver)
 

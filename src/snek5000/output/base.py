@@ -179,6 +179,24 @@ class Output(OutputCore):
             environment variables.
 
         """
+        mandatory_config = {
+            "CC",
+            "FC",
+            "MPICC",
+            "MPIFC",
+            "MPIEXEC",
+            "MPIEXEC_FLAGS",
+            "CFLAGS",
+            "FFLAGS",
+        }
+        missing_config = mandatory_config - set(config)
+
+        if missing_config:
+            raise ValueError(
+                f"Some keys are missing from the configfile {cls.get_configfile()}: "
+                f"{missing_config}"
+            )
+
         try:
             # Supress warnings for not instantiating Output with sim or params
             logging_level = logger.getEffectiveLevel()

@@ -34,6 +34,7 @@ Security in case of vulnerabilities.
 - {func}`snek5000.util.restart.load_for_restart` function
 - {mod}`snek5000.util.files`
 - {meth}`snek50000.output.base.Output.get_field_file` to locate a field file
+- Mandatory key `MPIEXEC_FLAGS` in Snakemake config
 
 ### Changed
 
