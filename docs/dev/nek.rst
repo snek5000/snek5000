@@ -1,6 +1,25 @@
 Notes on Nek5000 internals
 ##########################
 
+Nek5000 core library
+====================
+
+.. note::
+
+    The following is auto-generated using Doxygen and represents Nek5000 v19.
+    The official :doc:`Nek5000 documentation <nek:index>` is hand-written and is more general.
+
+* `Documentation produced with Doxygen <doxygen/index.html>`_
+
+External links
+--------------
+
+.. * :ref:`Upstream documentation for Nek5000 <nek:genindex>`
+.. Strange intersphinx bug: WARNING: undefined label: nek:genindex (if the link has no caption the label must precede a section header)
+
+* :doc:`Nek5000 documentation <nek:index>`
+* `KTH framework documentation <https://kth-nek5000.github.io/KTH_Framework>`_
+
 Boundary condition
 ==================
 

@@ -49,6 +49,10 @@ class SimulNek(SimulCore):
 
     @classmethod
     def load_params_from_file(cls, path_xml=None, path_par=None):
+        """Instantiate a Parameters instance and populate it from
+        `params_simul.xml` or `case.par`
+
+        """
         if not (path_xml or path_par):
             raise IOError(
                 "Either path to params_simul.xml or case.par should be provided"
@@ -68,6 +72,12 @@ class SimulNek(SimulCore):
 
     @classmethod
     def _set_internal_sections(cls, params):
+        """Set internal attributes to mark user sections and disable sections
+        following :attr:`InfoSolverNek.par_sections_disabled`. The internal
+        attributes  ``_user`` and ``_enabled`` of :class:`Parameters` are
+        modified here..
+
+        """
         try:
             info_solver = cls.info_solver
         except AttributeError:
