@@ -128,7 +128,8 @@ class SimulNek(SimulCore):
     ``scalar%%`` varying between ``scalar01`` and ``scalar99``.
 
     There is a mechanism to enable/disable these sections so that they are used
-    or not to produce the .par file (TODO: is it already described somewhere?).
+    or not to produce the .par file (see our `tutorial on writting new solvers
+    <https://snek5000.readthedocs.io/en/latest/packaging.html>`__).
 """
             )
         )
