@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from shutil import copy2
 
 from .. import logger
 
@@ -70,3 +71,39 @@ def next_path(old_path, force_suffix=False):
     logger.debug(f"Next path available: {new_path}")
 
     return new_path
+
+
+def create_session(case, re2, ma2, par):
+    """Creates a new session and write the path to a `SESSION.NAME` file.
+    Then, symlinks re2 and ma2 files, and copies the par file.
+
+    Parameters
+    ----------
+    case : str
+        Case name
+    re2 : str
+        Mesh file name
+    ma2 : str
+        Connectivity mapping file name
+    par : str
+        Parameter file name
+
+    .. todo::
+
+        Adapt load_for_restart function
+
+    """
+    session_dir = next_path("session", force_suffix=True)
+
+    session_dir.mkdir()
+
+    with open("SESSION.NAME", "w") as session_name:
+        # use relative paths to avoid 132 character limit in Nek5000
+        session_name.write(f"{case}\n" f"./{session_dir}")
+
+    for file in (re2, ma2):
+        # use relative symlinks
+        (session_dir / file).symlink_to(f"../{file}")
+
+    # Copy par files to run without recompiling
+    copy2(par, session_dir / par)

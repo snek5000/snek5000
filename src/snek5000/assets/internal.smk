@@ -1,4 +1,5 @@
 import snek5000
+from snek5000.util.files import create_session
 
 
 NEK_SOURCE_ROOT = snek5000.source_root()
@@ -71,11 +72,11 @@ rule generate_makefile:
 
 # generate sessionfile
 rule generate_session:
+    input:
+        re2=f"{config['CASE']}.re2",
+        ma2=f"{config['CASE']}.ma2",
+        par=f"{config['CASE']}.par",
     output:
         "SESSION.NAME",
-    shell:
-        """
-        touch SESSION.NAME
-        echo {config[CASE]} > SESSION.NAME
-        echo `pwd`'/' >>  SESSION.NAME
-        """
+    run:
+        create_session(config["CASE"], input.re2, input.ma2, input.par)

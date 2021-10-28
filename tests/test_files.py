@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from snek5000.util import files
@@ -64,7 +65,23 @@ def test_next_path_dir(tmpdir):
     tmpdir = Path(tmpdir)
 
     target = tmpdir / "test_dir"
+    path_dir = files.next_path(target, force_suffix=True)
 
-    assert str(files.next_path(target, force_suffix=True)) == str(
-        tmpdir / "test_dir_00"
-    )
+    assert str(path_dir) == str(tmpdir / "test_dir_00")
+
+
+def test_next_path_relative(tmpdir):
+    os.chdir(tmpdir)
+
+    session_00 = Path("./session_00")
+    session_01 = Path("./session_01")
+
+    assert files.next_path("session", force_suffix=True) == session_00
+
+    session_00.mkdir()
+    session_dir = files.next_path("session", force_suffix=True)
+
+    assert session_dir == session_01
+
+    if session_dir.is_absolute():
+        raise ValueError("next_path should return a relative path")
