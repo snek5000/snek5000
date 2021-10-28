@@ -45,10 +45,7 @@ User Guide
    :maxdepth: 1
    :caption: Help & Reference
 
-   roadmap
-   nek5000
-   internals
-   release
+   dev/index.rst
    CONTRIBUTING
    CHANGELOG
    AUTHORS

@@ -5,6 +5,7 @@ A bare Nek5000 solver which does not rely on any user parameters.
 
 """
 import math
+import textwrap
 from pathlib import Path
 
 from fluidsim_core.solver import SimulCore
@@ -13,6 +14,7 @@ from inflection import underscore
 from .. import logger, mpi
 from ..info import InfoSolverNek
 from ..params import Parameters
+from ..util import docstring_params
 
 
 class SimulNek(SimulCore):
@@ -47,6 +49,10 @@ class SimulNek(SimulCore):
 
     @classmethod
     def load_params_from_file(cls, path_xml=None, path_par=None):
+        """Instantiate a Parameters instance and populate it from
+        `params_simul.xml` or `case.par`
+
+        """
         if not (path_xml or path_par):
             raise IOError(
                 "Either path to params_simul.xml or case.par should be provided"
@@ -66,6 +72,12 @@ class SimulNek(SimulCore):
 
     @classmethod
     def _set_internal_sections(cls, params):
+        """Set internal attributes to mark user sections and disable sections
+        following :attr:`InfoSolverNek.par_sections_disabled`. The internal
+        attributes  ``_user`` and ``_enabled`` of :class:`Parameters` are
+        modified here..
+
+        """
         try:
             info_solver = cls.info_solver
         except AttributeError:
@@ -100,7 +112,54 @@ class SimulNek(SimulCore):
         params._set_child("nek")
         params_nek = params.nek
 
+        params_nek._set_doc(
+            textwrap.dedent(
+                """
+    The parameters in ``params.nek`` are used by Snek to produce the Nek file
+    .par, which is documented here :ref:`nek:case_files_par`.
+
+    .. note::
+
+        For these parameters, there is nearly a direct correspondance between
+        Nek5000 par file keys and Snek5000 parameter variable names, with only
+        *camelCase* <-> *snake_case* conversions. This is
+        implemented in :mod:`snek5000.params`.
+
+    The sections are:
+
+    * ``general`` (mandatory)
+    * ``problemtype``
+    * ``mesh``
+    * ``velocity``
+    * ``pressure`` (required for velocity)
+    * ``temperature``
+    * ``scalar%%``
+    * ``cvode``
+
+    When scalars are used, the keys of each scalar are defined under the section
+    ``scalar%%`` varying between ``scalar01`` and ``scalar99``.
+
+    There is a mechanism to enable/disable these sections so that they are used
+    or not to produce the .par file (see our `tutorial on writting new solvers
+    <https://snek5000.readthedocs.io/en/latest/packaging.html>`__).
+"""
+            )
+        )
+
         params._set_attribs(dict(NEW_DIR_RESULTS=True, short_name_type_run="run"))
+
+        # Referenced using Sphinx extension intersphinx. Run make intersphinx-nek in docs to see available labels
+        table_in_nek_doc = {
+            "general": "tab:generalparams",
+            "problemtype": "tab:probtypeparams",
+            "velocity": "tab:velocityparams",
+            "pressure": "tab:pressureparams",
+            "mesh": "tab:meshparams",
+            "temperature": "tab:temperatureparams",
+            "scalar01": "tab:scalarparams",
+            "cvode": "tab:cvodeparams",
+        }
+
         for section in (
             "general",
             "problemtype",
@@ -111,7 +170,13 @@ class SimulNek(SimulCore):
             "scalar01",
             "cvode",
         ):
-            params_nek._set_child(section)
+            child = params_nek._set_child(section)
+
+            child._set_doc(
+                f"""
+    See table :ref:`nek:{table_in_nek_doc[section]}`
+"""
+            )
 
         cls._set_internal_sections(params)
 
@@ -170,6 +235,12 @@ class SimulNek(SimulCore):
             )
         )
         params_nek.scalar01._set_attribs(dict(density=math.nan, diffusivity=math.nan))
+
+        # Document all params
+        for child_name in params.nek._tag_children:
+            child = getattr(params.nek, child_name)
+            child._autodoc_par(indent=4)
+
         return params
 
     def __init__(self, params):
@@ -199,3 +270,14 @@ class SimulNek(SimulCore):
 
 
 Simul = SimulNek
+Simul.__doc__ += """
+
+    Notes
+    -----
+
+    Here, only the documention for ``params.nek`` is displayed. For the
+    documentation on ``params.oper`` see :mod:`snek5000.operators`.
+
+""" + docstring_params(
+    Simul, indent_len=4
+)

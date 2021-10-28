@@ -34,15 +34,10 @@ def _check_user_param(idx):
 
 
 class Parameters(_Parameters):
-    """Container for reading, modifying and writing par_ files.
-
-    .. _par: https://nek5000.github.io/NekDoc/problem_setup/case_files.html#parameter-file-par
+    """Container for reading, modifying and writing :ref:`par files <nek:case_files_par>`.
 
     :param tag: A string representing name of case files (for example: provide
                  ``"abl"`` for files like ``abl.usr, abl.par`` etc).
-
-    .. automethod: _read_par
-
 
     :todo: Consolidate the logic of param to par file syncing in two methods!
            More tests to see if it works.
@@ -95,7 +90,9 @@ class Parameters(_Parameters):
                     attrib = underscore(option)
                     setattr(params_child, attrib, value)
 
-    def _update_par_section(self, section_name, section_dict):
+    def _update_par_section(
+        self, section_name, section_dict, has_to_prune_literals=True
+    ):
         """Updates a section of the ``par_file`` object from a dictionary."""
         par = self._par_file
 
@@ -112,7 +109,7 @@ class Parameters(_Parameters):
             if literal in literal_python2nek:
                 value = literal_python2nek[literal]
 
-            if value in literal_prune:
+            if has_to_prune_literals and value in literal_prune:
                 continue
 
             # Make everything consistent where values refer to option names
@@ -132,7 +129,7 @@ class Parameters(_Parameters):
             else:
                 par.set(section_name_par, camelcase(option), str(value))
 
-    def _sync_par(self):
+    def _sync_par(self, has_to_prune_literals=True, keep_all_sections=False):
         """Sync values in param children and attributes to ``self._par_file``
         object.
 
@@ -148,17 +145,22 @@ class Parameters(_Parameters):
 
         for child, d in data:
             section_name = child.upper()
-            self._update_par_section(section_name, d)
+            self._update_par_section(
+                section_name, d, has_to_prune_literals=has_to_prune_literals
+            )
 
-        self._tidy_par()
+        self._tidy_par(keep_all_sections)
 
-    def _tidy_par(self):
+    def _tidy_par(self, keep_all_sections=False):
         """Remove internal attributes and disabled sections from par file."""
         par = self._par_file
         for section_name in par.sections():
             par.remove_option(section_name, "_user")
 
-            enabled = par.getboolean(section_name, "_enabled")
+            if keep_all_sections:
+                enabled = True
+            else:
+                enabled = par.getboolean(section_name, "_enabled")
             if enabled:
                 par.remove_option(section_name, "_enabled")
             else:
@@ -178,7 +180,7 @@ class Parameters(_Parameters):
 
     def _autodoc_par(self, indent=0):
         """Autodoc a code block with ``ini`` syntax and set docstring."""
-        self._sync_par()
+        self._sync_par(has_to_prune_literals=False, keep_all_sections=True)
         docstring = "\n.. code-block:: ini\n\n"
         with StringIO() as output:
             self._par_file.write(output)
