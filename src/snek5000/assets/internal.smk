@@ -41,11 +41,12 @@ rule generate_map:
         genmap=Nek5000("bin/genmap"),
     output:
         f"{config['CASE']}.ma2",
-    params:
-        tolerance=0.01,
+    resources:
+        tolerance="0.01",
     shell:
-        'echo "{config[CASE]}\n{params.tolerance}" | '
-        "{input.genmap}"
+        r'printf "{config[CASE]}\n{resources.tolerance}\n" '
+        "  | {input.genmap} "
+        "  | (head -n 20; tail -n 10) "
 
 
 # generate makefile
