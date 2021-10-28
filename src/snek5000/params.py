@@ -134,7 +134,7 @@ class Parameters(_Parameters):
             else:
                 par.set(section_name_par, camelcase(option), str(value))
 
-    def _sync_par(self, has_to_prune_literals=True):
+    def _sync_par(self, has_to_prune_literals=True, keep_all_sections=False):
         """Sync values in param children and attributes to ``self._par_file``
         object.
 
@@ -150,17 +150,22 @@ class Parameters(_Parameters):
 
         for child, d in data:
             section_name = child.upper()
-            self._update_par_section(section_name, d, has_to_prune_literals=has_to_prune_literals)
+            self._update_par_section(
+                section_name, d, has_to_prune_literals=has_to_prune_literals
+            )
 
-        self._tidy_par()
+        self._tidy_par(keep_all_sections)
 
-    def _tidy_par(self):
+    def _tidy_par(self, keep_all_sections=False):
         """Remove internal attributes and disabled sections from par file."""
         par = self._par_file
         for section_name in par.sections():
             par.remove_option(section_name, "_user")
 
-            enabled = par.getboolean(section_name, "_enabled")
+            if keep_all_sections:
+                enabled = True
+            else:
+                enabled = par.getboolean(section_name, "_enabled")
             if enabled:
                 par.remove_option(section_name, "_enabled")
             else:
@@ -180,7 +185,7 @@ class Parameters(_Parameters):
 
     def _autodoc_par(self, indent=0):
         """Autodoc a code block with ``ini`` syntax and set docstring."""
-        self._sync_par(has_to_prune_literals=False)
+        self._sync_par(has_to_prune_literals=False, keep_all_sections=True)
         docstring = "\n.. code-block:: ini\n\n"
         with StringIO() as output:
             self._par_file.write(output)
