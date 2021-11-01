@@ -141,7 +141,6 @@ def sim_data(tmpdir_factory):
 makefile
 makefile_usr.inc
 nek5000
-phill0.f00001
 phill.box
 phill.f
 phill.log
@@ -149,16 +148,30 @@ phill.ma2
 phill.par
 phill.re2
 phill.usr
-rs6phill0.f00001
-rs6phill0.f00002
-rs6phill0.f00003
 SESSION.NAME
 SIZE
 Snakefile""".splitlines()
 
+    session_files = """
+phill0.f00001
+rs6phill0.f00001
+rs6phill0.f00002
+rs6phill0.f00003
+""".splitlines()
+
     path_run = Path(tmpdir_factory.mktemp("phill_sim_data"))
+
+    from snek5000.output import _make_path_session
+
+    session_id = 0
+    path_session = _make_path_session(path_run, session_id)
+    path_session.mkdir()
+
     for f in files:
         (path_run / f).touch()
+
+    for f in session_files:
+        (path_session / f).touch()
 
     from phill.solver import Simul
 
@@ -167,6 +180,8 @@ Snakefile""".splitlines()
 
     info._save_as_xml(path_run / "info_solver.xml")
     params._set_attrib("path_run", path_run)
+    params.output._set_attrib("session_id", session_id)
+    params.output._set_attrib("path_session", path_session)
     params._save_as_xml(path_run / "params_simul.xml")
 
     return path_run

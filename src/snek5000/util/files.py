@@ -6,7 +6,7 @@ from .. import logger
 from ..solvers import load_params
 
 
-def next_path(old_path, force_suffix=False):
+def next_path(old_path, force_suffix=False, return_suffix=False):
     """Generate a new path with an integer suffix
 
     Parameters
@@ -18,8 +18,14 @@ def next_path(old_path, force_suffix=False):
         If true, will not check if the `old_path` can be used and adds
         a suffix in the end.
 
+    return_suffix:
+        If true, returns the integer suffix along with the path/
+
     Returns
     -------
+    (i, new_path): tuple[int, Path]
+        If `return_suffix` is `True`.
+
     new_path: Path
         A path (with an integer suffix) which does not yet exist in the
         filesystem.
@@ -71,7 +77,7 @@ def next_path(old_path, force_suffix=False):
 
     logger.debug(f"Next path available: {new_path}")
 
-    return new_path
+    return (i, new_path) if return_suffix else new_path
 
 
 def create_session(case, re2, ma2, par):

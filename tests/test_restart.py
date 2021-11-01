@@ -1,6 +1,7 @@
 import pymech as pm
 import pytest
 
+from snek5000.output import _make_path_session
 from snek5000.util.restart import SnekRestartError, get_status, load_for_restart
 
 
@@ -21,7 +22,8 @@ def test_locked(sim_data):
 
 def test_ok(sim_data):
     (sim_data / ".snakemake").mkdir()
-    [file.unlink() for file in sim_data.glob("phill*0.f?????")]
+    session = _make_path_session(sim_data, 0)
+    [file.unlink() for file in session.glob("phill*0.f?????")]
 
     assert get_status(sim_data).code == 200
 
@@ -41,7 +43,8 @@ def test_not_found(sim_data):
 
 def test_partial_content(sim_data):
     (sim_data / ".snakemake").mkdir()
-    [restart.unlink() for restart in sim_data.glob("rs6*")]
+    session = _make_path_session(sim_data, 0)
+    [restart.unlink() for restart in session.glob("rs6*")]
 
     assert get_status(sim_data).code == 206
 

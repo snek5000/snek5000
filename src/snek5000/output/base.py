@@ -20,6 +20,8 @@ from snek5000.solvers import get_solver_package, is_package
 from snek5000.util import docstring_params
 from snek5000.util.smake import append_debug_flags
 
+from . import _make_path_session
+
 
 class Output(OutputCore):
     """Container and methods for getting paths of and copying case files.
@@ -327,7 +329,7 @@ class Output(OutputCore):
                 "Attribute sim.output.path_session is set as sim.output.path_run."
             )
         else:
-            path_session = Path(self.path_run) / f"session_{session_id:02d}"
+            path_session = _make_path_session(self.path_run, session_id)
 
         self.params._set_attrib("path_session", path_session)
 

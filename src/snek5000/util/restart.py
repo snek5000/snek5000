@@ -10,7 +10,9 @@ from warnings import warn
 from fluiddyn.io import FLUIDSIM_PATH
 
 from ..log import logger
+from ..output import _make_path_session
 from ..solvers import get_solver_short_name, import_cls_simul, load_params
+from .files import next_path
 
 
 class SnekRestartError(Exception):
@@ -61,7 +63,7 @@ class SimStatus(Enum):
         self.message = message  #: helpful description
 
 
-def get_status(path_dir, verbose=False):
+def get_status(path_dir, session_id=None, verbose=False):
     """Get status of a simulation run by verifying its contents. It checks if:
 
     - snakemake was ever executed
@@ -74,6 +76,8 @@ def get_status(path_dir, verbose=False):
     ----------
     path : str or path-like
         Path to an existing simulation directory
+    session_id : int
+        Integer suffix of the session directory
     verbose : bool
         Print out the path and its contents
 
@@ -84,6 +88,11 @@ def get_status(path_dir, verbose=False):
 
     """
     path = Path(path_dir)
+    if session_id:
+        path_session = _make_path_session(path, session_id)
+    else:
+        path_session = Path(load_params(path_dir).output.path_session)
+
     locks_dir = path / ".snakemake" / "locks"
     contents = os.listdir(path)
 
@@ -100,8 +109,8 @@ def get_status(path_dir, verbose=False):
     if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
         return SimStatus.NOT_FOUND
 
-    checkpoints = set(path.glob("rs6*0.f?????"))
-    field_files = set(path.glob("*0.f?????")) - checkpoints
+    checkpoints = set(path_session.glob("rs6*0.f?????"))
+    field_files = set(path_session.glob("*0.f?????")) - checkpoints
 
     if checkpoints and field_files:
         return SimStatus.RESET_CONTENT
@@ -172,11 +181,13 @@ def load_for_restart(
 
     """
     path = Path(path_dir)
+
     if not path.exists():
         logger.info("Trying to open the path relative to $FLUIDSIM_PATH")
         path = Path(FLUIDSIM_PATH) / path_dir
 
-    status = get_status(path)
+    params = load_params(path)
+    status = get_status(path, params.output.session_id)
 
     if verify_contents:
         if status.code >= 400:
@@ -192,17 +203,30 @@ def load_for_restart(
     except ImportError:
         raise ImportError(f"Cannot import Simul class of solver {short_name}")
 
-    params = load_params(path)
-
     # Set restart file
     if use_start_from and use_checkpoint:
         raise SnekRestartError(
             "Options use_start_from and use_checkpoint are mutually exclusive. "
             "Use only one option at a time."
         )
-    elif use_start_from:
-        if (path / use_start_from).exists():
+    else:
+        old_path_session = Path(params.output.path_session)
+        session_id, new_path_session = next_path(
+            path / "session", force_suffix=True, return_suffix=True
+        )
+        params.output.session_id = session_id
+        params.output.path_session = new_path_session
+
+    def make_relative_symlink(file_name):
+        src = new_path_session / file_name
+        dest = f"../{old_path_session.name}/{file_name}"
+        logger.debug(f"Symlinking {src} -> {dest}")
+        src.symlink_to(dest)
+
+    if use_start_from:
+        if (old_path_session / use_start_from).exists():
             params.nek.general.start_from = use_start_from
+            make_relative_symlink(use_start_from)
         else:
             raise SnekRestartError(f"Restart file {use_start_from} not found")
     elif use_checkpoint:
@@ -212,6 +236,9 @@ def load_for_restart(
         ):
             params.nek.chkpoint.chkp_fnumber = use_checkpoint
             params.nek.chkpoint.read_chkpt = True
+
+            for restart_file in old_path_session.glob(f"rs6{short_name}0.f?????"):
+                make_relative_symlink(restart_file.name)
         else:
             raise SnekRestartError(
                 f"Restart checkpoint {use_checkpoint} is invalid / does not exist"
