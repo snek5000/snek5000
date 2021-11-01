@@ -58,14 +58,14 @@ class SimulNek(SimulCore):
                 "Either path to params_simul.xml or case.par should be provided"
             )
 
-        params = Parameters(tag="params")
         if path_xml:
+            params = Parameters(tag="params")
             params._load_from_xml_file(str(path_xml))
         else:
-            # FIXME: or remove, because it no longer works
             logger.warn(
                 "Loading from a par file will not have full details of the simulation"
             )
+            params = cls.create_default_params()
             params.nek._read_par(path_par)
 
         cls._set_internal_sections(params)

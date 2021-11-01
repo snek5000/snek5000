@@ -10,7 +10,7 @@ from warnings import warn
 from fluiddyn.io import FLUIDSIM_PATH
 
 from ..log import logger
-from ..solvers import get_solver_short_name, import_cls_simul
+from ..solvers import get_solver_short_name, import_cls_simul, load_params
 
 
 class SnekRestartError(Exception):
@@ -171,7 +171,6 @@ def load_for_restart(
         Possibility to make a new session
 
     """
-    contents = os.listdir(path_dir)
     path = Path(path_dir)
     if not path.exists():
         logger.info("Trying to open the path relative to $FLUIDSIM_PATH")
@@ -193,16 +192,7 @@ def load_for_restart(
     except ImportError:
         raise ImportError(f"Cannot import Simul class of solver {short_name}")
 
-    if "params_simul.xml" in contents:
-        params = Simul.load_params_from_file(path_xml=str(path / "params_simul.xml"))
-    else:
-        # Trying to read the par file
-        logger.warning(
-            f"No params_simul.xml found... Attempting to read {short_name}.par"
-        )
-
-        params = Simul.create_default_params()
-        params.nek._read_par(path / f"{short_name}.par")
+    params = load_params(path)
 
     # Set restart file
     if use_start_from and use_checkpoint:
