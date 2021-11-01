@@ -314,6 +314,9 @@ class Output(OutputCore):
         path_session: path-like
 
         """
+        if not self.params:
+            return None
+
         try:
             session_id = self.params.session_id
         except AttributeError:
