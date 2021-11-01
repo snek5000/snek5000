@@ -24,17 +24,37 @@ from snek5000.util.smake import append_debug_flags
 class Output(OutputCore):
     """Container and methods for getting paths of and copying case files.
 
-    Some important methods and attributes of this class:
+    Some important methods:
 
     - :meth:`snek5000.output.base.Output.get_root` points to the
       directory containing the case files.
     - :meth:`snek5000.output.base.Output.get_paths` populates a list of
       files to copy.
-    - attribute ``name_solver`` initialized from ``sim.info.solver.short_name``
-      used to discover source code files, such as usr, box, par files. The
-      value of ``name_solver`` is also used to identify the entrypoint pointing
-      to the solver module. Have a look at the :ref:`packaging tutorial
-      <packaging>`.
+
+    and important attributes:
+
+    .. autoattribute:: name_solver
+
+        Initialized from ``sim.info.solver.short_name`` used to discover source
+        code files, such as usr, box, par files. The value of ``name_solver``
+        i s also used to identify the entrypoint pointing to the solver module.
+        Have a look at the :ref:`packaging tutorial <packaging>`.
+
+    .. autoattribute:: package
+
+        Initialized using :func:`snek5000.solvers.get_solver_package` and
+        :attr:`name_solver`, points to the path to the package to discover
+        source code files.
+
+    .. autoattribute:: path_run
+
+        Path to the generated simulation directory.
+
+    .. autoattribute:: path_session
+
+        Path to subdirectory under :attr:`path_run` which would contain the
+        field files upon execution. This path would be written into the
+        `SESSION.NAME` file.
 
     """
 
@@ -111,9 +131,15 @@ class Output(OutputCore):
     - ``sub_directory``: str (default: "") A name of a sub-directory (relative
       to $FLUIDDYN_PATH_SCRATCH) wherein the directory of the simulation
       (``path_run``) is saved.
-    - ``session_id``: int (default: 0) Determines the sub-directory (relative
-      to ``path_run``) in which the field files would be generated during
+    - ``session_id``: int (default: 0) Determines the sub-directory,
+      ``path_session`` in which the field files would be generated during
       runtime. The session directory takes the form `session_{session_id}`.
+
+    .. note::
+
+        In short, the field files would be generated under
+        ``$FLUIDDYN_PATH_SCRATCH/<path_run>/<path_session>``
+
 """
             )
         )
@@ -275,6 +301,34 @@ class Output(OutputCore):
             logger.warning(
                 "Initializing Output class without sim or params might lead to errors."
             )
+
+        self.path_session = self._init_path_session()
+
+    def _init_path_session(self):
+        """Initialize :attr:`path_session` and ``params.output.path_session``
+        from ``params.output.session_id``. Unlike :meth:`_init_path_run`, the
+        directory will not be created.
+
+        Returns
+        -------
+        path_session: path-like
+
+        """
+        try:
+            session_id = self.params.session_id
+        except AttributeError:
+            # For compatibility while loading old simulations
+            path_session = Path(self.path_run)
+            logger.warning(
+                "Parameter params.output.session_id is undefined. "
+                "Attribute sim.output.path_session is set as sim.output.path_run."
+            )
+        else:
+            path_session = Path(self.path_run) / f"session_{session_id:02d}"
+
+        self.params._set_attrib("path_session", path_session)
+
+        return path_session
 
     def _init_sim_repr_maker(self):
         """Adds mesh description to name of the simulation. Called by the
