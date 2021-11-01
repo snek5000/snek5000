@@ -60,8 +60,9 @@ class SimulNek(SimulCore):
 
         params = Parameters(tag="params")
         if path_xml:
-            params._load_from_xml_file(path_xml)
+            params._load_from_xml_file(str(path_xml))
         else:
+            # FIXME: or remove, because it no longer works
             logger.warn(
                 "Loading from a par file will not have full details of the simulation"
             )

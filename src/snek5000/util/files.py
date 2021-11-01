@@ -3,6 +3,7 @@ from pathlib import Path
 from shutil import copy2
 
 from .. import logger
+from ..solvers import load_params
 
 
 def next_path(old_path, force_suffix=False):
@@ -74,7 +75,7 @@ def next_path(old_path, force_suffix=False):
 
 
 def create_session(case, re2, ma2, par):
-    """Creates a new session and write the path to a `SESSION.NAME` file.
+    """Creates a session and write the path to a `SESSION.NAME` file.
     Then, symlinks re2 and ma2 files, and copies the par file.
 
     Parameters
@@ -88,14 +89,10 @@ def create_session(case, re2, ma2, par):
     par : str
         Parameter file name
 
-    .. todo::
-
-        Adapt load_for_restart function
-
     """
-    session_dir = next_path("session", force_suffix=True)
+    session_dir = load_params().output.path_session
 
-    session_dir.mkdir()
+    session_dir.mkdir(exists_ok=True)
 
     with open("SESSION.NAME", "w") as session_name:
         # use relative paths to avoid 132 character limit in Nek5000

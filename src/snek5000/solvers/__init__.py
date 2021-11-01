@@ -10,6 +10,7 @@ Solver framework
 """
 import importlib
 from functools import partial
+from pathlib import Path
 from pkgutil import ModuleInfo
 from types import ModuleType
 
@@ -99,3 +100,25 @@ def get_solver_short_name(path_dir):
         short_name = path_dir.absolute().name.split("_")[0]
 
     return short_name
+
+
+def load_params(path_dir="."):
+    """Load a :class:`snek5000.params.Parameters` instance from `path_dir`.
+
+    Parameters
+    ----------
+    path_dir : str or path-like
+        Path to a simulation directory.
+
+    Returns
+    -------
+    params: :class:`snek5000.params.Parameters`
+
+    """
+    path_dir = Path(path_dir)
+    short_name = get_solver_short_name(path_dir)
+    Simul = import_cls_simul(short_name)
+
+    return Simul.load_params_from_file(
+        path_xml=path_dir / "params_simul.xml", path_par=path_dir / f"{short_name}.par"
+    )
