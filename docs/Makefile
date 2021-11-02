@@ -35,7 +35,7 @@ intersphinx-jinja2:
 	@python -msphinx.ext.intersphinx https://jinja.palletsprojects.com/en/2.10.x/objects.inv
 
 autobuild:
-	@sphinx-autobuild --watch ../src --ignore _build/jupyter_execute "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	@sphinx-autobuild --watch ../src --re-ignore '_build\/.*' "$(SOURCEDIR)" "$(BUILDDIR)/html"
 
 cleanall: clean
 	@echo "Removing everything under '_generated'..."
