@@ -36,9 +36,9 @@ class SimulKTH(SimulNek):
 
     InfoSolver = InfoSolverKTH
 
-    @staticmethod
-    def _complete_params_with_default(params):
-        params = SimulNek._complete_params_with_default(params)
+    @classmethod
+    def _complete_params_with_default(cls, params):
+        params = super()._complete_params_with_default(params)
 
         for section in ("runpar", "monitor", "chkpoint", "stat"):
             params.nek._set_child(section)
