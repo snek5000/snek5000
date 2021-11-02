@@ -108,6 +108,6 @@ class PrintStdOut:
     def __call__(self, *args):
         """Print to stdout and log file simultaneously."""
         mpi.printby0(*args)
-        if mpi.rank == 0:
+        if mpi.rank == 0 and self.output._has_to_save:
             with self.file.open("a") as f:
                 f.write(" ".join(str(a) for a in args) + "\n")
