@@ -13,6 +13,8 @@ from pathlib import Path
 from socket import gethostname
 
 from fluidsim_core.output import OutputCore
+from fluidsim_core.params import iter_complete_params
+
 from inflection import underscore
 
 from snek5000 import __version__, get_asset, logger, mpi, resources
@@ -39,7 +41,7 @@ class Output(OutputCore):
 
         Initialized from ``sim.info.solver.short_name`` used to discover source
         code files, such as usr, box, par files. The value of ``name_solver``
-        i s also used to identify the entrypoint pointing to the solver module.
+        is also used to identify the entrypoint pointing to the solver module.
         Have a look at the :ref:`packaging tutorial <packaging>`.
 
     .. autoattribute:: package
@@ -115,6 +117,13 @@ class Output(OutputCore):
             dict(module_name="snek5000.output.phys_fields", class_name="PhysFields"),
         )
 
+        classes._set_child(
+            "HistoryPoints",
+            dict(
+                module_name="snek5000.output.history_points", class_name="HistoryPoints"
+            ),
+        )
+
     @staticmethod
     def _complete_params_with_default(params, info_solver):
         """This static method is used to complete the *params* container."""
@@ -145,6 +154,9 @@ class Output(OutputCore):
 """
             )
         )
+
+        dict_classes = info_solver.classes.Output.import_classes()
+        iter_complete_params(params, info_solver, dict_classes.values())
 
     @classmethod
     def get_root(cls):
@@ -284,17 +296,8 @@ class Output(OutputCore):
         if sim:
             self.oper = sim.oper
             self.params = sim.params.output
-
             # Same as package name __name__
             super().__init__(sim)
-
-            dict_classes = sim.info.solver.classes.Output.import_classes()
-
-            # initialize objects
-            for cls_name, Class in dict_classes.items():
-                # only initialize if Class is not the Output class
-                if not isinstance(self, Class):
-                    setattr(self, underscore(cls_name), Class(self))
         elif params:
             # At least initialize params
             self.params = params.output
@@ -305,6 +308,14 @@ class Output(OutputCore):
             )
 
         self.path_session = self._init_path_session()
+
+        if sim:
+            # initialize objects
+            dict_classes = sim.info.solver.classes.Output.import_classes()
+            for cls_name, Class in dict_classes.items():
+                # only initialize if Class is not the Output class
+                if not isinstance(self, Class):
+                    setattr(self, underscore(cls_name), Class(self))
 
     def _init_path_session(self):
         """Initialize :attr:`path_session` and ``params.output.path_session``

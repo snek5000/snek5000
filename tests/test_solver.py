@@ -40,3 +40,36 @@ def test_output(sim_data):
         sim.output.print_stdout.file.exists()
     ), "Cannot find .log file for print_stdout"
     assert sim.output.phys_fields.path_run.exists(), "Cannot initialize phys_fields"
+
+
+def test_init_output():
+    from phill.solver import Simul
+
+    params = Simul.create_default_params()
+
+    # init history_points
+    coords = params.output.history_points.coords = [
+        (0.5, 0.2, 0.5),
+        (0.5, 0.8, 0.5),
+    ]
+    params.oper.max.hist = len(coords) + 1
+
+    sim = Simul(params)
+
+    # tests history_points
+    assert sim.output.history_points.path_file.exists()
+    coords, df = sim.output.history_points.load()
+
+    assert len(df) == 0
+    assert tuple(coords.iloc[-1]) == params.output.history_points.coords[-1]
+
+    with open(sim.output.history_points.path_file, "a") as file:
+        file.write(
+            "\n".join(
+                ["0.0 2.0 2.0 2.0 2.0"] * 2
+                + ["0.5 2.0 2.0 2.0 2.0"] * 2
+                + ["1.0 2.0 2.0 2.0 2.0\n2.0 2.0\n"]
+            )
+        )
+
+    sim.output.history_points.plot()
