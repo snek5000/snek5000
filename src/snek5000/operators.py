@@ -136,7 +136,8 @@ Parameters for boundary conditions:
 - ``boundary_scalars``: list[str]
     :ref:`Temperature and passive scalar boundary conditions <nek:tab:userbct>`
 
-The following table matches counterpart of mandatory ``SIZE`` variables.
+The following table matches counterpart of mandatory :ref:`SIZE
+<nek:case_files_size>` variables.
 
 ==========  ===================   =============================================
 SIZE        params.oper           Comment
@@ -169,9 +170,10 @@ SIZE        params.oper           Comment
         params.oper._set_child("max", attribs=attribs)
         params.oper.max._set_doc(
             """
-The following table matches counterpart of optional ``SIZE`` variables. These
-refer to upper bound number of `something`. The parameters are considered
-"optional" and would be ignored with the default values.
+The following table matches counterpart of optional :ref:`SIZE
+<nek:case_files_size>` variables. These refer to upper bound number of
+`something`. The parameters are considered "optional" and would be ignored with
+the default values.
 
 ==============  ===================   =========================================
 SIZE            params.oper.max       Comment
