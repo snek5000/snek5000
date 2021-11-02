@@ -55,6 +55,11 @@ class InfoSolverNek(InfoSolverCore):
             attribs={"module_name": "snek5000.operators", "class_name": "Operators"},
         )
 
+        self.classes._set_child(
+            "Reader",
+            attribs={"module_name": "snek5000.reader.base", "class_name": "ReaderBase"},
+        )
+
 
 class InfoSolverMake(InfoSolverNek):
     """Contain the information on a solver which uses Snakemake."""

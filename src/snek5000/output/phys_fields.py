@@ -14,13 +14,12 @@ class PhysFields:
         params.output._set_child("phys_fields", attribs={"reader": "pymech"})
 
     def __init__(self, output=None):
-        if output:
-            self.sim = output.sim
-            self.output = output
+        self.output = output
 
     @cached_property
     def reader(self):
-        pass
+        #  tag = self.params.phys_fields
+        self.sim.info_solver.reader.classes
         #  reader_cls = ...
         #  reader_backend = ...
         #  return reader_backend

@@ -2,16 +2,18 @@ from functools import cached_property
 from pathlib import Path
 
 import numpy as np
-import paraview.simple as pv
-from paraview.simple import *  # noqa: F401, F403
+
+from .. import logger
 
 try:
+    import paraview.simple as pv
+    from paraview.simple import *  # noqa: F401, F403
+except ImportError:
+    logger.debug("Paraview Python module cannot be imported")
+else:
+    # Continue importing VTK
     from vtk.numpy_interface import dataset_adapter as dsa  # algorithms as algs,
     from vtk.util.numpy_support import vtk_to_numpy
-except ImportError as e:
-    print("Ensure paraview.simple was imported before vtk!")
-    print("Failed to import algs, dsa, vtk_to_numpy")
-    print(e)
 
 
 #  import pyvista
@@ -24,6 +26,8 @@ except ImportError as e:
 
 class ReaderParaview:
     """A user-friendly API for Paraview scripting with 'VisItNek5000Reader'."""
+
+    tag = "paraview"
 
     def __init__(
         self,
@@ -169,6 +173,8 @@ class ReaderParaview:
 
 
 class ReaderParaviewStats(ReaderParaview):
+    tag = "paraview_stats"
+
     def __init__(
         self,
         filename="stsabl.nek5000",
