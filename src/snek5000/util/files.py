@@ -71,9 +71,9 @@ def next_path(old_path, force_suffix=False, return_suffix=False):
     new_path = int_suffix(old_path, i)
 
     while new_path.exists():
-        logger.debug(f"Checking if path exists: {new_path}")
-        new_path = int_suffix(old_path, i)
+        logger.debug(f"Path exists: {new_path}")
         i += 1
+        new_path = int_suffix(old_path, i)
 
     logger.debug(f"Next path available: {new_path}")
 
@@ -96,13 +96,14 @@ def create_session(case, re2, ma2, par):
         Parameter file name
 
     """
-    session_dir = load_params().output.path_session
+    params = load_params()
+    session_dir = Path(params.output.path_session).relative_to(params.path_run)
 
-    session_dir.mkdir(exists_ok=True)
+    session_dir.mkdir(exist_ok=True)
 
     with open("SESSION.NAME", "w") as session_name:
         # use relative paths to avoid 132 character limit in Nek5000
-        session_name.write(f"{case}\n" f"./{session_dir}")
+        session_name.write(f"{case}\n./{session_dir}\n")
 
     for file in (re2, ma2):
         # use relative symlinks

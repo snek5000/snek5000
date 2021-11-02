@@ -79,8 +79,11 @@ def test_next_path_relative(tmpdir):
     assert files.next_path("session", force_suffix=True) == session_00
 
     session_00.mkdir()
-    session_dir = files.next_path("session", force_suffix=True)
+    int_suffix, session_dir = files.next_path(
+        "session", force_suffix=True, return_suffix=True
+    )
 
+    assert int_suffix == 1
     assert session_dir == session_01
 
     if session_dir.is_absolute():

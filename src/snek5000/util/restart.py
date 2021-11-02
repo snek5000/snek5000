@@ -221,6 +221,8 @@ def load_for_restart(
         params.output.session_id = session_id
         params.output.path_session = new_path_session
 
+        new_path_session.mkdir()
+
     def make_relative_symlink(file_name):
         src = new_path_session / file_name
         dest = f"../{old_path_session.name}/{file_name}"

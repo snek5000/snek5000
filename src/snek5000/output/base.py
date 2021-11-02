@@ -605,11 +605,11 @@ class Output(OutputCore):
 
         """
         case = self.name_solver
-        path_run = self.sim.path_run
+        path_session = self.sim.output.path_session
 
         if index > 0:
             pattern = f"{prefix}{case}0.f{index:05d}"
-            file = path_run / pattern
+            file = path_session / pattern
             if file.exists():
                 return file
             else:
@@ -620,9 +620,11 @@ class Output(OutputCore):
 
         pattern = f"{prefix}{case}0.f?????"
         try:
-            file = sorted(path_run.glob(pattern))[index]
+            file = sorted(path_session.glob(pattern))[index]
         except IndexError:
-            raise FileNotFoundError(f"Cannot index {index} in {path_run}/{pattern} ")
+            raise FileNotFoundError(
+                f"Cannot index {index} in {path_session}/{pattern} "
+            )
         else:
             return Path(file)
 
@@ -660,9 +662,21 @@ class Output(OutputCore):
                 with open(par_file, "x") as fp:
                     params.nek._write_par(fp)
             elif self._has_to_save:
-                logger.info(f"Updating {par_file}")
+                logger.info(f"Updating {par_file}, params_simul.xml")
                 with open(par_file, "w") as fp:
                     params.nek._write_par(fp)
+
+                # Update params_simul.xml here, since FluidSim Core will only
+                # do it if NEW_DIR_RESULTS = True
+                params_xml_path = self.path_run / "params_simul.xml"
+                params_xml_path.unlink()
+                comment = f"""\
+This file should not be modified (except for adding xml comments).
+Created by the Python programs:
+snek5000 {__version__}
+"""
+
+                params._save_as_xml(path_file=params_xml_path, comment=comment)
 
         super()._save_info_solver_params_xml(replace, comment=f"snek5000 {__version__}")
 
