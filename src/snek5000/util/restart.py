@@ -122,7 +122,7 @@ def get_status(path_dir, session_id=None, verbose=False):
 
 
 def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
-    """Use :func:`load_for_restart()` instead.
+    """Load only params for a restart. Use :func:`load_for_restart()` instead.
 
     .. deprecated: 0.8.0b0
 
@@ -175,10 +175,6 @@ def load_for_restart(
     - Modifies parameters (in memory, but does not write into the filesystem,
       yet) ``start_from`` (Nek5000) or checkpoint module (requires KTH
       framework) with appropriate ``chkp_fnumber`` to restart from.
-
-    .. todo::
-
-        Possibility to make a new session
 
     """
     path = Path(path_dir)
@@ -250,6 +246,11 @@ def load_for_restart(
             raise SnekRestartError(
                 f"Restart checkpoint {use_checkpoint} is invalid / does not exist"
             )
+    else:
+        logger.info(
+            "No restart files were requested. "
+            "This would result in a fresh simulation in a new session."
+        )
 
     if hasattr(params, "output") and hasattr(params.output, "HAS_TO_SAVE"):
         params.output.HAS_TO_SAVE = True
