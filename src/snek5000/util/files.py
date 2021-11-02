@@ -3,7 +3,7 @@ from pathlib import Path
 from shutil import copy2
 
 from .. import logger
-from ..solvers import load_params
+from ..params import load_params
 
 
 def next_path(old_path, force_suffix=False, return_suffix=False):

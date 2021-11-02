@@ -16,13 +16,14 @@ def pytest_configure(config):
 
     try:
         import rich  # noqa
+
+        import snek5000.log
+
     except ImportError:
         pass
     else:
         # Bug while using rich + pytest: stderr / stdout is too short
         # Inspired from: https://github.com/willmcgugan/rich/issues/1425
-        import snek5000.log
-
         snek5000.log.logger.removeHandler(snek5000.log.handler)
 
         handler = snek5000.log.create_handler(width=shutil.get_terminal_size().columns)

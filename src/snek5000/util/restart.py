@@ -11,7 +11,8 @@ from fluiddyn.io import FLUIDSIM_PATH
 
 from ..log import logger
 from ..output import _make_path_session
-from ..solvers import get_solver_short_name, import_cls_simul, load_params
+from ..params import load_params
+from ..solvers import get_solver_short_name, import_cls_simul
 from .files import next_path
 
 

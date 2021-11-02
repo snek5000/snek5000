@@ -13,6 +13,8 @@ from sys import stdout
 from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
 
+from .solvers import get_solver_short_name, import_cls_simul
+
 literal_python2nek = {
     nan: "<real>",
     "nan": "nan",
@@ -31,6 +33,28 @@ def camelcase(value):
 def _check_user_param(idx):
     if idx > 20:
         raise ValueError(f"userParam {idx} > 20")
+
+
+def load_params(path_dir="."):
+    """Load a :class:`snek5000.params.Parameters` instance from `path_dir`.
+
+    Parameters
+    ----------
+    path_dir : str or path-like
+        Path to a simulation directory.
+
+    Returns
+    -------
+    params: :class:`snek5000.params.Parameters`
+
+    """
+    path_dir = Path(path_dir)
+    short_name = get_solver_short_name(path_dir)
+    Simul = import_cls_simul(short_name)
+
+    return Simul.load_params_from_file(
+        path_xml=path_dir / "params_simul.xml", path_par=path_dir / f"{short_name}.par"
+    )
 
 
 class Parameters(_Parameters):

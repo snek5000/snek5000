@@ -2,7 +2,7 @@ import pymech as pm
 import pytest
 
 from snek5000.output import _make_path_session
-from snek5000.solvers import load_params
+from snek5000.params import load_params
 from snek5000.util.restart import SnekRestartError, get_status, load_for_restart
 
 
