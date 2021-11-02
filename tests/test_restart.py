@@ -49,8 +49,10 @@ def test_partial_content(sim_data):
     assert get_status(sim_data).code == 206
 
 
-def test_restart_error(tmpdir):
-    with pytest.raises(SnekRestartError, match="425: Too Early"):
+@pytest.mark.parametrize("prefix_dir", ("phill_", "undefined_solver"))
+def test_restart_error(tmpdir_factory, prefix_dir):
+    tmpdir = tmpdir_factory.mktemp(prefix_dir)
+    with pytest.raises(SnekRestartError):
         load_for_restart(tmpdir)
 
 

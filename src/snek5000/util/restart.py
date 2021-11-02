@@ -186,7 +186,11 @@ def load_for_restart(
         logger.info("Trying to open the path relative to $FLUIDSIM_PATH")
         path = Path(FLUIDSIM_PATH) / path_dir
 
-    params = load_params(path)
+    try:
+        params = load_params(path)
+    except (ValueError, OSError) as err:
+        raise SnekRestartError(err)
+
     status = get_status(path, params.output.session_id)
 
     if verify_contents:
