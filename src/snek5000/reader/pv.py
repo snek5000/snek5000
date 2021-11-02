@@ -1,8 +1,4 @@
-try:
-    from functools import cached_property
-except ImportError:
-    from cached_property import cached_property
-
+from functools import cached_property
 from pathlib import Path
 
 import numpy as np
@@ -10,10 +6,7 @@ import paraview.simple as pv
 from paraview.simple import *  # noqa: F401, F403
 
 try:
-    from vtk.numpy_interface import (
-        # algorithms as algs,
-        dataset_adapter as dsa,
-    )
+    from vtk.numpy_interface import dataset_adapter as dsa  # algorithms as algs,
     from vtk.util.numpy_support import vtk_to_numpy
 except ImportError as e:
     print("Ensure paraview.simple was imported before vtk!")
@@ -29,13 +22,19 @@ except ImportError as e:
 # pv._DisableFirstRenderCameraReset()
 
 
-class NekReader:
+class ReaderParaview:
     """A user-friendly API for Paraview scripting with 'VisItNek5000Reader'."""
 
     def __init__(
         self,
         filename="abl.nek5000",
-        arrays=("pressure", "velocity_mag", "x_velocity", "y_velocity", "z_velocity",),
+        arrays=(
+            "pressure",
+            "velocity_mag",
+            "x_velocity",
+            "y_velocity",
+            "z_velocity",
+        ),
     ):
         self.filename = filename
         assert Path(filename).exists()
@@ -165,11 +164,11 @@ class NekReader:
 
         # pv.SetActiveSource(slice1)
 
-        return NekSlice(slice1)
+        return _ParaviewSlice(slice1)
         # return pyvista.wrap(dobj)
 
 
-class StatsReader(NekReader):
+class ReaderParaviewStats(ReaderParaview):
     def __init__(
         self,
         filename="stsabl.nek5000",
@@ -184,7 +183,7 @@ class StatsReader(NekReader):
         return calculator1
 
 
-class NekSlice:
+class _ParaviewSlice:
     """Convenience wrapper to easily access arrays stored in a VTK dataset."""
 
     def __init__(self, slice1):
@@ -335,7 +334,10 @@ class NekSlice:
 
 if __name__ in ("__main__", "__vtkconsole__"):
     pv._DisableFirstRenderCameraReset()
-    reader = NekReader(filename="abl.nek5000", arrays=("velocity", "velocity_mag"),)
+    reader = ReaderParaview(
+        filename="abl.nek5000",
+        arrays=("velocity", "velocity_mag"),
+    )
 
     print(reader.time)
     # next(reader)
