@@ -31,7 +31,7 @@ Security in case of vulnerabilities.
 
 ### Added
 
-- {func}`snek5000.util.restart.load_for_restart` function
+- Functions {func}`snek5000.util.restart.load_for_restart`, {func}`snek5000.params.load_params`
 - {mod}`snek5000.util.files`
 - {meth}`snek5000.output.base.Output.get_field_file` to locate a field file
 - Mandatory key `MPIEXEC_FLAGS` in Snakemake config
@@ -42,9 +42,13 @@ Security in case of vulnerabilities.
   staggered grid if a linear solver is used and a collocated one if some other
   solver is used. Explicitly setting `params.oper.elem.staggered = True` is
   required to maintain previous default behaviour.
-- {func}`snek5000.util.files.next_path` gets a `force_suffix` parameter
+- {func}`snek5000.util.files.next_path` gets `force_suffix` and `return_suffix`
+  parameters
 - {meth}`snek5000.output.base.Output._save_info_solver_params_xml` updates
-  `.par` file on loading for restart
+  `.par` and `params_simul.xml` file on loading for restart
+- Shorter output while executing `genmap`
+- Field files will be stored in sessions enabling restart with symlinking of
+  restart files and avoids clobbering existing solution files
 
 ### Deprecated
 
