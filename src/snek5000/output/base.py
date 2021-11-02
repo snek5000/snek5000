@@ -41,7 +41,7 @@ class Output(OutputCore):
 
         Initialized from ``sim.info.solver.short_name`` used to discover source
         code files, such as usr, box, par files. The value of ``name_solver``
-        i s also used to identify the entrypoint pointing to the solver module.
+        is also used to identify the entrypoint pointing to the solver module.
         Have a look at the :ref:`packaging tutorial <packaging>`.
 
     .. autoattribute:: package
@@ -296,17 +296,8 @@ class Output(OutputCore):
         if sim:
             self.oper = sim.oper
             self.params = sim.params.output
-
             # Same as package name __name__
             super().__init__(sim)
-
-            dict_classes = sim.info.solver.classes.Output.import_classes()
-
-            # initialize objects
-            for cls_name, Class in dict_classes.items():
-                # only initialize if Class is not the Output class
-                if not isinstance(self, Class):
-                    setattr(self, underscore(cls_name), Class(self))
         elif params:
             # At least initialize params
             self.params = params.output
@@ -317,6 +308,14 @@ class Output(OutputCore):
             )
 
         self.path_session = self._init_path_session()
+
+        if sim:
+            # initialize objects
+            dict_classes = sim.info.solver.classes.Output.import_classes()
+            for cls_name, Class in dict_classes.items():
+                # only initialize if Class is not the Output class
+                if not isinstance(self, Class):
+                    setattr(self, underscore(cls_name), Class(self))
 
     def _init_path_session(self):
         """Initialize :attr:`path_session` and ``params.output.path_session``

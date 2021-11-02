@@ -34,7 +34,10 @@ class HistoryPoints:
                 f"Should be (< {params.oper.max.hist = }, == {params.oper.dim = })"
             )
 
-        self.path_file = Path(output.path_run) / f"{sim.info_solver.short_name}.his"
+        # temporary?
+        output.path_session.mkdir(exist_ok=True)
+
+        self.path_file = output.path_session / f"{sim.info_solver.short_name}.his"
         if self.path_file.exists():
             return
 
