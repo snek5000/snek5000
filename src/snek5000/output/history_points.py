@@ -1,4 +1,3 @@
-from pathlib import Path
 from io import StringIO
 
 import numpy as np
@@ -34,12 +33,12 @@ class HistoryPoints:
                 f"Should be (< {params.oper.max.hist = }, == {params.oper.dim = })"
             )
 
+        self.path_file = output.path_session / f"{sim.info_solver.short_name}.his"
+        if self.path_file.exists() or not self.output._has_to_save:
+            return
+
         # temporary?
         output.path_session.mkdir(exist_ok=True)
-
-        self.path_file = output.path_session / f"{sim.info_solver.short_name}.his"
-        if self.path_file.exists():
-            return
 
         with open(self.path_file, "w") as file:
             file.write(f"{self.nb_points} !number of monitoring coords\n")
@@ -59,20 +58,6 @@ class HistoryPoints:
             coords = np.loadtxt(file, max_rows=nb_points)
             lines = file.readlines()
 
-        # we want to be able to load data during the simulation
-        if lines:
-            nb_numbers_per_line = len(lines[0])
-
-            while len(lines[-1]) != nb_numbers_per_line:
-                lines = lines[:-1]
-
-            nb_times = len(lines) // nb_points
-            lines = lines[: nb_times * nb_points]
-        else:
-            nb_times = 0
-
-        df = pd.read_fwf(StringIO("\n".join(lines)), header=None)
-
         columns = ["time", "vx", "vy"]
 
         sim = self.output.sim
@@ -85,11 +70,30 @@ class HistoryPoints:
             if key not in sim.info_solver.par_sections_disabled:
                 columns.append(key)
 
-        df.columns = columns
+        # we want to be able to load data during the simulation
+        if lines:
+            nb_numbers_per_line = len(lines[0])
+
+            while len(lines[-1]) != nb_numbers_per_line:
+                lines = lines[:-1]
+
+            nb_times = len(lines) // nb_points
+            lines = lines[: nb_times * nb_points]
+            df = pd.read_fwf(StringIO("\n".join(lines)), header=None)
+            df.columns = columns
+        else:
+            nb_times = 0
+            df = pd.DataFrame({}, columns=columns)
 
         index_points = list(range(nb_points)) * nb_times
         df["index_points"] = index_points
-        coords = pd.DataFrame(coords, columns=list("xy"))
+
+        if sim.params.oper.dim == 2:
+            columns = list("xy")
+        else:
+            columns = list("xyz")
+
+        coords = pd.DataFrame(coords, columns=columns)
 
         return coords, df
 

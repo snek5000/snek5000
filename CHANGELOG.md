@@ -1,4 +1,5 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -35,6 +36,8 @@ Security in case of vulnerabilities.
 - {mod}`snek5000.util.files`
 - {meth}`snek5000.output.base.Output.get_field_file` to locate a field file
 - Mandatory key `MPIEXEC_FLAGS` in Snakemake config
+- {class}`snek5000.output.history_points.HistoryPoints` for `Nek5000 history points
+  <https://nek5000.github.io/NekDoc/problem_setup/features.html#history-points>`__
 
 ### Changed
 
