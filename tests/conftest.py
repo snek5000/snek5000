@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,20 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "slow: mark test as slow to run")
+
+    try:
+        import rich  # noqa
+    except ImportError:
+        pass
+    else:
+        # Bug while using rich + pytest: stderr / stdout is too short
+        # Inspired from: https://github.com/willmcgugan/rich/issues/1425
+        import snek5000.log
+
+        snek5000.log.logger.removeHandler(snek5000.log.handler)
+
+        handler = snek5000.log.create_handler(width=shutil.get_terminal_size().columns)
+        snek5000.log.logger.addHandler(handler)
 
 
 def pytest_collection_modifyitems(config, items):
