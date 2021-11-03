@@ -141,7 +141,11 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
 
 
 def load_for_restart(
-    path_dir=".", use_start_from=None, use_checkpoint=None, verify_contents=True
+    path_dir=".",
+    use_start_from=None,
+    use_checkpoint=None,
+    session_id=None,
+    verify_contents=True,
 ):
     """Load params and Simul for a restart.
 
@@ -162,6 +166,11 @@ def load_for_restart(
     use_checkpoint: int, {1, 2}
         Number of the multi-file checkpoint file set to restart from. Mutually
         exclusive parameter with ``use_start_from``.
+
+    session_id: int
+        Indicate which session directory should be used to look for restart files.
+        If not specified it would default to the `path_session` value last
+        recorded in the `params_simul.xml` file
 
     verify_contents: bool
         Verify directory contents to avoid runtime errors.
@@ -186,7 +195,7 @@ def load_for_restart(
     try:
         params = load_params(path)
     except (ValueError, OSError) as err:
-        raise SnekRestartError(err)
+        raise SnekRestartError(err) from err
 
     status = get_status(path, params.output.session_id)
 
@@ -211,11 +220,15 @@ def load_for_restart(
             "Use only one option at a time."
         )
     else:
-        old_path_session = Path(params.output.path_session)
-        session_id, new_path_session = next_path(
+        if session_id:
+            old_path_session = _make_path_session(path, session_id)
+        else:
+            old_path_session = Path(params.output.path_session)
+
+        new_session_id, new_path_session = next_path(
             path / "session", force_suffix=True, return_suffix=True
         )
-        params.output.session_id = session_id
+        params.output.session_id = new_session_id
         params.output.path_session = new_path_session
 
         new_path_session.mkdir()
