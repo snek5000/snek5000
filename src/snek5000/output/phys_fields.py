@@ -20,7 +20,6 @@ class PhysFields:
     :param path: :class:`pathlib.Path` Path where simulation state files are
                  found.
 
-
     """
 
     def __init__(self, output=None, path=None):
@@ -29,6 +28,16 @@ class PhysFields:
             self.output = output
 
         self._path_run = path
+
+    @classmethod
+    def _complete_params_with_default(cls, params):
+        params.output._set_child(
+            "phys_fields",
+            attribs={"write_interval_pert_field": 1000},
+        )
+        params.output.phys_fields._record_nek_user_params(
+            {"write_interval_pert_field": 1}
+        )
 
     @property
     def path_run(self):

@@ -48,7 +48,10 @@ class HistoryPoints:
     def _complete_params_with_default(cls, params):
         params.output._set_child(
             "history_points",
-            attribs={"coords": None},
+            attribs={"coords": None, "write_interval": 100},
+        )
+        params.output.history_points._record_nek_user_params(
+            {"write_interval": 2}
         )
 
     def load(self):
