@@ -76,7 +76,7 @@ class SimulNek(SimulCore):
         """Set internal attributes to mark user sections and disable sections
         following :attr:`InfoSolverNek.par_sections_disabled`. The internal
         attributes  ``_user`` and ``_enabled`` of :class:`Parameters` are
-        modified here..
+        modified here.
 
         """
         try:
@@ -202,7 +202,6 @@ class SimulNek(SimulCore):
                 extrapolation="standard",
                 opt_level=2,
                 log_level=2,
-                user_params={},
             )
         )
 

@@ -9,6 +9,7 @@ from io import StringIO
 from math import nan
 from pathlib import Path
 from sys import stdout
+from ast import literal_eval
 
 from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
@@ -33,6 +34,14 @@ def camelcase(value):
 def _check_user_param(idx):
     if idx > 20:
         raise ValueError(f"userParam {idx} > 20")
+
+
+def _as_value(value):
+    try:
+        return literal_eval(value)
+
+    except (SyntaxError, ValueError):
+        return value
 
 
 def load_params(path_dir="."):
@@ -94,14 +103,24 @@ class Parameters(_Parameters):
         d = super()._make_dict_attribs()
         # Append internal attributes
         d.update({"_enabled": self._enabled, "_user": self._user})
+        if hasattr(self, "_recorded_user_params"):
+            d["_recorded_user_params"] = self._recorded_user_params
         return d
 
-    def _read_par(self, path=None):
+    def _read_par(self, par_input=None):
         """Read par file into a class children and attributes."""
-        if not path:
-            path = self._tag + ".par"
 
-        self._par_file.read(path)
+        if not par_input:
+            par_input = self._tag + ".par"
+
+        if isinstance(par_input, (str, Path)):
+            self._par_file.read(par_input)
+        elif hasattr(par_input, "read"):
+            self._par_file.read_file(par_input)
+        else:
+            raise ValueError(
+                "par_input has to be a str, a Path or a file opened in text mode"
+            )
 
         for section in self._par_file.sections():
             params_child = getattr(self, section.lower().lstrip("_"))
@@ -114,12 +133,18 @@ class Parameters(_Parameters):
                 if option.lower().startswith("userparam"):
                     idx_uparam = int(option[-2:])
                     _check_user_param(idx_uparam)
-                    params_child.user_params.update({idx_uparam: float(value)})
+                    assert self._tag == "nek"
+                    params = self._parent
+                    assert params._tag == "params"
+                    recorded_user_params = self.general._recorded_user_params
+                    assert idx_uparam in recorded_user_params
+                    tag = recorded_user_params[idx_uparam]
+                    params[tag] = _as_value(value)
                 else:
                     attrib = underscore(option)
                     setattr(params_child, attrib, value)
 
-    def _update_par_section(
+    def __update_par_section(
         self, section_name, section_dict, has_to_prune_literals=True
     ):
         """Updates a section of the ``par_file`` object from a dictionary."""
@@ -131,6 +156,12 @@ class Parameters(_Parameters):
 
         if section_name_par not in par.sections():
             par.add_section(section_name_par)
+
+        if section_name_par == "GENERAL" and "_recorded_user_params" in section_dict:
+            recorded_user_params = section_dict.pop("_recorded_user_params")
+        else:
+            recorded_user_params = False
+
         for option, value in section_dict.items():
             # Convert to string to avoid hash collisions
             # hash(1) == hash(True)
@@ -146,19 +177,27 @@ class Parameters(_Parameters):
             if str(value) in section_dict:
                 value = camelcase(value)
 
-            # user_params -> userParam%%
-            if option.lower().startswith("user_params") and isinstance(value, dict):
-                for idx_uparam, value_uparam in value.items():
-                    _check_user_param(idx_uparam)
-                    par.set(
-                        section_name_par,
-                        f"userParam{idx_uparam:02d}",
-                        str(value_uparam),
-                    )
-            else:
-                par.set(section_name_par, camelcase(option), str(value))
+            par.set(section_name_par, camelcase(option), str(value))
 
-    def _sync_par(self, has_to_prune_literals=True, keep_all_sections=False):
+        # _recorded_user_params -> userParam%%
+        if recorded_user_params:
+            assert self._tag == "nek"
+            params = self._parent
+            assert params._tag == "params"
+            for idx_uparam in sorted(recorded_user_params.keys()):
+                tag = recorded_user_params[idx_uparam]
+                _check_user_param(idx_uparam)
+                value = params[tag]
+                literal = str(value) if value is not nan else nan
+                if literal in literal_python2nek:
+                    value = literal_python2nek[literal]
+                par.set(
+                    section_name_par,
+                    f"userParam{idx_uparam:02d}",
+                    str(value),
+                )
+
+    def __sync_par(self, has_to_prune_literals=True, keep_all_sections=False):
         """Sync values in param children and attributes to ``self._par_file``
         object.
 
@@ -174,13 +213,13 @@ class Parameters(_Parameters):
 
         for child, d in data:
             section_name = child.upper()
-            self._update_par_section(
+            self.__update_par_section(
                 section_name, d, has_to_prune_literals=has_to_prune_literals
             )
 
-        self._tidy_par(keep_all_sections)
+        self.__tidy_par(keep_all_sections)
 
-    def _tidy_par(self, keep_all_sections=False):
+    def __tidy_par(self, keep_all_sections=False):
         """Remove internal attributes and disabled sections from par file."""
         par = self._par_file
         for section_name in par.sections():
@@ -200,7 +239,7 @@ class Parameters(_Parameters):
         or to stdout.
 
         """
-        self._sync_par()
+        self.__sync_par()
         if isinstance(path, (str, Path)):
             with open(path, "w") as fp:
                 self._par_file.write(fp)
@@ -209,7 +248,7 @@ class Parameters(_Parameters):
 
     def _autodoc_par(self, indent=0):
         """Autodoc a code block with ``ini`` syntax and set docstring."""
-        self._sync_par(has_to_prune_literals=False, keep_all_sections=True)
+        self.__sync_par(has_to_prune_literals=False, keep_all_sections=True)
         docstring = "\n.. code-block:: ini\n\n"
         with StringIO() as output:
             self._par_file.write(output)
@@ -247,19 +286,23 @@ class Parameters(_Parameters):
         params = current
         assert params._tag == "params"
 
+        # path relative to params
+        path = path[len("params") :]
+        if path.startswith("."):
+            path = path[1:]
+
+        if path:
+            path = path + "."
+
         user_params = {}
         for name, key in nek_params_keys.items():
-            user_params[key] = f"{path}.{name}"
-
-        print(user_params)
+            user_params[key] = f"{path}{name}"
 
         general = params.nek.general
         if not hasattr(general, "_recorded_user_params"):
             general._set_internal_attr("_recorded_user_params", {})
 
         general._recorded_user_params.update(user_params)
-
-        print(general._recorded_user_params)
 
 
 create_params = Parameters._create_params

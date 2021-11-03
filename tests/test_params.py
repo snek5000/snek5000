@@ -19,7 +19,10 @@ def test_simul_params():
 
     buffer = StringIO()
     params.nek._write_par(buffer)
-    params.nek._read_par(buffer)
+
+    buffer1 = StringIO(buffer.getvalue())
+    params.nek._read_par(buffer1)
+
     buffer2 = StringIO()
     params.nek._write_par(buffer2)
 
@@ -98,3 +101,42 @@ def test_par_xml_match():
         return sorted(ftext)
 
     assert format_par(par1) == format_par(par2)
+
+
+def test_user_params():
+    def complete_create_default_params(p):
+        p._set_attribs({"prandtl": 0.71, "rayleigh": 1.8e8})
+        p._record_nek_user_params({"prandtl": 2, "rayleigh": 3})
+        p.output._set_child("other", {"write_interval": 100})
+        p.output.other._record_nek_user_params({"write_interval": 4})
+
+    from phill.solver import Simul
+
+    params = Simul.create_default_params()
+
+    if hasattr(params.nek.general, "_recorded_user_params"):
+        params.nek.general._recorded_user_params.clear()
+
+    complete_create_default_params(params)
+
+    assert params.nek.general._recorded_user_params == {
+        2: "prandtl",
+        3: "rayleigh",
+        4: "output.other.write_interval",
+    }
+
+    params.prandtl = 2
+    params.rayleigh = 2e8
+    params.output.other.write_interval = 1000
+
+    buffer = StringIO()
+    params.nek._write_par(buffer)
+
+    params1 = Simul.create_default_params()
+    complete_create_default_params(params1)
+    buffer1 = StringIO(buffer.getvalue())
+    params1.nek._read_par(buffer1)
+
+    assert params1.prandtl == params.prandtl
+    assert params1.rayleigh == params.rayleigh
+    assert params1.output.other.write_interval == params.output.other.write_interval
