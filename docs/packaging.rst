@@ -113,10 +113,10 @@ src/snek5000_canonical/solver.py
        """
        InfoSolver = InfoSolverCanonical
 
-       @staticmethod
-       def _complete_params_with_default(params):
+       @classmethod
+       def _complete_params_with_default(cls, params):
            """Add missing default parameters."""
-           params = SimulNek._complete_params_with_default(params)
+           params = super()._complete_params_with_default(params)
            # Extend with new default parameters here, for example:
 
            # params.nek.velocity._set_attrib("advection", True)
