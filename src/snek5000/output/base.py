@@ -14,7 +14,6 @@ from socket import gethostname
 
 from fluidsim_core.output import OutputCore
 from fluidsim_core.params import iter_complete_params
-
 from inflection import underscore
 
 from snek5000 import __version__, get_asset, logger, mpi, resources
@@ -613,6 +612,10 @@ class Output(OutputCore):
 
         index: int
             Index to match a specific field file
+
+        Returns
+        -------
+        file: Path
 
         """
         case = self.name_solver
