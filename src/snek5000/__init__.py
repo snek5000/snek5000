@@ -70,7 +70,7 @@ def get_asset(asset_name):
     return asset
 
 
-def load_simul(path_dir=None):
+def load_simul(path_dir=".", session_id=None):
     """Loads a simulation
 
     .. todo::
@@ -80,38 +80,52 @@ def load_simul(path_dir=None):
     Parameters
     ----------
     path_dir: str or path-like
-
         Path to a directory containing a simulation. If not provided the
         current directory is used.
 
+    session_id: int
+        Indicate which session directory should be used to set
+        ``sim.output.path_session``. If not specified it would default to the
+        `session_id` and `path_session` values last recorded in the
+        `params_simul.xml` file
+
+
+    .. hint::
+
+        An common use case of ``session_id`` parameter is to load field
+        files from old sessions using the :meth:`sim.output.get_field_file
+        <snek5000.output.base.Output.get_field_file>` method
+
     """
-    if path_dir is None:
-        path_dir = Path.cwd()
-    else:
-        path_dir = Path(path_dir)
+    path_dir = Path(path_dir)
 
     # Load simulation class
     from snek5000.solvers import import_cls_simul, get_solver_short_name
+    from snek5000.output import _parse_path_run_session_id
 
-    Simul = import_cls_simul(get_solver_short_name(path_dir))
+    # In case the user specifies the path to a session sub-directory
+    if session_id is None:
+        path_dir, session_id = _parse_path_run_session_id(path_dir)
+
+    short_name = get_solver_short_name(path_dir)
+    Simul = import_cls_simul(short_name)
 
     # Load parameters
-    from snek5000.params import Parameters
+    from snek5000.params import load_params
 
-    params = Parameters._load_params_simul(path_dir)
+    params = load_params(path_dir)
 
-    # try:
-    #     params_par = next(path_dir.glob("*.par"))
-    # except StopIteration:
-    #     warn(f"The {path_dir}/*.par file is missing!")
-    #     params_par = None
-    #
-    # params_xml = path_dir / "params_simul.xml"
-    # params = Simul.load_params_from_file(path_xml=params_xml, path_par=params_par)
     # Modify parameters prior to loading
     params.NEW_DIR_RESULTS = False
     params.output.HAS_TO_SAVE = False
     params.path_run = path_dir
+
+    if isinstance(session_id, int):
+        from snek5000.output import _make_path_session
+
+        params.output.session_id = session_id
+        params.output.path_session = _make_path_session(path_dir, session_id)
+
     sim = Simul(params)
     return sim
 

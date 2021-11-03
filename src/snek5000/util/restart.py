@@ -10,7 +10,7 @@ from warnings import warn
 from fluiddyn.io import FLUIDSIM_PATH
 
 from ..log import logger
-from ..output import _make_path_session
+from ..output import _make_path_session, _parse_path_run_session_id
 from ..params import load_params
 from ..solvers import get_solver_short_name, import_cls_simul
 from .files import next_path
@@ -141,7 +141,11 @@ def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
 
 
 def load_for_restart(
-    path_dir=".", use_start_from=None, use_checkpoint=None, verify_contents=True
+    path_dir=".",
+    use_start_from=None,
+    use_checkpoint=None,
+    session_id=None,
+    verify_contents=True,
 ):
     """Load params and Simul for a restart.
 
@@ -163,6 +167,11 @@ def load_for_restart(
         Number of the multi-file checkpoint file set to restart from. Mutually
         exclusive parameter with ``use_start_from``.
 
+    session_id: int
+        Indicate which session directory should be used to look for restart files.
+        If not specified it would default to the `path_session` value last
+        recorded in the `params_simul.xml` file
+
     verify_contents: bool
         Verify directory contents to avoid runtime errors.
 
@@ -183,12 +192,16 @@ def load_for_restart(
         logger.info("Trying to open the path relative to $FLUIDSIM_PATH")
         path = Path(FLUIDSIM_PATH) / path_dir
 
+    # In case the user specifies the path to a session sub-directory
+    if session_id is None:
+        path, session_id = _parse_path_run_session_id(path)
+
     try:
         params = load_params(path)
     except (ValueError, OSError) as err:
-        raise SnekRestartError(err)
+        raise SnekRestartError(err) from err
 
-    status = get_status(path, params.output.session_id)
+    status = get_status(path, session_id or params.output.session_id)
 
     if verify_contents:
         if status.code >= 400:
@@ -211,11 +224,15 @@ def load_for_restart(
             "Use only one option at a time."
         )
     else:
-        old_path_session = Path(params.output.path_session)
-        session_id, new_path_session = next_path(
+        if session_id:
+            old_path_session = _make_path_session(path, session_id)
+        else:
+            old_path_session = Path(params.output.path_session)
+
+        new_session_id, new_path_session = next_path(
             path / "session", force_suffix=True, return_suffix=True
         )
-        params.output.session_id = session_id
+        params.output.session_id = new_session_id
         params.output.path_session = new_path_session
 
         new_path_session.mkdir()

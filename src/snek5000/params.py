@@ -68,6 +68,11 @@ class Parameters(_Parameters):
 
     """
 
+    @classmethod
+    def _load_params_simul(cls, path=None):
+        """Alias for :func:`load_params`"""
+        return load_params(path or Path.cwd())
+
     def __init__(self, *args, **kwargs):
         comments = ("#",)
         self._set_internal_attr(

@@ -23,7 +23,7 @@ def test_locked(sim_data):
 
 def test_ok(sim_data):
     (sim_data / ".snakemake").mkdir()
-    session = _make_path_session(sim_data, 0)
+    session = _make_path_session(sim_data, 1)
     [file.unlink() for file in session.glob("phill*0.f?????")]
 
     assert get_status(sim_data).code == 200
@@ -44,7 +44,7 @@ def test_not_found(sim_data):
 
 def test_partial_content(sim_data):
     (sim_data / ".snakemake").mkdir()
-    session = _make_path_session(sim_data, 0)
+    session = _make_path_session(sim_data, 1)
     [restart.unlink() for restart in session.glob("rs6*")]
 
     assert get_status(sim_data).code == 206
