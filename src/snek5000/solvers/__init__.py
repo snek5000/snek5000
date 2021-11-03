@@ -95,7 +95,10 @@ def get_solver_short_name(path_dir):
         info_solver = InfoSolverNek(path_file=info_solver_xml)
         short_name = info_solver.short_name
     else:
-        logger.warning(f"The {info_solver_xml} file is missing!")
+        logger.warning(
+            f"The {info_solver_xml} file is missing! "
+            "Attempting to guess solver from the directory name."
+        )
         short_name = path_dir.absolute().name.split("_")[0]
 
     return short_name

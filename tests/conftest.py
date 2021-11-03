@@ -164,15 +164,14 @@ rs6phill0.f00003
 
     from snek5000.output import _make_path_session
 
-    session_id = 0
-    path_session = _make_path_session(path_run, session_id)
-    path_session.mkdir()
-
     for f in files:
         (path_run / f).touch()
 
-    for f in session_files:
-        (path_session / f).touch()
+    for session_id in range(2):
+        path_session = _make_path_session(path_run, session_id)
+        path_session.mkdir()
+        for f in session_files:
+            (path_session / f).touch()
 
     from phill.solver import Simul
 
