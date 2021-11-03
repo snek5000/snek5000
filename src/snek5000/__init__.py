@@ -102,7 +102,15 @@ def load_simul(path_dir=".", session_id=None):
     # Load simulation class
     from snek5000.solvers import import_cls_simul, get_solver_short_name
 
-    Simul = import_cls_simul(get_solver_short_name(path_dir))
+    short_name = get_solver_short_name(path_dir)
+    if short_name == "session" and not (path_dir / "info_solver.xml").exists():
+        raise ValueError(
+            "You are trying to specify the path to a session sub-directory. "
+            "Specify the main simulation directory instead and "
+            "the session_id (optional)."
+        )
+
+    Simul = import_cls_simul(short_name)
 
     # Load parameters
     from snek5000.params import load_params
