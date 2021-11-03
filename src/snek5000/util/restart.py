@@ -197,7 +197,7 @@ def load_for_restart(
     except (ValueError, OSError) as err:
         raise SnekRestartError(err) from err
 
-    status = get_status(path, params.output.session_id)
+    status = get_status(path, session_id or params.output.session_id)
 
     if verify_contents:
         if status.code >= 400:
