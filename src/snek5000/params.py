@@ -220,5 +220,46 @@ class Parameters(_Parameters):
         if ini:
             self._set_doc(self._doc + textwrap.indent(docstring, " " * indent))
 
+    def _record_nek_user_params(self, nek_params_keys):
+        """Record some Nek user parameters
+
+        Examples
+        --------
+
+        >>> params._record_nek_user_params({"prandtl": 2, "rayleigh": 3})
+        >>> params.output.history_points._record_nek_user_params({"write_interval": 4})
+
+        """
+        # we need to find where is self in the tree compared to `params`
+        current = self
+        parent = current._parent
+        tag = current._tag
+        path = tag
+
+        while not (parent is None and tag == "params") and not (
+            parent._tag == "info_simul" and tag == "params"
+        ):
+            current = parent
+            parent = current._parent
+            tag = current._tag
+            path = f"{tag}.{path}"
+
+        params = current
+        assert params._tag == "params"
+
+        user_params = {}
+        for name, key in nek_params_keys.items():
+            user_params[key] = f"{path}.{name}"
+
+        print(user_params)
+
+        general = params.nek.general
+        if not hasattr(general, "_recorded_user_params"):
+            general._set_internal_attr("_recorded_user_params", {})
+
+        general._recorded_user_params.update(user_params)
+
+        print(general._recorded_user_params)
+
 
 create_params = Parameters._create_params
