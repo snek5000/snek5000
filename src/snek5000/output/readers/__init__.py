@@ -20,15 +20,16 @@ class ReaderBase(ABC):
     def _complete_params_with_default(cls, params):
         params.output.phys_fields.available_readers.append(cls.tag)
 
-    def __init__(self, sim):
-        self.sim = sim
+    def __init__(self, output):
+        self.output = output
+        self.data = None
 
     @abstractmethod
-    def open(self, filename):
-        """Opens field file into memory"""
+    def open(self, index=-1):
+        """Opens field file into memory and into :attr:`data`"""
         ...
 
     @abstractmethod
-    def get(self, key):
+    def get_var(self, key):
         """Get an array"""
         ...

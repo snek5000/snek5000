@@ -64,13 +64,8 @@ class PhysFields:
         reader_key = self.params.phys_fields.reader
         dict_classes = sim.info.solver.classes.Output.PhysFields.import_classes()
         Class = dict_classes[reader_key]
-        return Class(sim)
+        return Class(self.output)
 
     def __init__(self, output=None):
         self.output = output
         self.params = output.params
-
-    def load(self):
-        path = self.path_run
-        if path.is_dir():
-            path = next(path.glob("*.nek5000"))
