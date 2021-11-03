@@ -124,6 +124,9 @@ class Output(OutputCore):
             ),
         )
 
+        # iteratively call _complete_info_solver of the above classes
+        info_solver.classes.Output.complete_with_classes()
+
     @staticmethod
     def _complete_params_with_default(params, info_solver):
         """This static method is used to complete the *params* container."""

@@ -3,7 +3,8 @@ from pathlib import Path
 
 import numpy as np
 
-from .. import logger
+from ...log import logger
+from . import ReaderBase
 
 try:
     import paraview.simple as pv
@@ -24,14 +25,14 @@ else:
 # pv._DisableFirstRenderCameraReset()
 
 
-class ReaderParaview:
+class ReaderParaview(ReaderBase):
     """A user-friendly API for Paraview scripting with 'VisItNek5000Reader'."""
 
     tag = "paraview"
 
-    def __init__(
+    def open(
         self,
-        filename="abl.nek5000",
+        filename,  # <case>.nek5000
         arrays=(
             "pressure",
             "velocity_mag",
@@ -175,9 +176,9 @@ class ReaderParaview:
 class ReaderParaviewStats(ReaderParaview):
     tag = "paraview_stats"
 
-    def __init__(
+    def open(
         self,
-        filename="stsabl.nek5000",
+        filename,  # "sts<case>.nek5000",
         arrays=tuple(f"s{idx}" for idx in range(1, 45)),
     ):
         super().__init__(filename, arrays)
