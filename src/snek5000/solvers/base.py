@@ -13,7 +13,7 @@ from inflection import underscore
 
 from .. import logger, mpi
 from ..info import InfoSolverNek
-from ..params import Parameters, load_recorded_user_params, _complete_from_par_file
+from ..params import Parameters, _load_recorded_user_params, _complete_from_par_file
 from ..util import docstring_params
 
 
@@ -67,7 +67,7 @@ class SimulNek(SimulCore):
             if path_recorded_user_params.exists():
                 params.nek.general._set_internal_attr(
                     "_recorded_user_params",
-                    load_recorded_user_params(path_recorded_user_params),
+                    _load_recorded_user_params(path_recorded_user_params),
                 )
 
         else:

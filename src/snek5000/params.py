@@ -5,10 +5,9 @@ Scripting interface for Nek5000 :ref:`parameter file <nek:case_files_par>`.
 """
 import textwrap
 from configparser import ConfigParser
-from io import StringIO, TextIOBase
+from io import StringIO
 from math import nan
 from pathlib import Path
-from sys import stdout
 from ast import literal_eval
 import json
 
@@ -28,16 +27,25 @@ literal_nek2python = {v: k for k, v in literal_python2nek.items()}
 literal_prune = ("<real>", "", "nan")
 
 
+def _prepare_nek_value(value):
+    # Convert to string to avoid hash collisions
+    # hash(1) == hash(True)
+    literal = str(value) if value is not nan else nan
+    if literal in literal_python2nek:
+        value = literal_python2nek[literal]
+    return value
+
+
 def camelcase(value):
     return camelize(str(value).lower(), uppercase_first_letter=False)
 
 
 def _check_user_param(idx):
     if idx > 20:
-        raise ValueError(f"userParam {idx} > 20")
+        raise ValueError(f"userParam {idx = } > 20")
 
 
-def _as_value(value):
+def _as_python_value(value):
     try:
         return literal_eval(value)
 
@@ -127,11 +135,7 @@ class Parameters(_Parameters):
             recorded_user_params = False
 
         for option, value in section_dict.items():
-            # Convert to string to avoid hash collisions
-            # hash(1) == hash(True)
-            literal = str(value) if value is not nan else nan
-            if literal in literal_python2nek:
-                value = literal_python2nek[literal]
+            value = _prepare_nek_value(value)
 
             if has_to_prune_literals and value in literal_prune:
                 continue
@@ -145,16 +149,13 @@ class Parameters(_Parameters):
 
         # _recorded_user_params -> userParam%%
         if recorded_user_params:
-            assert self._tag == "nek"
             params = self._parent
-            assert params._tag == "params"
+            if self._tag != "nek" or params._tag != "params":
+                raise RuntimeError("_recorded_user_params should only be in params.nek")
             for idx_uparam in sorted(recorded_user_params.keys()):
                 tag = recorded_user_params[idx_uparam]
                 _check_user_param(idx_uparam)
-                value = params[tag]
-                literal = str(value) if value is not nan else nan
-                if literal in literal_python2nek:
-                    value = literal_python2nek[literal]
+                value = _prepare_nek_value(params[tag])
                 par.set(
                     section_name_par,
                     f"userParam{idx_uparam:02d}",
@@ -220,13 +221,15 @@ class Parameters(_Parameters):
         >>> params._record_nek_user_params({"prandtl": 2, "rayleigh": 3})
         >>> params.output.history_points._record_nek_user_params({"write_interval": 4})
 
-        This is going to modify of ``params.nek.general._recorded_user_params``
-        (internal attribute) to ``{2: "prandtl", 3: "rayleigh", 4:
-        "output.other.write_interval"}``.
+        This is going to set or modify the internal attribute
+        ``params.nek.general._recorded_user_params`` to ``{2: "prandtl", 3:
+        "rayleigh", 4: "output.other.write_interval"}``.
 
         This attribute is then used to write the ``[GENERAL]`` section of the
         .par file.
 
+        Note that this attribute is only for ``params.nek.general`` and should
+        never be set for other parameter children.
         """
         # we need to find where is self in the tree compared to `params`
         current = self
@@ -283,19 +286,19 @@ class Parameters(_Parameters):
                 path_dir = Path.cwd()
             else:
                 path_dir = Path(path_file).parent
-            save_recorded_user_params(user_params, path_dir)
+            _save_recorded_user_params(user_params, path_dir)
 
         return super()._save_as_xml(
             path_file=path_file, comment=comment, find_new_name=find_new_name
         )
 
 
-def save_recorded_user_params(user_params, path_dir):
+def _save_recorded_user_params(user_params, path_dir):
     with open(path_dir / "recorded_user_params.json", "w") as file:
         json.dump(user_params, file)
 
 
-def load_recorded_user_params(path):
+def _load_recorded_user_params(path):
     with open(path) as file:
         tmp = json.load(file)
     return {int(key): value for key, value in tmp.items()}
@@ -328,11 +331,22 @@ def _save_par_file(params, path, mode="w"):
     with open(path, mode) as fp:
         nek._par_file.write(fp)
 
+    if hasattr(nek.general, "_recorded_user_params"):
+        _save_recorded_user_params(nek.general._recorded_user_params, path.parent)
+
 
 def _complete_from_par_file(params, path):
 
     nek = _check_and_get_params_nek(params, path)
     nek._par_file.read(path)
+
+    recorded_user_params_path = path.with_name("recorded_user_params.json")
+    if recorded_user_params_path.exists():
+        recorded_user_params = _load_recorded_user_params(recorded_user_params_path)
+    elif hasattr(nek.general, "_recorded_user_params"):
+        recorded_user_params = nek.general._recorded_user_params
+    else:
+        recorded_user_params = {}
 
     for section in nek._par_file.sections():
         params_child = getattr(nek, section.lower().lstrip("_"))
@@ -340,16 +354,18 @@ def _complete_from_par_file(params, path):
         for option, value in nek._par_file.items(section):
             if value in literal_nek2python:
                 value = literal_nek2python[value]
-
-            value = _as_value(value)
+            value = _as_python_value(value)
 
             # userParam%% -> user_params
             if option.lower().startswith("userparam"):
                 idx_uparam = int(option[-2:])
                 _check_user_param(idx_uparam)
-                recorded_user_params = nek.general._recorded_user_params
-                assert idx_uparam in recorded_user_params
+                if idx_uparam not in recorded_user_params:
+                    raise RuntimeError(
+                        f"{idx_uparam = } not in {recorded_user_params = }"
+                    )
                 tag = recorded_user_params[idx_uparam]
+                # set the corresponding parameter
                 params[tag] = value
             else:
                 attrib = underscore(option)
