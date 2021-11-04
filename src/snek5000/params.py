@@ -108,43 +108,6 @@ class Parameters(_Parameters):
             d["_recorded_user_params"] = self._recorded_user_params
         return d
 
-    def _read_par(self, par_input=None):
-        """Read par file into a class children and attributes."""
-
-        if not par_input:
-            par_input = self._tag + ".par"
-
-        if isinstance(par_input, (str, Path)):
-            self._par_file.read(par_input)
-        elif isinstance(par_input, TextIOBase):
-            self._par_file.read_file(par_input)
-        else:
-            raise ValueError(
-                "par_input has to be a str, a Path or a file opened in text mode"
-            )
-
-        for section in self._par_file.sections():
-            params_child = getattr(self, section.lower().lstrip("_"))
-
-            for option, value in self._par_file.items(section):
-                if value in literal_nek2python:
-                    value = literal_nek2python[value]
-
-                # userParam%% -> user_params
-                if option.lower().startswith("userparam"):
-                    idx_uparam = int(option[-2:])
-                    _check_user_param(idx_uparam)
-                    assert self._tag == "nek"
-                    params = self._parent
-                    assert params._tag == "params"
-                    recorded_user_params = self.general._recorded_user_params
-                    assert idx_uparam in recorded_user_params
-                    tag = recorded_user_params[idx_uparam]
-                    params[tag] = _as_value(value)
-                else:
-                    attrib = underscore(option)
-                    setattr(params_child, attrib, value)
-
     def __update_par_section(
         self, section_name, section_dict, has_to_prune_literals=True
     ):
@@ -198,7 +161,7 @@ class Parameters(_Parameters):
                     str(value),
                 )
 
-    def __sync_par(self, has_to_prune_literals=True, keep_all_sections=False):
+    def _sync_par(self, has_to_prune_literals=True, keep_all_sections=False):
         """Sync values in param children and attributes to ``self._par_file``
         object.
 
@@ -235,21 +198,9 @@ class Parameters(_Parameters):
             else:
                 par.remove_section(section_name)
 
-    def _write_par(self, path=stdout):
-        """Write contents of ``self._par_file`` to file handler opened in disk
-        or to stdout.
-
-        """
-        self.__sync_par()
-        if isinstance(path, (str, Path)):
-            with open(path, "w") as fp:
-                self._par_file.write(fp)
-        else:
-            self._par_file.write(path)
-
     def _autodoc_par(self, indent=0):
         """Autodoc a code block with ``ini`` syntax and set docstring."""
-        self.__sync_par(has_to_prune_literals=False, keep_all_sections=True)
+        self._sync_par(has_to_prune_literals=False, keep_all_sections=True)
         docstring = "\n.. code-block:: ini\n\n"
         with StringIO() as output:
             self._par_file.write(output)
@@ -348,6 +299,61 @@ def load_recorded_user_params(path):
     with open(path) as file:
         tmp = json.load(file)
     return {int(key): value for key, value in tmp.items()}
+
+
+def _check_and_get_params_nek(params, path):
+
+    if not isinstance(params, Parameters):
+        raise TypeError
+
+    if params._tag != "params":
+        raise ValueError
+
+    if not isinstance(path, Path):
+        raise TypeError
+
+    nek = params.nek
+
+    if nek._tag != "nek":
+        raise RuntimeError(
+            "This method should always be called with the parameter `params.nek`"
+        )
+
+    return nek
+
+
+def _save_par_file(params, path, mode="w"):
+    nek = _check_and_get_params_nek(params, path)
+    nek._sync_par()
+    with open(path, mode) as fp:
+        nek._par_file.write(fp)
+
+
+def _complete_from_par_file(params, path):
+
+    nek = _check_and_get_params_nek(params, path)
+    nek._par_file.read(path)
+
+    for section in nek._par_file.sections():
+        params_child = getattr(nek, section.lower().lstrip("_"))
+
+        for option, value in nek._par_file.items(section):
+            if value in literal_nek2python:
+                value = literal_nek2python[value]
+
+            value = _as_value(value)
+
+            # userParam%% -> user_params
+            if option.lower().startswith("userparam"):
+                idx_uparam = int(option[-2:])
+                _check_user_param(idx_uparam)
+                recorded_user_params = nek.general._recorded_user_params
+                assert idx_uparam in recorded_user_params
+                tag = recorded_user_params[idx_uparam]
+                params[tag] = value
+            else:
+                attrib = underscore(option)
+                setattr(params_child, attrib, value)
 
 
 create_params = Parameters._create_params

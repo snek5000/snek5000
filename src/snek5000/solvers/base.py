@@ -13,7 +13,7 @@ from inflection import underscore
 
 from .. import logger, mpi
 from ..info import InfoSolverNek
-from ..params import Parameters, load_recorded_user_params
+from ..params import Parameters, load_recorded_user_params, _complete_from_par_file
 from ..util import docstring_params
 
 
@@ -75,7 +75,7 @@ class SimulNek(SimulCore):
                 "Loading from a par file will not have full details of the simulation"
             )
             params = cls.create_default_params()
-            params.nek._read_par(path_par)
+            _complete_from_par_file(params, path_par)
 
         cls._set_internal_sections(params)
         return params
