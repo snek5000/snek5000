@@ -151,7 +151,9 @@ class Parameters(_Parameters):
         if recorded_user_params:
             params = self._parent
             if self._tag != "nek" or params._tag != "params":
-                raise RuntimeError("_recorded_user_params should only be in params.nek")
+                raise RuntimeError(
+                    "_recorded_user_params should only be in params.nek.general"
+                )
             for idx_uparam in sorted(recorded_user_params.keys()):
                 tag = recorded_user_params[idx_uparam]
                 _check_user_param(idx_uparam)
@@ -305,24 +307,17 @@ def _load_recorded_user_params(path):
 
 
 def _check_and_get_params_nek(params, path):
-
-    if not isinstance(params, Parameters):
-        raise TypeError
-
-    if params._tag != "params":
-        raise ValueError
-
     if not isinstance(path, Path):
         raise TypeError
 
-    nek = params.nek
+    if not isinstance(params, Parameters):
+        raise TypeError
+    if params._tag != "params":
+        raise ValueError(f'{params._tag = } != "params"')
 
-    if nek._tag != "nek":
-        raise RuntimeError(
-            "This method should always be called with the parameter `params.nek`"
-        )
-
-    return nek
+    if params.nek._tag != "nek":
+        raise RuntimeError(f'{params.nek._tag =} != "nek"')
+    return params.nek
 
 
 def _save_par_file(params, path, mode="w"):
@@ -335,8 +330,7 @@ def _save_par_file(params, path, mode="w"):
         _save_recorded_user_params(nek.general._recorded_user_params, path.parent)
 
 
-def _complete_from_par_file(params, path):
-
+def _complete_params_from_par_file(params, path):
     nek = _check_and_get_params_nek(params, path)
     nek._par_file.read(path)
 
@@ -370,6 +364,17 @@ def _complete_from_par_file(params, path):
             else:
                 attrib = underscore(option)
                 setattr(params_child, attrib, value)
+
+
+def _complete_params_from_xml_file(params, path_xml):
+    params._load_from_xml_file(str(path_xml))
+    nek = _check_and_get_params_nek(params, path_xml)
+    path_recorded_user_params = Path(path_xml).parent / "recorded_user_params.json"
+    if path_recorded_user_params.exists():
+        nek.general._set_internal_attr(
+            "_recorded_user_params",
+            _load_recorded_user_params(path_recorded_user_params),
+        )
 
 
 create_params = Parameters._create_params

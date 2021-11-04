@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 
 from snek5000.log import logger
-from snek5000.params import Parameters, _save_par_file, _complete_from_par_file
+from snek5000.params import Parameters, _save_par_file, _complete_params_from_par_file
 from snek5000.util import init_params
 
 
@@ -31,7 +31,7 @@ def test_simul_params():
     assert txt
 
     params1 = Simul.create_default_params()
-    _complete_from_par_file(params1, path_par)
+    _complete_params_from_par_file(params1, path_par)
 
     assert params1.nek.general.dt == params.nek.general.dt
 
@@ -59,7 +59,7 @@ def test_par_xml_match():
 
     par1 = save_par_file_and_read(params, tmp_dir / "tmp1.par")
 
-    params_xml = params._save_as_xml(str(tmp_dir / "params_simul.xml"))
+    params_xml = Path(params._save_as_xml(str(tmp_dir / "params_simul.xml")))
 
     try:
         from snek5000.params import Parameters
@@ -144,7 +144,7 @@ def test_user_params():
     params1 = Simul.create_default_params()
     complete_create_default_params(params1)
 
-    _complete_from_par_file(params1, path_par)
+    _complete_params_from_par_file(params1, path_par)
 
     assert params1.prandtl == params.prandtl
     assert params1.rayleigh == params.rayleigh
