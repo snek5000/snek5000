@@ -26,6 +26,8 @@ literal_python2nek = {
 literal_nek2python = {v: k for k, v in literal_python2nek.items()}
 literal_prune = ("<real>", "", "nan")
 
+namefile_user_params = "recorded_user_params.json"
+
 
 def _prepare_nek_value(value):
     # Convert to string to avoid hash collisions
@@ -46,6 +48,8 @@ def _check_user_param(idx):
 
 
 def _as_python_value(value):
+    if value in literal_nek2python:
+        value = literal_nek2python[value]
     try:
         return literal_eval(value)
 
@@ -297,7 +301,7 @@ class Parameters(_Parameters):
 
 
 def _save_recorded_user_params(user_params, path_dir):
-    with open(path_dir / "recorded_user_params.json", "w") as file:
+    with open(path_dir / namefile_user_params, "w") as file:
         json.dump(user_params, file)
 
 
@@ -335,7 +339,7 @@ def _complete_params_from_par_file(params, path):
     nek = _check_and_get_params_nek(params, path)
     nek._par_file.read(path)
 
-    recorded_user_params_path = path.with_name("recorded_user_params.json")
+    recorded_user_params_path = path.with_name(namefile_user_params)
     if recorded_user_params_path.exists():
         recorded_user_params = _load_recorded_user_params(recorded_user_params_path)
     elif hasattr(nek.general, "_recorded_user_params"):
@@ -347,8 +351,6 @@ def _complete_params_from_par_file(params, path):
         params_child = getattr(nek, section.lower().lstrip("_"))
 
         for option, value in nek._par_file.items(section):
-            if value in literal_nek2python:
-                value = literal_nek2python[value]
             value = _as_python_value(value)
 
             # userParam%% -> user_params
@@ -370,7 +372,7 @@ def _complete_params_from_par_file(params, path):
 def _complete_params_from_xml_file(params, path_xml):
     params._load_from_xml_file(str(path_xml))
     nek = _check_and_get_params_nek(params, path_xml)
-    path_recorded_user_params = Path(path_xml).parent / "recorded_user_params.json"
+    path_recorded_user_params = Path(path_xml).parent / namefile_user_params
     if path_recorded_user_params.exists():
         nek.general._set_internal_attr(
             "_recorded_user_params",
