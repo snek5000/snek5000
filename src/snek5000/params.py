@@ -129,7 +129,7 @@ class Parameters(_Parameters):
         if section_name_par not in par.sections():
             par.add_section(section_name_par)
 
-        if section_name_par == "GENERAL" and "_recorded_user_params" in section_dict:
+        if "_recorded_user_params" in section_dict:
             recorded_user_params = section_dict.pop("_recorded_user_params")
         else:
             recorded_user_params = False
@@ -148,21 +148,22 @@ class Parameters(_Parameters):
             par.set(section_name_par, camelcase(option), str(value))
 
         # _recorded_user_params -> userParam%%
-        if recorded_user_params:
-            params = self._parent
-            if self._tag != "nek" or params._tag != "params":
-                raise RuntimeError(
-                    "_recorded_user_params should only be in params.nek.general"
-                )
-            for idx_uparam in sorted(recorded_user_params.keys()):
-                tag = recorded_user_params[idx_uparam]
-                _check_user_param(idx_uparam)
-                value = _prepare_nek_value(params[tag])
-                par.set(
-                    section_name_par,
-                    f"userParam{idx_uparam:02d}",
-                    str(value),
-                )
+        if not recorded_user_params:
+            return
+        params = self._parent
+        if self._tag != "nek" or params._tag != "params":
+            raise RuntimeError(
+                "_recorded_user_params should only be in params.nek.general"
+            )
+        for idx_uparam in sorted(recorded_user_params.keys()):
+            tag = recorded_user_params[idx_uparam]
+            _check_user_param(idx_uparam)
+            value = _prepare_nek_value(params[tag])
+            par.set(
+                section_name_par,
+                f"userParam{idx_uparam:02d}",
+                str(value),
+            )
 
     def _sync_par(self, has_to_prune_literals=True, keep_all_sections=False):
         """Sync values in param children and attributes to ``self._par_file``
