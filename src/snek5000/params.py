@@ -5,11 +5,12 @@ Scripting interface for Nek5000 :ref:`parameter file <nek:case_files_par>`.
 """
 import textwrap
 from configparser import ConfigParser
-from io import StringIO
+from io import StringIO, TextIOBase
 from math import nan
 from pathlib import Path
 from sys import stdout
 from ast import literal_eval
+import json
 
 from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
@@ -115,7 +116,7 @@ class Parameters(_Parameters):
 
         if isinstance(par_input, (str, Path)):
             self._par_file.read(par_input)
-        elif hasattr(par_input, "read"):
+        elif isinstance(par_input, TextIOBase):
             self._par_file.read_file(par_input)
         else:
             raise ValueError(
@@ -259,7 +260,7 @@ class Parameters(_Parameters):
         if ini:
             self._set_doc(self._doc + textwrap.indent(docstring, " " * indent))
 
-    def _record_nek_user_params(self, nek_params_keys):
+    def _record_nek_user_params(self, nek_params_keys, overwrite=False):
         """Record some Nek user parameters
 
         Examples
@@ -267,6 +268,13 @@ class Parameters(_Parameters):
 
         >>> params._record_nek_user_params({"prandtl": 2, "rayleigh": 3})
         >>> params.output.history_points._record_nek_user_params({"write_interval": 4})
+
+        This is going to modify of ``params.nek.general._recorded_user_params``
+        (internal attribute) to ``{2: "prandtl", 3: "rayleigh", 4:
+        "output.other.write_interval"}``.
+
+        This attribute is then used to write the ``[GENERAL]`` section of the
+        .par file.
 
         """
         # we need to find where is self in the tree compared to `params`
@@ -302,7 +310,44 @@ class Parameters(_Parameters):
         if not hasattr(general, "_recorded_user_params"):
             general._set_internal_attr("_recorded_user_params", {})
 
-        general._recorded_user_params.update(user_params)
+        if overwrite:
+            general._recorded_user_params.update(user_params)
+            return
+
+        for key, value in user_params.items():
+            if key in general._recorded_user_params:
+                raise ValueError(
+                    f"{key = } already used for user parameter "
+                    f"{general._recorded_user_params[key]}"
+                )
+            general._recorded_user_params[key] = value
+
+    def _save_as_xml(self, path_file=None, comment=None, find_new_name=False):
+        try:
+            user_params = self.nek.general._recorded_user_params
+        except AttributeError:
+            pass
+        else:
+            if path_file is None:
+                path_dir = Path.cwd()
+            else:
+                path_dir = Path(path_file).parent
+            save_recorded_user_params(user_params, path_dir)
+
+        return super()._save_as_xml(
+            path_file=path_file, comment=comment, find_new_name=find_new_name
+        )
+
+
+def save_recorded_user_params(user_params, path_dir):
+    with open(path_dir / "recorded_user_params.json", "w") as file:
+        json.dump(user_params, file)
+
+
+def load_recorded_user_params(path):
+    with open(path) as file:
+        tmp = json.load(file)
+    return {int(key): value for key, value in tmp.items()}
 
 
 create_params = Parameters._create_params

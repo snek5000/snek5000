@@ -50,9 +50,7 @@ class HistoryPoints:
             "history_points",
             attribs={"coords": None, "write_interval": 100},
         )
-        params.output.history_points._record_nek_user_params(
-            {"write_interval": 2}
-        )
+        params.output.history_points._record_nek_user_params({"write_interval": 2})
 
     def load(self):
         with open(self.path_file) as file:

@@ -106,11 +106,12 @@ def test_par_xml_match():
 def test_user_params():
     def complete_create_default_params(p):
         p._set_attribs({"prandtl": 0.71, "rayleigh": 1.8e8})
-        p._record_nek_user_params({"prandtl": 2, "rayleigh": 3})
+        p._record_nek_user_params({"prandtl": 8, "rayleigh": 9})
+        p._set_child("output")
         p.output._set_child("other", {"write_interval": 100})
-        p.output.other._record_nek_user_params({"write_interval": 4})
+        p.output.other._record_nek_user_params({"write_interval": 1}, overwrite=True)
 
-    from phill.solver import Simul
+    from snek5000.solvers.base import Simul
 
     params = Simul.create_default_params()
 
@@ -120,9 +121,9 @@ def test_user_params():
     complete_create_default_params(params)
 
     assert params.nek.general._recorded_user_params == {
-        2: "prandtl",
-        3: "rayleigh",
-        4: "output.other.write_interval",
+        8: "prandtl",
+        9: "rayleigh",
+        1: "output.other.write_interval",
     }
 
     params.prandtl = 2

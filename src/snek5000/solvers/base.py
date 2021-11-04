@@ -13,7 +13,7 @@ from inflection import underscore
 
 from .. import logger, mpi
 from ..info import InfoSolverNek
-from ..params import Parameters
+from ..params import Parameters, load_recorded_user_params
 from ..util import docstring_params
 
 
@@ -61,6 +61,15 @@ class SimulNek(SimulCore):
         if path_xml:
             params = Parameters(tag="params")
             params._load_from_xml_file(str(path_xml))
+            path_recorded_user_params = (
+                Path(path_xml).parent / "recorded_user_params.json"
+            )
+            if path_recorded_user_params.exists():
+                params.nek.general._set_internal_attr(
+                    "_recorded_user_params",
+                    load_recorded_user_params(path_recorded_user_params),
+                )
+
         else:
             logger.warn(
                 "Loading from a par file will not have full details of the simulation"
