@@ -22,6 +22,7 @@ class SimulNek(SimulCore):
 
     Parameters
     ----------
+
     params: Parameters
         Input parameters for the simulation run.
     write_files: bool, optional
@@ -30,6 +31,7 @@ class SimulNek(SimulCore):
 
     Example
     -------
+
     >>> from snek5000.solvers.base import Simul
     >>> params = Simul.create_default_params()
     >>> sim = Simul(params)

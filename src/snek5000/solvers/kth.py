@@ -28,6 +28,7 @@ class SimulKTH(SimulNek):
 
     Example
     -------
+
     >>> from snek5000.solvers.kth import Simul
     >>> params = Simul.create_default_params()
     >>> sim = Simul(params)
