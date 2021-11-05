@@ -62,7 +62,9 @@ class PhysFields:
         sim = self.output.sim
 
         reader_key = self.params.phys_fields.reader
-        dict_classes = sim.info.solver.classes.Output.PhysFields.import_classes()
+        dict_classes = (
+            sim.info.solver.classes.Output.classes.PhysFields.import_classes()
+        )
         Class = dict_classes[reader_key]
         return Class(self.output)
 
