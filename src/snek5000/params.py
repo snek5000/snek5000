@@ -10,6 +10,7 @@ from math import nan
 from pathlib import Path
 from ast import literal_eval
 import json
+from warnings import warn
 
 from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
@@ -26,7 +27,7 @@ literal_python2nek = {
 literal_nek2python = {v: k for k, v in literal_python2nek.items()}
 literal_prune = ("<real>", "", "nan")
 
-namefile_user_params = "recorded_user_params.json"
+filename_map_user_params = "map_user_params.json"
 
 
 def _prepare_nek_value(value):
@@ -301,7 +302,7 @@ class Parameters(_Parameters):
 
 
 def _save_recorded_user_params(user_params, path_dir):
-    with open(path_dir / namefile_user_params, "w") as file:
+    with open(path_dir / filename_map_user_params, "w") as file:
         json.dump(user_params, file)
 
 
@@ -339,7 +340,7 @@ def _complete_params_from_par_file(params, path):
     nek = _check_and_get_params_nek(params, path)
     nek._par_file.read(path)
 
-    recorded_user_params_path = path.with_name(namefile_user_params)
+    recorded_user_params_path = path.with_name(filename_map_user_params)
     if recorded_user_params_path.exists():
         recorded_user_params = _load_recorded_user_params(recorded_user_params_path)
     elif hasattr(nek.general, "_recorded_user_params"):
@@ -358,8 +359,11 @@ def _complete_params_from_par_file(params, path):
                 idx_uparam = int(option[-2:])
                 _check_user_param(idx_uparam)
                 if idx_uparam not in recorded_user_params:
-                    raise RuntimeError(
-                        f"{idx_uparam = } not in {recorded_user_params = }"
+                    warn(
+                        f"{idx_uparam = } not in {recorded_user_params = } so we"
+                        "cannot update the right parameter in the object `params`."
+                        "It might be because you load a simulation done with "
+                        "an old snek5000 (< 0.8), or it might be a bug :-)"
                     )
                 tag = recorded_user_params[idx_uparam]
                 # set the corresponding parameter
@@ -372,7 +376,7 @@ def _complete_params_from_par_file(params, path):
 def _complete_params_from_xml_file(params, path_xml):
     params._load_from_xml_file(str(path_xml))
     nek = _check_and_get_params_nek(params, path_xml)
-    path_recorded_user_params = Path(path_xml).parent / namefile_user_params
+    path_recorded_user_params = Path(path_xml).parent / filename_map_user_params
     if path_recorded_user_params.exists():
         nek.general._set_internal_attr(
             "_recorded_user_params",
