@@ -168,7 +168,7 @@ def docstring_params(Class, sections=False, indent_len=4):
         doc = ""
 
     # Remove the first heading: typically no content
-    doc = re.sub(r"^\s+Documentation\ for\ params$", "", doc, flags=re.MULTILINE)
+    doc = doc.replace("Documentation for params\n========================", "")
 
     if not sections:
         lines = []
