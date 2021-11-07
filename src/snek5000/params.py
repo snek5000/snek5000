@@ -3,13 +3,13 @@
 Scripting interface for Nek5000 :ref:`parameter file <nek:case_files_par>`.
 
 """
+import json
 import textwrap
+from ast import literal_eval
 from configparser import ConfigParser
 from io import StringIO
 from math import nan
 from pathlib import Path
-from ast import literal_eval
-import json
 from warnings import warn
 
 from fluidsim_core.params import Parameters as _Parameters
@@ -30,12 +30,11 @@ literal_prune = ("<real>", "", "nan")
 filename_map_user_params = "map_user_params.json"
 
 
-def _prepare_nek_value(value):
+def _as_nek_value(input_value):
     # Convert to string to avoid hash collisions
     # hash(1) == hash(True)
-    literal = str(value) if value is not nan else nan
-    if literal in literal_python2nek:
-        value = literal_python2nek[literal]
+    literal = str(input_value) if input_value is not nan else nan
+    value = literal_python2nek.get(literal, input_value)
     return value
 
 
@@ -48,12 +47,11 @@ def _check_user_param(idx):
         raise ValueError(f"userParam {idx = } > 20")
 
 
-def _as_python_value(value):
-    if value in literal_nek2python:
-        value = literal_nek2python[value]
+def _as_python_value(input_value):
+    value = literal_nek2python.get(str(input_value), input_value)
+
     try:
         return literal_eval(value)
-
     except (SyntaxError, ValueError):
         return value
 
@@ -140,7 +138,7 @@ class Parameters(_Parameters):
             recorded_user_params = False
 
         for option, value in section_dict.items():
-            value = _prepare_nek_value(value)
+            value = _as_nek_value(value)
 
             if has_to_prune_literals and value in literal_prune:
                 continue
@@ -163,7 +161,7 @@ class Parameters(_Parameters):
         for idx_uparam in sorted(recorded_user_params.keys()):
             tag = recorded_user_params[idx_uparam]
             _check_user_param(idx_uparam)
-            value = _prepare_nek_value(params[tag])
+            value = _as_nek_value(params[tag])
             par.set(
                 section_name_par,
                 f"userParam{idx_uparam:02d}",
