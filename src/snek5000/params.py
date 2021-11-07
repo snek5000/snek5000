@@ -10,11 +10,11 @@ from configparser import ConfigParser
 from io import StringIO
 from math import nan
 from pathlib import Path
-from warnings import warn
 
 from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
 
+from .log import logger
 from .solvers import get_solver_short_name, import_cls_simul
 
 literal_python2nek = {
@@ -42,9 +42,15 @@ def camelcase(value):
     return camelize(str(value).lower(), uppercase_first_letter=False)
 
 
-def _check_user_param(idx):
+def _check_user_param_index(idx):
+    """Check if the index of user parameter is within bounds"""
     if idx > 20:
         raise ValueError(f"userParam {idx = } > 20")
+    elif idx > 10:
+        logger.warning(
+            "Due to a bug in Nek5000, the last index of userParam## that we can "
+            f"specify seems to be 10. {idx = } may not work"
+        )
 
 
 def _as_python_value(input_value):
@@ -160,7 +166,7 @@ class Parameters(_Parameters):
             )
         for idx_uparam in sorted(recorded_user_params.keys()):
             tag = recorded_user_params[idx_uparam]
-            _check_user_param(idx_uparam)
+            _check_user_param_index(idx_uparam)
             value = _as_nek_value(params[tag])
             par.set(
                 section_name_par,
@@ -355,9 +361,9 @@ def _complete_params_from_par_file(params, path):
             # userParam%% -> user_params
             if option.lower().startswith("userparam"):
                 idx_uparam = int(option[-2:])
-                _check_user_param(idx_uparam)
+                _check_user_param_index(idx_uparam)
                 if idx_uparam not in recorded_user_params:
-                    warn(
+                    logger.warning(
                         f"{idx_uparam = } not in {recorded_user_params = } so we"
                         "cannot update the right parameter in the object `params`."
                         "It might be because you load a simulation done with "
