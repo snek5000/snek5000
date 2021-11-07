@@ -1,10 +1,41 @@
-from sys import path
 import tempfile
 from pathlib import Path
 
+import pytest
+
 from snek5000.log import logger
-from snek5000.params import Parameters, _save_par_file, _complete_params_from_par_file
+from snek5000.params import (
+    Parameters,
+    _as_nek_value,
+    _as_python_value,
+    _complete_params_from_par_file,
+    _save_par_file,
+)
 from snek5000.util import init_params
+
+
+@pytest.mark.parametrize("input_value", (True, False, None, "a string", 1, 3.14, "nan"))
+def test_python_value_roundtrip(input_value):
+    roundtrip_python_nek = _as_python_value(_as_nek_value(input_value))
+    assert input_value == roundtrip_python_nek
+
+
+@pytest.mark.parametrize(
+    ("input_value", "equivalent"),
+    zip(("yes", "no", "42", "2.71"), (True, False, 42, 2.71)),
+)
+def test_python_value_roundtrip_evaluated(input_value, equivalent):
+    roundtrip_python_nek = _as_python_value(_as_nek_value(input_value))
+    assert input_value != roundtrip_python_nek == equivalent
+
+
+@pytest.mark.parametrize(
+    ("input_value", "equivalent"),
+    zip(("True", "False", "42", "2.71"), ("yes", "no", 42, 2.71)),
+)
+def test_nek_value_roundtrip_evaluated(input_value, equivalent):
+    roundtrip_nek_python = _as_nek_value(_as_python_value(input_value))
+    assert input_value != roundtrip_nek_python == equivalent
 
 
 def save_par_file_and_read(params, path):
