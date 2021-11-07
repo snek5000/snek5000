@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+INDEX_USERPARAM_HISTORY_POINTS = 10
+
 
 class HistoryPoints:
     """History points (Nek5000 output)
@@ -50,7 +52,9 @@ class HistoryPoints:
             "history_points",
             attribs={"coords": None, "write_interval": 100},
         )
-        params.output.history_points._record_nek_user_params({"write_interval": 1})
+        params.output.history_points._record_nek_user_params(
+            {"write_interval": INDEX_USERPARAM_HISTORY_POINTS}
+        )
 
     def load(self):
         with open(self.path_file) as file:
