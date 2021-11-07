@@ -45,7 +45,7 @@ class SimStatus(Enum):
     )
     NOT_FOUND = (
         404,
-        "Not Found: SIZE and/or nek5000 and/or SESSION.NAME files are missing.",
+        "Not Found: nek5000 executable is missing.",
     )
     LOCKED = (
         423,
@@ -107,7 +107,7 @@ def get_status(path_dir, session_id=None, verbose=False):
         if locks:
             return SimStatus.LOCKED
 
-    if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
+    if not {"nek5000"}.issubset(contents):
         return SimStatus.NOT_FOUND
 
     checkpoints = set(path_session.glob("rs6*0.f?????"))

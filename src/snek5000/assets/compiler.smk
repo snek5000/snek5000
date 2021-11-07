@@ -1,3 +1,4 @@
+from pathlib import Path
 from pprint import pprint
 
 import snek5000
@@ -61,18 +62,43 @@ rule mpiexec:
     log:
         "logs/run_" + now() + ".log",
     resources:
-        nproc=nproc_available(),
+        nproc=64,
     params:
         redirect=">",
         end="",
-    shell:
-        """
-        ln -sf {log} {config[CASE]}.log
-        echo "Log file:"
-        realpath {config[CASE]}.log
-        {config[MPIEXEC]} -n {resources.nproc} {config[MPIEXEC_FLAGS]} ./nek5000 {params.redirect} {log} {params.end}
-        echo $PWD
-        """
+    run:
+        case = config['CASE']
+        case_log = Path(f"{case}.log")
+        run_log = str(log)
+        if case_log.exists():
+            case_log.unlink()
+
+        case_log.symlink_to(run_log)
+        print("Log file:")
+        print(case_log.resolve())
+
+
+        with open(run_log, 'wb') as fp_log:
+            subprocess.run(
+                [
+                    config['MPIEXEC'], '-n', str(resources.nproc),
+                    config['MPIEXEC_FLAGS'], "./nek5000"
+                ],
+                stdin=subprocess.DEVNULL,
+                stdout=fp_log,
+                check=True
+            )
+
+        print(Path.cwd().resolve())
+
+# shell:
+#     """
+#     ln -sf {log} {config[CASE]}.log
+#     echo "Log file:"
+#     realpath {config[CASE]}.log
+#     {config[MPIEXEC]} -n {resources.nproc} {config[MPIEXEC_FLAGS]} ./nek5000 {params.redirect} {log} {params.end}
+#     echo $PWD
+#     """
 
 
 # run in background
