@@ -3,12 +3,26 @@ import math
 
 
 def coriolis_freq(lat):
-    """Compute coriolis frequency.
+    r"""Compute coriolis frequency in the f-plane.
 
-    https://en.wikipedia.org/wiki/Earth%27s_rotation#Angular_speed
-    omega = 7.2921150 ± 0.0000001×10−5 radians per second
+    .. math::
 
-    :param theta: Latitude in degrees.
+        \omega &= 7.2921150 ± 0.0000001×10^{−5} \, \text{radians per second} \\
+        f &= 2 \omega \sin(\theta)
+
+
+    .. seealso::
+        https://en.wikipedia.org/wiki/Earth%27s_rotation#Angular_speed
+
+    Parameters
+    ----------
+    lat: float
+        Latitude in degrees, which gets converted to radians :math:`\theta`.
+
+    Returns
+    -------
+    f: float
+        Coriolis frequency in radians per second
 
     """
     omega = 7.2921150e-5

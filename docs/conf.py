@@ -77,6 +77,7 @@ extensions = [
 jupyter_execute_notebooks = "cache"
 # ... except these ipynb files
 execution_excludepatterns = ["ipynb/executed/*"]
+execution_show_tb = True
 
 # CSS selector which modifies the sphinx-copybutton feature
 copybutton_selector = ",".join(
@@ -253,3 +254,16 @@ autodoc_mock_imports = ["IPython"]
 todo_include_todos = True
 
 napoleon_numpy_docstring = True
+
+# -- Custom functions --------------------------------------------------------
+
+
+def autodoc_skip_member(app, what, name, obj, skip, options):
+    # return True if (skip or exclude) else None
+    # Can interfere with subsequent skip functions.
+    if what == "function" and name == "load" and obj is snek5000.load:
+        return True
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", autodoc_skip_member)
