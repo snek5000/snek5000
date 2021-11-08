@@ -327,7 +327,8 @@ class Output(OutputCore):
         path_session: path-like
 
         """
-        if not self.params:
+        if not self.params or not hasattr(self, "path_run"):
+            logger.debug("Attribute sim.output.path_session will not be initialized.")
             return None
 
         try:
