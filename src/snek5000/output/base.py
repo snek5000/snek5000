@@ -20,6 +20,7 @@ from snek5000 import __version__, get_asset, logger, mpi, resources
 from snek5000.solvers import get_solver_package, is_package
 from snek5000.util import docstring_params
 from snek5000.util.smake import append_debug_flags
+from snek5000.params import _save_par_file
 
 from . import _make_path_session
 
@@ -673,12 +674,10 @@ class Output(OutputCore):
                     f"Writing params files... {par_file}, params_simul.xml, "
                     "info_solver.xml"
                 )
-                with open(par_file, "x") as fp:
-                    params.nek._write_par(fp)
+                _save_par_file(params, par_file, mode="x")
             elif self._has_to_save:
                 logger.info(f"Updating {par_file}, params_simul.xml")
-                with open(par_file, "w") as fp:
-                    params.nek._write_par(fp)
+                _save_par_file(params, par_file)
 
                 # Update params_simul.xml here, since FluidSim Core will only
                 # do it if NEW_DIR_RESULTS = True

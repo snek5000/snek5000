@@ -20,7 +20,6 @@ class PhysFields:
     :param path: :class:`pathlib.Path` Path where simulation state files are
                  found.
 
-
     """
 
     def __init__(self, output=None, path=None):

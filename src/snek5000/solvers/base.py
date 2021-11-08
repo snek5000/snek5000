@@ -13,7 +13,11 @@ from inflection import underscore
 
 from .. import logger, mpi
 from ..info import InfoSolverNek
-from ..params import Parameters
+from ..params import (
+    Parameters,
+    _complete_params_from_par_file,
+    _complete_params_from_xml_file,
+)
 from ..util import docstring_params
 
 
@@ -62,13 +66,13 @@ class SimulNek(SimulCore):
 
         if path_xml:
             params = Parameters(tag="params")
-            params._load_from_xml_file(str(path_xml))
+            _complete_params_from_xml_file(params, path_xml)
         else:
             logger.warn(
                 "Loading from a par file will not have full details of the simulation"
             )
             params = cls.create_default_params()
-            params.nek._read_par(path_par)
+            _complete_params_from_par_file(params, path_par)
 
         cls._set_internal_sections(params)
         return params
@@ -78,7 +82,7 @@ class SimulNek(SimulCore):
         """Set internal attributes to mark user sections and disable sections
         following :attr:`InfoSolverNek.par_sections_disabled`. The internal
         attributes  ``_user`` and ``_enabled`` of :class:`Parameters` are
-        modified here..
+        modified here.
 
         """
         try:
@@ -204,7 +208,6 @@ class SimulNek(SimulCore):
                 extrapolation="standard",
                 opt_level=2,
                 log_level=2,
-                user_params={},
             )
         )
 
