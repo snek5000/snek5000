@@ -4,6 +4,8 @@ Scripting interface for Nek5000 :ref:`parameter file <nek:case_files_par>`.
 
 """
 import json
+import logging
+import sys
 import textwrap
 from ast import literal_eval
 from configparser import ConfigParser
@@ -27,10 +29,12 @@ literal_python2nek = {
 literal_nek2python = {v: k for k, v in literal_python2nek.items()}
 literal_prune = ("<real>", "", "nan")
 
+#: JSON file name to which recorded user_params are saved
 filename_map_user_params = "map_user_params.json"
 
 
 def _as_nek_value(input_value):
+    """Convert Python values to equivalent Nek5000 par values."""
     # Convert to string to avoid hash collisions
     # hash(1) == hash(True)
     literal = str(input_value) if input_value is not nan else nan
@@ -54,6 +58,7 @@ def _check_user_param_index(idx):
 
 
 def _as_python_value(input_value):
+    """Convert Nek5000 par values to equivalent Python values if possible."""
     value = literal_nek2python.get(str(input_value), input_value)
 
     try:
@@ -189,6 +194,7 @@ class Parameters(_Parameters):
             data = [(self._tag, self._make_dict_attribs())]
 
         for child, d in data:
+            # Section name is often written in [UPPERCASE]
             section_name = child.upper()
             self.__update_par_section(
                 section_name, d, has_to_prune_literals=has_to_prune_literals
@@ -249,6 +255,7 @@ class Parameters(_Parameters):
         tag = current._tag
         path = tag
 
+        # iterate up the `params` tree to the top
         while not (parent is None and tag == "params") and not (
             parent._tag == "info_simul" and tag == "params"
         ):
@@ -260,6 +267,7 @@ class Parameters(_Parameters):
         params = current
         assert params._tag == "params"
 
+        # FIXME: ashwinvis - What is going on here?
         # path relative to params
         path = path[len("params") :]
         if path.startswith("."):
@@ -271,6 +279,19 @@ class Parameters(_Parameters):
         user_params = {}
         for name, key in nek_params_keys.items():
             user_params[key] = f"{path}{name}"
+
+        # Useful while building isolated `params` for a specific class,
+        # for e.g.: Operators, Output etc.
+        if not hasattr(params, "nek"):
+            log_level = logging.DEBUG if "sphinx" in sys.modules else logging.WARNING
+            logger.log(
+                log_level,
+                (
+                    "Attribute params.nek does not exist, skipping "
+                    "initializing user parameters."
+                ),
+            )
+            return
 
         general = params.nek.general
         if not hasattr(general, "_recorded_user_params"):
@@ -289,6 +310,7 @@ class Parameters(_Parameters):
             general._recorded_user_params[key] = value
 
     def _save_as_xml(self, path_file=None, comment=None, find_new_name=False):
+        """Invoke :func:`_save_recorded_user_params` and then save to an XML file at ``path_file``."""
         try:
             user_params = self.nek.general._recorded_user_params
         except AttributeError:
@@ -306,6 +328,7 @@ class Parameters(_Parameters):
 
 
 def _save_recorded_user_params(user_params, path_dir):
+    """Save a JSON file"""
     with open(path_dir / filename_map_user_params, "w") as file:
         json.dump(user_params, file)
 
