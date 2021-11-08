@@ -43,6 +43,7 @@ def _as_nek_value(input_value):
 
 
 def camelcase(value):
+    """Convert strings to ``camelCase``."""
     return camelize(str(value).lower(), uppercase_first_letter=False)
 
 
@@ -90,13 +91,11 @@ def load_params(path_dir="."):
 
 
 class Parameters(_Parameters):
-    """Container for reading, modifying and writing :ref:`par files <nek:case_files_par>`.
+    """Container for reading, modifying and writing :ref:`par files
+    <nek:case_files_par>`.
 
     :param tag: A string representing name of case files (for example: provide
                  ``"abl"`` for files like ``abl.usr, abl.par`` etc).
-
-    :todo: Consolidate the logic of param to par file syncing in two methods!
-           More tests to see if it works.
 
     """
 
@@ -267,7 +266,8 @@ class Parameters(_Parameters):
         params = current
         assert params._tag == "params"
 
-        # FIXME: ashwinvis - What is going on here?
+        # FIXME: ashwinvis - What is going on here? Add some comments to
+        #        explain the logic.
         # path relative to params
         path = path[len("params") :]
         if path.startswith("."):
@@ -320,8 +320,8 @@ class Parameters(_Parameters):
         To overwrite a parameter, use ``_record_nek_user_params`` with the
         ``overwrite`` argument.
 
-        Example
-        -------
+        Examples
+        --------
 
         >>> params._change_index_userparams({8: "output.history_points.write_interval"}
 
@@ -392,18 +392,34 @@ class Parameters(_Parameters):
 
 
 def _save_recorded_user_params(user_params, path_dir):
-    """Save a JSON file"""
+    """Save a JSON file from a dictionary denoting ``user_params``"""
     with open(path_dir / filename_map_user_params, "w") as file:
         json.dump(user_params, file)
 
 
 def _load_recorded_user_params(path):
+    """Load a JSON file and return a dictionary denoting ``user_params``"""
     with open(path) as file:
         tmp = json.load(file)
     return {int(key): value for key, value in tmp.items()}
 
 
 def _check_and_get_params_nek(params, path):
+    """Check if params is the top level object (via the ``_tag`` attribute) and
+    returen the ``params.nek`` object.
+
+    Parameters
+    ----------
+    params: :class:`Parameters`
+        The ``params`` object
+
+    Returns
+    -------
+    params.nek: :class:`Parameters`
+        The ``params.nek`` object
+
+    """
+    # FIXME: ashwinvis - The path argument is unused. Why do we need it?
     if not isinstance(path, Path):
         raise TypeError
 
@@ -418,6 +434,7 @@ def _check_and_get_params_nek(params, path):
 
 
 def _save_par_file(params, path, mode="w"):
+    """Save the ``params.nek`` object as a `.par` file."""
     nek = _check_and_get_params_nek(params, path)
     nek._sync_par()
     with open(path, mode) as fp:
@@ -428,6 +445,10 @@ def _save_par_file(params, path, mode="w"):
 
 
 def _complete_params_from_par_file(params, path):
+    """Populate the ``params.nek`` object by reading a `.par` file and
+    :attr:`filename_map_user_params`.
+
+    """
     nek = _check_and_get_params_nek(params, path)
     nek._par_file.read(path)
 
@@ -465,6 +486,10 @@ def _complete_params_from_par_file(params, path):
 
 
 def _complete_params_from_xml_file(params, path_xml):
+    """Populate the ``params.nek`` object by reading a `.xml` file and
+    :attr:`filename_map_user_params`.
+
+    """
     params._load_from_xml_file(str(path_xml))
     nek = _check_and_get_params_nek(params, path_xml)
     path_recorded_user_params = Path(path_xml).parent / filename_map_user_params
