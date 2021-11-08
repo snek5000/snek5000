@@ -18,7 +18,7 @@ Python framework for Nek5000
 
 **Documentation**: <https://snek5000.readthedocs.io/>
 
-## Installation
+## Quick start
 
 Install it as follows:
 
@@ -28,6 +28,8 @@ export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
 
 pip install snek5000
 ```
+
+See here for [detailed installation instructions](https://snek5000.readthedocs.io/en/latest/install.html).
 
 ### Why snek5000?
 

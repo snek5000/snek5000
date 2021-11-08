@@ -30,6 +30,7 @@ internals rely on FluidSim's core_ to build its API.
    :caption: Getting Started
 
    intro
+   install
    tutorials
 
 User Guide
