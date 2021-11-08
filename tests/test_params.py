@@ -10,6 +10,7 @@ from snek5000.params import (
     _as_python_value,
     _complete_params_from_par_file,
     _save_par_file,
+    _str_par_file,
 )
 from snek5000.util import init_params
 
@@ -188,3 +189,11 @@ def test_user_params():
     assert params1.prandtl == params.prandtl
     assert params1.rayleigh == params.rayleigh
     assert params1.output.other.write_interval == params.output.other.write_interval
+
+
+def test_str_par_file(sim, tmp_path):
+    path = tmp_path / "test.par"
+    par_save_par_file = save_par_file_and_read(sim.params, path)
+    par_str_par_file = _str_par_file(sim.params)
+
+    assert par_save_par_file == par_str_par_file

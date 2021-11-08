@@ -5,11 +5,12 @@ Scripting interface for Nek5000 :ref:`parameter file <nek:case_files_par>`.
 """
 import json
 import logging
+import os
 import sys
 import textwrap
 from ast import literal_eval
 from configparser import ConfigParser
-from io import StringIO
+from io import StringIO, TextIOBase
 from math import nan
 from pathlib import Path
 
@@ -404,9 +405,15 @@ def _load_recorded_user_params(path):
     return {int(key): value for key, value in tmp.items()}
 
 
-def _check_and_get_params_nek(params, path):
+def _check_path_like(path):
+    """Ensure input is a path-like object"""
+    if not isinstance(path, os.PathLike):
+        raise TypeError(f"Expected path-like object, not {type(path) = }")
+
+
+def _get_params_nek(params):
     """Check if params is the top level object (via the ``_tag`` attribute) and
-    returen the ``params.nek`` object.
+    return the ``params.nek`` object.
 
     Parameters
     ----------
@@ -419,10 +426,6 @@ def _check_and_get_params_nek(params, path):
         The ``params.nek`` object
 
     """
-    # FIXME: ashwinvis - The path argument is unused. Why do we need it?
-    if not isinstance(path, Path):
-        raise TypeError
-
     if not isinstance(params, Parameters):
         raise TypeError
     if params._tag != "params":
@@ -433,15 +436,30 @@ def _check_and_get_params_nek(params, path):
     return params.nek
 
 
-def _save_par_file(params, path, mode="w"):
+def _save_par_file(params, path_or_buffer, mode="w"):
     """Save the ``params.nek`` object as a `.par` file."""
-    nek = _check_and_get_params_nek(params, path)
+    nek = _get_params_nek(params)
     nek._sync_par()
-    with open(path, mode) as fp:
-        nek._par_file.write(fp)
 
-    if hasattr(nek.general, "_recorded_user_params"):
-        _save_recorded_user_params(nek.general._recorded_user_params, path.parent)
+    if isinstance(path_or_buffer, TextIOBase):
+        nek._par_file.write(path_or_buffer)
+    else:
+        path = path_or_buffer
+        _check_path_like(path)
+        with open(path, mode) as fp:
+            nek._par_file.write(fp)
+
+        if hasattr(nek.general, "_recorded_user_params"):
+            _save_recorded_user_params(nek.general._recorded_user_params, path.parent)
+
+
+def _str_par_file(params):
+    """Preview contents of the resulting `.par` file as a string"""
+    with StringIO() as output:
+        _save_par_file(params, output)
+        str_par = output.getvalue()
+
+    return str_par
 
 
 def _complete_params_from_par_file(params, path):
@@ -449,7 +467,8 @@ def _complete_params_from_par_file(params, path):
     :attr:`filename_map_user_params`.
 
     """
-    nek = _check_and_get_params_nek(params, path)
+    _check_path_like(path)
+    nek = _get_params_nek(params)
     nek._par_file.read(path)
 
     recorded_user_params_path = path.with_name(filename_map_user_params)
@@ -490,8 +509,10 @@ def _complete_params_from_xml_file(params, path_xml):
     :attr:`filename_map_user_params`.
 
     """
+    _check_path_like(path_xml)
+
     params._load_from_xml_file(str(path_xml))
-    nek = _check_and_get_params_nek(params, path_xml)
+    nek = _get_params_nek(params)
     path_recorded_user_params = Path(path_xml).parent / filename_map_user_params
     if path_recorded_user_params.exists():
         nek.general._set_internal_attr(
