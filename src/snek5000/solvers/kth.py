@@ -26,8 +26,9 @@ class InfoSolverKTH(_InfoSolver):
 class SimulKTH(SimulNek):
     """A base class which incorporates parameters for KTH toolbox also.
 
-    Example
-    -------
+    Examples
+    --------
+
     >>> from snek5000.solvers.kth import Simul
     >>> params = Simul.create_default_params()
     >>> sim = Simul(params)

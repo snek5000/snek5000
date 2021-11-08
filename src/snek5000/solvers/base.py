@@ -26,14 +26,16 @@ class SimulNek(SimulCore):
 
     Parameters
     ----------
+
     params: Parameters
         Input parameters for the simulation run.
     write_files: bool, optional
         Write simulation files, including usr, box, SIZE files. By default
         all files are written.
 
-    Example
-    -------
+    Examples
+    --------
+
     >>> from snek5000.solvers.base import Simul
     >>> params = Simul.create_default_params()
     >>> sim = Simul(params)

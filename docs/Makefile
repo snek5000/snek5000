@@ -9,6 +9,11 @@ SOURCEDIR     = .
 BUILDDIR      = _build
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
+html:
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	@echo
+	@printf "Build finished.\nfile://"$(shell pwd)"/_build/html/index.html\n"
+
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
@@ -20,10 +25,6 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
-	@echo
-	@printf "Build finished.\nfile://"$(shell pwd)"/_build/html/index.html\n"
 
 intersphinx-python:
 	@python -msphinx.ext.intersphinx https://docs.python.org/3/objects.inv
