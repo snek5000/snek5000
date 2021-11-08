@@ -284,6 +284,70 @@ class Parameters(_Parameters):
                 )
             general._recorded_user_params[key] = value
 
+    def _change_index_userparams(self, user_params):
+        """Change indices for user parameters
+
+        This method can be used in the ``create_default_params`` class method
+        of a solver to overwrite the default indices used in the base snek5000
+        package.
+
+        This method checks that no already recorded parameters are overwritten.
+        To overwrite a parameter, use ``_record_nek_user_params`` with the
+        ``overwrite`` argument.
+
+        Example
+        -------
+
+        >>> params._change_index_userparams({8: "output.history_points.write_interval"}
+
+        """
+
+        if self._tag != "params":
+            raise ValueError(
+                "The method `_change_index_userparams` has to be called "
+                "directly with the root `params` object."
+            )
+
+        try:
+            general = self.nek.general
+        except AttributeError:
+            raise AttributeError("No `params.nek.general` attribute.")
+
+        try:
+            recorded_user_params = general._recorded_user_params
+        except AttributeError:
+            raise AttributeError(
+                "No `general._recorded_user_params` attribute. This attribute "
+                "can be created with `_record_nek_user_params`."
+            )
+
+        # check that no user parameters are overwritten
+        modified_labels = []
+        for index in user_params:
+            try:
+                modified_labels.append(recorded_user_params[index])
+            except KeyError:
+                pass
+        values = user_params.values()
+        for label in modified_labels:
+            if label not in values:
+                raise ValueError(
+                    f"The value {label} would be removed from the user params."
+                )
+
+        reverted = {value: key for key, value in recorded_user_params.items()}
+        for label in user_params.values():
+            try:
+                key = reverted[label]
+            except KeyError:
+                raise ValueError(
+                    f"User parameter {label = } is not already recorded. "
+                    "Use `_record_nek_user_params`"
+                )
+            del recorded_user_params[key]
+
+        recorded_user_params.update(user_params)
+
     def _save_as_xml(self, path_file=None, comment=None, find_new_name=False):
         try:
             user_params = self.nek.general._recorded_user_params
