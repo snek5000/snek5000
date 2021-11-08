@@ -2,22 +2,23 @@
 """
 API reference
 
-**Sub-packages**
+.. rubric:: Sub-packages
 
 .. autosummary::
    :toctree:
 
    assets
-   clusters
    output
    solvers
    util
 
-**Modules**
+.. rubric:: Modules
 
 .. autosummary::
    :toctree:
 
+   clusters
+   const
    info
    log
    magic
@@ -31,6 +32,7 @@ try:
 except ImportError:
     import importlib_resources as resources
 import os
+import weakref
 from pathlib import Path
 
 from fluiddyn.util import mpi  # noqa: F401
@@ -131,7 +133,7 @@ def load_simul(path_dir=".", session_id=None):
 
 
 # for consistency with fluidsim
-load = load_simul  #: Alias for :func:`load_simul`
+load = weakref.proxy(load_simul)  #: Alias for :func:`load_simul`
 
 
 from .util.smake import append_debug_flags, ensure_env  # noqa: F401, E402

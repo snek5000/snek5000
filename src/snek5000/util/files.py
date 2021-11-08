@@ -30,8 +30,8 @@ def next_path(old_path, force_suffix=False, return_suffix=False):
         A path (with an integer suffix) which does not yet exist in the
         filesystem.
 
-    Example
-    -------
+    Examples
+    --------
     >>> import os
     >>> os.chdir("/tmp")
 

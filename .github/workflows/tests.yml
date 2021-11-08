@@ -2,10 +2,10 @@ name: Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     tags: ['*']
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   PIP_CACHE_DIR: ~/.cache/pip
@@ -90,10 +90,12 @@ jobs:
           ${{ runner.os }}-pip-docs-
 
     - name: Install dependencies
-      run: pip install .[docs]
+      run: |
+        pip install .[docs]
+        pip install "phill @ git+https://github.com/exabl/snek5000-phill.git"
 
     - name: Build docs
-      run: make -C docs html
+      run: SPHINXOPTS="-W" make -C docs html
 
   deploy:
     needs: [docs, build]
