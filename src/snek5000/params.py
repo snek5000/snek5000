@@ -267,13 +267,14 @@ class Parameters(_Parameters):
         params = current
         assert params._tag == "params"
 
-        # FIXME: ashwinvis - What is going on here? Add some comments to
-        #        explain the logic.
-        # path relative to params
+        # path relative to params:
+        # we have `(path, name)` equal to
+        # `("params.output.history_points", "write_interval")` or
+        # `("params", "rayleigh")` and we want to end up with
+        # `"output.history_points.write_interval"` or `rayleigh`, resp.
         path = path[len("params") :]
         if path.startswith("."):
             path = path[1:]
-
         if path:
             path = path + "."
 
