@@ -10,7 +10,7 @@ import sys
 import textwrap
 from ast import literal_eval
 from configparser import ConfigParser
-from io import StringIO, TextIOBase
+from io import StringIO
 from math import nan
 from pathlib import Path
 
@@ -436,30 +436,27 @@ def _get_params_nek(params):
     return params.nek
 
 
-def _save_par_file(params, path_or_buffer, mode="w"):
+def _save_par_file(params, path, mode="w"):
     """Save the ``params.nek`` object as a `.par` file."""
     nek = _get_params_nek(params)
     nek._sync_par()
 
-    if isinstance(path_or_buffer, TextIOBase):
-        nek._par_file.write(path_or_buffer)
-    else:
-        path = path_or_buffer
-        _check_path_like(path)
-        with open(path, mode) as fp:
-            nek._par_file.write(fp)
+    _check_path_like(path)
+    with open(path, mode) as fp:
+        nek._par_file.write(fp)
 
-        if hasattr(nek.general, "_recorded_user_params"):
-            _save_recorded_user_params(nek.general._recorded_user_params, path.parent)
+    if hasattr(nek.general, "_recorded_user_params"):
+        _save_recorded_user_params(nek.general._recorded_user_params, path.parent)
 
 
 def _str_par_file(params):
     """Preview contents of the resulting `.par` file as a string"""
-    with StringIO() as output:
-        _save_par_file(params, output)
-        str_par = output.getvalue()
+    nek = _get_params_nek(params)
+    nek._sync_par()
 
-    return str_par
+    with StringIO() as output:
+        nek._par_file.write(output)
+        return output.getvalue()
 
 
 def _complete_params_from_par_file(params, path):
