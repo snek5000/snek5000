@@ -149,10 +149,18 @@ def test_user_params():
         if hasattr(p.nek.general, "_recorded_user_params"):
             p.nek.general._recorded_user_params.clear()
         p._set_attribs({"prandtl": 0.71, "rayleigh": 1.8e8})
-        p._record_nek_user_params({"prandtl": 8, "rayleigh": 9})
+        p._record_nek_user_params({"prandtl": 1, "rayleigh": 2})
         p._set_child("output")
         p.output._set_child("other", {"write_interval": 100})
-        p.output.other._record_nek_user_params({"write_interval": 1}, overwrite=True)
+        p.output.other._record_nek_user_params({"write_interval": 10}, overwrite=True)
+
+        with pytest.raises(ValueError):
+            p._change_index_userparams({2: "prandtl"})
+
+        with pytest.raises(ValueError):
+            p._change_index_userparams({5: "foo"})
+
+        p._change_index_userparams({2: "prandtl", 1: "rayleigh"})
 
     from snek5000.solvers.base import Simul
 
@@ -160,9 +168,9 @@ def test_user_params():
     complete_create_default_params(params)
 
     assert params.nek.general._recorded_user_params == {
-        8: "prandtl",
-        9: "rayleigh",
-        1: "output.other.write_interval",
+        2: "prandtl",
+        1: "rayleigh",
+        10: "output.other.write_interval",
     }
 
     params.prandtl = 2
