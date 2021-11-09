@@ -25,8 +25,8 @@ class ReaderBase(ABC):
         self.data = None
 
     @abstractmethod
-    def open(self, index=-1):
-        """Opens field file into memory and into :attr:`data`"""
+    def load(self, index=-1):
+        """Opens field file and loads into memory as :attr:`data`"""
         ...
 
     @abstractmethod

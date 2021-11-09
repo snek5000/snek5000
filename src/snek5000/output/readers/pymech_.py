@@ -8,7 +8,7 @@ from . import ReaderBase
 class ReaderPymech(ReaderBase):
     tag = "pymech"
 
-    def open(self, prefix="", index=-1, **kwargs):
+    def load(self, prefix="", index=-1, **kwargs):
         """Opens field files(s) as a xarray dataset. The data is cached in
         :attr:`data`.
 
@@ -67,7 +67,7 @@ class ReaderPymech(ReaderBase):
 class ReaderPymechStats(ReaderPymech):
     tag = "pymech_stats"
 
-    def open(self, prefix="sts", index=-1, **kwargs):
+    def load(self, prefix="sts", index=-1, **kwargs):
         """Opens statistics_ field files(s) as a xarray dataset
 
         .. _statistics: https://kth-nek5000.github.io/KTH_Framework/group__stat.html

@@ -69,7 +69,31 @@ class PhysFields:
             sim.info.solver.classes.Output.classes.PhysFields.import_classes()
         )
         Class = dict_classes[reader_key]
-        return Class(self.output)
+
+        reader = Class(self.output)
+        # TODO: Find a way to update documentation dynamically on first access, if
+        # possible. Or statically define it.  See how property(doc=...) works
+        # self.load = reader.load
+        # self.get_var = reader.get_var
+        return reader
+
+    @property
+    def load(self):
+        """Opens field file and loads into memory. For usage, see:
+
+        >>> help(sim.output.phys_fields._reader.load)
+
+        """
+        return self._reader.load
+
+    @property
+    def get_var(self):
+        """Get an array. For usage, see:
+
+        >>> help(sim.output.phys_fields._reader.get_var)
+
+        """
+        return self._reader.get_var
 
     def __init__(self, output=None):
         self.output = output
