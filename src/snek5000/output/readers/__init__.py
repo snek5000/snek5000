@@ -3,7 +3,7 @@
 .. autosummary::
    :toctree:
 
-   pymech_
+    pymech_
 
 .. paraview_
 

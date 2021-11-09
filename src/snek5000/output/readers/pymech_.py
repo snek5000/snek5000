@@ -68,5 +68,9 @@ class ReaderPymechStats(ReaderPymech):
     tag = "pymech_stats"
 
     def open(self, prefix="sts", index=-1, **kwargs):
-        """Opens :ref:`statistics` field files(s) as a xarray dataset"""
+        """Opens statistics_ field files(s) as a xarray dataset
+
+        .. _statistics: https://kth-nek5000.github.io/KTH_Framework/group__stat.html
+
+        """
         return super().open(prefix, index, **kwargs)

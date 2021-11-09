@@ -1,5 +1,7 @@
-"""Interface for Nek5000 field files. Loading of data files are managed by the
-classes in the :mod:`snek5000.output.readers`
+"""Interface for Nek5000 field files. :class:`PhysFields` usually
+instantiated as ``sim.output.phys_fields`` provides a common interface for
+plotting and reading arrays from the solution field files. Loading of data
+files are managed by the classes in the :mod:`snek5000.output.readers`.
 
 """
 from functools import cached_property
@@ -58,7 +60,8 @@ class PhysFields:
         iter_complete_params(params, info_solver, dict_classes.values())
 
     @cached_property
-    def reader(self):
+    def _reader(self):
+        """An instance which implements :class:`snek5000.output.readers.ReaderBase`."""
         sim = self.output.sim
 
         reader_key = self.params.phys_fields.reader

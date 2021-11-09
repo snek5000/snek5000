@@ -25,6 +25,7 @@ To install for development, execute::
    solver
    output
    params
+   phys_fields
    nek
    roadmap
    release

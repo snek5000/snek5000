@@ -8,7 +8,6 @@ Manage outputs
    history_points
    print_stdout
    phys_fields
-   readers
 
 
 """
