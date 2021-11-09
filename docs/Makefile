@@ -13,6 +13,7 @@ INTERSPHINX_TARGETS := \
 	intersphinx-python \
 	intersphinx-jinja2 \
 	intersphinx-nek \
+	intersphinx-fluiddyn \
 	intersphinx-fluidsim
 
 html:

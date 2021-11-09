@@ -1,6 +1,16 @@
 Internal API of Parameters
 ==========================
 
+.. seealso::
+
+   :doc:`Tutorial on FluidDyn's ParamContainer API
+   <fluiddyn:ipynb/tuto_paramscontainer>` and documentation of
+   :class:`fluiddyn.util.paramcontainer.ParamContainer` which is
+   extended for Snek5000.
+
+   The function :func:`fluidsim_core.params.iter_complete_params` also comes in
+   handy while building default Parameters.
+
 Conversion
 ----------
 
