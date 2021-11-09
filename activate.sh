@@ -1,7 +1,6 @@
 DIR="$(pwd)"
 export NEK_SOURCE_ROOT="$DIR/lib/Nek5000"
 export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
-export FLUIDSIM_TRANSONIC_BACKEND=python
 
 alias smake="snakemake -j all"
 # tarball utilities
@@ -28,7 +27,7 @@ if [ -d venv ]; then
   source venv/bin/activate
 elif [[ -z "$CONDA_PREFIX" ]] && [[ -z "$VIRTUAL_ENV" ]]; then
   echo 'WARNING: no venv / conda environment present.'
-  echo 'Read the docs on how to setup your Python environment: https://exabl.github.io/snek5000/README.html#installation'
+  echo 'Read the docs on how to setup your Python environment: https://snek5000.readthedocs.io/en/latest/intro.html'
 fi
 
 if [ "$BASH_VERSION" ]; then

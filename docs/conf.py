@@ -22,6 +22,12 @@ from datetime import date
 from pathlib import Path
 from subprocess import PIPE
 
+try:
+    from importlib import metadata
+except ImportError:
+    # Running on pre-3.8 Python; use importlib-metadata package
+    import importlib_metadata as metadata
+
 import breathe
 
 import snek5000
@@ -44,6 +50,7 @@ print("sys.path =\n   ", "\n    ".join(sys.path))
 # -- Project information -----------------------------------------------------
 
 project = "snek5000"
+_meta = metadata.metadata(project)
 _today = date.today()
 copyright = (
     f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
@@ -54,6 +61,13 @@ version = ".".join(snek5000.__version__.split(".")[:3])
 # The full version, including alpha/beta/rc tags
 release = snek5000.__version__
 
+_py_min_version = _meta.get("Requires-Python").split(">=")[-1]
+
+rst_prolog = f"""
+.. |author| replace:: {author}
+.. |today| replace:: {_today}
+.. |py_min_version| replace:: {_py_min_version}
+"""
 
 # -- General configuration ---------------------------------------------------
 
@@ -67,6 +81,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "sphinx_inline_tabs",
     #  "recommonmark",
     #  "myst_parser",
     "myst_nb",
@@ -232,12 +247,7 @@ html_context = {
     ],
 }
 # -- Options for Intersphinx -------------------------------------------------
-
-intersphinx_mapping = dict(
-    python=("https://docs.python.org/3", None),
-    nek=("https://nek5000.github.io/NekDoc", None),
-    jinja2=("https://jinja.palletsprojects.com/en/2.10.x", None),
-)
+intersphinx_mapping = runpy.run_path("ls_intersphinx_targets.py")["intersphinx_mapping"]
 
 # -- Other options ------------------------------------------------------------
 autosummary_generate = True

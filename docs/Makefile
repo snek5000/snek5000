@@ -9,6 +9,13 @@ SOURCEDIR     = .
 BUILDDIR      = _build
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
+INTERSPHINX_TARGETS := \
+	intersphinx-python \
+	intersphinx-jinja2 \
+	intersphinx-nek \
+	intersphinx-fluiddyn \
+	intersphinx-fluidsim
+
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
@@ -18,7 +25,7 @@ html:
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile
+.PHONY: help Makefile html $(INTERSPHINX_TARGETS) autobuild cleanall
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
@@ -26,14 +33,8 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 
-intersphinx-python:
-	@python -msphinx.ext.intersphinx https://docs.python.org/3/objects.inv
-
-intersphinx-nek:
-	@python -msphinx.ext.intersphinx https://nek5000.github.io/NekDoc/objects.inv
-
-intersphinx-jinja2:
-	@python -msphinx.ext.intersphinx https://jinja.palletsprojects.com/en/2.10.x/objects.inv
+$(INTERSPHINX_TARGETS): intersphinx-%:
+	@python ls_intersphinx_targets.py $(subst intersphinx-,,$@)
 
 autobuild:
 	@sphinx-autobuild --watch ../src --re-ignore '_build\/.*' "$(SOURCEDIR)" "$(BUILDDIR)/html"
