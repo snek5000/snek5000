@@ -232,12 +232,7 @@ html_context = {
     ],
 }
 # -- Options for Intersphinx -------------------------------------------------
-
-intersphinx_mapping = dict(
-    python=("https://docs.python.org/3", None),
-    nek=("https://nek5000.github.io/NekDoc", None),
-    jinja2=("https://jinja.palletsprojects.com/en/2.10.x", None),
-)
+intersphinx_mapping = runpy.run_path("ls_intersphinx_targets.py")["intersphinx_mapping"]
 
 # -- Other options ------------------------------------------------------------
 autosummary_generate = True

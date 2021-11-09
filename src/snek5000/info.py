@@ -19,14 +19,16 @@ class InfoSolverNek(InfoSolverCore):
 
         - :attr:`module_name` - module of the Simul class
         - :attr:`class_name` - Simul class name
-        - :attr:`short_name` - short name of the solver (and name used in the source code usr, par, re2, ma2 etc.)
+        - :attr:`short_name` - short name of the solver (and name used in the
+          source code usr, par, re2, ma2 etc.)
         - :attr:`par_sections` - sections in the .par file
-        - :attr:`par_sections_disabled` - sections to be disabled (i.e. removed while generating) in the .par file
+        - :attr:`par_sections_disabled` - sections to be disabled (i.e. removed
+          while generating) in the .par file
 
         """
         self._set_attribs(
             {
-                "module_name": "snek5000.solvers.base",  #:
+                "module_name": "snek5000.solvers.base",
                 "class_name": "SimulNek",
                 "short_name": "nek",
                 "par_sections": (
