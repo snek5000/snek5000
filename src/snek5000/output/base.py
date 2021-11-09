@@ -66,7 +66,7 @@ class Output(OutputCore):
     def excludes(self):
         """Prefixes and suffixes of files which should be excluded from being
         copied."""
-        return {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py")}
+        return {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py", ".usr.f")}
 
     @property
     def makefile_usr_sources(self):
@@ -457,48 +457,22 @@ class Output(OutputCore):
             return exclude
 
         new_root = Path(new_dir)
-        try:
-            logger.info("Copying with shutil.copytree ...")
-            copytree_kwargs = dict(
-                src=root, dst=new_root, symlinks=False, ignore=conditional_ignore
-            )
-            # Python 3.8+
-            shutil.copytree(**copytree_kwargs, dirs_exist_ok=True)
-        except (TypeError, shutil.Error):
-            try:
-                logger.warning(
-                    "Python < 3.8: shutil.copytree may not proceed if "
-                    "directories exist."
-                )
-                # Hoping that new_root has not been created
-                shutil.copytree(**copytree_kwargs)
-            except FileExistsError as e:
-                logger.warning(e)
-                logger.info("Copying with shutil.copy2 ...")
-                # Copy one by one from the scratch
-                if not new_root.exists():
-                    logger.debug(f"Creating {new_root} ...")
-                    os.makedirs(new_root, exist_ok=True)
+        logger.info("Copying with shutil.copytree ...")
+        # `dirs_exist_ok`` new in Python 3.8
+        shutil.copytree(
+            src=root,
+            dst=new_root,
+            symlinks=False,
+            ignore=conditional_ignore,
+            dirs_exist_ok=True,
+        )
 
-                for abs_path in abs_paths:
-                    rel_path = abs_path.relative_to(root)
-                    new_path = new_root / rel_path
-                    if not new_path.parent.exists():
-                        os.makedirs(new_path.parent)
+        # special case for .usr.f: copy to .usr
+        paths_usr_f = list(root.glob("*.usr.f"))
+        for path_usr_f in paths_usr_f:
+            shutil.copyfile(path_usr_f, new_root / path_usr_f.stem)
 
-                    logger.debug(f"Copying {new_path}")
-                    if new_path.exists():
-                        if force:
-                            logger.warning(f"{new_path} would be overwritten ...")
-                        else:
-                            logger.warning(
-                                f"{new_path} exists, skipping. Use force=True to overwrite."
-                            )
-                            continue
-
-                    shutil.copy2(abs_path, new_path)
-        finally:
-            logger.info(f"Copied: {root} -> {new_root}")
+        logger.info(f"Copied: {root} -> {new_root}")
 
     def write_box(self, template):
         """Write <case name>.box file from box.j2 template.

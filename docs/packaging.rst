@@ -25,14 +25,19 @@ repository) like this::
        └── snek5000_canonical
            ├── Snakefile
            ├── __init__.py
-           ├── canonical.usr
+           ├── canonical.usr.f
            ├── output.py
            ├── solver.py
            └── templates
                └── __init__.py
 
-
 Start populating with the following boilerplate.
+
+.. note::
+
+   The Nek5000 ``.usr`` files have to contain Fortran 77 code in strict form
+   layout. In snek5000 solvers, one can rename this file with the ``.usr.f``
+   extension so that editors can correctly highlight the Fortran code.
 
 setup.py
 --------
@@ -75,7 +80,7 @@ setup.cfg
    where=src
 
    [options.package_data]
-   snek5000_canonical = templates/*.j2, *.usr, Snakefile, etc/*.yml
+   snek5000_canonical = templates/*.j2, *.usr.f, Snakefile, etc/*.yml
 
 
 .. _solver.py:
