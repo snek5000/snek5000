@@ -66,7 +66,7 @@ class Output(OutputCore):
     def excludes(self):
         """Prefixes and suffixes of files which should be excluded from being
         copied."""
-        return {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py")}
+        return {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py", ".usr.f")}
 
     @property
     def makefile_usr_sources(self):
@@ -466,6 +466,12 @@ class Output(OutputCore):
             ignore=conditional_ignore,
             dirs_exist_ok=True,
         )
+
+        # special case for .usr.f: copy to .usr
+        paths_usr_f = list(root.glob("*.usr.f"))
+        for path_usr_f in paths_usr_f:
+            shutil.copyfile(path_usr_f, new_root / path_usr_f.stem)
+
         logger.info(f"Copied: {root} -> {new_root}")
 
     def write_box(self, template):
