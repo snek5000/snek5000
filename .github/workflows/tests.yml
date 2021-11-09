@@ -53,7 +53,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .[tests]
-        pip install "phill @ git+https://github.com/exabl/snek5000-phill.git"
+        pip install --no-deps "phill @ git+https://github.com/exabl/snek5000-phill.git"
 
     - name: Run tests
       run: |
@@ -80,6 +80,11 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
     - name: Cache pip requirements
       id: pip-cache-docs
       uses: actions/cache@v2
@@ -89,16 +94,20 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-docs-
 
+    - name: Verify Python environment
+      run: |
+        pip list
+        pip cache list
+
     - name: Install dependencies
       run: |
+        python -m pip install --upgrade pip
         pip install .[docs]
-        pip install "phill @ git+https://github.com/exabl/snek5000-phill.git"
+        pip install --no-deps "phill @ git+https://github.com/exabl/snek5000-phill.git"
 
     - name: Build docs
       run: |
-        # FIXME: Fails on Github CI, but cannot be reproduced locally. Most likely caused by https://github.com/sphinx-doc/sphinx/pull/9128
-        # SPHINXOPTS="-W" make -C docs html
-        make -C docs html
+        SPHINXOPTS="-W" make -C docs html
 
   deploy:
     needs: [docs, build]
