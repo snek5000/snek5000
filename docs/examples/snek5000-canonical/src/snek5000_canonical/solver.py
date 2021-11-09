@@ -19,11 +19,14 @@ class InfoSolverCanonical(InfoSolverMake):
         self.classes.Output.module_name = "snek5000_canonical.output"
         self.classes.Output.class_name = "OutputCanonical"
 
+        # To solve for the temperature, one needs to add a [TEMPERATURE]
+        # section in the .par file. It can be done like this:
+        self.par_sections_disabled.remove("temperature")
+
 
 class SimulCanonical(SimulNek):
-    """A solver which compiles and runs using a Snakefile.
+    """A solver which compiles and runs using a Snakefile."""
 
-    """
     InfoSolver = InfoSolverCanonical
 
     @classmethod
