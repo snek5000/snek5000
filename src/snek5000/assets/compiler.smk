@@ -5,7 +5,7 @@ from snek5000.clusters import nproc_available
 from snek5000.util import now
 
 
-NEK_SOURCE_ROOT = snek5000.source_root()
+NEK_SOURCE_ROOT = snek5000.get_nek_source_root()
 
 
 # Snakemake configuration

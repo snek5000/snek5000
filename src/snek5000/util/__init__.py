@@ -20,7 +20,7 @@ from zipfile import ZipFile
 
 from fluiddyn import util
 
-from .. import source_root
+from .. import get_nek_source_root, source_root
 from .restart import (  # noqa: kept for backwards compatibility
     get_status,
     prepare_for_restart,
@@ -112,7 +112,7 @@ def activate_paths():
     """Setup environment variables in preparation for Nek5000 build.
 
     .. deprecated:: 0.6.0
-       Use :func:`snek5000.source_root`
+       Use :func:`snek5000.get_nek_source_root`
        and :func:`snek5000.util.smake.ensure_env` instead.
 
     """
@@ -121,12 +121,12 @@ def activate_paths():
     warnings.warn(
         (
             "Function activate_paths will be removed on a later release. Use "
-            "source_root and ensure_env instead"
+            "get_nek_source_root and ensure_env instead"
         ),
         DeprecationWarning,
     )
 
-    env_source_root = os.environ["NEK_SOURCE_ROOT"] = source_root()
+    env_source_root = os.environ["NEK_SOURCE_ROOT"] = get_nek_source_root()
 
     env_path = str(os.getenv("PATH"))
     if env_source_root not in env_path:

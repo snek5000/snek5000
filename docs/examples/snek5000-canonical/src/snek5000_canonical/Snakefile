@@ -1,17 +1,14 @@
 import snek5000
 from snek5000_canonical.output import OutputCanonical as Output
 
+CASE_NAME = "canonical"
 
-# Case name
-CASE = "canonical"
-CONFIG = Output.get_configfile()
+configfile: Output.get_configfile()
 
 snek5000.ensure_env()
 
-configfile: CONFIG
-
 # Necessary to pass configuration to other Snakemake modules
-Output.update_snakemake_config(config, CASE)
+Output.update_snakemake_config(config, CASE_NAME)
 
 # default rule
 rule all:
@@ -22,8 +19,8 @@ rule all:
 # shorthand for mesh
 rule mesh:
     input:
-        f"{CASE}.re2",
-        f"{CASE}.ma2",
+        f"{CASE_NAME}.re2",
+        f"{CASE_NAME}.ma2",
 
 
 # compiler and run rules

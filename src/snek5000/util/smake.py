@@ -7,9 +7,9 @@ def ensure_env():
     intact.
 
     """
-    from .. import source_root
+    from .. import get_nek_source_root
 
-    NEK_SOURCE_ROOT = source_root()
+    NEK_SOURCE_ROOT = get_nek_source_root()
 
     if not os.getenv("NEK_SOURCE_ROOT"):
         os.environ["NEK_SOURCE_ROOT"] = NEK_SOURCE_ROOT

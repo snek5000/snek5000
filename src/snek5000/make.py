@@ -35,7 +35,13 @@ class Make:
         self.log_handler = []
 
     def list(self):
-        """List rules."""
+        """List rules.
+
+        Equivalent to::
+
+          snakemake --list-target-rules
+
+        """
         with change_dir(self.path_run):
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
@@ -72,11 +78,15 @@ class Make:
         It is also possible to do the same directly from command line
         by changing to the simulation directory and executing::
 
-            snakemake -j compile
-            snakemake -j1 --resources nproc=2 run
+          snakemake -j1 compile
+          snakemake -j1 --resources nproc=2 run
 
         The flag ``-j`` is short for ``--jobs`` and sets the number of
         threads available for snakemake rules to execute.
+
+        The list of the available target rules can be obtained with::
+
+          snakemake --list-target-rules
 
         .. seealso:: Useful Snakemake `command line arguments`_
 
