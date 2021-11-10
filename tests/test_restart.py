@@ -96,20 +96,42 @@ def test_phys_fields_uninit(sim):
         sim.output.phys_fields.get_var()
 
 
+pymech_issue = (
+    "Pymech does not support non-box meshes, and snek5000-phill has "
+    "such a geometry: https://github.com/eX-Mech/pymech/issues/31"
+)
+
+
+@pytest.mark.slow
+@pytest.mark.xfail(ValueError, reason=pymech_issue)
+def test_phys_fields_get_var_before_load(sim_executed):
+    sim_executed.output.phys_fields.init_reader()
+    ux = sim_executed.output.phys_fields.get_var("ux")
+    assert isinstance(ux, xr.DataArray)
+
+
+@pytest.mark.slow
+@pytest.mark.xfail(ValueError, reason=pymech_issue)
+def test_phys_fields_load_all(sim_executed):
+    sim_executed.output.phys_fields.init_reader()
+    ds = sim_executed.output.phys_fields.load(index="all")
+    assert isinstance(ds, xr.Dataset)
+
+
+@pytest.mark.slow
+@pytest.mark.xfail(ValueError, reason=pymech_issue)
+def test_phys_fields_load_stats(sim_executed):
+    sim_executed.output.phys_fields.change_reader("pymech_stats")
+    ds = sim_executed.output.phys_fields.load(index="*0")
+    assert isinstance(ds, xr.Dataset)
+
+
 @pytest.mark.slow
 def test_phys_fields(sim_executed):
     sim_executed.output.phys_fields.init_reader()
-
     try:
         ds = sim_executed.output.phys_fields.load()
-        ux = sim_executed.output.phys_fields.get_var("ux")
     except ValueError:
-        pytest.xfail(
-            reason=(
-                "Pymech does not support non-box meshes, and snek5000-phill has "
-                "such a geometry: https://github.com/eX-Mech/pymech/issues/31"
-            )
-        )
+        pytest.xfail(reason=pymech_issue)
     else:
         assert isinstance(ds, xr.Dataset)
-        assert isinstance(ux, xr.Dataset)

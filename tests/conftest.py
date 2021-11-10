@@ -60,7 +60,6 @@ def sim():
 
     params.nek.general.stop_at = "numSteps"
     params.nek.general.num_steps = 9
-
     return Simul(params)
 
 
@@ -137,6 +136,9 @@ def sim_executed():
     params.oper.nproc_min = 2
     params.oper.nproc_max = 12
     params.oper.nx = params.oper.ny = params.oper.nz = 3
+
+    params.nek.stat.av_step = 4
+    params.nek.stat.io_step = 8
 
     sim = Simul(params)
     sim.make.exec(["run_fg"])

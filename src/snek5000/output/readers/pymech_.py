@@ -2,6 +2,7 @@
 
 import pymech as pm
 
+from ...log import logger
 from . import ReaderBase
 
 
@@ -64,7 +65,8 @@ class ReaderPymech(ReaderBase):
 
         """
         if not self.data:
-            raise IOError("Call load() method first to load the dataset into memory.")
+            logger.info("Using defaults of the load() method to read the data.")
+            self.load()
 
         return self.data[key]
 
@@ -78,4 +80,4 @@ class ReaderPymechStats(ReaderPymech):
         .. _statistics: https://kth-nek5000.github.io/KTH_Framework/group__stat.html
 
         """
-        return super().open(prefix, index, **kwargs)
+        return super().load(prefix, index, **kwargs)
