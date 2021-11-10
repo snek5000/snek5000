@@ -33,7 +33,6 @@ pip install -e '.[dev]'
 pip install --no-deps -r ./docs/test-requirements.txt
 ```
 
-
 ## General guidelines
 
 * **Editor**: Use an editor which supports [EditorConfig](http://editorconfig.org/)

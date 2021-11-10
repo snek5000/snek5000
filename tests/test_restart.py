@@ -103,10 +103,10 @@ pymech_issue = (
 
 
 @pytest.mark.slow
-@pytest.mark.xfail(ValueError, reason=pymech_issue)
-def test_phys_fields_get_var_before_load(sim_executed):
-    sim_executed.output.phys_fields.init_reader()
-    ux = sim_executed.output.phys_fields.get_var("ux")
+def test_phys_fields_get_var_before_load(sim_cbox_executed):
+    sim = sim_cbox_executed
+    sim.output.phys_fields.init_reader()
+    ux = sim.output.phys_fields.get_var("ux")
     assert isinstance(ux, xr.DataArray)
 
 
