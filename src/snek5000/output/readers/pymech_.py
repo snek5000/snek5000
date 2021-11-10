@@ -19,11 +19,11 @@ class ReaderPymech(ReaderBase):
             field files.
 
         index : int or str
-            When an integer is provided, it refers to the index posiion in a
-            sorted list of field files. When a string is provided and the value
-            is `all` it loads all files, if not the value is assumed to be glob
-            pattern for the final 5 digits of the field filename extension (for
-            example: ``??20?``).
+            When an integer is provided, it refers to the index position in a
+            sorted list of field files. When ``index == "all"`` all files are
+            loaded. When ``index`` is some other string, it is assumed to be
+            glob pattern for the final 5 digits of the field filename extension
+            (for example: ``"??20?"``).
 
         **kwargs
             Keyword arguments for ``pymech.open_*`` function
@@ -55,12 +55,17 @@ class ReaderPymech(ReaderBase):
         Parameters
         ----------
         key: str
-            Key indicating a DataArray in
+            Key indicating a DataArray in the loaded dataset stored in :attr:`data`.
+            Must be called after :meth:`load`.
 
         Returns
         -------
         xarray.DataArray
+
         """
+        if not self.data:
+            raise IOError("Call load() method first to load the dataset into memory.")
+
         return self.data[key]
 
 
