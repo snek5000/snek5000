@@ -1,5 +1,6 @@
 import pymech as pm
 import pytest
+import xarray as xr
 
 from snek5000.output import _make_path_session
 from snek5000.params import load_params
@@ -84,3 +85,31 @@ def test_restart(sim_executed):
     # check if params_simul.xml is updated
     params_in_filesystem = load_params(sim_executed.path_run)
     assert params.output.session_id == params_in_filesystem.output.session_id
+
+
+def test_phys_fields_uninit(sim):
+    """Should error if trying to load / get_var without executing init_reader."""
+    with pytest.raises(RuntimeError):
+        sim.output.phys_fields.load()
+
+    with pytest.raises(RuntimeError):
+        sim.output.phys_fields.get_var()
+
+
+@pytest.mark.slow
+def test_phys_fields(sim_executed):
+    sim_executed.output.phys_fields.init_reader()
+
+    try:
+        ds = sim_executed.output.phys_fields.load()
+        ux = sim_executed.output.phys_fields.get_var("ux")
+    except ValueError:
+        pytest.xfail(
+            reason=(
+                "Pymech does not support non-box meshes, and snek5000-phill has "
+                "such a geometry: https://github.com/eX-Mech/pymech/issues/31"
+            )
+        )
+    else:
+        assert isinstance(ds, xr.Dataset)
+        assert isinstance(ux, xr.Dataset)

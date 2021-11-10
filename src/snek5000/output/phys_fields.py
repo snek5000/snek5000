@@ -4,9 +4,9 @@ plotting and reading arrays from the solution field files. Loading of data
 files are managed by the classes in the :mod:`snek5000.output.readers`.
 
 """
-from functools import cached_property
-
 from fluidsim_core.params import iter_complete_params
+
+from ..log import logger
 
 #  from .readers import try_paraview_ as pv
 from .readers import pymech_ as pm
@@ -59,42 +59,75 @@ class PhysFields:
         dict_classes = info_solver.classes.Output.classes.PhysFields.import_classes()
         iter_complete_params(params, info_solver, dict_classes.values())
 
-    @cached_property
-    def _reader(self):
-        """An instance which implements :class:`snek5000.output.readers.ReaderBase`."""
-        sim = self.output.sim
-
-        reader_key = self.params.phys_fields.reader
-        dict_classes = (
-            sim.info.solver.classes.Output.classes.PhysFields.import_classes()
-        )
-        Class = dict_classes[reader_key]
-
-        reader = Class(self.output)
-        # TODO: Find a way to update documentation dynamically on first access, if
-        # possible. Or statically define it.  See how property(doc=...) works
-        # self.load = reader.load
-        # self.get_var = reader.get_var
-        return reader
-
-    @property
-    def load(self):
-        """Opens field file and loads into memory. For usage, see:
-
-        >>> help(sim.output.phys_fields._reader.load)
-
-        """
-        return self._reader.load
-
-    @property
-    def get_var(self):
-        """Get an array. For usage, see:
-
-        >>> help(sim.output.phys_fields._reader.get_var)
-
-        """
-        return self._reader.get_var
-
     def __init__(self, output=None):
         self.output = output
         self.params = output.params
+
+        self._reader = None  #: Reader instance
+
+        self.load = self._uninitialized
+        """Reader method which loads a particular file into memory and returns it.
+
+        .. seealso::
+            :meth:`snek5000.output.readers.ReaderBase.load`
+        """
+
+        self.get_var = self._uninitialized
+        """Reader method which returns a particular array from memory.
+
+        .. seealso::
+            :meth:`snek5000.output.readers.ReaderBase.get_var`
+        """
+
+    def _uninitialized(self, *args, **kwargs):
+        """Place holder method to raise a :exc:`RuntimeError` while accessing
+        :meth:`init_reader` not initialized.
+
+        """
+        raise RuntimeError(
+            "The reader and the method has not initialized yet. "
+            "Call sim.output.phys_fields.init_reader() to initialize the reader."
+        )
+
+    def init_reader(self):
+        """Initializes the reader instance following the value in
+        ``params.output.phys_fields.reader``. This would also "initialize"
+        :meth:`load` and :meth:`get_var`.
+
+        """
+        if self._reader:
+            logger.warning(
+                "The reader is already initialized. Use change_reader() "
+                "if you need to change the backend"
+            )
+            return
+
+        reader_key = self.params.phys_fields.reader
+        self.change_reader(reader_key)
+
+    def change_reader(self, reader_key):
+        """Changes the reader following which ``reader_key`` is provided.
+
+        Parameters
+        ----------
+        reader_key: str
+            String denoting the reader class. Should be one of
+            ``params.output.phys_fields.available_readers``.
+
+        """
+        sim = self.output.sim
+
+        dict_classes = (
+            sim.info.solver.classes.Output.classes.PhysFields.import_classes()
+        )
+        try:
+            Class = dict_classes[reader_key]
+        except AttributeError as err:
+            available_readers = self.params.phys_fields.available_readers
+            raise ValueError(
+                f"{reader_key =} not found in {available_readers =}"
+            ) from err
+
+        self._reader = Class(self.output)
+        self.load = self._reader.load
+        self.get_var = self._reader.get_var
