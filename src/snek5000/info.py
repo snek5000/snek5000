@@ -41,12 +41,12 @@ class InfoSolverNek(InfoSolverCore):
                     "scalar01",
                     "cvode",
                 ),
-                "par_sections_disabled": (
+                "par_sections_disabled": {
                     "mesh",
                     "temperature",
                     "scalar01",
                     "cvode",
-                ),
+                },
             }
         )
         self._set_child("classes")
