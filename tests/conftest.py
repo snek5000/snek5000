@@ -166,7 +166,7 @@ def sim_cbox_executed():
     params.oper.max.hist = len(coords) + 1
 
     sim = Simul(params)
-    sim.make.exec(["run_fg"])
+    sim.make.exec(["run_fg"], resources={"nproc": 2})
     return sim
 
 

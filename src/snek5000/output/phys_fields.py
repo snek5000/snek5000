@@ -30,7 +30,7 @@ class PhysFields:
           default one (for example with the tag 'pymech').
 
         """
-        classesXML = info_solver.classes.PhysFields._set_child("classes")
+        classes_xml = info_solver.classes.PhysFields._set_child("classes")
 
         avail_classes = [
             #  pv.ReaderParaview,
@@ -42,7 +42,7 @@ class PhysFields:
             avail_classes.extend(classes)
 
         for cls in avail_classes:
-            classesXML._set_child(
+            classes_xml._set_child(
                 cls.tag,
                 attribs={
                     "module_name": cls.__module__,
@@ -121,13 +121,13 @@ class PhysFields:
             sim.info.solver.classes.Output.classes.PhysFields.import_classes()
         )
         try:
-            Class = dict_classes[reader_key]
+            cls = dict_classes[reader_key]
         except AttributeError as err:
             available_readers = self.params.phys_fields.available_readers
             raise ValueError(
                 f"{reader_key =} not found in {available_readers =}"
             ) from err
 
-        self._reader = Class(self.output)
+        self._reader = cls(self.output)
         self.load = self._reader.load
         self.get_var = self._reader.get_var
