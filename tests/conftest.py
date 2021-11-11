@@ -153,12 +153,17 @@ def sim_cbox_executed():
     params.output.sub_directory = "test"
 
     params.nek.general.stop_at = "endTime"
+    params.nek.general.dt = 1e-3
     params.nek.general.end_time = 10 * abs(params.nek.general.dt)
     params.nek.general.write_interval = 5
 
     params.oper.nproc_min = 2
     params.oper.nproc_max = 12
     params.oper.nx = params.oper.ny = params.oper.nz = 3
+
+    coords = [(0.5, 0.5)]
+    params.output.history_points.coords = coords
+    params.oper.max.hist = len(coords) + 1
 
     sim = Simul(params)
     sim.make.exec(["run_fg"])
