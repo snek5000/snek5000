@@ -53,7 +53,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .[tests]
-        pip install --no-deps "phill @ git+https://github.com/exabl/snek5000-phill.git"
+        pip install --no-deps -r ./docs/test-requirements.txt
 
     - name: Run tests
       run: |

@@ -30,8 +30,9 @@ do this (and it has to be done only once):
 Finally, to install in development mode:
 ```sh
 pip install -e '.[dev]'
-pip install "phill @ git+https://github.com/exabl/snek5000-phill.git"
+pip install --no-deps -r ./docs/test-requirements.txt
 ```
+
 
 ## General guidelines
 
