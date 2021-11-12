@@ -6,6 +6,12 @@ from snakemake import snakemake
 from snakemake.executors import change_working_directory as change_dir
 
 
+def unlock(path_dir):
+    """Unlock a directory locked using Snakemake."""
+    with change_dir(path_dir):
+        snakemake("Snakefile", unlock=True)
+
+
 class Make:
     """Snakemake interface for the solvers.
 
