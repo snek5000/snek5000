@@ -46,8 +46,8 @@ def test_not_found(sim_data):
 
 def test_partial_content(sim_data):
     (sim_data / ".snakemake").mkdir()
-    session = _make_path_session(sim_data, 1)
-    [restart.unlink() for restart in session.glob("rs6*")]
+    _make_path_session(sim_data, 1)
+    [restart.unlink() for restart in sim_data.glob("rs6*")]
 
     assert get_status(sim_data).code == 206
 

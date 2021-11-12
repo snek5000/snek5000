@@ -195,15 +195,15 @@ phill.ma2
 phill.par
 phill.re2
 phill.usr
+rs6phill0.f00001
+rs6phill0.f00002
+rs6phill0.f00003
 SESSION.NAME
 SIZE
 Snakefile""".splitlines()
 
     session_files = """
 phill0.f00001
-rs6phill0.f00001
-rs6phill0.f00002
-rs6phill0.f00003
 """.splitlines()
 
     path_run = Path(tmpdir_factory.mktemp("phill_sim_data"))
