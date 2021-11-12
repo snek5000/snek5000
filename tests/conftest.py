@@ -145,8 +145,8 @@ def sim_executed():
     return sim
 
 
-@pytest.fixture(scope="module")
-def sim_cbox_executed():
+@pytest.fixture
+def sim_cbox_executed(monkeypatch):
     from snek5000_cbox.solver import Simul
 
     params = Simul.create_default_params()
@@ -164,6 +164,17 @@ def sim_cbox_executed():
     coords = [(0.5, 0.5)]
     params.output.history_points.coords = coords
     params.oper.max.hist = len(coords) + 1
+
+    def mock_append_debug_flags(config, warnings):
+        pass
+
+    monkeypatch.setattr("snek5000.append_debug_flags", mock_append_debug_flags)
+    monkeypatch.setattr(
+        "snek5000.util.smake.append_debug_flags", mock_append_debug_flags
+    )
+    monkeypatch.setattr(
+        "snek5000.output.base.append_debug_flags", mock_append_debug_flags
+    )
 
     sim = Simul(params)
     assert sim.make.exec(["run_fg"], resources={"nproc": 2}), "cbox simulation failed"
