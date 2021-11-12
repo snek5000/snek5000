@@ -123,8 +123,9 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      a = -pi
-      b = pi
+      ! NOTE: the only change we make here from the original code
+      a = -uparam(1)
+      b = uparam(1)
       call rescale_x(xm1,a,b)
       call rescale_x(ym1,a,b)
       call rescale_x(zm1,a,b)
