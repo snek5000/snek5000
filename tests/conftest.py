@@ -116,6 +116,14 @@ def sim2d():
 
 
 @pytest.fixture(scope="module")
+def sim_canonical():
+    from snek5000_canonical.solver import Simul
+
+    params = Simul.create_default_params()
+    return Simul(params)
+
+
+@pytest.fixture(scope="module")
 def sim_executed():
     from phill.solver import Simul
 

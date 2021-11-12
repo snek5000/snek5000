@@ -33,7 +33,7 @@ c
       {{ parameter("lelg", max_n_seq) }}  ! max total number of elements
       {{ parameter("lpmin", params.oper.nproc_min) }}  ! min MPI ranks
       {{ parameter("lpmax", params.oper.nproc_max) }}  ! max MPI ranks
-      {{ parameter("ldimt", params.oper.scalars) }}  ! max auxiliary fields (temperature + scalars)
+      {{ parameter("ldimt", (1, params.oper.scalars) | max) }}  ! max auxiliary fields (temperature + scalars)
 
       ! OPTIONAL
       {{ parameter("ldimt_proj", params.oper.max.scalars_proj) }}  ! max auxiliary fields residual projection

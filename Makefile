@@ -1,5 +1,6 @@
 dev:
 	pip install -e .[dev]
+	pip install --no-deps -e ./docs/examples/snek5000-canonical/
 
 test:
 	pytest
