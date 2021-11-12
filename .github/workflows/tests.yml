@@ -63,11 +63,7 @@ jobs:
 
     - name: Upload coverage to codecov
       if: ${{ success() }}
-      run: |
-        pip install codecov
-        codecov
-      env:
-        super_secret: ${{ secrets.CODECOV_TOKEN }}
+      uses: codecov/codecov-action@v2
 
   docs:
     runs-on: ubuntu-latest

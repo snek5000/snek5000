@@ -39,7 +39,10 @@ def test_output(sim_data):
     assert (
         sim.output.print_stdout.file.exists()
     ), "Cannot find .log file for print_stdout"
-    assert sim.output.phys_fields.path_run.exists(), "Cannot initialize phys_fields"
+    try:
+        sim.output.phys_fields
+    except AttributeError as err:
+        raise AssertionError("Cannot initialize phys_fields") from err
 
 
 def test_init_output():
