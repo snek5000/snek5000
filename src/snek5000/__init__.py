@@ -33,7 +33,6 @@ except ImportError:
     import importlib_resources as resources
 import os
 import weakref
-from pathlib import Path
 
 from fluiddyn.util import mpi  # noqa: F401
 
@@ -72,7 +71,7 @@ def get_asset(asset_name):
     return asset
 
 
-def load_simul(path_dir=".", session_id=None):
+def load_simul(path_dir=".", session_id=None, reader=True):
     """Loads a simulation
 
     .. todo::
@@ -91,6 +90,14 @@ def load_simul(path_dir=".", session_id=None):
         `session_id` and `path_session` values last recorded in the
         `params_simul.xml` file
 
+    reader: bool or str
+        By default (`reader=True`) invokes
+        :meth:`sim.output.phys_fields.init_reader()
+        <snek5000.output.phys_fields.PhysFields.init_reader>`. If a string is
+        provided, it is passed onto
+        :meth:`sim.output.phys_fields.change_reader(reader)
+        <snek5000.output.phys_fields.PhysFields.change_reader>`.
+
 
     .. hint::
 
@@ -99,7 +106,9 @@ def load_simul(path_dir=".", session_id=None):
         <snek5000.output.base.Output.get_field_file>` method
 
     """
-    path_dir = Path(path_dir)
+    from snek5000.util.files import _path_try_from_fluidsim_path
+
+    path_dir = _path_try_from_fluidsim_path(path_dir)
 
     # Load simulation class
     from snek5000.solvers import import_cls_simul, get_solver_short_name
@@ -129,6 +138,17 @@ def load_simul(path_dir=".", session_id=None):
         params.output.path_session = _make_path_session(path_dir, session_id)
 
     sim = Simul(params)
+
+    if reader:
+        if reader is True:
+            sim.output.phys_fields.init_reader()
+        elif isinstance(reader, str):
+            sim.output.phys_fields.change_reader(reader)
+        else:
+            raise ValueError(
+                f"Reader should be either True or False or one of {params.output.phys_fields.available_readers = }"
+            )
+
     return sim
 
 

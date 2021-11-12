@@ -2,6 +2,7 @@ import pymech as pm
 import pytest
 import xarray as xr
 
+import snek5000
 from snek5000.output import _make_path_session
 from snek5000.params import load_params
 from snek5000.util.restart import SnekRestartError, get_status, load_for_restart
@@ -89,11 +90,30 @@ def test_restart(sim_executed):
 
 def test_phys_fields_uninit(sim):
     """Should error if trying to load / get_var without executing init_reader."""
-    with pytest.raises(RuntimeError):
+    with pytest.raises(
+        RuntimeError, match="The reader and the method has not initialized yet."
+    ):
         sim.output.phys_fields.load()
 
-    with pytest.raises(RuntimeError):
+    with pytest.raises(
+        RuntimeError, match="The reader and the method has not initialized yet."
+    ):
         sim.output.phys_fields.get_var()
+
+
+@pytest.mark.parametrize("reader", (True, "pymech_stats"))
+def test_load_with_phys_fields(sim, reader):
+    sim2 = snek5000.load(sim.path_run, reader=reader)
+    with pytest.raises(FileNotFoundError):
+        sim2.output.phys_fields.load()
+
+    with pytest.raises(FileNotFoundError):
+        sim2.output.phys_fields.get_var("ux")
+
+
+def test_load_wrong_phys_fields_reader(sim):
+    with pytest.raises(ValueError, match="params.output.phys_fields.available_readers"):
+        snek5000.load(sim.path_run, reader=1.0)
 
 
 pymech_issue = (

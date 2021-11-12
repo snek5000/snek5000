@@ -66,7 +66,10 @@ class Output(OutputCore):
     def excludes(self):
         """Prefixes and suffixes of files which should be excluded from being
         copied."""
-        return {"prefix": "__", "suffix": (".vimrc", ".tar.gz", ".o", ".py", ".usr.f")}
+        return {
+            "prefix": "__",
+            "suffix": (".vimrc", ".tar.gz", ".o", ".py", ".usr.f", ".par.cfg"),
+        }
 
     @property
     def makefile_usr_sources(self):

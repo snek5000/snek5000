@@ -2,6 +2,8 @@ import re
 from pathlib import Path
 from shutil import copy2
 
+from fluiddyn.io import FLUIDSIM_PATH
+
 from .. import logger
 from ..params import load_params
 
@@ -111,3 +113,17 @@ def create_session(case, re2, ma2, par):
 
     # Copy par files to run without recompiling
     copy2(par, session_dir / par)
+
+
+def _path_try_from_fluidsim_path(path_dir):
+    """Converts to a :class:`pathlib.Path` object and if it does not exists,
+    attempts a path relative to environment variable ``FLUIDSIM_PATH``.
+
+    """
+    path = Path(path_dir)
+
+    if not path.exists():
+        logger.info("Trying to open the path relative to $FLUIDSIM_PATH")
+        path = Path(FLUIDSIM_PATH) / path_dir
+
+    return path
