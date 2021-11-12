@@ -71,7 +71,7 @@ def get_asset(asset_name):
     return asset
 
 
-def load_simul(path_dir=".", session_id=None, reader=False):
+def load_simul(path_dir=".", session_id=None, reader=True):
     """Loads a simulation
 
     .. todo::
@@ -91,9 +91,10 @@ def load_simul(path_dir=".", session_id=None, reader=False):
         `params_simul.xml` file
 
     reader: bool or str
-        If True invokes :meth:`sim.output.phys_fields.init_reader()
+        By default (`reader=True`) invokes
+        :meth:`sim.output.phys_fields.init_reader()
         <snek5000.output.phys_fields.PhysFields.init_reader>`. If a string is
-        provided it is passed onto
+        provided, it is passed onto
         :meth:`sim.output.phys_fields.change_reader(reader)
         <snek5000.output.phys_fields.PhysFields.change_reader>`.
 
@@ -145,7 +146,7 @@ def load_simul(path_dir=".", session_id=None, reader=False):
             sim.output.phys_fields.change_reader(reader)
         else:
             raise ValueError(
-                f"Reader should be either True or one of {params.output.phys_fields.available_readers = }"
+                f"Reader should be either True or False or one of {params.output.phys_fields.available_readers = }"
             )
 
     return sim
