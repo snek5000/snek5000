@@ -7,13 +7,11 @@ from enum import Enum
 from pathlib import Path
 from warnings import warn
 
-from fluiddyn.io import FLUIDSIM_PATH
-
 from ..log import logger
 from ..output import _make_path_session, _parse_path_run_session_id
 from ..params import load_params
 from ..solvers import get_solver_short_name, import_cls_simul
-from .files import next_path
+from .files import _path_try_from_fluidsim_path, next_path
 
 
 class SnekRestartError(Exception):
@@ -186,11 +184,7 @@ def load_for_restart(
       framework) with appropriate ``chkp_fnumber`` to restart from.
 
     """
-    path = Path(path_dir)
-
-    if not path.exists():
-        logger.info("Trying to open the path relative to $FLUIDSIM_PATH")
-        path = Path(FLUIDSIM_PATH) / path_dir
+    path = _path_try_from_fluidsim_path(path_dir)
 
     # In case the user specifies the path to a session sub-directory
     if session_id is None:

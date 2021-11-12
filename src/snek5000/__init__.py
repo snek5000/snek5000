@@ -33,7 +33,6 @@ except ImportError:
     import importlib_resources as resources
 import os
 import weakref
-from pathlib import Path
 
 from fluiddyn.util import mpi  # noqa: F401
 
@@ -99,7 +98,9 @@ def load_simul(path_dir=".", session_id=None):
         <snek5000.output.base.Output.get_field_file>` method
 
     """
-    path_dir = Path(path_dir)
+    from snek5000.util.files import _path_try_from_fluidsim_path
+
+    path_dir = _path_try_from_fluidsim_path(path_dir)
 
     # Load simulation class
     from snek5000.solvers import import_cls_simul, get_solver_short_name
