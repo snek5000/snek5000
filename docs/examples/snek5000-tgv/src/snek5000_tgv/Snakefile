@@ -1,0 +1,65 @@
+import snek5000
+from snek5000_tgv.output import OutputTGV as Output
+
+
+# Case name
+CASE = "tgv"
+CONFIG = Output.get_configfile()
+
+snek5000.ensure_env()
+
+
+configfile: CONFIG
+
+
+# Necessary to pass configuration to other Snakemake modules
+Output.update_snakemake_config(config, CASE)
+
+
+# default rule
+rule all:
+    input:
+        "nek5000",
+
+
+# shorthand for mesh
+rule mesh:
+    input:
+        f"{CASE}.re2",
+        f"{CASE}.ma2",
+
+
+# compiler and run rules
+# ======================
+module compiler:
+    snakefile:
+        snek5000.get_asset("compiler.smk")
+    config:
+        config
+
+
+use rule * from compiler
+
+
+# I/O rules
+# =========
+module io:
+    snakefile:
+        snek5000.get_asset("io.smk")
+    config:
+        config
+
+
+use rule * from io
+
+
+# internal rules
+# ==============
+module internal:
+    snakefile:
+        snek5000.get_asset("internal.smk")
+    config:
+        config
+
+
+use rule * from internal as internal_*
