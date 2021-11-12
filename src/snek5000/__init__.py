@@ -72,7 +72,7 @@ def get_asset(asset_name):
     return asset
 
 
-def load_simul(path_dir=".", session_id=None):
+def load_simul(path_dir=".", session_id=None, reader=False):
     """Loads a simulation
 
     .. todo::
@@ -90,6 +90,13 @@ def load_simul(path_dir=".", session_id=None):
         ``sim.output.path_session``. If not specified it would default to the
         `session_id` and `path_session` values last recorded in the
         `params_simul.xml` file
+
+    reader: bool or str
+        If True invokes :meth:`sim.output.phys_fields.init_reader()
+        <snek5000.output.phys_fields.PhysFields.init_reader>`. If a string is
+        provided it is passed onto
+        :meth:`sim.output.phys_fields.change_reader(reader)
+        <snek5000.output.phys_fields.PhysFields.change_reader>`.
 
 
     .. hint::
@@ -129,6 +136,17 @@ def load_simul(path_dir=".", session_id=None):
         params.output.path_session = _make_path_session(path_dir, session_id)
 
     sim = Simul(params)
+
+    if reader:
+        if reader is True:
+            sim.output.phys_fields.init_reader()
+        elif isinstance(reader, str):
+            sim.output.phys_fields.change_reader(reader)
+        else:
+            raise ValueError(
+                f"Reader should be either True or one of {params.output.phys_fields.available_readers = }"
+            )
+
     return sim
 
 
