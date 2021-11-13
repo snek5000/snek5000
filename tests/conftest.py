@@ -141,7 +141,7 @@ def sim_executed():
     params.nek.stat.io_step = 8
 
     sim = Simul(params)
-    assert sim.make.exec(["run_fg"]), "phill simulation failed"
+    assert sim.make.exec("run_fg"), "phill simulation failed"
     return sim
 
 
@@ -177,7 +177,7 @@ def sim_cbox_executed(monkeypatch):
     )
 
     sim = Simul(params)
-    assert sim.make.exec(["run_fg"], resources={"nproc": 2}), "cbox simulation failed"
+    assert sim.make.exec("run_fg", resources={"nproc": 2}), "cbox simulation failed"
     return sim
 
 

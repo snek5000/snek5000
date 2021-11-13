@@ -78,7 +78,7 @@ def test_restart(sim_executed):
     )  # In phill for some reason dt is negative
 
     sim = Simul(params)
-    sim.make.exec(["run_fg"])
+    sim.make.exec("run_fg")
 
     fld = pm.readnek(sim.output.get_field_file())
     assert fld.time == t_end
