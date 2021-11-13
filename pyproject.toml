@@ -7,10 +7,34 @@ write_to = "src/snek5000/_version.py"
 write_to_template = "__version__ = \"{version}\"\n"
 
 [tool.pytest.ini_options]
-addopts = "--cov=snek5000 --cov=tests --no-cov-on-fail"
+addopts = "--cov --cov-config=pyproject.toml --no-cov-on-fail"
 
 [tool.isort]
 known_first_party = ["fluiddyn", "fluidsim", "snek5000"]
 # multi_line_output = 3
 profile = "black"
 line_length = 82
+
+[tool.coverage.run]
+source = ["./src", "./tests"]
+data_file = ".coverage/coverage"
+omit = [
+    "*/try_*.py",
+    "*/_old_*.py"
+]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "if __name__ == .__main__.:",
+    'if "sphinx" in sys.modules:',
+    "raise ValueError",
+    "raise NotImplementedError",
+    "except KeyError:",
+    "except ImportError:",
+    "except AttributeError:",
+    "except NotImplementedError:"
+]
+
+[tool.coverage.html]
+directory = ".coverage/html"
