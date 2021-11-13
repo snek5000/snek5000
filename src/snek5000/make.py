@@ -3,11 +3,10 @@
 
 """
 from typing import Iterable
+from warnings import warn
 
 from snakemake import snakemake
 from snakemake.executors import change_working_directory as change_dir
-
-from .log import logger
 
 
 def unlock(path_dir):
@@ -89,10 +88,13 @@ class Make:
 
         """
         if not isinstance(rule, str) and isinstance(rule, Iterable) and not extra_rules:
-            logger.warning(
-                f"Rules {rule} should be passed as positional arguments, i.e. a "
-                f"string or comma separated strings; and not as a {type(rule)}. "
-                "Changed in snek5000 0.8.0b0"
+            warn(
+                (
+                    f"Rules {rule} should be passed as positional arguments, "
+                    "i.e. a string or comma separated strings; and not as a "
+                    f"{type(rule)}. Changed in snek5000 0.8.0b0."
+                ),
+                DeprecationWarning,
             )
             rules = rule
         else:
