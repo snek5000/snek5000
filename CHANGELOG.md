@@ -36,8 +36,10 @@ Security in case of vulnerabilities.
 - {mod}`snek5000.util.files`
 - {meth}`snek5000.output.base.Output.get_field_file` to locate a field file
 - Mandatory key `MPIEXEC_FLAGS` in Snakemake config
-- {class}`snek5000.output.history_points.HistoryPoints` for `Nek5000 history points
-  <https://nek5000.github.io/NekDoc/problem_setup/features.html#history-points>`__
+- {class}`snek5000.output.history_points.HistoryPoints` for {ref}`Nek5000 history points <nek:features_his>`
+- {class}`snek5000.output.phys_fields.PhysFields` now fully functional with
+  `load` and `get_var` methods provided by classes under {mod}`snek5000.output.readers`.
+- Support for number of processes detection in OAR clusters
 
 ### Changed
 
@@ -52,10 +54,15 @@ Security in case of vulnerabilities.
 - Shorter output while executing `genmap`
 - Field files will be stored in sessions enabling restart with symlinking of
   restart files and avoids clobbering existing solution files
+- Support extension `.usr.f` to facilitate syntax highlighting and which would
+  be copied as a `.usr` file upon {meth}`snek5000.output.base.Output.copy`
+- The use of `params.nek.general.user_params` are replaced by a more powerful
+  {meth}`snek5000.params.Parameters._record_nek_user_params` method. 
 
 ### Deprecated
 
 - {func}`snek5000.util.restart.prepare_for_restart`
+- Passing rules as iterables to {meth}`snek5000.make.Make.exec`. Pass positional parameters instead.
 
 ### Fixed
 
