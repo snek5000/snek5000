@@ -39,17 +39,13 @@ class Make:
         with change_dir(self.path_run):
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
-    def exec(
-        self, rule="run", /, *extra_rules, dryrun=False, keep_incomplete=True, **kwargs
-    ):
+    def exec(self, *rules, dryrun=False, keep_incomplete=True, **kwargs):
         """Execute snakemake rules in sequence.
 
         Parameters
-        ---------------------
-        rule: str, positional-only
-            Snakemake rules to be executed
-        *extra_rules: iterable of str, positional-only
-            Extra snakemake rules to be executed
+        ----------
+        rules: iterable of str, positional-only
+            Snakemake rules to be executed. Default rule is `"run"`
         dryrun: bool
             Dry run snakemake rules without executing
         keep_incomplete: bool
@@ -87,18 +83,26 @@ class Make:
         .. _command line arguments: https://snakemake.readthedocs.io/en/stable/executing/cli.html#useful-command-line-arguments
 
         """
-        if not isinstance(rule, str) and isinstance(rule, Iterable) and not extra_rules:
+        # Default rule
+        if not rules:
+            rules = ("run",)
+
+        # Check if rules were passed as a list / tuple (old API)
+        first_rule = rules[0]
+        if (
+            not isinstance(first_rule, str)
+            and isinstance(first_rule, Iterable)
+            and len(rules) == 1
+        ):
             warn(
                 (
-                    f"Rules {rule} should be passed as positional arguments, "
+                    f"Rules {first_rule} should be passed as positional arguments, "
                     "i.e. a string or comma separated strings; and not as a "
-                    f"{type(rule)}. Changed in snek5000 0.8.0b0."
+                    f"{type(first_rule)}. Changed in snek5000 0.8.0b0."
                 ),
                 DeprecationWarning,
             )
-            rules = rule
-        else:
-            rules = (rule, *extra_rules)
+            rules = first_rule
 
         with change_dir(self.path_run):
             return snakemake(
