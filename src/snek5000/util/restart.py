@@ -43,13 +43,13 @@ class SimStatus(Enum):
     )
     NOT_FOUND = (
         404,
-        "Not Found: SIZE and/or nek5000 and/or SESSION.NAME files are missing.",
+        "Not Found: SIZE and/or nek5000 is missing.",
     )
     LOCKED = (
         423,
         (
             "Locked: The path is currently locked by snakemake. "
-            "Execute `snakemake --unlock` or see prepare_for_restart function."
+            "Execute `snakemake --unlock` function snek5000.make.unlock."
         ),
     )
     TOO_EARLY = (
@@ -105,11 +105,11 @@ def get_status(path_dir, session_id=None, verbose=False):
         if locks:
             return SimStatus.LOCKED
 
-    if not {"SIZE", "SESSION.NAME", "nek5000"}.issubset(contents):
+    if not {"SIZE", "nek5000"}.issubset(contents):
         return SimStatus.NOT_FOUND
 
-    checkpoints = set(path_session.glob("rs6*0.f?????"))
-    field_files = set(path_session.glob("*0.f?????")) - checkpoints
+    checkpoints = set(path.glob("rs6*0.f?????"))
+    field_files = set(path_session.glob("*0.f?????"))
 
     if checkpoints and field_files:
         return SimStatus.RESET_CONTENT
@@ -251,8 +251,9 @@ def load_for_restart(
             params.nek.chkpoint.chkp_fnumber = use_checkpoint
             params.nek.chkpoint.read_chkpt = True
 
-            for restart_file in old_path_session.glob(f"rs6{short_name}0.f?????"):
-                make_relative_symlink(restart_file.name)
+            # NOTE: restart files are written into in path_run and not old_path_session
+            #  for restart_file in old_path_session.glob(f"rs6{short_name}0.f?????"):
+            #      make_relative_symlink(restart_file.name)
         else:
             raise SnekRestartError(
                 f"Restart checkpoint {use_checkpoint} is invalid / does not exist"

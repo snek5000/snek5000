@@ -48,9 +48,9 @@ params = Simul.create_default_params()
 
 sim = Simul(params)
 sim.make.exec()  # by default starts a run
-sim.make.exec(["mesh", "compile"])  # run rules in order
-sim.make.exec(["run"], dryrun=True)  # simulate simulation
-sim.make.exec(["run"], resources={"nproc": 2})  # actual simulation
+sim.make.exec("mesh", "compile")  # run rules in order
+sim.make.exec("run", dryrun=True)  # simulate simulation
+sim.make.exec("run", resources={"nproc": 2})  # actual simulation
 ```
 
 Check out the

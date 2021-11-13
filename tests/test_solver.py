@@ -1,3 +1,5 @@
+import pytest
+
 from snek5000 import load_simul
 from snek5000.solvers import available_solvers, import_cls_simul
 
@@ -43,6 +45,13 @@ def test_output(sim_data):
         sim.output.phys_fields
     except AttributeError as err:
         raise AssertionError("Cannot initialize phys_fields") from err
+
+
+def test_make_exec_deprecation(sim2d):
+    with pytest.deprecated_call():
+        sim2d.make.exec(["phill.re2", "phill.ma2"])
+
+    sim2d.make.exec("SESSION.NAME")
 
 
 def test_init_output():

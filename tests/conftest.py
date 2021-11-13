@@ -141,7 +141,7 @@ def sim_executed():
     params.nek.stat.io_step = 8
 
     sim = Simul(params)
-    assert sim.make.exec(["run_fg"]), "phill simulation failed"
+    assert sim.make.exec("run_fg"), "phill simulation failed"
     return sim
 
 
@@ -177,7 +177,7 @@ def sim_cbox_executed(monkeypatch):
     )
 
     sim = Simul(params)
-    assert sim.make.exec(["run_fg"], resources={"nproc": 2}), "cbox simulation failed"
+    assert sim.make.exec("run_fg", resources={"nproc": 2}), "cbox simulation failed"
     return sim
 
 
@@ -195,15 +195,15 @@ phill.ma2
 phill.par
 phill.re2
 phill.usr
+rs6phill0.f00001
+rs6phill0.f00002
+rs6phill0.f00003
 SESSION.NAME
 SIZE
 Snakefile""".splitlines()
 
     session_files = """
 phill0.f00001
-rs6phill0.f00001
-rs6phill0.f00002
-rs6phill0.f00003
 """.splitlines()
 
     path_run = Path(tmpdir_factory.mktemp("phill_sim_data"))
