@@ -625,14 +625,14 @@ class Output(OutputCore):
         pattern = f"{prefix}{case}0.f?????"
         try:
             result = sorted(path_session.glob(pattern))[index]
-        except IndexError as err:
-            raise FileNotFoundError(
-                f"Cannot index {index} in {path_session}/{pattern} "
-            ) from err
-        else:
             if t_approx:
                 result = bisect_nek_files_by_time(result, t_approx)
 
+        except IndexError as err:
+            raise FileNotFoundError(
+                f"Cannot {index =} / find {t_approx =} in {path_session}/{pattern} "
+            ) from err
+        else:
             return result
 
     def post_init(self):
