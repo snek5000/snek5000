@@ -20,6 +20,7 @@ from snek5000 import __version__, get_asset, logger, mpi, resources
 from snek5000.params import _save_par_file
 from snek5000.solvers import get_solver_package, is_package
 from snek5000.util import docstring_params
+from snek5000.util.files import bisect_nek_files_by_time
 from snek5000.util.smake import append_debug_flags
 
 from . import _make_path_session
@@ -584,8 +585,8 @@ class Output(OutputCore):
         if path:
             os.chmod(path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH)
 
-    def get_field_file(self, prefix="", index=-1):
-        """Get a field file of format ``{prefix}case0.f{index:05d}``
+    def get_field_file(self, prefix="", index=-1, t_approx=None):
+        """Get a field file from ``path_session``.
 
         Parameters
         ----------
@@ -593,7 +594,12 @@ class Output(OutputCore):
             Prefix for special field files; for examples KTH statistics files use prefix `sts`.
 
         index: int
-            Index to match a specific field file
+            Index to match a specific field file. If index > 0, the file
+            extension is matched as ``{prefix}case0.f{index:05d}``. If index <
+            0, the file is indexed from the end of a list of files
+
+        t_approx: float
+            Find a file from approximate simulation time
 
         Returns
         -------
@@ -603,7 +609,9 @@ class Output(OutputCore):
         case = self.name_solver
         path_session = self.sim.output.path_session
 
-        if index > 0:
+        if index > 0 and t_approx:
+            raise ValueError("Specify either index or t_approx at a time, not both.")
+        elif index > 0:
             pattern = f"{prefix}{case}0.f{index:05d}"
             file = path_session / pattern
             if file.exists():
@@ -613,16 +621,21 @@ class Output(OutputCore):
                     f"{file} not found. Attempting to index a file from a "
                     "sorted list of field files"
                 )
+        elif t_approx:
+            index = slice(None)
 
         pattern = f"{prefix}{case}0.f?????"
         try:
-            file = sorted(path_session.glob(pattern))[index]
-        except IndexError:
+            result = sorted(path_session.glob(pattern))[index]
+            if t_approx:
+                result = bisect_nek_files_by_time(result, t_approx)
+
+        except IndexError as err:
             raise FileNotFoundError(
-                f"Cannot index {index} in {path_session}/{pattern} "
-            )
+                f"Cannot {index =} / find {t_approx =} in {path_session}/{pattern} "
+            ) from err
         else:
-            return Path(file)
+            return result
 
     def post_init(self):
         """Logs info on instantiated classes and finally :meth:`copy` all

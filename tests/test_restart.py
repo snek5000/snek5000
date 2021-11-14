@@ -83,6 +83,9 @@ def test_restart(sim_executed):
     fld = pm.readnek(sim.output.get_field_file())
     assert fld.time == t_end
 
+    fld = pm.readnek(sim.output.get_field_file(t_approx=t_end))
+    assert fld.time == t_end
+
     # check if params_simul.xml is updated
     params_in_filesystem = load_params(sim_executed.path_run)
     assert params.output.session_id == params_in_filesystem.output.session_id
