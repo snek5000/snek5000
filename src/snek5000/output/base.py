@@ -586,7 +586,7 @@ class Output(OutputCore):
             os.chmod(path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH)
 
     def get_field_file(self, prefix="", index=-1, t_approx=None):
-        """Get a field file of format ``{prefix}case0.f{index:05d}``
+        """Get a field file from ``path_session``.
 
         Parameters
         ----------
@@ -594,7 +594,9 @@ class Output(OutputCore):
             Prefix for special field files; for examples KTH statistics files use prefix `sts`.
 
         index: int
-            Index to match a specific field file
+            Index to match a specific field file. If index > 0, the file
+            extension is matched as ``{prefix}case0.f{index:05d}``. If index <
+            0, the file is indexed from the end of a list of files
 
         t_approx: float
             Find a file from approximate simulation time
