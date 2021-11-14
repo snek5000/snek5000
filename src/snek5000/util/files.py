@@ -1,6 +1,9 @@
+import bisect
 import re
 from pathlib import Path
 from shutil import copy2
+
+from pymech import readnek
 
 from fluiddyn.io import FLUIDSIM_PATH
 
@@ -113,6 +116,58 @@ def create_session(case, re2, ma2, par):
 
     # Copy par files to run without recompiling
     copy2(par, session_dir / par)
+
+
+class LazyNekFile:
+    """A small data stucture to assist bisection sort by simulation time,
+    :func:`bisect_nek_files_by_time`
+
+    """
+
+    def __init__(self, path):
+        self.path = path
+
+    @property
+    def time(self):
+        return readnek(self.path).time
+
+    def __gt__(self, other):
+        time = other.time if isinstance(other, type(self)) else other
+        return self.time > time
+
+    def __lt__(self, other):
+        time = other.time if isinstance(other, type(self)) else other
+        return self.time < time
+
+    def __repr__(self):
+        return f"LazyNekFile <{self.path}>"
+
+
+def bisect_nek_files_by_time(files, time):
+    """Bisect Nek5000 field files by the simulation time metadata. The
+    bisection search is done using :func:`bisect.bisect_left`
+
+    Parameters
+    ----------
+    files: iterable of str or path-like
+        List of file names / paths.
+
+    time: float
+        Approximate simulation time. Finds ``file`` such that
+        :func:`readnek(file).time <pymech:pymech.neksuite.readnek>` < ``time``.
+
+    Returns
+    -------
+    file: str or path-like
+        Path to field file.
+
+    """
+    files = sorted(files)
+    lazy_files = [LazyNekFile(file) for file in files]
+
+    index = min(bisect.bisect_left(lazy_files, time), len(files) - 1)
+
+    return files[index]
 
 
 def _path_try_from_fluidsim_path(path_dir):

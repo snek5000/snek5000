@@ -9,6 +9,7 @@ intersphinx_mapping = dict(
     jinja2=("https://jinja.palletsprojects.com/en/3.0.x", None),
     fluiddyn=("https://fluiddyn.readthedocs.io/en/latest", None),
     fluidsim=("https://fluidsim.readthedocs.io/en/latest", None),
+    pymech=("https://pymech.readthedocs.io/en/latest", None),
 )
 
 
