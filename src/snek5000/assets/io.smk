@@ -5,7 +5,7 @@ import snek5000
 from snek5000.util.archive import tar_name, archive, clean_simul
 
 
-NEK_SOURCE_ROOT = snek5000.source_root()
+NEK_SOURCE_ROOT = snek5000.get_nek_source_root()
 
 
 # clean compiler output

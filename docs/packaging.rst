@@ -9,9 +9,9 @@ get started.  Assume your files are named ``canonical.usr``, ``canonical.par``
 etc. and you wish to package it under a name say ``snek5000_canonical``.
 
 .. note::
-   The package name does not have to contain `snek5000` or `canonical`. It
-   could be anything. Make sure the ``short_name`` variable (in solver.py_)
-   and entry point key (in setup.cfg_) matches.
+   The package name does not have to contain ``snek5000`` or ``canonical``. It
+   could be anything. Make sure the ``short_name`` variable (in
+   :ref:`__init__.py <init.py>`) and entry point key (in setup.cfg_) matches.
 
 One first has to create a directory structure, (preferably in a git / mercurial
 repository) like this::
@@ -55,6 +55,13 @@ setup.cfg
 .. literalinclude:: examples/snek5000-canonical/setup.cfg
    :language: cfg
 
+.. _init.py:
+
+src/snek5000_canonical/__init__.py
+----------------------------------
+
+.. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/__init__.py
+
 .. _solver.py:
 
 src/snek5000_canonical/solver.py
@@ -89,4 +96,3 @@ src/snek5000_canonical/Snakefile
 --------------------------------
 
 .. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/Snakefile
-

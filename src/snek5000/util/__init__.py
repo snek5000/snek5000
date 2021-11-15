@@ -20,7 +20,7 @@ from zipfile import ZipFile
 
 from fluiddyn import util
 
-from .. import source_root
+from .. import get_nek_source_root, source_root
 from .restart import (  # noqa: kept for backwards compatibility
     get_status,
     prepare_for_restart,
@@ -106,34 +106,6 @@ def last_modified(path):
         lambda x, y: x if x.stat().st_mtime > y.stat().st_mtime else y,
         scantree(path),
     )
-
-
-def activate_paths():
-    """Setup environment variables in preparation for Nek5000 build.
-
-    .. deprecated:: 0.6.0
-       Use :func:`snek5000.source_root`
-       and :func:`snek5000.util.smake.ensure_env` instead.
-
-    """
-    import warnings
-
-    warnings.warn(
-        (
-            "Function activate_paths will be removed on a later release. Use "
-            "source_root and ensure_env instead"
-        ),
-        DeprecationWarning,
-    )
-
-    env_source_root = os.environ["NEK_SOURCE_ROOT"] = source_root()
-
-    env_path = str(os.getenv("PATH"))
-    if env_source_root not in env_path:
-        os.environ["PATH"] = ":".join((env_source_root + "/bin", env_path))
-
-    return env_source_root, env_path
-
 
 def init_params(Class, isolated_unit=False):
     """Instantiate an isolated ``params`` for a specific class."""

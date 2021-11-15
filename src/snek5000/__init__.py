@@ -27,10 +27,7 @@ API reference
    params
 
 """
-try:
-    from importlib import resources
-except ImportError:
-    import importlib_resources as resources
+from importlib import resources
 import os
 import weakref
 
@@ -40,7 +37,7 @@ from ._version import __version__  # noqa: F401
 from .log import logger  # noqa: F401
 
 
-def source_root():
+def get_nek_source_root():
     """Path of Nek5000 source code."""
     if os.getenv("SOURCE_ROOT"):
         logger.warning(
@@ -63,6 +60,21 @@ def source_root():
             "NEK_SOURCE_ROOT to point to Nek5000 top level directory."
         )
     return nek5000
+
+
+def source_root():
+
+    import warnings
+
+    warnings.warn(
+        (
+            "Function source_root will be removed on a later release. "
+            "Use get_nek_source_root instead."
+        ),
+        DeprecationWarning,
+    )
+
+    return get_nek_source_root()
 
 
 def get_asset(asset_name):

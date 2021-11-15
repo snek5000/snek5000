@@ -2,7 +2,7 @@ import jinja2
 
 env = jinja2.Environment(
     loader=jinja2.PackageLoader("snek5000", "assets"),
-    #  loader=jinja2.PackageLoader("snek5000_canonical", "templates"),
+    #  loader=jinja2.PackageLoader("snek5000_tgv", "templates"),
     undefined=jinja2.StrictUndefined,
 )
 

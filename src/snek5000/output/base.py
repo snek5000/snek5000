@@ -31,7 +31,7 @@ class Output(OutputCore):
 
     Some important methods:
 
-    - :meth:`snek5000.output.base.Output.get_root` points to the
+    - :meth:`snek5000.output.base.Output.get_path_solver_package` points to the
       directory containing the case files.
     - :meth:`snek5000.output.base.Output.get_paths` populates a list of
       files to copy.
@@ -168,17 +168,24 @@ class Output(OutputCore):
         iter_complete_params(params, info_solver, dict_classes.values())
 
     @classmethod
+    def get_path_solver_package(cls):
+        """Get the path towards the solver package."""
+        return Path(inspect.getmodule(cls).__file__).parent
+
+    @classmethod
     def get_root(cls):
-        """Get the path to the current package."""
-        # Better than
 
-        # root = Path(__file__).parent?
+        import warnings
 
-        #  with resources.path(__name__, "__init__.py") as f:
-        #      root = f.parent
+        warnings.warn(
+            (
+                "Method get_root will be removed on a later release. "
+                "Use get_path_solver_package instead."
+            ),
+            DeprecationWarning,
+        )
 
-        root = Path(inspect.getmodule(cls).__file__).parent
-        return root
+        return cls.get_path_solver_package()
 
     @classmethod
     def get_configfile(cls, host=None):
@@ -195,11 +202,11 @@ class Output(OutputCore):
             host = os.getenv(
                 "SNIC_RESOURCE", os.getenv("GITHUB_WORKFLOW", gethostname())
             )
-        root = cls.get_root()
+        path_solver_package = cls.get_path_solver_package()
         xdg_config = Path(
             os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config"))
         )
-        configfile_root = root / "etc" / f"{host}.yml"
+        configfile_root = path_solver_package / "etc" / f"{host}.yml"
         configfile_xdg_config = xdg_config / "snek5000" / f"{host}.yml"
         configfile_default = Path(get_asset("default_configfile.yml"))
 
@@ -257,12 +264,12 @@ class Output(OutputCore):
 
         if missing_config:
             raise ValueError(
-                f"Some keys are missing from the configfile {cls.get_configfile()}: "
-                f"{missing_config}"
+                f"Some keys are missing from the configfile "
+                f"{cls.get_configfile()}: {missing_config}"
             )
 
         try:
-            # Supress warnings for not instantiating Output with sim or params
+            # Suppress warnings for not instantiating Output with sim or params
             logging_level = logger.getEffectiveLevel()
             logger.setLevel(logging.ERROR)
             temp = cls()
@@ -298,7 +305,7 @@ class Output(OutputCore):
         else:
             self.package = get_solver_package(self.name_solver)
 
-        self.root = self.get_root()
+        self.path_solver_package = self.get_path_solver_package()
         # Check configfile early
         self.get_configfile()
 
@@ -379,7 +386,8 @@ class Output(OutputCore):
             contents_pkg = resources.contents(package)
         except ImportError:
             raise FileNotFoundError(
-                f"Cannot resolve subpackage name_solver={package} at root={self.root}"
+                f"Cannot resolve subpackage name_solver={package} "
+                f"at path_solver_package={self.path_solver_package}"
             )
 
         return (
@@ -399,7 +407,7 @@ class Output(OutputCore):
         :returns: dict
 
         """
-        root = self.root
+        root = self.path_solver_package
         subpackages = {
             subpkg.name.replace(f"{root.name}.", ""): self._get_resources(subpkg.name)
             for subpkg in pkgutil.walk_packages([str(root)], prefix=f"{self.package}.")
@@ -417,11 +425,13 @@ class Output(OutputCore):
         paths = []
 
         # abl.usr -> /path/to/abl/abl.usr
-        paths += [self.root / resource for resource in self._get_resources()]
+        paths += [
+            self.path_solver_package / resource for resource in self._get_resources()
+        ]
 
         for subpkg, res in self._get_subpackages().items():
             # toolbox -> /path/to/abl/toolbox
-            subpkg_root = self.root / subpkg.replace(".", os.sep)
+            subpkg_root = self.path_solver_package / subpkg.replace(".", os.sep)
             # main.f -> /path/to/abl/toolbox/main.f
             paths += [subpkg_root / resource for resource in res]
         return paths
@@ -440,12 +450,14 @@ class Output(OutputCore):
         abs_paths = self.get_paths()
         subpackages = self._get_subpackages()
 
-        root = self.root
+        path_solver_package = self.path_solver_package
 
         def conditional_ignore(src, names):
             """Ignore if not found in ``abs_paths``."""
             src = Path(src)
-            include = abs_paths + [root / subpkg for subpkg in subpackages]
+            include = abs_paths + [
+                path_solver_package / subpkg for subpkg in subpackages
+            ]
             exclude = tuple(
                 name
                 for name in names
@@ -469,7 +481,7 @@ class Output(OutputCore):
         logger.info("Copying with shutil.copytree ...")
         # `dirs_exist_ok`` new in Python 3.8
         shutil.copytree(
-            src=root,
+            src=path_solver_package,
             dst=new_root,
             symlinks=False,
             ignore=conditional_ignore,
@@ -477,11 +489,11 @@ class Output(OutputCore):
         )
 
         # special case for .usr.f: copy to .usr
-        paths_usr_f = list(root.glob("*.usr.f"))
+        paths_usr_f = list(path_solver_package.glob("*.usr.f"))
         for path_usr_f in paths_usr_f:
             shutil.copyfile(path_usr_f, new_root / path_usr_f.stem)
 
-        logger.info(f"Copied: {root} -> {new_root}")
+        logger.info(f"Copied: {path_solver_package} -> {new_root}")
 
     def write_box(self, template):
         """Write <case name>.box file from box.j2 template.
@@ -516,7 +528,7 @@ class Output(OutputCore):
 
     def write_makefile_usr(self, template, fp=None, **template_vars):
         """Write the makefile_usr.inc file which gets included in the main
-        makefile.
+        makefile by the ``makenek`` tool.
 
         Parameters
         ----------

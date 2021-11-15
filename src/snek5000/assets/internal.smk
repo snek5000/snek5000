@@ -2,7 +2,7 @@ import snek5000
 from snek5000.util.files import create_session
 
 
-NEK_SOURCE_ROOT = snek5000.source_root()
+NEK_SOURCE_ROOT = snek5000.get_nek_source_root()
 
 
 subworkflow Nek5000:
