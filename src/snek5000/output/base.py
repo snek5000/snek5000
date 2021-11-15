@@ -129,7 +129,7 @@ class Output(OutputCore):
         )
 
         # iteratively call _complete_info_solver of the above classes
-        # info_solver.classes.Output.complete_with_classes()
+        info_solver.classes.Output.complete_with_classes()
 
     @staticmethod
     def _complete_params_with_default(params, info_solver):
@@ -164,7 +164,6 @@ class Output(OutputCore):
         )
 
         dict_classes = info_solver.classes.Output.import_classes()
-        info_solver.classes.Output.complete_with_classes()
         iter_complete_params(params, info_solver, dict_classes.values())
 
     @classmethod
