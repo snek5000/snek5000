@@ -4,4 +4,4 @@ from .output import Output
 
 short_name = "canonical"
 
-__all__ = ["Simul", "Output", short_name]
+__all__ = ["Simul", "Output", "short_name"]
