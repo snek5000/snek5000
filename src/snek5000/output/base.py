@@ -101,13 +101,9 @@ class Output(OutputCore):
     def fortran_inc_flags(self):
         return (f"-I{inc_dir}" for inc_dir in self.makefile_usr_sources)
 
-    @staticmethod
-    def _complete_info_solver(info_solver):
-        """Complete the info_solver instance with child class details (module
-        and class names).
-
-        """
-        classes = info_solver.classes.Output._set_child("classes")
+    @classmethod
+    def _set_info_solver_classes(cls, classes):
+        """Set the the classes for info_solver.classes.Output"""
 
         classes._set_child(
             "PrintStdout",
@@ -128,6 +124,14 @@ class Output(OutputCore):
             ),
         )
 
+    @classmethod
+    def _complete_info_solver(cls, info_solver):
+        """Complete the info_solver instance with child class details (module
+        and class names).
+
+        """
+        classes = info_solver.classes.Output._set_child("classes")
+        cls._set_info_solver_classes(classes)
         # iteratively call _complete_info_solver of the above classes
         info_solver.classes.Output.complete_with_classes()
 
