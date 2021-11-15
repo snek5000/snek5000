@@ -134,6 +134,7 @@ class Output(OutputCore):
     @staticmethod
     def _complete_params_with_default(params, info_solver):
         """This static method is used to complete the *params* container."""
+
         # Bare minimum
         attribs = {
             "HAS_TO_SAVE": True,
@@ -163,6 +164,7 @@ class Output(OutputCore):
         )
 
         dict_classes = info_solver.classes.Output.import_classes()
+        info_solver.classes.Output.complete_with_classes()
         iter_complete_params(params, info_solver, dict_classes.values())
 
     @classmethod
@@ -650,11 +652,9 @@ class Output(OutputCore):
             logger.info(f"path_run: {self.path_run}")
             logger.info("*" * _banner_length)
 
-        self.sim.info_solver.classes.Output.complete_with_classes()
-
         # This also calls _save_info_solver_params_xml
         super().post_init()
-        
+
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
             self.copy(self.path_run)
