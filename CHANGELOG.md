@@ -68,7 +68,6 @@ Security in case of vulnerabilities.
 - {meth}`snek5000.output.OutputBase.get_root` (renamed as
   {meth}`snek5000.output.OutputBase.get_path_solver_package`).
 
-
 ### Fixed
 
 - Detection of linear Nek5000 solvers

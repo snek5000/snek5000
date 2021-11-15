@@ -107,34 +107,6 @@ def last_modified(path):
         scantree(path),
     )
 
-
-def activate_paths():
-    """Setup environment variables in preparation for Nek5000 build.
-
-    .. deprecated:: 0.6.0
-       Use :func:`snek5000.get_nek_source_root`
-       and :func:`snek5000.util.smake.ensure_env` instead.
-
-    """
-    import warnings
-
-    warnings.warn(
-        (
-            "Function activate_paths will be removed on a later release. Use "
-            "get_nek_source_root and ensure_env instead"
-        ),
-        DeprecationWarning,
-    )
-
-    env_source_root = os.environ["NEK_SOURCE_ROOT"] = get_nek_source_root()
-
-    env_path = str(os.getenv("PATH"))
-    if env_source_root not in env_path:
-        os.environ["PATH"] = ":".join((env_source_root + "/bin", env_path))
-
-    return env_source_root, env_path
-
-
 def init_params(Class, isolated_unit=False):
     """Instantiate an isolated ``params`` for a specific class."""
     if hasattr(Class, "create_default_params") and not isolated_unit:
