@@ -57,12 +57,17 @@ Security in case of vulnerabilities.
 - Support extension `.usr.f` to facilitate syntax highlighting and which would
   be copied as a `.usr` file upon {meth}`snek5000.output.base.Output.copy`
 - The use of `params.nek.general.user_params` are replaced by a more powerful
-  {meth}`snek5000.params.Parameters._record_nek_user_params` method. 
+  {meth}`snek5000.params.Parameters._record_nek_user_params` method.
 
 ### Deprecated
 
 - {func}`snek5000.util.restart.prepare_for_restart`
 - Passing rules as iterables to {meth}`snek5000.make.Make.exec`. Pass positional parameters instead.
+- {func}`snek5000.source_root` (renamed as
+  {func}`snek5000.get_nek_source_root`).
+- {meth}`snek5000.output.OutputBase.get_root` (renamed as
+  {meth}`snek5000.output.OutputBase.get_path_solver_package`).
+
 
 ### Fixed
 
