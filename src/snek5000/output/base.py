@@ -129,7 +129,7 @@ class Output(OutputCore):
         )
 
         # iteratively call _complete_info_solver of the above classes
-        info_solver.classes.Output.complete_with_classes()
+        # info_solver.classes.Output.complete_with_classes()
 
     @staticmethod
     def _complete_params_with_default(params, info_solver):
@@ -642,6 +642,7 @@ class Output(OutputCore):
         source code to simulation directory
 
         """
+
         if mpi.rank == 0:
             _banner_length = 42
             logger.info("*" * _banner_length)
@@ -649,9 +650,11 @@ class Output(OutputCore):
             logger.info(f"path_run: {self.path_run}")
             logger.info("*" * _banner_length)
 
+        self.sim.info_solver.classes.Output.complete_with_classes()
+
         # This also calls _save_info_solver_params_xml
         super().post_init()
-
+        
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
             self.copy(self.path_run)

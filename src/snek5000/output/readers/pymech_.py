@@ -9,7 +9,7 @@ from . import ReaderBase
 class ReaderPymech(ReaderBase):
     tag = "pymech"
 
-    def load(self, prefix="", index=-1, **kwargs):
+    def load(self, prefix="", index=-1, t_approx=None, **kwargs):
         """Opens field files(s) as a xarray dataset. The data is cached in
         :attr:`data`.
 
@@ -26,6 +26,9 @@ class ReaderPymech(ReaderBase):
             glob pattern for the final 5 digits of the field filename extension
             (for example: ``"??20?"``).
 
+        t_approx: float
+            Find a file from approximate simulation time
+
         **kwargs
             Keyword arguments for ``pymech.open_*`` function
 
@@ -35,7 +38,7 @@ class ReaderPymech(ReaderBase):
 
         """
         if isinstance(index, int):
-            path_file = self.output.get_field_file(prefix, index)
+            path_file = self.output.get_field_file(prefix, index, t_approx)
             ds = pm.open_dataset(path_file, **kwargs)
         elif isinstance(index, str):
             case = self.output.name_solver
@@ -43,7 +46,7 @@ class ReaderPymech(ReaderBase):
             ext = "?????" if index == "all" else index
 
             pattern = f"{prefix}{case}0.f{ext}"
-            ds = pm.open_mfdataset(path / pattern, **kwargs)
+            ds = pm.open_mfdataset(path.glob(pattern), **kwargs)
         else:
             raise ValueError("Parameter index should be int or str")
 

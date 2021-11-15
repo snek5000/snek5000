@@ -59,6 +59,10 @@ class PhysFields:
         dict_classes = info_solver.classes.Output.classes.PhysFields.import_classes()
         iter_complete_params(params, info_solver, dict_classes.values())
 
+    @property
+    def data(self):
+        return self._reader.data
+        
     def __init__(self, output=None):
         self.output = output
         self.params = output.params
