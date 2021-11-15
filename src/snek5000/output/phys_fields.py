@@ -62,7 +62,7 @@ class PhysFields:
     @property
     def data(self):
         return self._reader.data
-        
+
     def __init__(self, output=None):
         self.output = output
         self.params = output.params
