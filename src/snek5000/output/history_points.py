@@ -29,6 +29,8 @@ class HistoryPoints:
         self.coords = np.array(self.coords)
         shape = self.coords.shape
 
+        self._data = None
+
         if shape[0] >= params.oper.max.hist or shape[1] != params.oper.dim:
             raise ValueError(
                 "Shape of params.output.history_points.coords are not compatible."
@@ -57,11 +59,65 @@ class HistoryPoints:
         )
 
     def load(self):
+        if self._data is None:
+            return self._load_full()
+        else:
+            nb_points = self.coords.shape[0]
+            nb_data_lines_read = len(self._data)
+
+            size_file = self.path_file.stat().st_size
+            print(f"  {size_file = }")
+
+            with open(self.path_file) as file:
+                first_line = file.readline()
+                line_coord = file.readline()
+                for _ in range(nb_points - 1):
+                    file.readline()
+                line_data = file.readline()
+
+            nb_chars_read = (
+                len(first_line)
+                + nb_points * len(line_coord)
+                + nb_data_lines_read * len(line_data)
+            )
+            nb_chars_not_read = size_file - nb_chars_read
+
+            print(f"  {nb_chars_not_read = }")
+
+            if nb_chars_not_read == 0:
+                return self.coords, self._data
+
+            with open(self.path_file) as file:
+                file.seek(nb_chars_read)
+                lines = file.readlines()
+
+            df_more = self._create_df_from_lines(lines, nb_points)
+            if len(df_more) > 0:
+                self._data = pd.concat(
+                    [self._data, df_more], ignore_index=True, sort=False
+                )
+
+            return self.coords, self._data
+
+    def _load_full(self):
+
         with open(self.path_file) as file:
-            line = file.readline()
-            nb_points = int(line.split(" ", 1)[0])
+            nb_points = int(file.readline().split(" ", 1)[0])
             coords = np.loadtxt(file, max_rows=nb_points)
             lines = file.readlines()
+
+        if self.output.sim.params.oper.dim == 2:
+            columns = list("xy")
+        else:
+            columns = list("xyz")
+        self.coords = pd.DataFrame(coords, columns=columns)
+
+        df = self._create_df_from_lines(lines, nb_points)
+        self._data = df
+
+        return self.coords, df
+
+    def _create_df_from_lines(self, lines, nb_points):
 
         columns = ["time", "vx", "vy"]
 
@@ -84,8 +140,11 @@ class HistoryPoints:
 
             nb_times = len(lines) // nb_points
             lines = lines[: nb_times * nb_points]
-            df = pd.read_fwf(StringIO("\n".join(lines)), header=None)
-            df.columns = columns
+            if lines:
+                df = pd.read_fwf(StringIO("\n".join(lines)), header=None)
+                df.columns = columns
+            else:
+                df = pd.DataFrame({}, columns=columns)
         else:
             nb_times = 0
             df = pd.DataFrame({}, columns=columns)
@@ -93,14 +152,7 @@ class HistoryPoints:
         index_points = list(range(nb_points)) * nb_times
         df["index_points"] = index_points
 
-        if sim.params.oper.dim == 2:
-            columns = list("xy")
-        else:
-            columns = list("xyz")
-
-        coords = pd.DataFrame(coords, columns=columns)
-
-        return coords, df
+        return df
 
     def plot(self, key="vx", data=None):
         if data is None:
