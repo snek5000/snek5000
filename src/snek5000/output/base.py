@@ -211,10 +211,15 @@ class Output(OutputCore):
             os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config"))
         )
         configfile_root = path_solver_package / "etc" / f"{host}.yml"
-        configfile_xdg_config = xdg_config / "snek5000" / f"{host}.yml"
+        configfile_xdg_config_host = xdg_config / f"snek5000/{host}.yml"
+        configfile_xdg_config = xdg_config / "snek5000.yml"
         configfile_default = Path(get_asset("default_configfile.yml"))
 
-        custom_configfiles = (configfile_xdg_config, configfile_root)
+        custom_configfiles = (
+            configfile_xdg_config_host,
+            configfile_xdg_config,
+            configfile_root,
+        )
 
         for configfile in custom_configfiles:
             if configfile.exists():
