@@ -21,6 +21,7 @@ warning similar to::
 
    WARNING  Missing a configuration file describing compilers and flags. Create one at either of the following paths to avoid future warnings:
             /home/avmo/.config/snek5000/<hostname>.yml
+            /home/avmo/.config/snek5000.yml
             /home/avmo/src/snek5000/snek5000-canonical/src/snek5000_canonical/etc/<hostname>.yml
    INFO     Using default configuration for now:
             /home/avmo/src/snek5000/snek5000/src/snek5000/assets/default_configfile.yml

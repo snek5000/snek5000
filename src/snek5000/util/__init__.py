@@ -107,6 +107,7 @@ def last_modified(path):
         scantree(path),
     )
 
+
 def init_params(Class, isolated_unit=False):
     """Instantiate an isolated ``params`` for a specific class."""
     if hasattr(Class, "create_default_params") and not isolated_unit:

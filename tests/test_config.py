@@ -1,7 +1,13 @@
 import logging
 import os
+from pathlib import Path
+
+import pytest
 
 from snek5000.output.base import Output
+
+xdg_config = Path(os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config")))
+configfile_xdg_config = xdg_config / "snek5000.yml"
 
 
 def test_update_snakemake_config():
@@ -33,7 +39,10 @@ def test_update_snakemake_config():
     assert config["CASE"] == "test_config"
 
 
-def test_get_configfile(monkeypatch, caplog):
+@pytest.mark.skipif(
+    configfile_xdg_config.exists(), reason=f"File {configfile_xdg_config} exists"
+)
+def test_get_configfile(caplog):
     hostname = "test_config"
 
     Output.get_configfile(host=hostname)
