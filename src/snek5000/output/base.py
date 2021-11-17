@@ -16,6 +16,7 @@ from fluidsim_core.output import OutputCore
 from fluidsim_core.params import iter_complete_params
 from inflection import underscore
 
+from fluiddyn.io import stdout_redirected
 from snek5000 import __version__, get_asset, logger, mpi, resources
 from snek5000.params import _save_par_file
 from snek5000.solvers import get_solver_package, is_package
@@ -331,7 +332,11 @@ class Output(OutputCore):
             for cls_name, Class in dict_classes.items():
                 # only initialize if Class is not the Output class
                 if not isinstance(self, Class):
-                    setattr(self, underscore(cls_name), Class(self))
+                    obj_name = underscore(cls_name)
+                    setattr(self, obj_name, Class(self))
+                    self.sim._objects_to_print += "{:28s}{}\n".format(
+                        f"sim.output.{obj_name}: ", Class
+                    )
 
     def _init_path_session(self):
         """Initialize :attr:`path_session` and ``params.output.path_session``
@@ -658,14 +663,15 @@ class Output(OutputCore):
         """
 
         if mpi.rank == 0:
-            _banner_length = 42
-            logger.info("*" * _banner_length)
-            logger.info(f"solver: {self.__class__}")
             logger.info(f"path_run: {self.path_run}")
-            logger.info("*" * _banner_length)
+            logger.info(f"session_id: {self.params.session_id}")
 
         # This also calls _save_info_solver_params_xml
-        super().post_init()
+        with stdout_redirected():
+            # We gather objects to print within Snek5000
+            super().post_init()
+
+        logger.info(self.sim._objects_to_print)
 
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
