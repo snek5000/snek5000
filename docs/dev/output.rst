@@ -6,6 +6,7 @@ Internal API of Output
    Documentation on  :class:`fluidsim:fluidsim_core.output.OutputCore` which is the base class for :class:`snek5000.output.base.Output`.
 
 .. automethod:: snek5000.output.base.Output._complete_info_solver
+.. automethod:: snek5000.output.base.Output._set_info_solver_classes
 .. automethod:: snek5000.output.base.Output._complete_params_with_default
 .. automethod:: snek5000.output.base.Output._init_sim_repr_maker
 .. automethod:: snek5000.output.base.Output._get_resources

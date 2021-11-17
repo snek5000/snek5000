@@ -40,6 +40,7 @@ Security in case of vulnerabilities.
 - {class}`snek5000.output.phys_fields.PhysFields` now fully functional with
   `load` and `get_var` methods provided by classes under {mod}`snek5000.output.readers`.
 - Support for number of processes detection in OAR clusters
+- {meth}`snek5000.output.base.Output._set_info_solver_classes` to customize Output child classes
 
 ### Changed
 

@@ -7,10 +7,15 @@ from snek5000.output.base import Output as OutputBase
 class OutputCanonical(OutputBase):
     @classmethod
     def _set_info_solver_classes(cls, classes):
-        """Set the the classes for info_solver.classes.Output"""
+        """Set the the classes for info_solver.classes.Output
+
+        NOTE: This method is optional, and only required if custom classes are
+        to be set.
+
+        """
         super()._set_info_solver_classes(classes)
 
-        # Replace sim.output.phys_fields with a custom classe
+        # Replace sim.output.phys_fields with a custom class
         classes.PhysFields.module_name = "snek5000_canonical.phys_fields"
         classes.PhysFields.class_name = "PhysFieldsCanonical"
 
