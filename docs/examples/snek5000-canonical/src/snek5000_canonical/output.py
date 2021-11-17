@@ -1,9 +1,18 @@
+from snek5000_canonical.templates import box, makefile_usr, size
+
 from snek5000 import mpi
 from snek5000.output.base import Output as OutputBase
-from snek5000_canonical.templates import box, size, makefile_usr
 
 
 class OutputCanonical(OutputBase):
+    @classmethod
+    def _set_info_solver_classes(cls, classes):
+        """Set the the classes for info_solver.classes.Output"""
+        super()._set_info_solver_classes(classes)
+
+        # Replace sim.output.phys_fields with a custom classe
+        classes.PhysFields.module_name = "snek5000_canonical.phys_fields"
+        classes.PhysFields.class_name = "PhysFieldsCanonical"
 
     @property
     def makefile_usr_sources(self):

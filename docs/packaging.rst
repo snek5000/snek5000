@@ -82,6 +82,15 @@ src/snek5000_canonical/output.py
 
 .. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/output.py
 
+src/snek5000_canonical/phys_fields.py
+-------------------------------------
+
+Optionally, add classes for ``reader`` and ``phys_fields`` objects which would
+allow customized ``load``, ``get_var`` and ``plot_*`` methods suited for your
+case.
+
+.. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/output.py
+
 src/snek5000_canonical/templates/__init__.py
 --------------------------------------------
 

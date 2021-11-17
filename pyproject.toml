@@ -16,7 +16,7 @@ profile = "black"
 line_length = 82
 
 [tool.coverage.run]
-source = ["snek5000", "./tests"]
+source = ["snek5000", "snek5000_canonical", "./tests"]
 data_file = ".coverage/coverage"
 omit = [
     "*/try_*.py",
