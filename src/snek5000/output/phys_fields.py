@@ -61,7 +61,12 @@ class PhysFields:
 
     @property
     def data(self):
-        return self._reader.data
+        data = self._reader.data
+        if not data:
+            raise IOError(
+                "No data has been loaded yet. Try calling sim.output.phys_fields.load() first."
+            )
+        return data
 
     def __init__(self, output=None):
         self.output = output

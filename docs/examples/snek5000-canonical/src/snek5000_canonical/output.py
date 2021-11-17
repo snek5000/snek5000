@@ -5,12 +5,12 @@ from snek5000.output.base import Output as OutputBase
 
 
 class OutputCanonical(OutputBase):
-    @staticmethod
-    def _complete_info_solver(info_solver):
-        """Complete the ParamContainer info_solver."""
-        OutputBase._complete_info_solver(info_solver)
+    @classmethod
+    def _set_info_solver_classes(cls, classes):
+        """Set the the classes for info_solver.classes.Output"""
+        super()._set_info_solver_classes(classes)
 
-        classes = info_solver.classes.Output.classes
+        # Replace sim.output.phys_fields with a custom classe
         classes.PhysFields.module_name = "snek5000_canonical.phys_fields"
         classes.PhysFields.class_name = "PhysFieldsCanonical"
 
