@@ -18,6 +18,7 @@ External links
 .. Strange intersphinx bug: WARNING: undefined label: nek:genindex (if the link has no caption the label must precede a section header)
 
 * :doc:`Nek5000 documentation <nek:index>`
+* The FLOW-SESE Course 2021 book - `Nek5000: Theory, Implementation and Optimization <https://www.mech.kth.se/~pschlatt/Nek5000_2021.pdf>`__
 * `KTH framework documentation <https://kth-nek5000.github.io/KTH_Framework>`_
 
 Boundary condition
