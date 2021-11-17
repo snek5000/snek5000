@@ -172,5 +172,35 @@ class HistoryPoints:
         ax.set_ylabel(key)
         fig.legend()
         fig.tight_layout()
+        return ax
 
+    def load_1point(self, index_point, key=None):
+        coords, df = self.load()
+        df_point = df[df.index_points == index_point]
+        if key is not None:
+            df_point = df_point[[key, "time"]]
+        return coords, df_point
+
+    def plot_1point(self, index_point, key, tmin=None, tmax=None):
+        coords, df_point = self.load_1point(index_point, key)
+        fig, ax = plt.subplots()
+
+        signal = df_point[key]
+        times = df_point["time"]
+
+        if tmin is not None:
+            signal = signal[times > tmin]
+            times = times[times > tmin]
+
+        if tmax is not None:
+            signal = signal[times < tmax]
+            times = times[times < tmax]
+
+        ax.plot(times, signal)
+        ax.set_xlabel("time")
+        ax.set_ylabel(key)
+        tmp = ", ".join("xyz"[i] for i in range(self.output.sim.params.oper.dim))
+        ax.set_title(f"{key}, ({tmp}) = {tuple(coords.values[index_point])}")
+
+        fig.tight_layout()
         return ax
