@@ -171,6 +171,7 @@ class HistoryPoints:
         ax.set_xlabel("time")
         ax.set_ylabel(key)
         fig.legend()
+        ax.set_title(self.output.summary_simul)
         fig.tight_layout()
         return ax
 
@@ -200,7 +201,10 @@ class HistoryPoints:
         ax.set_xlabel("time")
         ax.set_ylabel(key)
         tmp = ", ".join("xyz"[i] for i in range(self.output.sim.params.oper.dim))
-        ax.set_title(f"{key}, ({tmp}) = {tuple(coords.values[index_point])}")
+        ax.set_title(
+            self.output.summary_simul
+            + f"\n{key}, ({tmp}) = {tuple(coords.values[index_point])}"
+        )
 
         fig.tight_layout()
         return ax
