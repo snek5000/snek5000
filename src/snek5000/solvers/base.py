@@ -252,13 +252,18 @@ class SimulNek(SimulCore):
     def __init__(self, params):
         super().__init__(params)
 
+        self._objects_to_print = "{:28s}{}\n".format("sim: ", type(self))
         dict_classes = self.info_solver.import_classes()
 
         # initialize objects
         for cls_name, Class in dict_classes.items():
             # only initialize if Class is not the Simul class
             if not isinstance(self, Class):
-                setattr(self, underscore(cls_name), Class(self))
+                obj_name = underscore(cls_name)
+                setattr(self, obj_name, Class(self))
+                self._objects_to_print += "{:28s}{}\n".format(
+                    f"sim.{obj_name}: ", Class
+                )
 
         if "Output" in dict_classes:
             if not params.NEW_DIR_RESULTS:
