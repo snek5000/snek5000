@@ -1,7 +1,11 @@
 import shutil
 from pathlib import Path
+from contextlib import contextmanager
+import os
 
 import pytest
+
+from snek5000.util.gfortran_log import log_matches
 
 
 def pytest_addoption(parser):
@@ -145,6 +149,16 @@ def sim_executed():
     return sim
 
 
+@contextmanager
+def unset_snek_debug():
+    old_snek_debug = os.environ.pop("SNEK_DEBUG", None)
+    try:
+        yield
+    finally:
+        if old_snek_debug is not None:
+            os.environ["SNEK_DEBUG"] = old_snek_debug
+
+
 @pytest.fixture(scope="module")
 def sim_cbox_executed():
     from snek5000_cbox.solver import Simul
@@ -168,18 +182,16 @@ def sim_cbox_executed():
     params.oper.max.hist = len(coords) + 1
 
     sim = Simul(params)
-    if not sim.make.exec("compile"):
-        from snek5000.util.gfortran_log import log_matches
 
-        build_log = Path(sim.output.path_run) / "build.log"
-        log_matches(build_log, levels=["Error"])
-
-        raise RuntimeError("cbox compilation failed")
+    with unset_snek_debug():
+        if not sim.make.exec("compile"):
+            build_log = Path(sim.output.path_run) / "build.log"
+            log_matches(build_log, levels=["Error"])
+            raise RuntimeError("cbox compilation failed")
 
     if not sim.make.exec("run_fg", resources={"nproc": 2}):
         with open(Path(sim.output.path_run) / "cbox.log") as file:
             print(file.read())
-
         raise RuntimeError("cbox simulation failed")
     return sim
 
