@@ -123,11 +123,11 @@ class HistoryPoints:
 
     def _create_df_from_lines(self, lines, nb_points):
 
-        columns = ["time", "vx", "vy"]
+        columns = ["time", "ux", "uy"]
 
         sim = self.output.sim
         if sim.params.oper.dim == 3:
-            columns.append("vz")
+            columns.append("uz")
 
         columns.append("pressure")
 
@@ -158,7 +158,7 @@ class HistoryPoints:
 
         return df
 
-    def plot(self, key="vx"):
+    def plot(self, key="ux"):
         coords, df = self.load()
 
         fig, ax = plt.subplots()
