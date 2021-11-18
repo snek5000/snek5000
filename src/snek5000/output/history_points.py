@@ -112,10 +112,8 @@ class HistoryPoints:
         if coords.ndim == 1:
             coords = coords.reshape((1, coords.size))
 
-        if self.output.sim.params.oper.dim == 2:
-            columns = list("xy")
-        else:
-            columns = list("xyz")
+        # ('x', 'y') or ('x', 'y', 'z')
+        columns = tuple("xyz"[: self.output.sim.params.oper.dim])
         self.coords = pd.DataFrame(coords, columns=columns)
 
         df = self._create_df_from_lines(lines, nb_points)
@@ -171,10 +169,8 @@ class HistoryPoints:
             times = df_point["time"]
             ax.plot(times, signal, label=str(tuple(coords.iloc[index])))
 
-        ax.set_xlabel("time")
-        ax.set_ylabel(key)
+        ax.set(xlabel="time", ylabel=key, title=self.output.summary_simul)
         fig.legend()
-        ax.set_title(self.output.summary_simul)
         fig.tight_layout()
         return ax
 
@@ -201,12 +197,14 @@ class HistoryPoints:
             times = times[times < tmax]
 
         ax.plot(times, signal)
-        ax.set_xlabel("time")
-        ax.set_ylabel(key)
-        tmp = ", ".join("xyz"[i] for i in range(self.output.sim.params.oper.dim))
-        ax.set_title(
-            self.output.summary_simul
-            + f"\n{key}, ({tmp}) = {tuple(coords.values[index_point])}"
+        tmp = ", ".join("xyz"[: self.output.sim.params.oper.dim])
+        ax.set(
+            xlabel="time",
+            ylabel=key,
+            title=(
+                self.output.summary_simul
+                + f"\n{key}, ({tmp}) = {tuple(coords.values[index_point])}"
+            ),
         )
 
         fig.tight_layout()
