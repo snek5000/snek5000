@@ -1,6 +1,7 @@
 import xarray as xr
 
 from snek5000 import load
+from snek5000.util import repeat
 
 
 def test_history_points(sim_cbox_executed):
@@ -19,8 +20,9 @@ def test_history_points(sim_cbox_executed):
     # let's tweak the cbox.his to mimic a new data point
     with open(hist_points.path_file, "r") as file:
         file.readline()
-        for _ in range(len(p_hist.coords)):
+        for _ in repeat(len(p_hist.coords)):
             file.readline()
+
         line_data = file.readline()
     with open(hist_points.path_file, "a") as file:
         file.write(f"{line_data}\nbad\n")

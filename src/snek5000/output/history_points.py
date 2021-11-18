@@ -1,8 +1,10 @@
 from io import StringIO
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+
+from snek5000.util import repeat
 
 INDEX_USERPARAM_HISTORY_POINTS = 10
 
@@ -71,8 +73,9 @@ class HistoryPoints:
             with open(self.path_file) as file:
                 first_line = file.readline()
                 line_coord = file.readline()
-                for _ in range(nb_points - 1):
+                for _ in repeat(nb_points - 1):
                     file.readline()
+
                 line_data = file.readline()
 
             nb_chars_read = (

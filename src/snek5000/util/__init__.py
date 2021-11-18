@@ -10,21 +10,43 @@
    smake
 
 """
+import itertools
 import os
-import re
 import sys
 from datetime import datetime
-from functools import reduce
+from functools import partial, reduce
 from tarfile import TarFile
 from zipfile import ZipFile
 
 from fluiddyn import util
 
-from .. import get_nek_source_root, source_root
+from .. import (  # noqa: kept for backwards compatlibility
+    get_nek_source_root,
+    source_root,
+)
 from .restart import (  # noqa: kept for backwards compatibility
     get_status,
     prepare_for_restart,
 )
+
+repeat = partial(itertools.repeat, None)
+repeat.__doc__ = """\
+Iterator which returns a ``None`` object for a number of times.
+
+.. note::
+
+        Using :func:`itertools.repeat` instead of :func:`range` is considered a
+        more efficient option when the iterated value is unused.
+        https://stackoverflow.com/a/9098860
+
+
+Examples
+--------
+>>> for _ in repeat(10):
+...     # do something
+
+
+"""
 
 
 def isoformat(dt):
