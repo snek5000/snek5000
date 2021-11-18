@@ -53,7 +53,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .[tests]
-        pip install --no-deps -r ./docs/test-requirements.txt
+        pip install --no-deps -r ./requirements-tests.txt
 
     - name: Run tests
       run: |
