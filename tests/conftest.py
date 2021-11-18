@@ -169,11 +169,10 @@ def sim_cbox_executed():
 
     sim = Simul(params)
     if not sim.make.exec("compile"):
-        from snek5000.util.gfortran_log import expr, print_match
+        from snek5000.util.gfortran_log import log_matches
 
-        build_log = (Path(sim.output.path_run) / "build.log").read_text()
-        for match in expr.finditer(build_log):
-            print_match(match, levels=["Error"])
+        build_log = Path(sim.output.path_run) / "build.log"
+        log_matches(build_log, levels=["Error"])
 
         raise RuntimeError("cbox compilation failed")
 

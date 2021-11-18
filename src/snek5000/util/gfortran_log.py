@@ -1,5 +1,7 @@
 import re
-import sys
+from pathlib import Path
+
+from snek5000.log import logger
 
 pattern = r"""
 (?P<file>[^:^\n]+):(?P<line_nb>\d+):(?P<col>\d+):\n{,3}              # Filename and location: file, line_nb, col
@@ -10,13 +12,36 @@ pattern = r"""
 expr = re.compile(pattern, re.MULTILINE | re.VERBOSE)
 
 
-def print_match(match: re.Match, levels=("Error", "Warning")):
+def log_match(match, levels):
+    """Display a match which is included in the levels requested.
+
+    Parameters
+    ----------
+    match : re.Match
+        A regular expression match
+    levels : iterable of str
+        Should by a subset of `{"Error", "Warning"}`
+
+    """
     if match["level"] in levels:
-        print(match["level"], end=": ", file=sys.stderr)
-        print(
-            f"{match['file']}:{match['line_nb']}:{match['col']}\n  ",
-            match.group(match.lastindex),
-            "\n",
-            match["source"],
-            file=sys.stderr,
+        logger.info(
+            f"{match['level']}: "
+            f"{match['file']}:{match['line_nb']}:{match['col']}\n"
+            f"{match.group(match.lastindex)}\n"
+            #  match["source"],
         )
+
+
+def log_matches(path_log, levels=("Error", "Warning")):
+    """Log all matches
+
+    Parameters
+    ----------
+    path_log : str or path-like
+        Path to a log file with gfortran compilation output
+    levels : iterable of str
+        Should by a subset of `{"Error", "Warning"}`
+    """
+    text = Path(path_log).read_text()
+    for match in expr.finditer(text):
+        log_match(match, levels=["Error"])
