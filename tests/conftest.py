@@ -1,7 +1,7 @@
-import shutil
-from pathlib import Path
-from contextlib import contextmanager
 import os
+import shutil
+from contextlib import contextmanager
+from pathlib import Path
 
 import pytest
 
