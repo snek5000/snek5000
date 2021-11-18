@@ -168,7 +168,10 @@ def sim_cbox_executed():
     params.oper.max.hist = len(coords) + 1
 
     sim = Simul(params)
-    assert sim.make.exec("run_fg", resources={"nproc": 2}), "cbox simulation failed"
+    if not sim.make.exec("run_fg", resources={"nproc": 2}):
+        with open(Path(sim.output.path_run) / "cbox.log") as file:
+            print(file.read())
+        raise RuntimeError("cbox simulation failed")
     return sim
 
 
