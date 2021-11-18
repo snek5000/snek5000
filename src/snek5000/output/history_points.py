@@ -106,6 +106,9 @@ class HistoryPoints:
             coords = np.loadtxt(file, max_rows=nb_points)
             lines = file.readlines()
 
+        if coords.ndim == 1:
+            coords = coords.reshape((1, coords.size))
+
         if self.output.sim.params.oper.dim == 2:
             columns = list("xy")
         else:
@@ -154,11 +157,8 @@ class HistoryPoints:
 
         return df
 
-    def plot(self, key="vx", data=None):
-        if data is None:
-            coords, df = self.load()
-        else:
-            coords, df = data
+    def plot(self, key="vx"):
+        coords, df = self.load()
 
         fig, ax = plt.subplots()
 

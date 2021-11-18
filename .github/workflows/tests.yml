@@ -100,6 +100,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install .[docs]
         pip install --no-deps "phill @ git+https://github.com/exabl/snek5000-phill.git"
+        pip install --no-deps "snek5000-cbox @ git+https://github.com/exabl/snek5000-cbox.git@stable"
 
     - name: Build docs
       run: |

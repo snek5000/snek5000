@@ -145,36 +145,27 @@ def sim_executed():
     return sim
 
 
-@pytest.fixture
-def sim_cbox_executed(monkeypatch):
+@pytest.fixture(scope="module")
+def sim_cbox_executed():
     from snek5000_cbox.solver import Simul
 
     params = Simul.create_default_params()
     params.output.sub_directory = "test"
 
-    params.nek.general.stop_at = "endTime"
+    params.nek.general.stop_at = "numSteps"
     params.nek.general.dt = 1e-3
-    params.nek.general.end_time = 10 * abs(params.nek.general.dt)
-    params.nek.general.write_interval = 5
+    params.nek.general.num_steps = 12
+    params.nek.general.write_interval = 3
 
     params.oper.nproc_min = 2
     params.oper.nproc_max = 12
-    params.oper.nx = params.oper.ny = params.oper.nz = 3
+    params.oper.dim = 2
+    params.oper.nx = params.oper.ny = 8
 
     coords = [(0.5, 0.5)]
+    params.output.history_points.write_interval = 2
     params.output.history_points.coords = coords
     params.oper.max.hist = len(coords) + 1
-
-    def mock_append_debug_flags(config, warnings):
-        pass
-
-    monkeypatch.setattr("snek5000.append_debug_flags", mock_append_debug_flags)
-    monkeypatch.setattr(
-        "snek5000.util.smake.append_debug_flags", mock_append_debug_flags
-    )
-    monkeypatch.setattr(
-        "snek5000.output.base.append_debug_flags", mock_append_debug_flags
-    )
 
     sim = Simul(params)
     assert sim.make.exec("run_fg", resources={"nproc": 2}), "cbox simulation failed"
