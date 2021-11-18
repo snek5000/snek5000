@@ -168,9 +168,19 @@ def sim_cbox_executed():
     params.oper.max.hist = len(coords) + 1
 
     sim = Simul(params)
+    if not sim.make.exec("compile"):
+        from snek5000.util.gfortran_log import expr, print_match
+
+        build_log = (Path(sim.output.path_run) / "build.log").read_text()
+        for match in expr.finditer(build_log):
+            print_match(match, levels=["Error"])
+
+        raise RuntimeError("cbox compilation failed")
+
     if not sim.make.exec("run_fg", resources={"nproc": 2}):
         with open(Path(sim.output.path_run) / "cbox.log") as file:
             print(file.read())
+
         raise RuntimeError("cbox simulation failed")
     return sim
 
