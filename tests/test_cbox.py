@@ -1,9 +1,11 @@
+import pytest
 import xarray as xr
 
 from snek5000 import load
 from snek5000.util import repeat
 
 
+@pytest.mark.slow
 def test_history_points(sim_cbox_executed):
     sim = sim_cbox_executed
     params = sim.params
@@ -30,6 +32,7 @@ def test_history_points(sim_cbox_executed):
     hist_points.plot_1point(0, "temperature", tmin=0, tmax=1)
 
 
+@pytest.mark.slow
 def test_loadsimul_phys_fields(sim_cbox_executed):
     sim = load(sim_cbox_executed.path_run)
 
