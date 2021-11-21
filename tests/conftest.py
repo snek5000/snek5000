@@ -1,7 +1,11 @@
+import os
 import shutil
+from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
+
+from snek5000.util.gfortran_log import log_matches
 
 
 def pytest_addoption(parser):
@@ -145,39 +149,50 @@ def sim_executed():
     return sim
 
 
-@pytest.fixture
-def sim_cbox_executed(monkeypatch):
+@contextmanager
+def unset_snek_debug():
+    old_snek_debug = os.environ.pop("SNEK_DEBUG", None)
+    try:
+        yield
+    finally:
+        if old_snek_debug is not None:
+            os.environ["SNEK_DEBUG"] = old_snek_debug
+
+
+@pytest.fixture(scope="module")
+def sim_cbox_executed():
     from snek5000_cbox.solver import Simul
 
     params = Simul.create_default_params()
     params.output.sub_directory = "test"
 
-    params.nek.general.stop_at = "endTime"
+    params.nek.general.stop_at = "numSteps"
     params.nek.general.dt = 1e-3
-    params.nek.general.end_time = 10 * abs(params.nek.general.dt)
-    params.nek.general.write_interval = 5
+    params.nek.general.num_steps = 12
+    params.nek.general.write_interval = 3
 
     params.oper.nproc_min = 2
     params.oper.nproc_max = 12
-    params.oper.nx = params.oper.ny = params.oper.nz = 3
+    params.oper.dim = 2
+    params.oper.nx = params.oper.ny = 8
 
     coords = [(0.5, 0.5)]
+    params.output.history_points.write_interval = 2
     params.output.history_points.coords = coords
     params.oper.max.hist = len(coords) + 1
 
-    def mock_append_debug_flags(config, warnings):
-        pass
-
-    monkeypatch.setattr("snek5000.append_debug_flags", mock_append_debug_flags)
-    monkeypatch.setattr(
-        "snek5000.util.smake.append_debug_flags", mock_append_debug_flags
-    )
-    monkeypatch.setattr(
-        "snek5000.output.base.append_debug_flags", mock_append_debug_flags
-    )
-
     sim = Simul(params)
-    assert sim.make.exec("run_fg", resources={"nproc": 2}), "cbox simulation failed"
+
+    with unset_snek_debug():
+        if not sim.make.exec("compile"):
+            build_log = Path(sim.output.path_run) / "build.log"
+            log_matches(build_log, levels=["Error"])
+            raise RuntimeError("cbox compilation failed")
+
+    if not sim.make.exec("run_fg", resources={"nproc": 2}):
+        with open(Path(sim.output.path_run) / "cbox.log") as file:
+            print(file.read())
+        raise RuntimeError("cbox simulation failed")
     return sim
 
 

@@ -127,18 +127,6 @@ pymech_issue = (
 
 @pytest.mark.slow
 @pytest.mark.xfail(ValueError, reason=pymech_issue)
-def test_phys_fields_get_var_before_load(sim_executed):
-    sim = sim_executed
-    # FIXME:
-    #  def test_phys_fields_get_var_before_load(sim_cbox_executed):
-    #      sim = sim_cbox_executed
-    sim.output.phys_fields.init_reader()
-    ux = sim.output.phys_fields.get_var("ux")
-    assert isinstance(ux, xr.DataArray)
-
-
-@pytest.mark.slow
-@pytest.mark.xfail(ValueError, reason=pymech_issue)
 def test_phys_fields_load_all(sim_executed):
     sim_executed.output.phys_fields.init_reader()
     ds = sim_executed.output.phys_fields.load(index="all")

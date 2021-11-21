@@ -451,9 +451,10 @@ SIZE            params.oper.misc      Comment
 
     def _str_Ln(self):
         params = self.params.oper
-        str_L = map(_str_len, (params.Lx, params.Ly, params.Lz))
-        str_n = map(str, (params.nx, params.ny, params.nz))
-        return str_L, str_n
+        dim = params.dim
+        str_l = map(_str_len, (params.Lx, params.Ly, params.Lz)[:dim])
+        str_n = map(str, (params.nx, params.ny, params.nz)[:dim])
+        return str_l, str_n
 
     def _modify_sim_repr_maker(self, sim_repr_maker):
         repr_oper = self.produce_str_describing_oper()

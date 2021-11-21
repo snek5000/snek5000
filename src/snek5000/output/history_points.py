@@ -1,8 +1,10 @@
 from io import StringIO
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+
+from snek5000.util import repeat
 
 INDEX_USERPARAM_HISTORY_POINTS = 10
 
@@ -28,6 +30,8 @@ class HistoryPoints:
         self.nb_points = len(self.coords)
         self.coords = np.array(self.coords)
         shape = self.coords.shape
+
+        self._data = None
 
         if shape[0] >= params.oper.max.hist or shape[1] != params.oper.dim:
             raise ValueError(
@@ -57,17 +61,73 @@ class HistoryPoints:
         )
 
     def load(self):
+        if self._data is None:
+            return self._load_full()
+        else:
+            nb_points = self.coords.shape[0]
+            nb_data_lines_read = len(self._data)
+
+            size_file = self.path_file.stat().st_size
+            print(f"  {size_file = }")
+
+            with open(self.path_file) as file:
+                first_line = file.readline()
+                line_coord = file.readline()
+                for _ in repeat(nb_points - 1):
+                    file.readline()
+
+                line_data = file.readline()
+
+            nb_chars_read = (
+                len(first_line)
+                + nb_points * len(line_coord)
+                + nb_data_lines_read * len(line_data)
+            )
+            nb_chars_not_read = size_file - nb_chars_read
+
+            print(f"  {nb_chars_not_read = }")
+
+            if nb_chars_not_read == 0:
+                return self.coords, self._data
+
+            with open(self.path_file) as file:
+                file.seek(nb_chars_read)
+                lines = file.readlines()
+
+            df_more = self._create_df_from_lines(lines, nb_points)
+            if len(df_more) > 0:
+                self._data = pd.concat(
+                    [self._data, df_more], ignore_index=True, sort=False
+                )
+
+            return self.coords, self._data
+
+    def _load_full(self):
+
         with open(self.path_file) as file:
-            line = file.readline()
-            nb_points = int(line.split(" ", 1)[0])
+            nb_points = int(file.readline().split(" ", 1)[0])
             coords = np.loadtxt(file, max_rows=nb_points)
             lines = file.readlines()
 
-        columns = ["time", "vx", "vy"]
+        if coords.ndim == 1:
+            coords = coords.reshape((1, coords.size))
+
+        # ('x', 'y') or ('x', 'y', 'z')
+        columns = tuple("xyz"[: self.output.sim.params.oper.dim])
+        self.coords = pd.DataFrame(coords, columns=columns)
+
+        df = self._create_df_from_lines(lines, nb_points)
+        self._data = df
+
+        return self.coords, df
+
+    def _create_df_from_lines(self, lines, nb_points):
+
+        columns = ["time", "ux", "uy"]
 
         sim = self.output.sim
         if sim.params.oper.dim == 3:
-            columns.append("vz")
+            columns.append("uz")
 
         columns.append("pressure")
 
@@ -84,8 +144,11 @@ class HistoryPoints:
 
             nb_times = len(lines) // nb_points
             lines = lines[: nb_times * nb_points]
-            df = pd.read_fwf(StringIO("\n".join(lines)), header=None)
-            df.columns = columns
+            if lines:
+                df = pd.read_fwf(StringIO("\n".join(lines)), header=None)
+                df.columns = columns
+            else:
+                df = pd.DataFrame({}, columns=columns)
         else:
             nb_times = 0
             df = pd.DataFrame({}, columns=columns)
@@ -93,20 +156,10 @@ class HistoryPoints:
         index_points = list(range(nb_points)) * nb_times
         df["index_points"] = index_points
 
-        if sim.params.oper.dim == 2:
-            columns = list("xy")
-        else:
-            columns = list("xyz")
+        return df
 
-        coords = pd.DataFrame(coords, columns=columns)
-
-        return coords, df
-
-    def plot(self, key="vx", data=None):
-        if data is None:
-            coords, df = self.load()
-        else:
-            coords, df = data
+    def plot(self, key="ux"):
+        coords, df = self.load()
 
         fig, ax = plt.subplots()
 
@@ -116,9 +169,43 @@ class HistoryPoints:
             times = df_point["time"]
             ax.plot(times, signal, label=str(tuple(coords.iloc[index])))
 
-        ax.set_xlabel("time")
-        ax.set_ylabel(key)
+        ax.set(xlabel="time", ylabel=key, title=self.output.summary_simul)
         fig.legend()
         fig.tight_layout()
+        return ax
 
+    def load_1point(self, index_point, key=None):
+        coords, df = self.load()
+        df_point = df[df.index_points == index_point]
+        if key is not None:
+            df_point = df_point[[key, "time"]]
+        return coords, df_point
+
+    def plot_1point(self, index_point, key, tmin=None, tmax=None):
+        coords, df_point = self.load_1point(index_point, key)
+        fig, ax = plt.subplots()
+
+        signal = df_point[key]
+        times = df_point["time"]
+
+        if tmin is not None:
+            signal = signal[times > tmin]
+            times = times[times > tmin]
+
+        if tmax is not None:
+            signal = signal[times < tmax]
+            times = times[times < tmax]
+
+        ax.plot(times, signal)
+        tmp = ", ".join("xyz"[: self.output.sim.params.oper.dim])
+        ax.set(
+            xlabel="time",
+            ylabel=key,
+            title=(
+                self.output.summary_simul
+                + f"\n{key}, ({tmp}) = {tuple(coords.values[index_point])}"
+            ),
+        )
+
+        fig.tight_layout()
         return ax
