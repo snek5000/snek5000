@@ -202,6 +202,18 @@ class Output(OutputCore):
             Override hostname detection and specify it instead
 
         """
+
+        path_configfile = os.environ.get("SNEK_CONFIGFILE", None)
+        if path_configfile is not None:
+            path_configfile = Path(path_configfile)
+            if not path_configfile.exists():
+                raise ValueError(
+                    f'SNEK_CONFIGFILE = "{path_configfile}" '
+                    "but this file does not exist."
+                )
+            logger.info(f"Using custom configuration:\n{path_configfile}")
+            return path_configfile
+
         if not host:
             host = os.getenv(
                 "SNIC_RESOURCE", os.getenv("GITHUB_WORKFLOW", gethostname())

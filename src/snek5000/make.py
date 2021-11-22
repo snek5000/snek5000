@@ -2,6 +2,8 @@
 ======================
 
 """
+import os
+from pathlib import Path
 from typing import Iterable
 from warnings import warn
 
@@ -45,7 +47,14 @@ class Make:
         with change_dir(self.path_run):
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
-    def exec(self, *rules, dryrun=False, keep_incomplete=True, **kwargs):
+    def exec(
+        self,
+        *rules,
+        dryrun=False,
+        keep_incomplete=True,
+        env_vars_configfile=None,
+        **kwargs,
+    ):
         """Execute snakemake rules in sequence.
 
         Parameters
@@ -56,7 +65,8 @@ class Make:
             Dry run snakemake rules without executing
         keep_incomplete: bool
             Keep incomplete output files of failed jobs
-
+        env_vars_configfile: dict (None)
+            Environment variables given to Snake via a custom config file.
 
         For more on available keyword arguments refer to `Snakemake API documentation`_.
 
@@ -78,7 +88,7 @@ class Make:
         It is also possible to do the same directly from command line
         by changing to the simulation directory and executing::
 
-          snakemake -j1 compile
+          snakemake -j compile
           snakemake -j1 --resources nproc=2 run
 
         The flag ``-j`` is short for ``--jobs`` and sets the number of
@@ -93,6 +103,21 @@ class Make:
         .. _command line arguments: https://snakemake.readthedocs.io/en/stable/executing/cli.html#useful-command-line-arguments
 
         """
+
+        if env_vars_configfile:
+            path_configfile0 = self.sim.output.get_configfile()
+            import yaml
+
+            with open(path_configfile0) as file:
+                config = yaml.safe_load(file)
+            config.update(env_vars_configfile)
+
+            path_custom_configfile = Path(self.sim.path_run) / "custom_configfile.yml"
+            with open(path_custom_configfile, "w") as file:
+                yaml.dump(config, file)
+
+            os.environ["SNEK_CONFIGFILE"] = str(path_custom_configfile)
+
         # Default rule
         if not rules:
             rules = ("run",)
