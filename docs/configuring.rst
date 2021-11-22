@@ -12,8 +12,8 @@ gfortran and OpenMPI to compile the code.
 .. literalinclude:: ../src/snek5000/assets/default_configfile.yml
    :language: yaml
 
-Customization
--------------
+Customization via config files
+------------------------------
 
 You are expected to keep one configuration file for per machine / cluster where
 ``snek5000`` is executed. When a file is not found during runtime it issues a
@@ -40,12 +40,33 @@ As the warnings suggest, there are two possible paths where you can save your co
 
    See :meth:`snek5000.output.base.Output.get_configfile` for more details.
 
-Overriding configuration with environment variable
---------------------------------------------------
+.. note::
+
+   It is possible to specify the path of a custom config file with the
+   environment variable ``SNEK_CONFIGFILE``.
+
+Overriding configuration in the launching script
+------------------------------------------------
+
+One can override a configuration variable by using the argument
+``env_vars_configfile`` of the function :meth:`snek5000.make.Make.exec`:
+
+.. code-block:: python
+
+   sim.make.exec(
+        "run",
+        env_vars_configfile={"MPIEXEC_FLAGS": "--report-pid PID.txt"},
+    )
+
+Overriding configuration with environment variables
+---------------------------------------------------
 
 To allow for reproducible runs, it is discouraged to rely on environment
 variables to set the configuration. Nevertheless, it is possible to do so by
-using the following function call in the user ``Snakefile``.
+setting up the environment variable ``SNEK_ENV_SENSITIVE``.
+
+It is also possible to force this behavior in the user ``Snakefile`` by using
+the following function call.
 
 .. code-block:: python
 

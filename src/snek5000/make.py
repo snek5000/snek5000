@@ -68,10 +68,12 @@ class Make:
         env_vars_configfile: dict (None)
             Environment variables given to Snake via a custom config file.
 
+        Notes
+        -----
+
         For more on available keyword arguments refer to `Snakemake API documentation`_.
 
         .. _Snakemake API documentation: https://snakemake.readthedocs.io/en/stable/api_reference/snakemake.html
-
 
         Returns
         -------

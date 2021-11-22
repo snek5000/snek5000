@@ -11,6 +11,7 @@ import textwrap
 from itertools import chain
 from pathlib import Path
 from socket import gethostname
+import yaml
 
 from fluidsim_core.output import OutputCore
 from fluidsim_core.params import iter_complete_params
@@ -310,6 +311,10 @@ class Output(OutputCore):
 
             if env_sensitive is None:
                 env_sensitive = os.environ.get("SNEK_ENV_SENSITIVE", False)
+                if isinstance(env_sensitive, str):
+                    # correct for "0", "false", "False"
+                    env_sensitive = bool(yaml.safe_load(env_sensitive))
+
             if env_sensitive:
                 config.update(
                     {
