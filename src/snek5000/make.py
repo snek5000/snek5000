@@ -146,7 +146,7 @@ class Make:
             rules = first_rule
 
         with change_dir(self.path_run):
-            return snakemake(
+            return_code = snakemake(
                 self.file,
                 targets=rules,
                 dryrun=dryrun,
@@ -154,3 +154,8 @@ class Make:
                 log_handler=self.log_handler,
                 **kwargs,
             )
+
+        if env_vars_configfile:
+            del os.environ["SNEK_CONFIGFILE"]
+
+        return return_code
