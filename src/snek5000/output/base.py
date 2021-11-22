@@ -252,7 +252,7 @@ class Output(OutputCore):
 
     @classmethod
     def update_snakemake_config(
-        cls, config, name_solver, warnings=True, env_sensitive=False
+        cls, config, name_solver, warnings=True, env_sensitive=None
     ):
         """Update snakemake config in-place with name of the solver / case,
         path to configfile and compiler flags
@@ -265,10 +265,12 @@ class Output(OutputCore):
             Short name of the solver, also known as case name
         warnings: bool
             Show most compiler warnings (default) or suppress them.
-        env_sensitive: bool
-            Kept ``False`` by default to allow for reproducible runs. If
-            ``True`` modifies values of the ``config`` dictionary based on
-            environment variables.
+        env_sensitive: bool (None)
+            If ``False``, the ``config`` dictionary is not modified (allows for
+            reproducible runs). If ``True``, the ``config`` dictionary is
+            modified based on environment variables. If ``None`` (default), the
+            value of ``env_sensitive`` is obtained with
+            ``os.environ.get("SNEK_ENV_SENSITIVE", False)``.
 
         """
         mandatory_config = {
@@ -306,6 +308,8 @@ class Output(OutputCore):
 
             append_debug_flags(config, warnings)
 
+            if env_sensitive is None:
+                env_sensitive = os.environ.get("SNEK_ENV_SENSITIVE", False)
             if env_sensitive:
                 config.update(
                     {
