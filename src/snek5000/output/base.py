@@ -192,8 +192,12 @@ class Output(OutputCore):
 
         return cls.get_path_solver_package()
 
+    @staticmethod
+    def get_configfile():
+        return Path("./config_simul.yml").resolve()
+
     @classmethod
-    def get_configfile(cls, host=None):
+    def find_configfile(cls, host=None):
         """Get path of the Snakemake configuration file for the current machine.
         All configuration files are stored under ``etc`` sub-package.
 
@@ -203,17 +207,6 @@ class Output(OutputCore):
             Override hostname detection and specify it instead
 
         """
-
-        path_configfile = os.environ.get("SNEK_CONFIGFILE", None)
-        if path_configfile is not None:
-            path_configfile = Path(path_configfile)
-            if not path_configfile.exists():
-                raise ValueError(
-                    f'SNEK_CONFIGFILE = "{path_configfile}" '
-                    "but this file does not exist."
-                )
-            logger.info(f"Using custom configuration:\n{path_configfile}")
-            return path_configfile
 
         if not host:
             host = os.getenv(
@@ -337,7 +330,7 @@ class Output(OutputCore):
 
         self.path_solver_package = self.get_path_solver_package()
         # Check configfile early
-        self.get_configfile()
+        self.find_configfile()
 
         if sim:
             self.oper = sim.oper
@@ -599,6 +592,36 @@ class Output(OutputCore):
                 with open(makefile_usr, "w") as fp:
                     fp.write(output)
 
+    def write_snakemake_config(self, custom_env_vars=None):
+        """Write the config file in the simulation directory
+
+        Parameters
+        ----------
+
+        custom_env_vars: dict (None)
+            Environment variables used to update the configuration found by
+            :meth:`find_configfile`.
+
+        """
+        if mpi.rank != 0:
+            return
+
+        path_configfile = self.find_configfile()
+        path_configfile_simul = self.sim.path_run / "config_simul.yml"
+
+        if custom_env_vars is None:
+            shutil.copyfile(path_configfile, path_configfile_simul)
+            return
+
+        import yaml
+
+        with open(path_configfile) as file:
+            config = yaml.safe_load(file)
+        config.update(custom_env_vars)
+
+        with open(path_configfile_simul, "w") as file:
+            yaml.dump(config, file)
+
     @staticmethod
     def write_compile_sh(template, config, fp=None, path=None):
         """Write a standalone ``compile.sh`` shell script to compile the user
@@ -705,6 +728,7 @@ class Output(OutputCore):
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
             self.copy(self.path_run)
+            self.write_snakemake_config()
 
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with ``params_simul.xml`` and

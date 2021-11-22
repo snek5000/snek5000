@@ -52,10 +52,10 @@ def test_update_snakemake_config():
 @pytest.mark.skipif(
     configfile_xdg_config.exists(), reason=f"File {configfile_xdg_config} exists"
 )
-def test_get_configfile(caplog):
+def test_find_configfile(caplog):
     hostname = "test_config"
 
-    Output.get_configfile(host=hostname)
+    Output.find_configfile(host=hostname)
 
     for logger_name, level, message in caplog.record_tuples:
         if (

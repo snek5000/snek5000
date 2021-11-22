@@ -52,7 +52,6 @@ class Make:
         *rules,
         dryrun=False,
         keep_incomplete=True,
-        env_vars_configfile=None,
         **kwargs,
     ):
         """Execute snakemake rules in sequence.
@@ -65,8 +64,6 @@ class Make:
             Dry run snakemake rules without executing
         keep_incomplete: bool
             Keep incomplete output files of failed jobs
-        env_vars_configfile: dict (None)
-            Environment variables given to Snake via a custom config file.
 
         Notes
         -----
@@ -110,20 +107,6 @@ class Make:
 
         """
 
-        if env_vars_configfile:
-            path_configfile0 = self.sim.output.get_configfile()
-            import yaml
-
-            with open(path_configfile0) as file:
-                config = yaml.safe_load(file)
-            config.update(env_vars_configfile)
-
-            path_custom_configfile = Path(self.sim.path_run) / "custom_configfile.yml"
-            with open(path_custom_configfile, "w") as file:
-                yaml.dump(config, file)
-
-            os.environ["SNEK_CONFIGFILE"] = str(path_custom_configfile)
-
         # Default rule
         if not rules:
             rules = ("run",)
@@ -146,7 +129,7 @@ class Make:
             rules = first_rule
 
         with change_dir(self.path_run):
-            return_code = snakemake(
+            return snakemake(
                 self.file,
                 targets=rules,
                 dryrun=dryrun,
@@ -154,8 +137,3 @@ class Make:
                 log_handler=self.log_handler,
                 **kwargs,
             )
-
-        if env_vars_configfile:
-            del os.environ["SNEK_CONFIGFILE"]
-
-        return return_code

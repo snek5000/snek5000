@@ -38,25 +38,19 @@ As the warnings suggest, there are two possible paths where you can save your co
 
       python -c 'import socket; print(socket.gethostname())'
 
-   See :meth:`snek5000.output.base.Output.get_configfile` for more details.
-
-.. note::
-
-   It is possible to specify the path of a custom config file with the
-   environment variable ``SNEK_CONFIGFILE``.
+   See :meth:`snek5000.output.base.Output.find_configfile` for more details.
 
 Overriding configuration in the launching script
 ------------------------------------------------
 
-One can override a configuration variable by using the argument
-``env_vars_configfile`` of the function :meth:`snek5000.make.Make.exec`:
+One can override a configuration variable from a launching script by calling
+the function :meth:`snek5000.output.base.Output.write_snakemake_config`:
 
 .. code-block:: python
 
-   sim.make.exec(
-        "run",
-        env_vars_configfile={"MPIEXEC_FLAGS": "--report-pid PID.txt"},
-    )
+   sim.output.write_snakemake_config(
+       custom_env_vars={"MPIEXEC_FLAGS": "--report-pid PID.txt"}
+   )
 
 Overriding configuration with environment variables
 ---------------------------------------------------
