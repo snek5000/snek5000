@@ -607,21 +607,22 @@ class Output(OutputCore):
                 with open(makefile_usr, "w") as fp:
                     fp.write(output)
 
-    def write_snakemake_config(self, custom_env_vars=None):
+    def write_snakemake_config(self, custom_env_vars=None, host=None):
         """Write the config file in the simulation directory
 
         Parameters
         ----------
-
         custom_env_vars: dict (None)
             Environment variables used to update the configuration found by
             :meth:`find_configfile`.
+        host: str
+            Override hostname detection and specify it instead
 
         """
         if mpi.rank != 0:
             return
 
-        path_configfile = self.find_configfile()
+        path_configfile = self.find_configfile(host=host)
         path_configfile_simul = self.sim.path_run / "config_simul.yml"
 
         if custom_env_vars is None:
