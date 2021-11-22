@@ -263,7 +263,7 @@ class Output(OutputCore):
             reproducible runs). If ``True``, the ``config`` dictionary is
             modified based on environment variables. If ``None`` (default), the
             value of ``env_sensitive`` is obtained with
-            ``os.environ.get("SNEK_ENV_SENSITIVE", False)``.
+            ``os.environ.get("SNEK_UPDATE_CONFIG_ENV_SENSITIVE", False)``.
 
         """
         mandatory_config = {
@@ -302,7 +302,7 @@ class Output(OutputCore):
             append_debug_flags(config, warnings)
 
             if env_sensitive is None:
-                env_sensitive = os.environ.get("SNEK_ENV_SENSITIVE", False)
+                env_sensitive = os.environ.get("SNEK_UPDATE_CONFIG_ENV_SENSITIVE", False)
                 if isinstance(env_sensitive, str):
                     # correct for "0", "false", "False"
                     env_sensitive = bool(yaml.safe_load(env_sensitive))

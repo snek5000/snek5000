@@ -57,7 +57,7 @@ Overriding configuration with environment variables
 
 To allow for reproducible runs, it is discouraged to rely on environment
 variables to set the configuration. Nevertheless, it is possible to do so by
-setting up the environment variable ``SNEK_ENV_SENSITIVE``.
+setting up the environment variable ``SNEK_UPDATE_CONFIG_ENV_SENSITIVE``.
 
 It is also possible to force this behavior in the user ``Snakefile`` by using
 the following function call.

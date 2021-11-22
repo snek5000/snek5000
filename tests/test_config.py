@@ -38,12 +38,12 @@ def test_update_snakemake_config():
     assert original_case != "test_config"
     assert config["CASE"] == "test_config"
 
-    os.environ["SNEK_ENV_SENSITIVE"] = "1"
+    os.environ["SNEK_UPDATE_CONFIG_ENV_SENSITIVE"] = "1"
     os.environ["CASE"] = "test_config_1"
     Output.update_snakemake_config(config, name_solver)
     assert config["CASE"] == "test_config_1"
 
-    os.environ["SNEK_ENV_SENSITIVE"] = "0"
+    os.environ["SNEK_UPDATE_CONFIG_ENV_SENSITIVE"] = "0"
     os.environ["CASE"] = "test_config_2"
     Output.update_snakemake_config(config, name_solver)
     assert config["CASE"] == original_case
