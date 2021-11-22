@@ -6,7 +6,7 @@ test:
 	pytest
 
 testslow:
-	pytest --runslow
+	pytest -v --runslow
 
 coverage_html:
 	coverage html

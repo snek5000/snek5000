@@ -194,6 +194,20 @@ class Output(OutputCore):
 
     @staticmethod
     def get_configfile():
+
+        import warnings
+
+        warnings.warn(
+            (
+                "Method get_configfile will be removed on a later release. "
+                "You can replace in the Snakefile the line\n"
+                "configfile: Output.get_configfile()\n"
+                "by:\n"
+                'configfile: "config_simul.yml"'
+            ),
+            DeprecationWarning,
+        )
+
         return Path("./config_simul.yml").resolve()
 
     @classmethod
@@ -302,7 +316,9 @@ class Output(OutputCore):
             append_debug_flags(config, warnings)
 
             if env_sensitive is None:
-                env_sensitive = os.environ.get("SNEK_UPDATE_CONFIG_ENV_SENSITIVE", False)
+                env_sensitive = os.environ.get(
+                    "SNEK_UPDATE_CONFIG_ENV_SENSITIVE", False
+                )
                 if isinstance(env_sensitive, str):
                     # correct for "0", "false", "False"
                     env_sensitive = bool(yaml.safe_load(env_sensitive))

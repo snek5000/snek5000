@@ -1,7 +1,7 @@
 import snek5000
 from snek5000_tgv import short_name, Output
 
-configfile: Output.get_configfile()
+configfile: "config_simul.yml"
 
 snek5000.ensure_env()
 
