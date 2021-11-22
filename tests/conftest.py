@@ -189,7 +189,9 @@ def sim_cbox_executed():
             log_matches(build_log, levels=["Error"])
             raise RuntimeError("cbox compilation failed")
 
-    if not sim.make.exec("run_fg", resources={"nproc": 2}):
+    if not sim.make.exec(
+        "run_fg", resources={"nproc": 2}, env_vars_configfile={"FOO": 1}
+    ):
         with open(Path(sim.output.path_run) / "cbox.log") as file:
             print(file.read())
         raise RuntimeError("cbox simulation failed")
