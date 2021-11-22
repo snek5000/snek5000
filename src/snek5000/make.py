@@ -2,8 +2,6 @@
 ======================
 
 """
-import os
-from pathlib import Path
 from typing import Iterable
 from warnings import warn
 
@@ -47,13 +45,7 @@ class Make:
         with change_dir(self.path_run):
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
-    def exec(
-        self,
-        *rules,
-        dryrun=False,
-        keep_incomplete=True,
-        **kwargs,
-    ):
+    def exec(self, *rules, dryrun=False, keep_incomplete=True, **kwargs):
         """Execute snakemake rules in sequence.
 
         Parameters
@@ -106,7 +98,6 @@ class Make:
         .. _command line arguments: https://snakemake.readthedocs.io/en/stable/executing/cli.html#useful-command-line-arguments
 
         """
-
         # Default rule
         if not rules:
             rules = ("run",)

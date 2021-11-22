@@ -207,7 +207,6 @@ class Output(OutputCore):
             Override hostname detection and specify it instead
 
         """
-
         if not host:
             host = os.getenv(
                 "SNIC_RESOURCE", os.getenv("GITHUB_WORKFLOW", gethostname())
@@ -618,7 +617,6 @@ class Output(OutputCore):
         with open(path_configfile) as file:
             config = yaml.safe_load(file)
         config.update(custom_env_vars)
-
         with open(path_configfile_simul, "w") as file:
             yaml.dump(config, file)
 
