@@ -11,8 +11,8 @@ import textwrap
 from itertools import chain
 from pathlib import Path
 from socket import gethostname
-import yaml
 
+import yaml
 from fluidsim_core.output import OutputCore
 from fluidsim_core.params import iter_complete_params
 from inflection import underscore
@@ -64,6 +64,8 @@ class Output(OutputCore):
         `SESSION.NAME` file.
 
     """
+
+    _config_filename = "config_simul.yml"
 
     @property
     def excludes(self):
@@ -192,8 +194,8 @@ class Output(OutputCore):
 
         return cls.get_path_solver_package()
 
-    @staticmethod
-    def get_configfile():
+    @classmethod
+    def get_configfile(cls):
 
         import warnings
 
@@ -203,12 +205,12 @@ class Output(OutputCore):
                 "You can replace in the Snakefile the line\n"
                 "configfile: Output.get_configfile()\n"
                 "by:\n"
-                'configfile: "config_simul.yml"'
+                f'configfile: "{cls._config_filename}"'
             ),
             DeprecationWarning,
         )
 
-        return Path("./config_simul.yml").resolve()
+        return Path(cls._config_filename).resolve()
 
     @classmethod
     def find_configfile(cls, host=None):
@@ -303,11 +305,13 @@ class Output(OutputCore):
             logging_level = logger.getEffectiveLevel()
             logger.setLevel(logging.ERROR)
             temp = cls()
+        finally:
+            logger.setLevel(logging_level)
 
             config.update(
                 {
                     "CASE": name_solver,
-                    "file": cls.get_configfile(),
+                    "file": Path(cls._config_filename).resolve(),
                     "includes": " ".join(temp.fortran_inc_flags),
                     "objects": " ".join(temp.makefile_usr_obj),
                 }
@@ -324,15 +328,15 @@ class Output(OutputCore):
                     env_sensitive = bool(yaml.safe_load(env_sensitive))
 
             if env_sensitive:
+                logger.info(
+                    "env_sensitive = True => attempting to update config from environment variables."
+                )
                 config.update(
                     {
                         key: os.getenv(key, original_value)
                         for key, original_value in config.items()
                     }
                 )
-
-        finally:
-            logger.setLevel(logging_level)
 
     def __init__(self, sim=None, params=None):
         self.sim = sim
@@ -623,7 +627,7 @@ class Output(OutputCore):
             return
 
         path_configfile = self.find_configfile(host=host)
-        path_configfile_simul = self.sim.path_run / "config_simul.yml"
+        path_configfile_simul = self.sim.path_run / self._config_filename
 
         if custom_env_vars is None:
             shutil.copyfile(path_configfile, path_configfile_simul)
