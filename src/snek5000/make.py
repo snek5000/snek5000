@@ -143,7 +143,12 @@ class _Nek5000Make(Make):
         self.file = snek5000.get_asset("nek5000.smk")
         self.lock = FileLock(self.path_run / "nek5000_make.lock")
         self.config_cache = self.path_run / "nek5000_make_config.yml"
-        self.targets = ["bin/genbox", "bin/genmap", "3rd_party/gslib/lib/libgs.a"]
+        self.targets = [
+            "bin/genbox",
+            "bin/genmap",
+            "3rd_party/gslib/lib/libgs.a",
+            "3rd_party/blasLapack/libblasLapack.a",
+        ]
 
         # TODO: replace with Snek5000 log handler?
         self.log_handler = []
