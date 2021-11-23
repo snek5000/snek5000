@@ -59,6 +59,8 @@ jobs:
       run: |
         source activate.sh
         export SNEK_DEBUG=1
+        pytest -v tests/test_make.py &
+        pytest -v tests/test_make.py
         pytest -v --runslow --cov-report=xml --cov-report=term-missing
 
     - name: Upload coverage to codecov
