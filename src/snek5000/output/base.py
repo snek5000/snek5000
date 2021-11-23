@@ -19,6 +19,7 @@ from inflection import underscore
 
 from fluiddyn.io import stdout_redirected
 from snek5000 import __version__, get_asset, logger, mpi, resources
+from snek5000.make import _Nek5000Make
 from snek5000.params import _save_par_file
 from snek5000.solvers import get_solver_package, is_package
 from snek5000.util import docstring_params
@@ -640,6 +641,11 @@ class Output(OutputCore):
         config.update(custom_env_vars)
         with open(path_configfile_simul, "w") as file:
             yaml.dump(config, file)
+
+        # Build Nek5000 if needed
+        nek5000 = _Nek5000Make()
+        if not nek5000.build(config):
+            raise RuntimeError("Nek5000 build failed.")
 
     @staticmethod
     def write_compile_sh(template, config, fp=None, path=None):
