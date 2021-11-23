@@ -5,20 +5,11 @@ from snek5000.util.files import create_session
 NEK_SOURCE_ROOT = snek5000.get_nek_source_root()
 
 
-subworkflow Nek5000:
-    workdir:
-        NEK_SOURCE_ROOT
-    snakefile:
-        snek5000.get_asset("nek5000.smk")
-    configfile:
-        config["file"]
-
-
 # generate a box mesh
 rule generate_box:
     input:
         box=f"{config['CASE']}.box",
-        genbox=Nek5000("bin/genbox"),
+        genbox=NEK_SOURCE_ROOT + "/bin/genbox",
     output:
         "box.re2",
     shell:
@@ -39,7 +30,7 @@ rule move_box:
 rule generate_map:
     input:
         f"{config['CASE']}.re2",
-        genmap=Nek5000("bin/genmap"),
+        genmap=NEK_SOURCE_ROOT + "/bin/genmap",
     output:
         f"{config['CASE']}.ma2",
     resources:
