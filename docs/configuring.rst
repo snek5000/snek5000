@@ -40,6 +40,8 @@ As the warnings suggest, there are two possible paths where you can save your co
 
    See :meth:`snek5000.output.base.Output.find_configfile` for more details.
 
+.. _override_config:
+
 Overriding configuration in the launching script
 ------------------------------------------------
 
@@ -57,7 +59,11 @@ Overriding configuration with environment variables
 
 To allow for reproducible runs, it is discouraged to rely on environment
 variables to set the configuration. Nevertheless, it is possible to do so by
-setting up the environment variable ``SNEK_UPDATE_CONFIG_ENV_SENSITIVE``.
+setting up the environment variable ``SNEK_UPDATE_CONFIG_ENV_SENSITIVE`` as
+follows::
+
+   export SNEK_UPDATE_CONFIG_ENV_SENSITIVE=1
+   export MPIEXEC_FLAGS="--report-pid PID.txt"
 
 It is also possible to force this behavior in the user ``Snakefile`` by using
 the following function call.
