@@ -57,11 +57,12 @@ class Make:
         keep_incomplete: bool
             Keep incomplete output files of failed jobs
 
+        Notes
+        -----
 
         For more on available keyword arguments refer to `Snakemake API documentation`_.
 
         .. _Snakemake API documentation: https://snakemake.readthedocs.io/en/stable/api_reference/snakemake.html
-
 
         Returns
         -------
@@ -84,7 +85,11 @@ class Make:
         The flag ``-j`` is short for ``--jobs`` and sets the number of
         threads available for snakemake rules to execute.
 
-        The list of the available target rules can be obtained with::
+        The list of the available target rules can be obtained with:
+
+        >>> sim.make.list()
+
+        or from command line with::
 
           snakemake --list-target-rules
 

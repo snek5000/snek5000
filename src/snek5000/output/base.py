@@ -12,6 +12,7 @@ from itertools import chain
 from pathlib import Path
 from socket import gethostname
 
+import yaml
 from fluidsim_core.output import OutputCore
 from fluidsim_core.params import iter_complete_params
 from inflection import underscore
@@ -63,6 +64,8 @@ class Output(OutputCore):
         `SESSION.NAME` file.
 
     """
+
+    _config_filename = "config_simul.yml"
 
     @property
     def excludes(self):
@@ -192,7 +195,25 @@ class Output(OutputCore):
         return cls.get_path_solver_package()
 
     @classmethod
-    def get_configfile(cls, host=None):
+    def get_configfile(cls):
+
+        import warnings
+
+        warnings.warn(
+            (
+                "Method get_configfile will be removed on a later release. "
+                "You can replace in the Snakefile the line\n"
+                "configfile: Output.get_configfile()\n"
+                "by:\n"
+                f'configfile: "{cls._config_filename}"'
+            ),
+            DeprecationWarning,
+        )
+
+        return Path(cls._config_filename).resolve()
+
+    @classmethod
+    def find_configfile(cls, host=None):
         """Get path of the Snakemake configuration file for the current machine.
         All configuration files are stored under ``etc`` sub-package.
 
@@ -240,7 +261,7 @@ class Output(OutputCore):
 
     @classmethod
     def update_snakemake_config(
-        cls, config, name_solver, warnings=True, env_sensitive=False
+        cls, config, name_solver, warnings=True, env_sensitive=None
     ):
         """Update snakemake config in-place with name of the solver / case,
         path to configfile and compiler flags
@@ -253,10 +274,12 @@ class Output(OutputCore):
             Short name of the solver, also known as case name
         warnings: bool
             Show most compiler warnings (default) or suppress them.
-        env_sensitive: bool
-            Kept ``False`` by default to allow for reproducible runs. If
-            ``True`` modifies values of the ``config`` dictionary based on
-            environment variables.
+        env_sensitive: bool (None)
+            If ``False``, the ``config`` dictionary is not modified (allows for
+            reproducible runs). If ``True``, the ``config`` dictionary is
+            modified based on environment variables. If ``None`` (default), the
+            value of ``env_sensitive`` is obtained with
+            ``os.environ.get("SNEK_UPDATE_CONFIG_ENV_SENSITIVE", False)``.
 
         """
         mandatory_config = {
@@ -282,11 +305,13 @@ class Output(OutputCore):
             logging_level = logger.getEffectiveLevel()
             logger.setLevel(logging.ERROR)
             temp = cls()
+        finally:
+            logger.setLevel(logging_level)
 
             config.update(
                 {
                     "CASE": name_solver,
-                    "file": cls.get_configfile(),
+                    "file": Path(cls._config_filename).resolve(),
                     "includes": " ".join(temp.fortran_inc_flags),
                     "objects": " ".join(temp.makefile_usr_obj),
                 }
@@ -294,16 +319,24 @@ class Output(OutputCore):
 
             append_debug_flags(config, warnings)
 
+            if env_sensitive is None:
+                env_sensitive = os.environ.get(
+                    "SNEK_UPDATE_CONFIG_ENV_SENSITIVE", False
+                )
+                if isinstance(env_sensitive, str):
+                    # correct for "0", "false", "False"
+                    env_sensitive = bool(yaml.safe_load(env_sensitive))
+
             if env_sensitive:
+                logger.info(
+                    "env_sensitive = True => attempting to update config from environment variables."
+                )
                 config.update(
                     {
                         key: os.getenv(key, original_value)
                         for key, original_value in config.items()
                     }
                 )
-
-        finally:
-            logger.setLevel(logging_level)
 
     def __init__(self, sim=None, params=None):
         self.sim = sim
@@ -316,7 +349,7 @@ class Output(OutputCore):
 
         self.path_solver_package = self.get_path_solver_package()
         # Check configfile early
-        self.get_configfile()
+        self.find_configfile()
 
         if sim:
             self.oper = sim.oper
@@ -578,6 +611,36 @@ class Output(OutputCore):
                 with open(makefile_usr, "w") as fp:
                     fp.write(output)
 
+    def write_snakemake_config(self, custom_env_vars=None, host=None):
+        """Write the config file in the simulation directory
+
+        Parameters
+        ----------
+        custom_env_vars: dict (None)
+            Environment variables used to update the configuration found by
+            :meth:`find_configfile`.
+        host: str
+            Override hostname detection and specify it instead
+
+        """
+        if mpi.rank != 0:
+            return
+
+        path_configfile = self.find_configfile(host=host)
+        path_configfile_simul = self.sim.path_run / self._config_filename
+
+        if custom_env_vars is None:
+            shutil.copyfile(path_configfile, path_configfile_simul)
+            return
+
+        import yaml
+
+        with open(path_configfile) as file:
+            config = yaml.safe_load(file)
+        config.update(custom_env_vars)
+        with open(path_configfile_simul, "w") as file:
+            yaml.dump(config, file)
+
     @staticmethod
     def write_compile_sh(template, config, fp=None, path=None):
         """Write a standalone ``compile.sh`` shell script to compile the user
@@ -684,6 +747,7 @@ class Output(OutputCore):
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
             self.copy(self.path_run)
+            self.write_snakemake_config()
 
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with ``params_simul.xml`` and

@@ -41,6 +41,10 @@ Security in case of vulnerabilities.
   `load` and `get_var` methods provided by classes under {mod}`snek5000.output.readers`.
 - Support for number of processes detection in OAR clusters
 - {meth}`snek5000.output.base.Output._set_info_solver_classes` to customize Output child classes
+- Environment variable `SNEK_UPDATE_CONFIG_ENV_SENSITIVE`,
+  {meth}`snek5000.output.base.Output.write_snakemake_config` to help the user
+  easily modify environment variables during Snakemake rule execution. See
+  {ref}`override_config`.
 
 ### Changed
 
@@ -66,8 +70,9 @@ Security in case of vulnerabilities.
 - Passing rules as iterables to {meth}`snek5000.make.Make.exec`. Pass positional parameters instead.
 - {func}`snek5000.source_root` (renamed as
   {func}`snek5000.get_nek_source_root`).
-- {meth}`snek5000.output.OutputBase.get_root` (renamed as
-  {meth}`snek5000.output.OutputBase.get_path_solver_package`).
+- {meth}`snek5000.output.base.Output.get_root` (renamed as
+  {meth}`snek5000.output.base.Output.get_path_solver_package`).
+- {meth}`snek5000.output.base.Output.get_configfile` (use a string `"config_simul.yml"` instead in user Snakefile).
 
 ### Fixed
 

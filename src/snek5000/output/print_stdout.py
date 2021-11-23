@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 
 import numpy as np
+
 from snek5000 import mpi
 from snek5000.log import logger
 from snek5000.solvers.base import Simul

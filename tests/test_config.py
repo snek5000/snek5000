@@ -38,14 +38,24 @@ def test_update_snakemake_config():
     assert original_case != "test_config"
     assert config["CASE"] == "test_config"
 
+    os.environ["SNEK_UPDATE_CONFIG_ENV_SENSITIVE"] = "1"
+    os.environ["CASE"] = "test_config_1"
+    Output.update_snakemake_config(config, name_solver)
+    assert config["CASE"] == "test_config_1"
+
+    os.environ["SNEK_UPDATE_CONFIG_ENV_SENSITIVE"] = "0"
+    os.environ["CASE"] = "test_config_2"
+    Output.update_snakemake_config(config, name_solver)
+    assert config["CASE"] == original_case
+
 
 @pytest.mark.skipif(
     configfile_xdg_config.exists(), reason=f"File {configfile_xdg_config} exists"
 )
-def test_get_configfile(caplog):
+def test_find_configfile(caplog):
     hostname = "test_config"
 
-    Output.get_configfile(host=hostname)
+    Output.find_configfile(host=hostname)
 
     for logger_name, level, message in caplog.record_tuples:
         if (

@@ -60,7 +60,7 @@ def sim():
     from phill.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test"
+    params.output.sub_directory = "test_snek5000"
 
     params.nek.general.stop_at = "numSteps"
     params.nek.general.num_steps = 9
@@ -112,7 +112,7 @@ def sim2d():
     from phill.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test"
+    params.output.sub_directory = "test_snek5000"
 
     set_params_oper2d(params)
     return Simul(params)
@@ -123,6 +123,8 @@ def sim_canonical():
     from snek5000_canonical.solver import Simul
 
     params = Simul.create_default_params()
+    params.output.sub_directory = "test_snek5000"
+
     return Simul(params)
 
 
@@ -131,7 +133,7 @@ def sim_executed():
     from phill.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test"
+    params.output.sub_directory = "test_snek5000"
 
     params.nek.general.stop_at = "endTime"
     params.nek.general.end_time = 10 * abs(params.nek.general.dt)
@@ -164,7 +166,7 @@ def sim_cbox_executed():
     from snek5000_cbox.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test"
+    params.output.sub_directory = "test_snek5000"
 
     params.nek.general.stop_at = "numSteps"
     params.nek.general.dt = 1e-3
@@ -182,6 +184,7 @@ def sim_cbox_executed():
     params.oper.max.hist = len(coords) + 1
 
     sim = Simul(params)
+    sim.output.write_snakemake_config(custom_env_vars={"FOO": 1})
 
     with unset_snek_debug():
         if not sim.make.exec("compile"):
