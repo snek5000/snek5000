@@ -39,9 +39,9 @@ rule tools_clean:
 rule gslib:
     output:
         "3rd_party/gslib/lib/libgs.a",
+    params:
+        flags=MAKETOOLS.replace("./maketools", ""),
     shell:
         """
-        source core/makenek.inc
-        pushd 3rd_party/gslib
-        CC={config[CC]} CFLAGS={config[CFLAGS]} ./install
+        {params.flags} ./bin/nekconfig -build-dep
         """
