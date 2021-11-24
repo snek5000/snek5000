@@ -630,22 +630,17 @@ class Output(OutputCore):
         path_configfile = self.find_configfile(host=host)
         path_configfile_simul = self.sim.path_run / self._config_filename
 
-        if custom_env_vars is None:
-            shutil.copyfile(path_configfile, path_configfile_simul)
-            return
-
-        import yaml
-
         with open(path_configfile) as file:
             config = yaml.safe_load(file)
-        config.update(custom_env_vars)
-        with open(path_configfile_simul, "w") as file:
-            yaml.dump(config, file)
 
-        # Build Nek5000 if needed
-        nek5000 = _Nek5000Make()
-        if not nek5000.build(config):
-            raise RuntimeError("Nek5000 build failed.")
+        if custom_env_vars is None:
+            shutil.copyfile(path_configfile, path_configfile_simul)
+        else:
+            config.update(custom_env_vars)
+            with open(path_configfile_simul, "w") as file:
+                yaml.dump(config, file)
+
+        return config
 
     @staticmethod
     def write_compile_sh(template, config, fp=None, path=None):
@@ -753,7 +748,12 @@ class Output(OutputCore):
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
             self.copy(self.path_run)
-            self.write_snakemake_config()
+            config = self.write_snakemake_config()
+
+            # Build Nek5000 if needed
+            nek5000 = _Nek5000Make()
+            if not nek5000.build(config):
+                raise RuntimeError("Nek5000 build failed.")
 
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with ``params_simul.xml`` and
