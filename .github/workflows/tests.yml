@@ -78,6 +78,11 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Install apt packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install gfortran libopenmpi-dev
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
