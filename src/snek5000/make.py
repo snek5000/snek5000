@@ -141,7 +141,7 @@ class _Nek5000Make(Make):
     def __init__(self):
         self.path_run = Path(snek5000.get_nek_source_root())
         self.file = snek5000.get_asset("nek5000.smk")
-        self.lock = FileLock(self.path_run / "nek5000_make.lock")
+        self.lock = FileLock(self.path_run / "nek5000_make_config.yml.lock")
         self.config_cache = self.path_run / "nek5000_make_config.yml"
         self.targets = [
             "bin/genbox",
