@@ -136,13 +136,35 @@ class Make:
 
 
 class _Nek5000Make(Make):
-    """Snakemake interface to build Nek5000 tools and other dependencies."""
+    """Snakemake interface to build Nek5000 tools and other dependencies.
+    This class would prevent unnecessary rebuild of Nek5000 if there is no
+    change in the compiler configuration.
+
+    .. note::
+
+        There is a small caveat with this solution. If a series of jobs are
+        launched which uses various compiler configurations, then it would
+        rebuild Nek5000 tools and libraries again and again during
+        ``sim.output.post_init`` - and suddenly some library would be missing
+        during the ``sim.make.exec`` call. As long as all subsequent jobs use
+        the same compiler configuration, it should work.
+
+    """
 
     def __init__(self):
+        #: ``NEK_SOURCE_ROOT`` is the working directory
         self.path_run = Path(snek5000.get_nek_source_root())
+
+        #: The ``nek5000.smk`` Snakemake file from :mod:`snek5000.assets` is used here
         self.file = snek5000.get_asset("nek5000.smk")
+
+        #: A file lock ``nek5000_make_config.yml.lock`` used to prevent race conditions
         self.lock = FileLock(self.path_run / "nek5000_make_config.yml.lock")
+
+        #: A YAML file ``nek5000_make_config.yml`` to record compiler configuration
         self.config_cache = self.path_run / "nek5000_make_config.yml"
+
+        #: List of files to build
         self.targets = [
             "bin/genbox",
             "bin/genmap",
