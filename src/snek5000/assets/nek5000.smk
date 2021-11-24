@@ -14,6 +14,7 @@ rule tools:
 rule _tool:
     input:
         "tools/{tool}",
+        "nek5000_make_config.yml",
     output:
         "bin/{tool}",
     params:
@@ -38,6 +39,7 @@ rule tools_clean:
 # makenek takes care of gslib building using the bash function make_3rd_party
 rule build_third_party:
     input:
+        "nek5000_make_config.yml",
         nekconfig="bin/nekconfig",
     output:
         "3rd_party/gslib/lib/libgs.a",
