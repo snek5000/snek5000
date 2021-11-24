@@ -643,6 +643,26 @@ class Output(OutputCore):
         return config
 
     @staticmethod
+    def build_nek5000(config):
+        """Build Nek5000, if needed. This method is automatically invoked
+        during :meth:`post_init`.
+
+        Examples
+        --------
+        If compiler configuration is changed via a script after Simulation
+        initialization, a rebuild can be manually triggered as follows:
+
+        >>> config = sim.output.write_snakemake_config(
+        ...     custom_env_vars={"CFLAGS": "-O0 -g", FFLAGS": "-O0 -g"}
+        ... )
+        >>> sim.output.build_nek5000(config)
+
+        """
+        nek5000 = _Nek5000Make()
+        if not nek5000.build(config):
+            raise RuntimeError("Nek5000 build failed.")
+
+    @staticmethod
     def write_compile_sh(template, config, fp=None, path=None):
         """Write a standalone ``compile.sh`` shell script to compile the user
         code.
@@ -749,11 +769,7 @@ class Output(OutputCore):
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
             self.copy(self.path_run)
             config = self.write_snakemake_config()
-
-            # Build Nek5000 if needed
-            nek5000 = _Nek5000Make()
-            if not nek5000.build(config):
-                raise RuntimeError("Nek5000 build failed.")
+            self.build_nek5000(config)
 
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with ``params_simul.xml`` and
