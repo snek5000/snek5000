@@ -77,7 +77,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: recursive
-        fetch-depth: 0
 
     - name: Install apt packages
       run: |
@@ -112,7 +111,6 @@ jobs:
 
     - name: Build docs
       run: |
-        source activate.sh
         SPHINXOPTS="-W" make -C docs html
 
   deploy:
