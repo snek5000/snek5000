@@ -112,6 +112,7 @@ jobs:
 
     - name: Build docs
       run: |
+        source activate.sh
         SPHINXOPTS="-W" make -C docs html
 
   deploy:
