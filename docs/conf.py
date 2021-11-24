@@ -44,7 +44,12 @@ sys.path.insert(0, root(breathe))
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, root(snek5000))
+os.environ["NEK_SOURCE_ROOT"] = os.fspath(
+    (Path(__file__).parent.parent / "lib" / "Nek5000").resolve()
+)
 
+
+print("NEK_SOURCE_ROOT = ", snek5000.get_nek_source_root())
 print("sys.path =\n   ", "\n    ".join(sys.path))
 
 # -- Project information -----------------------------------------------------
