@@ -53,3 +53,12 @@ interpreter of your choice:
 .. _PyPy: https://www.pypy.org/
 .. _conda: https://docs.conda.io/projects/conda/en/latest/user-guide/index.html
 .. _mamba: https://mamba.readthedocs.io/en/latest/installation.html
+
+
+Installing ParaView module
+==========================
+
+.. toctree::
+
+            install_opt.rst
+
