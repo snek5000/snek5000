@@ -19,6 +19,7 @@ from inflection import underscore
 
 from fluiddyn.io import stdout_redirected
 from snek5000 import __version__, get_asset, logger, mpi, resources
+from snek5000.make import _Nek5000Make
 from snek5000.params import _save_par_file
 from snek5000.solvers import get_solver_package, is_package
 from snek5000.util import docstring_params
@@ -629,17 +630,37 @@ class Output(OutputCore):
         path_configfile = self.find_configfile(host=host)
         path_configfile_simul = self.sim.path_run / self._config_filename
 
-        if custom_env_vars is None:
-            shutil.copyfile(path_configfile, path_configfile_simul)
-            return
-
-        import yaml
-
         with open(path_configfile) as file:
             config = yaml.safe_load(file)
-        config.update(custom_env_vars)
-        with open(path_configfile_simul, "w") as file:
-            yaml.dump(config, file)
+
+        if custom_env_vars is None:
+            shutil.copyfile(path_configfile, path_configfile_simul)
+        else:
+            config.update(custom_env_vars)
+            with open(path_configfile_simul, "w") as file:
+                yaml.dump(config, file)
+
+        return config
+
+    @staticmethod
+    def build_nek5000(config):
+        """Build Nek5000, if needed. This method is automatically invoked
+        during :meth:`post_init`.
+
+        Examples
+        --------
+        If compiler configuration is changed via a script after Simulation
+        initialization, a rebuild can be manually triggered as follows:
+
+        >>> config = sim.output.write_snakemake_config(
+        ...     custom_env_vars={"CFLAGS": "-O0 -g", FFLAGS": "-O0 -g"}
+        ... )
+        >>> sim.output.build_nek5000(config)
+
+        """
+        nek5000 = _Nek5000Make()
+        if not nek5000.build(config):
+            raise RuntimeError("Nek5000 build failed.")
 
     @staticmethod
     def write_compile_sh(template, config, fp=None, path=None):
@@ -747,7 +768,8 @@ class Output(OutputCore):
         # Write source files to compile the simulation
         if mpi.rank == 0 and self._has_to_save and self.sim.params.NEW_DIR_RESULTS:
             self.copy(self.path_run)
-            self.write_snakemake_config()
+            config = self.write_snakemake_config()
+            self.build_nek5000(config)
 
     def _save_info_solver_params_xml(self, replace=False):
         """Saves the par file, along with ``params_simul.xml`` and

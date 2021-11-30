@@ -12,3 +12,14 @@ Internal API of Output
 .. automethod:: snek5000.output.base.Output._get_resources
 .. automethod:: snek5000.output.base.Output._get_subpackages
 .. automethod:: snek5000.output.base.Output._save_info_solver_params_xml
+
+
+.. _nek5000make:
+
+Class _Nek5000Make
+------------------
+
+:meth:`snek5000.output.base.Output.build_nek5000` relies on:
+
+.. autoclass:: snek5000.make._Nek5000Make
+

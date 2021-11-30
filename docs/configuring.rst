@@ -73,3 +73,22 @@ the following function call.
    Output.update_snakemake_config(config, CASE, env_sensitive=True)
 
 See :meth:`snek5000.output.base.Output.update_snakemake_config` and :ref:`user_snakefile` for more details
+
+
+On compiling and running simultaneous simulations
+-------------------------------------------------
+
+Snek5000 supports compiling multiple simulation runs from different terminals
+or cluster jobs in realtime. It will also take care of rebuilding the Nek5000
+libraries if the compiler configuration changes. We use the ``filelock``
+library to avoid multiple rebuilds. See :ref:`nek5000make` for more
+information.
+
+.. warning::
+
+    There is a small caveat with this solution. If a series of jobs are
+    launched which uses various compiler configurations, then it would
+    rebuild Nek5000 tools and libraries again and again during
+    ``sim.output.post_init`` - and suddenly some library would be missing
+    during the ``sim.make.exec`` call. As long as all subsequent jobs use
+    the same compiler configuration, it should work.

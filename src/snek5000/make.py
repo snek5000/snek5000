@@ -2,11 +2,16 @@
 ======================
 
 """
+from pathlib import Path
 from typing import Iterable
 from warnings import warn
 
+import yaml
+from filelock import FileLock
 from snakemake import snakemake
 from snakemake.executors import change_working_directory as change_dir
+
+import snek5000
 
 
 def unlock(path_dir):
@@ -128,3 +133,89 @@ class Make:
                 log_handler=self.log_handler,
                 **kwargs,
             )
+
+
+class _Nek5000Make(Make):
+    """Snakemake interface to build Nek5000 tools and other dependencies.
+    This class would prevent unnecessary rebuild of Nek5000 if there is no
+    change in the compiler configuration.
+
+    """
+
+    def __init__(self):
+        #: ``NEK_SOURCE_ROOT`` is the working directory
+        self.path_run = Path(snek5000.get_nek_source_root())
+
+        #: The ``nek5000.smk`` Snakemake file from :mod:`snek5000.assets` is used here
+        self.file = snek5000.get_asset("nek5000.smk")
+
+        #: A file lock ``nek5000_make_config.yml.lock`` used to prevent race conditions
+        self.lock = FileLock(self.path_run / "nek5000_make_config.yml.lock")
+
+        #: A YAML file ``nek5000_make_config.yml`` to record compiler configuration
+        self.config_cache = self.path_run / "nek5000_make_config.yml"
+
+        #: List of files to build
+        self.targets = [
+            "bin/genbox",
+            "bin/genmap",
+            "3rd_party/gslib/lib/libgs.a",
+            "3rd_party/blasLapack/libblasLapack.a",
+        ]
+
+        # TODO: replace with Snek5000 log handler?
+        self.log_handler = []
+
+    def has_to_build(self, compiler_config):
+        compiler_config_str = yaml.safe_dump(compiler_config)
+        compiler_config_cache = (
+            self.config_cache.read_text() if self.config_cache.exists() else ""
+        )
+
+        if (
+            # One or more of the targets do not exist
+            any(not (self.path_run / target).exists() for target in self.targets)
+            or compiler_config_str != compiler_config_cache
+            # New compiler configuration
+        ):
+            # Save new configuration first
+            self.config_cache.write_text(compiler_config_str)
+
+            return True
+        else:
+            return False
+
+    def build(self, config):
+        """Build Nek5000 tools and third party libraries essential for a
+        simulation.
+
+        Parameters
+        ----------
+        config: dict
+            Snakemake configuration
+
+        Returns
+        -------
+        bool
+            ``True`` if workflow execution was successful.
+
+        """
+
+        compiler_config = {
+            key: config[key]
+            for key in (
+                "CC",
+                "FC",
+                "MPICC",
+                "MPIFC",
+                "CFLAGS",
+                "FFLAGS",
+            )
+        }
+
+        with self.lock:
+            # Only one process can inspect at a time. No timeout
+            if self.has_to_build(compiler_config):
+                return self.exec(*self.targets, config=config)
+            else:
+                return True
