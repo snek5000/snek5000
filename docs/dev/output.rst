@@ -14,6 +14,8 @@ Internal API of Output
 .. automethod:: snek5000.output.base.Output._save_info_solver_params_xml
 
 
+.. _nek5000make:
+
 Class _Nek5000Make
 ------------------
 

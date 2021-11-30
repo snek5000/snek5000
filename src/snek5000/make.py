@@ -140,15 +140,6 @@ class _Nek5000Make(Make):
     This class would prevent unnecessary rebuild of Nek5000 if there is no
     change in the compiler configuration.
 
-    .. note::
-
-        There is a small caveat with this solution. If a series of jobs are
-        launched which uses various compiler configurations, then it would
-        rebuild Nek5000 tools and libraries again and again during
-        ``sim.output.post_init`` - and suddenly some library would be missing
-        during the ``sim.make.exec`` call. As long as all subsequent jobs use
-        the same compiler configuration, it should work.
-
     """
 
     def __init__(self):
