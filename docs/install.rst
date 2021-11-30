@@ -55,10 +55,12 @@ interpreter of your choice:
 .. _mamba: https://mamba.readthedocs.io/en/latest/installation.html
 
 
-Installing ParaView module
-==========================
-
 .. toctree::
+   :caption: Optional dependencies
 
-            install_opt.rst
+   install_opt.rst
+
+
+
+
 
