@@ -35,6 +35,7 @@ from fluiddyn.util import mpi  # noqa: F401
 
 from ._version import __version__  # noqa: F401
 from .log import logger  # noqa: F401
+from .params import load_params
 
 
 def get_nek_source_root():
@@ -175,3 +176,14 @@ get_status = restart.get_status  #: Alias for :func:`snek5000.util.restart.get_s
 load_for_restart = (
     restart.load_for_restart
 )  #: Alias for :func:`snek5000.util.restart.load_for_restart`
+
+
+__all__ = [
+    "load_simul",
+    "load",
+    "load_params",
+    "load_for_restart",
+    "get_nek_source_root",
+    "logger",
+    "get_status",
+]
