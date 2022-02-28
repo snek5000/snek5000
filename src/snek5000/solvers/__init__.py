@@ -67,7 +67,11 @@ def get_solver_package(name_solver):
 
     """
     entrypoint = available_solvers()[name_solver]
-    module = entrypoint.module_name
+    try:
+        # importlib.metadata.entry_points (fluidsim_core > 0.6.0)
+        module = entrypoint.module
+    except AttributeError:
+        module = entrypoint.module_name
     if is_package(module):
         return module
     else:
