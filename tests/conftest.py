@@ -172,7 +172,8 @@ def sim_cbox_executed():
     params.nek.general.dt = 1e-3
     params.nek.general.num_steps = 12
     params.nek.general.write_interval = 3
-
+    
+    params.oper.delta_T_lateral = 1.0
     params.oper.nproc_min = 2
     params.oper.nproc_max = 12
     params.oper.dim = 2
