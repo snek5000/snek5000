@@ -94,10 +94,10 @@ extensions = [
 ]
 
 # Execute ipynb files into with a cache ...
-jupyter_execute_notebooks = "cache"
+nb_execution_mode = "cache"
 # ... except these ipynb files
-execution_excludepatterns = ["ipynb/executed/*"]
-execution_show_tb = True
+nb_execution_excludepatterns = ["ipynb/executed/*"]
+nb_execution_show_tb = True
 
 # CSS selector which modifies the sphinx-copybutton feature
 copybutton_selector = ",".join(
