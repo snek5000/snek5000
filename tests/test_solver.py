@@ -5,7 +5,7 @@ from snek5000.solvers import available_solvers, import_cls_simul
 
 
 def test_entrypoints():
-    solvers = available_solvers()
+    solvers = [entrypoint.name for entrypoint in available_solvers()]
     assert "nek" in solvers
     assert "kth" in solvers
     assert "phill" in solvers
