@@ -4,10 +4,10 @@
 
 
 [![PyPI](https://img.shields.io/pypi/v/snek5000)](https://pypi.org/project/snek5000/)
-[![Tests Status](https://github.com/exabl/snek5000/workflows/Tests/badge.svg)](https://github.com/exabl/snek5000/actions?workflow=Tests)
+[![Tests Status](https://github.com/snek5000/snek5000/workflows/Tests/badge.svg)](https://github.com/snek5000/snek5000/actions?workflow=Tests)
 [![Documentation Status](https://readthedocs.org/projects/snek5000/badge/?version=latest)](https://snek5000.readthedocs.io/en/latest/?badge=latest)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=exabl_snek5000&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=exabl_snek5000)
-[![Code coverage](https://codecov.io/gh/exabl/snek5000/branch/master/graph/badge.svg?token=WzGnN0dfbw)](https://codecov.io/gh/exabl/snek5000)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=snek5000_snek5000&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=snek5000_snek5000)
+[![Code coverage](https://codecov.io/gh/snek5000/snek5000/branch/master/graph/badge.svg?token=WzGnN0dfbw)](https://codecov.io/gh/snek5000/snek5000)
 
 <!-- badges -->
 
@@ -37,7 +37,7 @@ The [`snek5000` Python
 API](https://snek5000.readthedocs.io/en/latest/_generated/snek5000.html) is based on
 [fluidsim](https://fluidsim.readthedocs.io), which allows you to launch a
 simulation using scripts. For example the [periodic hill
-example](https://github.com/exabl/snek5000-phill) can be launched as.
+example](https://github.com/snek5000/snek5000-phill) can be launched as.
 
 ```python
 from phill.solver import Simul

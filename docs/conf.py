@@ -234,11 +234,11 @@ html_context = {
         #  ),
         (
             '<i class="fa fa-code fa-fw"></i> Source code',
-            f"https://github.com/exabl/{project.lower()}",
+            f"https://github.com/snek5000/{project.lower()}",
         ),
         (
             '<i class="fa fa-bug fa-fw"></i> Issue tracker',
-            f"https://github.com/exabl/{project.lower()}/issues",
+            f"https://github.com/snek5000/{project.lower()}/issues",
         ),
         #  ('<i class="fa fa-rss fa-fw"></i> Blog', 'https://...'),
         #  (

@@ -6,7 +6,7 @@ Something does not work and you wish to fix it? Are you curious to see how it
 works? For development:
 ```sh
 # Clone
-git clone --recursive https://github.com/exabl/snek5000.git
+git clone --recursive https://github.com/snek5000/snek5000.git
 
 # Activate paths: Start here. Always!
 cd snek5000

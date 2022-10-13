@@ -295,20 +295,20 @@ Security in case of vulnerabilities.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
-[Unreleased]: https://github.com/exabl/snek5000/compare/0.7.0b0...HEAD
-[0.7.0b0]: https://github.com/exabl/snek5000/compare/0.6.1b0...0.7.0b0
-[0.6.1b0]: https://github.com/exabl/snek5000/compare/0.6.0b0...0.6.1b0
-[0.6.0b0]: https://github.com/exabl/snek5000/compare/0.5.0b0...0.6.0b0
-[0.5.0b0]: https://github.com/exabl/snek5000/compare/0.4.1b1...0.5.0b0
-[0.4.1b1]: https://github.com/exabl/snek5000/compare/0.4.1b0...0.4.1b1
-[0.4.1b0]: https://github.com/exabl/snek5000/compare/0.4.0b1...0.4.1b0
-[0.4.0b1]: https://github.com/exabl/snek5000/compare/0.3.1a0...0.4.0b1
-[0.3.1a0]: https://github.com/exabl/snek5000/compare/0.3.0a0...0.3.1a0
-[0.3.0a0]: https://github.com/exabl/snek5000/compare/0.2.2...0.3.0a0
-[0.2.2]: https://github.com/exabl/snek5000/compare/0.2.1...0.2.2
-[0.2.1]: https://github.com/exabl/snek5000/compare/0.2.0...0.2.1
-[0.2.0]: https://github.com/exabl/snek5000/compare/0.1.1...0.2.0
-[0.1.1]: https://github.com/exabl/snek5000/compare/0.1.0...0.1.1
-[0.1.0]: https://github.com/exabl/snek5000/compare/0.0.1...0.1.0
-[0.0.1]: https://github.com/exabl/snek5000/releases/tag/0.0.1
+[Unreleased]: https://github.com/snek5000/snek5000/compare/0.7.0b0...HEAD
+[0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
+[0.6.1b0]: https://github.com/snek5000/snek5000/compare/0.6.0b0...0.6.1b0
+[0.6.0b0]: https://github.com/snek5000/snek5000/compare/0.5.0b0...0.6.0b0
+[0.5.0b0]: https://github.com/snek5000/snek5000/compare/0.4.1b1...0.5.0b0
+[0.4.1b1]: https://github.com/snek5000/snek5000/compare/0.4.1b0...0.4.1b1
+[0.4.1b0]: https://github.com/snek5000/snek5000/compare/0.4.0b1...0.4.1b0
+[0.4.0b1]: https://github.com/snek5000/snek5000/compare/0.3.1a0...0.4.0b1
+[0.3.1a0]: https://github.com/snek5000/snek5000/compare/0.3.0a0...0.3.1a0
+[0.3.0a0]: https://github.com/snek5000/snek5000/compare/0.2.2...0.3.0a0
+[0.2.2]: https://github.com/snek5000/snek5000/compare/0.2.1...0.2.2
+[0.2.1]: https://github.com/snek5000/snek5000/compare/0.2.0...0.2.1
+[0.2.0]: https://github.com/snek5000/snek5000/compare/0.1.1...0.2.0
+[0.1.1]: https://github.com/snek5000/snek5000/compare/0.1.0...0.1.1
+[0.1.0]: https://github.com/snek5000/snek5000/compare/0.0.1...0.1.0
+[0.0.1]: https://github.com/snek5000/snek5000/releases/tag/0.0.1
 [@paugier]: https://github.com/paugier
