@@ -4,15 +4,28 @@ plotting and reading arrays from the solution field files. Loading of data
 files are managed by the classes in the :mod:`snek5000.output.readers`.
 
 """
+from functools import lru_cache
+
+import numpy as np
+
+from fluiddyn.util import mpi
+
 from fluidsim_core.params import iter_complete_params
+from fluidsim_core.output.phys_fields import (
+    SetOfPhysFieldFilesBase,
+    PhysFieldsABC,
+)
+from fluidsim_core.output.movies import MoviesBasePhysFields
 
 from ..log import logger
 
 #  from .readers import try_paraview_ as pv
 from .readers import pymech_ as pm
 
+import pymech
 
-class PhysFields:
+
+class PhysFields(PhysFieldsABC):
     """Class for loading, plotting simulation files."""
 
     @staticmethod
@@ -63,9 +76,8 @@ class PhysFields:
     def data(self):
         data = self._reader.data
         if not data:
-            raise IOError(
-                "No data has been loaded yet. Try calling sim.output.phys_fields.load() first."
-            )
+            self.load()
+            data = self._reader.data
         return data
 
     def __init__(self, output=None):
@@ -87,6 +99,12 @@ class PhysFields:
         .. seealso::
             :meth:`snek5000.output.readers.ReaderBase.get_var`
         """
+
+        self.set_of_phys_files = SetOfPhysFieldFiles(output=output)
+        self.movies = MoviesBasePhysFields(self.output, self)
+        self.animate = self.movies.animate
+        self.interact = self.movies.interact
+        self._equation = None
 
     def _uninitialized(self, *args, **kwargs):
         """Place holder method to raise a :exc:`RuntimeError` while accessing
@@ -140,3 +158,103 @@ class PhysFields:
         self._reader = cls(self.output)
         self.load = self._reader.load
         self.get_var = self._reader.get_var
+
+    def get_key_field_to_plot(self, forbid_compute=False, key_prefered=None):
+        return "temperature"
+
+    def get_field_to_plot(
+        self,
+        key=None,
+        time=None,
+        idx_time=None,
+        equation=None,
+        interpolate_time=True,
+    ):
+        """Get the field to be plotted in process 0."""
+        return self.set_of_phys_files.get_field_to_plot(
+            time,
+            idx_time=idx_time,
+            key=key,
+            equation=equation,
+            interpolate_time=interpolate_time,
+        )
+
+    def get_vector_for_plot(self, from_state=False, time=None, interpolate_time=True):
+        return self.set_of_phys_files.get_vector_for_plot(time, self._equation)
+
+    def _quiver_plot(self, ax, vecx, vecy, XX=None, YY=None):
+        """Superimposes a quiver plot of velocity vectors with a given axis
+        object corresponding to a 2D contour plot.
+        """
+
+        if XX is None and YY is None:
+            x_seq, y_seq = self._get_axis_data(self._equation)
+            [XX, YY] = np.meshgrid(x_seq, y_seq)
+
+        if mpi.rank == 0:
+            vmax = np.max(np.sqrt(vecx**2 + vecy**2))
+
+            if not hasattr(self, "_skip_quiver"):
+                self._init_skip_quiver()
+
+            skip = self._skip_quiver
+            # copy to avoid a bug
+            vecx_c = vecx[::skip, ::skip].copy()
+            vecy_c = vecy[::skip, ::skip].copy()
+            quiver = ax.quiver(
+                XX[::skip, ::skip],
+                YY[::skip, ::skip],
+                vecx_c / vmax,
+                vecy_c / vmax,
+            )
+        else:
+            quiver = vmax = None
+
+        return quiver, vmax
+
+    @lru_cache(maxsize=None)
+    def _get_axis_data(self, equation=None):
+        data = self.data
+        if equation is not None:
+            raise NotImplementedError
+        return data.x.data, data.y.data
+
+
+class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
+    def _get_data_from_time(self, time):
+        index = self.times.tolist().index(time)
+        return self._get_data_from_path(self.path_files[index])
+
+    @lru_cache(maxsize=2)
+    def _get_data_from_path(self, path):
+        return pymech.open_dataset(path)
+
+    def _get_field_to_plot_from_file(self, path_file, key, equation):
+        data = self._get_data_from_path(path_file)
+        field = data[key].data
+        if equation is not None:
+            raise NotImplementedError
+        return field[0], float(data.time)
+
+    @staticmethod
+    def time_from_path(path):
+        return pymech.readnek(path).time
+
+    def _get_glob_pattern(self):
+        session_id = self.output.sim.params.output.session_id
+        case = self.output.name_solver
+        return f"session_{session_id:02d}/{case}0.f?????"
+
+    def get_vector_for_plot(self, time, equation=None):
+
+        if equation is not None:
+            raise NotImplementedError
+
+        # temporary hack
+        time = self.times[abs(self.times - time).argmin()]
+
+        data = self._get_data_from_time(time)
+
+        vec_xaxis = data["ux"].data[0]
+        vec_yaxis = data["uy"].data[0]
+        return vec_xaxis, vec_yaxis
