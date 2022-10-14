@@ -80,7 +80,10 @@ def source_root():
 
 def get_asset(asset_name):
     """Fetches path of an asset from subpackage ``snek5000.assets``."""
-    asset = next(resources.path("snek5000.assets", asset_name).gen)
+    try:
+        asset = next(resources.path("snek5000.assets", asset_name).gen)
+    except AttributeError:
+        asset = resources.path("snek5000.assets", asset_name)
     return asset
 
 

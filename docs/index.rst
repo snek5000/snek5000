@@ -19,11 +19,11 @@ internals rely on FluidSim's core_ to build its API.
       License: https://creativecommons.org/licenses/by/3.0/
    -->
 
-+------------+-----------------------------------+
-| Repository | https://github.com/exabl/snek5000 |
-+------------+-----------------------------------+
-| Version    | |release|                         |
-+------------+-----------------------------------+
++------------+--------------------------------------+
+| Repository | https://github.com/snek5000/snek5000 |
++------------+--------------------------------------+
+| Version    | |release|                            |
++------------+--------------------------------------+
 
 .. toctree::
    :maxdepth: 1
@@ -51,7 +51,7 @@ User Guide
    CHANGELOG
    AUTHORS
    license
-   Source code on GitHub <https://github.com/exabl/snek5000>
+   Source code on GitHub <https://github.com/snek5000/snek5000>
 
 Indices and tables
 ==================

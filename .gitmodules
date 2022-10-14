@@ -1,4 +1,4 @@
 [submodule "lib/Nek5000"]
 	path = lib/Nek5000
-	url = https://github.com/exabl/Nek5000.git
+	url = https://github.com/snek5000/Nek5000.git
 	ignore = dirty

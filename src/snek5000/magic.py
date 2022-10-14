@@ -8,7 +8,7 @@ Usage example in an IPython console:
    In [1]: %load_ext snek5000.magic
 
    In [2]: %snek abl
-   INFO     Reading baseline parameters from /home/avmo/src/exabl/snek5000/src/abl/abl.par
+   INFO     Reading baseline parameters from /home/avmo/src/snek5000/snek5000/src/abl/abl.par
    Created Simul class and default parameters for abl -> Simul, params
 
    In [3]: sim = Simul(params)

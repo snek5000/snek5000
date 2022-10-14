@@ -32,7 +32,7 @@ repository) like this::
                └── __init__.py
 
 You can copy the directory `docs/examples/snek5000-canonical
-<https://github.com/exabl/snek5000/tree/main/docs/examples/snek5000-canonical>`_
+<https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-canonical>`_
 from the Snek5000 repository, and then modify the directory names and the files
 as needed.
 

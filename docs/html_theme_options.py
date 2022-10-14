@@ -25,7 +25,7 @@ dark_css_variables = {**__common_css_variables}
 #      "color_primary": "indigo",
 #      "color_accent": "deep-purple",
 #      # Set the repo location to get a badge with stats
-#      "repo_url": f"https://github.com/exabl/{project}/",
+#      "repo_url": f"https://github.com/snek5000/{project}/",
 #      "repo_name": project,
 #      # Visible levels of the global TOC; -1 means unlimited
 #      "globaltoc_depth": 2,

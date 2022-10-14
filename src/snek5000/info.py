@@ -31,6 +31,7 @@ class InfoSolverNek(InfoSolverCore):
                 "module_name": "snek5000.solvers.base",
                 "class_name": "SimulNek",
                 "short_name": "nek",
+                "loader": "snek5000.load",
                 "par_sections": (
                     "general",
                     "problemtype",
