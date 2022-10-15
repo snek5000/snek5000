@@ -7,6 +7,10 @@ files are managed by the classes in the :mod:`snek5000.output.readers`.
 from functools import lru_cache
 
 import numpy as np
+import matplotlib.pyplot as plt
+
+import pymech
+from pymech.neksuite.field import read_header
 
 from fluiddyn.util import mpi
 
@@ -21,8 +25,6 @@ from ..log import logger
 
 #  from .readers import try_paraview_ as pv
 from .readers import pymech_ as pm
-
-import pymech
 
 
 class PhysFields(PhysFieldsABC):
@@ -69,7 +71,9 @@ class PhysFields(PhysFieldsABC):
             "phys_fields", attribs={"reader": "pymech", "available_readers": []}
         )
 
-        dict_classes = info_solver.classes.Output.classes.PhysFields.import_classes()
+        dict_classes = (
+            info_solver.classes.Output.classes.PhysFields.import_classes()
+        )
         iter_complete_params(params, info_solver, dict_classes.values())
 
     @property
@@ -179,7 +183,9 @@ class PhysFields(PhysFieldsABC):
             interpolate_time=interpolate_time,
         )
 
-    def get_vector_for_plot(self, from_state=False, time=None, interpolate_time=True):
+    def get_vector_for_plot(
+        self, from_state=False, time=None, interpolate_time=True
+    ):
         return self.set_of_phys_files.get_vector_for_plot(time, self._equation)
 
     def _quiver_plot(self, ax, vecx, vecy, XX=None, YY=None):
@@ -229,16 +235,63 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
     def _get_data_from_path(self, path):
         return pymech.open_dataset(path)
 
+    def _get_hexadata_from_time(self, time):
+        index = self.times.tolist().index(time)
+        return self._get_hexadata_from_path(self.path_files[index])
+
+    @lru_cache(maxsize=2)
+    def _get_hexadata_from_path(self, path):
+        return pymech.readnek(path)
+
     def _get_field_to_plot_from_file(self, path_file, key, equation):
-        data = self._get_data_from_path(path_file)
-        field = data[key].data
         if equation is not None:
             raise NotImplementedError
+        data = self._get_data_from_path(path_file)
+        field = data[key].data
         return field[0], float(data.time)
+
+    def plot_hexa(self, time, equation=None, nb_vec1d_x=2, nb_vec1d_y=2):
+        # temporary hack
+        time = self.times[abs(self.times - time).argmin()]
+
+        hexa_data = self._get_hexadata_from_time(time)
+        fig, ax = plt.subplots()
+
+        x_quiver = np.empty(nb_vec1d_x * nb_vec1d_y * len(hexa_data.elem))
+        y_quiver = np.empty_like(x_quiver)
+        vx_quiver = np.empty_like(x_quiver)
+        vy_quiver = np.empty_like(x_quiver)
+        i_quiv = -1
+
+        # assuming 2d...
+        iz = 0
+
+        for elem in hexa_data.elem:
+            field = elem.temp[0][iz]
+            XX = elem.pos[0][iz]
+            YY = elem.pos[1][iz]
+            ax.pcolormesh(
+                XX[0], YY[:, 0], field, shading="nearest", vmin=-0.5, vmax=0.5
+            )
+
+            ny, nx = XX.shape
+            for iy in range(nb_vec1d_y):
+                for ix in range(nb_vec1d_x):
+                    ix_elem = (1 + 2 * ix) * nx // (2 * nb_vec1d_x)
+                    iy_elem = (1 + 2 * iy) * ny // (2 * nb_vec1d_y)
+                    i_quiv += 1
+                    x_quiver[i_quiv] = XX[iy_elem, ix_elem]
+                    y_quiver[i_quiv] = YY[iy_elem, ix_elem]
+                    vx_quiver[i_quiv] = elem.vel[0, iz, iy_elem, ix_elem]
+                    vy_quiver[i_quiv] = elem.vel[1, iz, iy_elem, ix_elem]
+
+        ax.quiver(x_quiver, y_quiver, vx_quiver, vy_quiver)
 
     @staticmethod
     def time_from_path(path):
-        return pymech.readnek(path).time
+        with open(path, "rb") as file:
+            header = read_header(file)
+        return header.time
 
     def _get_glob_pattern(self):
         session_id = self.output.sim.params.output.session_id
