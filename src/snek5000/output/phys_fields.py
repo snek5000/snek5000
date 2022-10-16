@@ -250,18 +250,27 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         field = data[key].data
         return field[0], float(data.time)
 
-    def plot_hexa(self, time, equation=None, nb_vec1d_x=2, nb_vec1d_y=2):
+    def plot_hexa(self, time, equation=None, percentage_dx_quiver=4.0):
         # temporary hack
         time = self.times[abs(self.times - time).argmin()]
 
         hexa_data = self._get_hexadata_from_time(time)
         fig, ax = plt.subplots()
 
-        x_quiver = np.empty(nb_vec1d_x * nb_vec1d_y * len(hexa_data.elem))
-        y_quiver = np.empty_like(x_quiver)
-        vx_quiver = np.empty_like(x_quiver)
-        vy_quiver = np.empty_like(x_quiver)
-        i_quiv = -1
+        xmin, xmax = hexa_data.lims.pos[0]
+        ymin, ymax = hexa_data.lims.pos[1]
+
+        dx_quiver = percentage_dx_quiver / 100 * (xmax - xmin)
+        nx_quiver = int((xmax - xmin) / dx_quiver)
+        ny_quiver = int((ymax - ymin) / dx_quiver)
+
+        x_approx_quiver = np.linspace(dx_quiver, xmax - dx_quiver, nx_quiver)
+        y_approx_quiver = np.linspace(dx_quiver, ymax - dx_quiver, ny_quiver)
+
+        x_quiver = []
+        y_quiver = []
+        vx_quiver = []
+        vy_quiver = []
 
         # assuming 2d...
         iz = 0
@@ -270,20 +279,33 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
             field = elem.temp[0][iz]
             XX = elem.pos[0][iz]
             YY = elem.pos[1][iz]
-            ax.pcolormesh(
-                XX[0], YY[:, 0], field, shading="nearest", vmin=-0.5, vmax=0.5
-            )
+            x = XX[0]
+            y = YY[:, 0]
+            ax.pcolormesh(x, y, field, shading="nearest", vmin=-0.5, vmax=0.5)
 
-            ny, nx = XX.shape
-            for iy in range(nb_vec1d_y):
-                for ix in range(nb_vec1d_x):
-                    ix_elem = (1 + 2 * ix) * nx // (2 * nb_vec1d_x)
-                    iy_elem = (1 + 2 * iy) * ny // (2 * nb_vec1d_y)
-                    i_quiv += 1
-                    x_quiver[i_quiv] = XX[iy_elem, ix_elem]
-                    y_quiver[i_quiv] = YY[iy_elem, ix_elem]
-                    vx_quiver[i_quiv] = elem.vel[0, iz, iy_elem, ix_elem]
-                    vy_quiver[i_quiv] = elem.vel[1, iz, iy_elem, ix_elem]
+            xmin = x.min()
+            xmax = x.max()
+            ymin = y.min()
+            ymax = y.max()
+
+            for y_approx in y_approx_quiver:
+                if y_approx < ymin:
+                    continue
+                if y_approx > ymax:
+                    break
+                iy = abs(y - y_approx).argmin()
+                for x_approx in x_approx_quiver:
+                    if x_approx < xmin:
+                        continue
+                    if x_approx > xmax:
+                        break
+                    ix = abs(x - x_approx).argmin()
+
+                    x_quiver.append(x[ix])
+                    y_quiver.append(y[iy])
+
+                    vx_quiver.append(elem.vel[0, iz, iy, ix])
+                    vy_quiver.append(elem.vel[1, iz, iy, ix])
 
         ax.quiver(x_quiver, y_quiver, vx_quiver, vy_quiver)
 
