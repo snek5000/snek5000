@@ -19,7 +19,8 @@ from fluidsim_core.output.phys_fields import (
     SetOfPhysFieldFilesBase,
     PhysFieldsABC,
 )
-from fluidsim_core.output.movies import MoviesBasePhysFields
+from fluidsim_core.output.movies import MoviesBasePhysFieldsHexa
+from fluidsim_core.hexa_field import HexaField
 
 from ..log import logger
 
@@ -111,7 +112,7 @@ class PhysFields(PhysFieldsABC):
         """
 
         self.set_of_phys_files = SetOfPhysFieldFiles(output=output)
-        self.movies = MoviesBasePhysFields(self.output, self)
+        self.movies = MoviesBasePhysFieldsHexa(self.output, self)
         self.animate = self.movies.animate
         self.interact = self.movies.interact
         self._equation = None
@@ -224,10 +225,9 @@ class PhysFields(PhysFieldsABC):
 
     @lru_cache(maxsize=None)
     def _get_axis_data(self, equation=None):
-        data = self.data
-        if equation is not None:
-            raise NotImplementedError
-        return data.x.data, data.y.data
+        hexa_x, _ = self.get_field_to_plot(idx_time=0, key="x", equation=equation)
+        hexa_y, _ = self.get_field_to_plot(idx_time=0, key="y", equation=equation)
+        return hexa_x, hexa_y
 
 
 class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
@@ -250,9 +250,9 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
     def _get_field_to_plot_from_file(self, path_file, key, equation):
         if equation is not None:
             raise NotImplementedError
-        data = self._get_data_from_path(path_file)
-        field = data[key].data
-        return field[0], float(data.time)
+        hexa_data = self._get_hexadata_from_path(path_file)
+        hexa_field = HexaField(key, hexa_data)
+        return hexa_field, float(hexa_data.time)
 
     def plot_hexa(self, time, equation=None, percentage_dx_quiver=4.0):
         # temporary hack
