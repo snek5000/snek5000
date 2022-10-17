@@ -27,6 +27,14 @@ from ..log import logger
 from .readers import pymech_ as pm
 
 
+def _get_edges(var):
+    edges = np.empty(var.size + 1)
+    edges[0] = var[0]
+    edges[-1] = var[-1]
+    edges[1:-1] = 0.5 * (var[:-1] + var[1:])
+    return edges
+
+
 class PhysFields(PhysFieldsABC):
     """Class for loading, plotting simulation files."""
 
@@ -71,9 +79,7 @@ class PhysFields(PhysFieldsABC):
             "phys_fields", attribs={"reader": "pymech", "available_readers": []}
         )
 
-        dict_classes = (
-            info_solver.classes.Output.classes.PhysFields.import_classes()
-        )
+        dict_classes = info_solver.classes.Output.classes.PhysFields.import_classes()
         iter_complete_params(params, info_solver, dict_classes.values())
 
     @property
@@ -183,9 +189,7 @@ class PhysFields(PhysFieldsABC):
             interpolate_time=interpolate_time,
         )
 
-    def get_vector_for_plot(
-        self, from_state=False, time=None, interpolate_time=True
-    ):
+    def get_vector_for_plot(self, from_state=False, time=None, interpolate_time=True):
         return self.set_of_phys_files.get_vector_for_plot(time, self._equation)
 
     def _quiver_plot(self, ax, vecx, vecy, XX=None, YY=None):
@@ -281,7 +285,9 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
             YY = elem.pos[1][iz]
             x = XX[0]
             y = YY[:, 0]
-            ax.pcolormesh(x, y, field, shading="nearest", vmin=-0.5, vmax=0.5)
+            x_edges = _get_edges(x)
+            y_edges = _get_edges(y)
+            ax.pcolormesh(x_edges, y_edges, field, shading="flat", vmin=-0.5, vmax=0.5)
 
             xmin = x.min()
             xmax = x.max()
