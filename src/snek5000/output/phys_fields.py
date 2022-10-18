@@ -20,20 +20,12 @@ from fluidsim_core.output.phys_fields import (
     PhysFieldsABC,
 )
 from fluidsim_core.output.movies import MoviesBasePhysFieldsHexa
-from fluidsim_core.hexa_field import HexaField
+from fluidsim_core.hexa_field import HexaField, get_edges
 
 from ..log import logger
 
 #  from .readers import try_paraview_ as pv
 from .readers import pymech_ as pm
-
-
-def _get_edges(var):
-    edges = np.empty(var.size + 1)
-    edges[0] = var[0]
-    edges[-1] = var[-1]
-    edges[1:-1] = 0.5 * (var[:-1] + var[1:])
-    return edges
 
 
 class PhysFields(PhysFieldsABC):
@@ -112,6 +104,8 @@ class PhysFields(PhysFieldsABC):
         """
 
         self.set_of_phys_files = SetOfPhysFieldFiles(output=output)
+        self.plot_hexa = self.set_of_phys_files.plot_hexa
+
         self.movies = MoviesBasePhysFieldsHexa(self.output, self)
         self.animate = self.movies.animate
         self.interact = self.movies.interact
@@ -183,7 +177,7 @@ class PhysFields(PhysFieldsABC):
     ):
         """Get the field to be plotted in process 0."""
         return self.set_of_phys_files.get_field_to_plot(
-            time,
+            time=time,
             idx_time=idx_time,
             key=key,
             equation=equation,
@@ -191,37 +185,15 @@ class PhysFields(PhysFieldsABC):
         )
 
     def get_vector_for_plot(self, from_state=False, time=None, interpolate_time=True):
+        if from_state:
+            raise ValueError("cannot get anything from the state for this solver")
         return self.set_of_phys_files.get_vector_for_plot(time, self._equation)
 
     def _quiver_plot(self, ax, vecx, vecy, XX=None, YY=None):
         """Superimposes a quiver plot of velocity vectors with a given axis
         object corresponding to a 2D contour plot.
         """
-
-        if XX is None and YY is None:
-            x_seq, y_seq = self._get_axis_data(self._equation)
-            [XX, YY] = np.meshgrid(x_seq, y_seq)
-
-        if mpi.rank == 0:
-            vmax = np.max(np.sqrt(vecx**2 + vecy**2))
-
-            if not hasattr(self, "_skip_quiver"):
-                self._init_skip_quiver()
-
-            skip = self._skip_quiver
-            # copy to avoid a bug
-            vecx_c = vecx[::skip, ::skip].copy()
-            vecy_c = vecy[::skip, ::skip].copy()
-            quiver = ax.quiver(
-                XX[::skip, ::skip],
-                YY[::skip, ::skip],
-                vecx_c / vmax,
-                vecy_c / vmax,
-            )
-        else:
-            quiver = vmax = None
-
-        return quiver, vmax
+        pass
 
     @lru_cache(maxsize=None)
     def _get_axis_data(self, equation=None):
@@ -255,6 +227,10 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         return hexa_field, float(hexa_data.time)
 
     def plot_hexa(self, time, equation=None, percentage_dx_quiver=4.0):
+
+        if equation is not None:
+            raise NotImplementedError
+
         # temporary hack
         time = self.times[abs(self.times - time).argmin()]
 
@@ -285,8 +261,8 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
             YY = elem.pos[1][iz]
             x = XX[0]
             y = YY[:, 0]
-            x_edges = _get_edges(x)
-            y_edges = _get_edges(y)
+            x_edges = get_edges(x)
+            y_edges = get_edges(y)
             ax.pcolormesh(x_edges, y_edges, field, shading="flat", vmin=-0.5, vmax=0.5)
 
             xmin = x.min()
@@ -327,15 +303,11 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         return f"session_{session_id:02d}/{case}0.f?????"
 
     def get_vector_for_plot(self, time, equation=None):
-
         if equation is not None:
             raise NotImplementedError
-
         # temporary hack
         time = self.times[abs(self.times - time).argmin()]
-
-        data = self._get_data_from_time(time)
-
-        vec_xaxis = data["ux"].data[0]
-        vec_yaxis = data["uy"].data[0]
+        hexa_data = self._get_hexadata_from_time(time)
+        vec_xaxis = HexaField(hexa_data=hexa_data, key="vx")
+        vec_yaxis = HexaField(hexa_data=hexa_data, key="vy")
         return vec_xaxis, vec_yaxis
