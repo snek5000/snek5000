@@ -165,7 +165,10 @@ class PhysFields(PhysFieldsABC):
         self.get_var = self._reader.get_var
 
     def get_key_field_to_plot(self, forbid_compute=False, key_prefered=None):
-        return "temperature"
+        header = self.set_of_phys_files.get_header()
+        if "T" in header.variables:
+            return "temperature"
+        return "pressure"
 
     def get_field_to_plot(
         self,
@@ -291,11 +294,15 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
 
         ax.quiver(x_quiver, y_quiver, vx_quiver, vy_quiver)
 
-    @staticmethod
-    def time_from_path(path):
-        with open(path, "rb") as file:
-            header = read_header(file)
+    def time_from_path(self, path):
+        header = self.get_header(path)
         return header.time
+
+    def get_header(self, path=None):
+        if path is None:
+            path = self.path_files[0]
+        with open(path, "rb") as file:
+            return read_header(file)
 
     def _get_glob_pattern(self):
         session_id = self.output.sim.params.output.session_id
