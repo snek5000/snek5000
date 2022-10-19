@@ -226,24 +226,42 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         hexa_field = HexaField(key, hexa_data)
         return hexa_field, float(hexa_data.time)
 
-    def plot_hexa(self, time, equation="z=0", percentage_dx_quiver=4.0):
+    def init_hexa_pcolormesh(
+        self, ax, hexa_color, hexa_x, hexa_y, vmin=None, vmax=None
+    ):
 
-        # temporary hack
-        time = self.times[abs(self.times - time).argmin()]
+        images = []
 
-        hexa_data = self._get_hexadata_from_time(time)
+        if vmax is None:
+            vmax = hexa_color.max()
 
-        key_field = self.get_key_field_to_plot()
-        hexa_field = HexaField(key_field, hexa_data, equation=equation)
-        hexa_x = HexaField("x", hexa_data, equation=equation)
-        hexa_y = HexaField("y", hexa_data, equation=equation)
-        hexa_vx = HexaField("vx", hexa_data, equation=equation)
-        hexa_vy = HexaField("vy", hexa_data, equation=equation)
+        if vmin is None:
+            vmin = hexa_color.min()
 
-        fig, ax = plt.subplots()
+        for (arr, elem_x, elem_y) in zip(
+            hexa_color.arrays, hexa_x.elements, hexa_y.elements
+        ):
 
-        xmin, xmax = hexa_data.lims.pos[0]
-        ymin, ymax = hexa_data.lims.pos[1]
+            x_edges = elem_x["edges"]
+            y_edges = elem_y["edges"]
+
+            image = ax.pcolormesh(
+                x_edges, y_edges, arr, shading="flat", vmin=vmin, vmax=vmax
+            )
+
+            images.append(image)
+
+        cbar = ax.figure.colorbar(images[0])
+
+        return images, cbar
+
+    def init_quiver_1st_step(self, hexa_x, hexa_y, percentage_dx_quiver=4.0):
+
+        xmin = hexa_x.min()
+        xmax = hexa_x.max()
+
+        ymin = hexa_y.min()
+        ymax = hexa_y.max()
 
         dx_quiver = percentage_dx_quiver / 100 * (xmax - xmin)
         nx_quiver = int((xmax - xmin) / dx_quiver)
@@ -252,30 +270,17 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         x_approx_quiver = np.linspace(dx_quiver, xmax - dx_quiver, nx_quiver)
         y_approx_quiver = np.linspace(dx_quiver, ymax - dx_quiver, ny_quiver)
 
+        indices_vectors_in_elems = []
         x_quiver = []
         y_quiver = []
-        vx_quiver = []
-        vy_quiver = []
 
-        for (arr, elem_x, elem_y, arr_vx, arr_vy) in zip(
-            hexa_field.arrays,
-            hexa_x.elements,
-            hexa_y.elements,
-            hexa_vx.arrays,
-            hexa_vy.arrays,
-        ):
-            XX = elem_x["array"]
-            YY = elem_y["array"]
+        for x_2d, y_2d in zip(hexa_x.arrays, hexa_y.arrays):
+            xmin = x_2d.min()
+            xmax = x_2d.max()
+            ymin = y_2d.min()
+            ymax = y_2d.max()
 
-            x_edges = elem_x["edges"]
-            y_edges = elem_y["edges"]
-
-            ax.pcolormesh(x_edges, y_edges, arr, shading="flat", vmin=-0.5, vmax=0.5)
-
-            xmin = XX.min()
-            xmax = XX.max()
-            ymin = YY.min()
-            ymax = YY.max()
+            indices_vectors_in_elem = []
 
             for y_approx in y_approx_quiver:
                 if y_approx < ymin:
@@ -288,16 +293,60 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
                     if x_approx > xmax:
                         break
 
-                    distance2_2d = (XX - x_approx) ** 2 + (YY - y_approx) ** 2
+                    distance2_2d = (x_2d - x_approx) ** 2 + (y_2d - y_approx) ** 2
+
                     iy, ix = np.unravel_index(distance2_2d.argmin(), distance2_2d.shape)
+                    indices_vectors_in_elem.append((iy, ix))
 
-                    x_quiver.append(XX[iy, ix])
-                    y_quiver.append(YY[iy, ix])
+                    x_quiver.append(x_2d[iy, ix])
+                    y_quiver.append(y_2d[iy, ix])
 
-                    vx_quiver.append(arr_vx[iy, ix])
-                    vy_quiver.append(arr_vy[iy, ix])
+            indices_vectors_in_elems.append(indices_vectors_in_elem)
 
+        return indices_vectors_in_elems, x_quiver, y_quiver
+
+    def compute_vectors_quiver(self, hexa_vx, hexa_vy, indices_vectors_in_elems):
+        vx_quiver = []
+        vy_quiver = []
+
+        for indices_vectors_in_elem, arr_vx, arr_vy in zip(
+            indices_vectors_in_elems, hexa_vx.arrays, hexa_vy.arrays
+        ):
+
+            for iy, ix in indices_vectors_in_elem:
+
+                vx_quiver.append(arr_vx[iy, ix])
+                vy_quiver.append(arr_vy[iy, ix])
+
+        return vx_quiver, vy_quiver
+
+    def plot_hexa(
+        self, time, equation="z=0", percentage_dx_quiver=4.0, vmin=None, vmax=None
+    ):
+
+        time = self.times[abs(self.times - time).argmin()]
+        hexa_data = self._get_hexadata_from_time(time)
+
+        key_field = self.get_key_field_to_plot()
+        hexa_field = HexaField(key_field, hexa_data, equation=equation)
+        hexa_x = HexaField("x", hexa_data, equation=equation)
+        hexa_y = HexaField("y", hexa_data, equation=equation)
+        hexa_vx = HexaField("vx", hexa_data, equation=equation)
+        hexa_vy = HexaField("vy", hexa_data, equation=equation)
+
+        fig, ax = plt.subplots()
+
+        self.init_hexa_pcolormesh(ax, hexa_field, hexa_x, hexa_y, vmin=vmin, vmax=vmax)
+
+        indices_vectors_in_elems, x_quiver, y_quiver = self.init_quiver_1st_step(
+            hexa_x, hexa_y, percentage_dx_quiver=4.0
+        )
+        vx_quiver, vy_quiver = self.compute_vectors_quiver(
+            hexa_vx, hexa_vy, indices_vectors_in_elems
+        )
         ax.quiver(x_quiver, y_quiver, vx_quiver, vy_quiver)
+
+        fig.tight_layout()
 
     def time_from_path(self, path):
         header = self.get_header(path)
