@@ -308,17 +308,21 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
     def compute_vectors_quiver(self, hexa_vx, hexa_vy, indices_vectors_in_elems):
         vx_quiver = []
         vy_quiver = []
+        vmax = -np.inf
 
         for indices_vectors_in_elem, arr_vx, arr_vy in zip(
             indices_vectors_in_elems, hexa_vx.arrays, hexa_vy.arrays
         ):
 
-            for iy, ix in indices_vectors_in_elem:
+            vmax_elem = np.max(np.sqrt(arr_vx**2 + arr_vy**2))
+            if vmax_elem > vmax:
+                vmax = vmax_elem
 
+            for iy, ix in indices_vectors_in_elem:
                 vx_quiver.append(arr_vx[iy, ix])
                 vy_quiver.append(arr_vy[iy, ix])
 
-        return vx_quiver, vy_quiver
+        return vx_quiver, vy_quiver, vmax
 
     def plot_hexa(
         self, time, equation="z=0", percentage_dx_quiver=4.0, vmin=None, vmax=None
@@ -341,10 +345,10 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         indices_vectors_in_elems, x_quiver, y_quiver = self.init_quiver_1st_step(
             hexa_x, hexa_y, percentage_dx_quiver=4.0
         )
-        vx_quiver, vy_quiver = self.compute_vectors_quiver(
+        vx_quiver, vy_quiver, vmax = self.compute_vectors_quiver(
             hexa_vx, hexa_vy, indices_vectors_in_elems
         )
-        ax.quiver(x_quiver, y_quiver, vx_quiver, vy_quiver)
+        ax.quiver(x_quiver, y_quiver, vx_quiver / vmax, vy_quiver / vmax)
 
         fig.tight_layout()
 
