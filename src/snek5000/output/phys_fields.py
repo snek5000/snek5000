@@ -20,7 +20,7 @@ from fluidsim_core.output.phys_fields import (
     PhysFieldsABC,
 )
 from fluidsim_core.output.movies import MoviesBasePhysFieldsHexa
-from fluidsim_core.hexa_field import HexaField, get_edges
+from fluidsim_core.hexa_field import HexaField
 
 from ..log import logger
 
@@ -165,10 +165,7 @@ class PhysFields(PhysFieldsABC):
         self.get_var = self._reader.get_var
 
     def get_key_field_to_plot(self, forbid_compute=False, key_prefered=None):
-        header = self.set_of_phys_files.get_header()
-        if "T" in header.variables:
-            return "temperature"
-        return "pressure"
+        return self.set_of_phys_files.get_key_field_to_plot(key_prefered)
 
     def get_field_to_plot(
         self,
@@ -238,6 +235,14 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         time = self.times[abs(self.times - time).argmin()]
 
         hexa_data = self._get_hexadata_from_time(time)
+
+        key_field = self.get_key_field_to_plot()
+        hexa_field = HexaField(key_field, hexa_data)
+        hexa_x = HexaField("x", hexa_data)
+        hexa_y = HexaField("y", hexa_data)
+        hexa_vx = HexaField("vx", hexa_data)
+        hexa_vy = HexaField("vy", hexa_data)
+
         fig, ax = plt.subplots()
 
         xmin, xmax = hexa_data.lims.pos[0]
@@ -258,39 +263,49 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         # assuming 2d...
         iz = 0
 
-        for elem in hexa_data.elem:
-            field = elem.temp[0][iz]
-            XX = elem.pos[0][iz]
-            YY = elem.pos[1][iz]
-            x = XX[0]
-            y = YY[:, 0]
-            x_edges = get_edges(x)
-            y_edges = get_edges(y)
-            ax.pcolormesh(x_edges, y_edges, field, shading="flat", vmin=-0.5, vmax=0.5)
+        for (arr, elem_x, elem_y, arr_vx, arr_vy) in zip(
+            hexa_field.arrays,
+            hexa_x.elements,
+            hexa_y.elements,
+            hexa_vx.arrays,
+            hexa_vy.arrays,
+        ):
+            XX = elem_x["array"][iz]
+            YY = elem_y["array"][iz]
 
-            xmin = x.min()
-            xmax = x.max()
-            ymin = y.min()
-            ymax = y.max()
+            x_edges = elem_x["edges"]
+            y_edges = elem_y["edges"]
+
+            arr = arr[iz]
+            arr_vx = arr_vx[iz]
+            arr_vy = arr_vy[iz]
+
+            ax.pcolormesh(x_edges, y_edges, arr, shading="flat", vmin=-0.5, vmax=0.5)
+
+            xmin = XX.min()
+            xmax = XX.max()
+            ymin = YY.min()
+            ymax = YY.max()
 
             for y_approx in y_approx_quiver:
                 if y_approx < ymin:
                     continue
                 if y_approx > ymax:
                     break
-                iy = abs(y - y_approx).argmin()
                 for x_approx in x_approx_quiver:
                     if x_approx < xmin:
                         continue
                     if x_approx > xmax:
                         break
-                    ix = abs(x - x_approx).argmin()
 
-                    x_quiver.append(x[ix])
-                    y_quiver.append(y[iy])
+                    distance2_2d = (XX - x_approx) ** 2 + (YY - y_approx) ** 2
+                    iy, ix = np.unravel_index(distance2_2d.argmin(), distance2_2d.shape)
 
-                    vx_quiver.append(elem.vel[0, iz, iy, ix])
-                    vy_quiver.append(elem.vel[1, iz, iy, ix])
+                    x_quiver.append(XX[iy, ix])
+                    y_quiver.append(YY[iy, ix])
+
+                    vx_quiver.append(arr_vx[iy, ix])
+                    vy_quiver.append(arr_vy[iy, ix])
 
         ax.quiver(x_quiver, y_quiver, vx_quiver, vy_quiver)
 
@@ -318,3 +333,12 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         vec_xaxis = HexaField(hexa_data=hexa_data, key="vx")
         vec_yaxis = HexaField(hexa_data=hexa_data, key="vy")
         return vec_xaxis, vec_yaxis
+
+    def get_key_field_to_plot(self, key_prefered=None):
+        if key_prefered is None:
+            header = self.get_header()
+            if "T" in header.variables:
+                return "temperature"
+            return "pressure"
+        else:
+            return key_prefered
