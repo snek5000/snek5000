@@ -226,10 +226,7 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         hexa_field = HexaField(key, hexa_data)
         return hexa_field, float(hexa_data.time)
 
-    def plot_hexa(self, time, equation=None, percentage_dx_quiver=4.0):
-
-        if equation is not None:
-            raise NotImplementedError
+    def plot_hexa(self, time, equation="z=0", percentage_dx_quiver=4.0):
 
         # temporary hack
         time = self.times[abs(self.times - time).argmin()]
@@ -237,11 +234,11 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         hexa_data = self._get_hexadata_from_time(time)
 
         key_field = self.get_key_field_to_plot()
-        hexa_field = HexaField(key_field, hexa_data)
-        hexa_x = HexaField("x", hexa_data)
-        hexa_y = HexaField("y", hexa_data)
-        hexa_vx = HexaField("vx", hexa_data)
-        hexa_vy = HexaField("vy", hexa_data)
+        hexa_field = HexaField(key_field, hexa_data, equation=equation)
+        hexa_x = HexaField("x", hexa_data, equation=equation)
+        hexa_y = HexaField("y", hexa_data, equation=equation)
+        hexa_vx = HexaField("vx", hexa_data, equation=equation)
+        hexa_vy = HexaField("vy", hexa_data, equation=equation)
 
         fig, ax = plt.subplots()
 
@@ -260,9 +257,6 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         vx_quiver = []
         vy_quiver = []
 
-        # assuming 2d...
-        iz = 0
-
         for (arr, elem_x, elem_y, arr_vx, arr_vy) in zip(
             hexa_field.arrays,
             hexa_x.elements,
@@ -270,15 +264,11 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
             hexa_vx.arrays,
             hexa_vy.arrays,
         ):
-            XX = elem_x["array"][iz]
-            YY = elem_y["array"][iz]
+            XX = elem_x["array"]
+            YY = elem_y["array"]
 
             x_edges = elem_x["edges"]
             y_edges = elem_y["edges"]
-
-            arr = arr[iz]
-            arr_vx = arr_vx[iz]
-            arr_vy = arr_vy[iz]
 
             ax.pcolormesh(x_edges, y_edges, arr, shading="flat", vmin=-0.5, vmax=0.5)
 
