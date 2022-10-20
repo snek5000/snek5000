@@ -2,7 +2,7 @@ from phill.solver import Simul
 
 params = Simul.create_default_params()
 
-params.output.sub_directory = "examples_phill/short"
+params.output.sub_directory = "examples_snek_phill/short"
 
 params.oper.nx = 12
 params.oper.ny = 10
