@@ -251,7 +251,45 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
 
             images.append(image)
 
-        cbar = ax.figure.colorbar(images[0])
+        fig = ax.figure
+
+        cbar = fig.colorbar(images[0])
+
+        def on_move(event):
+            if event.inaxes is not None and event.inaxes == ax:
+                x = event.xdata
+                y = event.ydata
+
+                elements_possibly_touched = []
+
+                for (image, elem_x, elem_y) in zip(
+                    images, hexa_x.elements, hexa_y.elements
+                ):
+                    xmin, xmax = elem_x["lims"]
+                    ymin, ymax = elem_y["lims"]
+
+                    x_2d = elem_x["array"]
+                    y_2d = elem_y["array"]
+
+                    if (xmin <= x <= xmax) and (ymin <= y <= ymax):
+                        distance2_2d = (x_2d - x) ** 2 + (y_2d - y) ** 2
+                        i1d = distance2_2d.argmin()
+                        iy, ix = np.unravel_index(i1d, distance2_2d.shape)
+                        distance2_min = distance2_2d[iy, ix]
+                        color = image.get_array()[i1d]
+                        elements_possibly_touched.append((distance2_min, color))
+
+                if elements_possibly_touched:
+                    elements_possibly_touched = sorted(
+                        elements_possibly_touched, key=lambda el: el[0]
+                    )
+                    element_touched = elements_possibly_touched[0]
+                    _, color = element_touched
+                    fig.canvas.toolbar.set_message(
+                        ax.format_coord(x, y) + f" {hexa_color.key} = {color:.3f}"
+                    )
+
+        fig.canvas.mpl_connect("motion_notify_event", on_move)
 
         return images, cbar
 
@@ -338,7 +376,7 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
         hexa_vx = HexaField("vx", hexa_data, equation=equation)
         hexa_vy = HexaField("vy", hexa_data, equation=equation)
 
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(layout="constrained")
 
         self.init_hexa_pcolormesh(ax, hexa_field, hexa_x, hexa_y, vmin=vmin, vmax=vmax)
 
@@ -349,8 +387,6 @@ class SetOfPhysFieldFiles(SetOfPhysFieldFilesBase):
             hexa_vx, hexa_vy, indices_vectors_in_elems
         )
         ax.quiver(x_quiver, y_quiver, vx_quiver / vmax, vy_quiver / vmax)
-
-        fig.tight_layout()
 
     def time_from_path(self, path):
         header = self.get_header(path)
