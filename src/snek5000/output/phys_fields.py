@@ -9,7 +9,7 @@ from functools import lru_cache
 from fluidsim_core.params import iter_complete_params
 from fluidsim_core.output.phys_fields import PhysFieldsABC
 from fluidsim_core.output.movies import MoviesBasePhysFieldsHexa
-from fluidsim_core.hexa_field import SetOfPhysFieldFiles
+from fluidsim_core.hexa_files import SetOfPhysFieldFiles
 
 from ..log import logger
 
