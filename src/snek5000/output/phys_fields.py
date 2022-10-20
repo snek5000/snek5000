@@ -134,7 +134,6 @@ class PhysFields(PhysFieldsABC):
         reader_key: str
             String denoting the reader class. Should be one of
             ``params.output.phys_fields.available_readers``.
-
         """
         sim = self.output.sim
 
@@ -177,12 +176,6 @@ class PhysFields(PhysFieldsABC):
         if from_state:
             raise ValueError("cannot get anything from the state for this solver")
         return self.set_of_phys_files.get_vector_for_plot(time, self._equation)
-
-    def _quiver_plot(self, ax, vecx, vecy, XX=None, YY=None):
-        """Superimposes a quiver plot of velocity vectors with a given axis
-        object corresponding to a 2D contour plot.
-        """
-        pass
 
     @lru_cache(maxsize=None)
     def _get_axis_data(self, equation=None):
