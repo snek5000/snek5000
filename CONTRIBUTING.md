@@ -30,7 +30,7 @@ do this (and it has to be done only once):
 Finally, to install in development mode:
 ```sh
 pip install -e '.[dev]'
-pip install --no-deps -r ./docs/test-requirements.txt
+pip install --no-deps -r ./requirements-test.txt
 ```
 
 ## General guidelines
