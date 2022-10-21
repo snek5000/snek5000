@@ -82,7 +82,9 @@ def load_params(path_dir="."):
     params: :class:`snek5000.params.Parameters`
 
     """
-    path_dir = Path(path_dir)
+    from snek5000.util.files import _path_try_from_fluidsim_path
+
+    path_dir = _path_try_from_fluidsim_path(path_dir)
     short_name = get_solver_short_name(path_dir)
     Simul = import_cls_simul(short_name)
 

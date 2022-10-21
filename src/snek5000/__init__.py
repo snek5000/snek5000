@@ -35,6 +35,7 @@ from fluiddyn.util import mpi  # noqa: F401
 
 from ._version import __version__  # noqa: F401
 from .log import logger  # noqa: F401
+from .params import load_params
 
 
 def get_nek_source_root():
@@ -79,7 +80,10 @@ def source_root():
 
 def get_asset(asset_name):
     """Fetches path of an asset from subpackage ``snek5000.assets``."""
-    asset = next(resources.path("snek5000.assets", asset_name).gen)
+    try:
+        asset = next(resources.path("snek5000.assets", asset_name).gen)
+    except AttributeError:
+        asset = resources.path("snek5000.assets", asset_name)
     return asset
 
 
@@ -175,3 +179,14 @@ get_status = restart.get_status  #: Alias for :func:`snek5000.util.restart.get_s
 load_for_restart = (
     restart.load_for_restart
 )  #: Alias for :func:`snek5000.util.restart.load_for_restart`
+
+
+__all__ = [
+    "load_simul",
+    "load",
+    "load_params",
+    "load_for_restart",
+    "get_nek_source_root",
+    "logger",
+    "get_status",
+]

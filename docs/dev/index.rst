@@ -5,7 +5,7 @@ Developer Guide
 
 To install for development, execute::
 
-   git clone --recursive https://github.com/exabl/snek5000.git
+   git clone --recursive https://github.com/snek5000/snek5000.git
    cd snek5000
    pip install -e ."[dev]"
 
