@@ -2,8 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
+this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!--
 
@@ -32,47 +32,51 @@ Security in case of vulnerabilities.
 
 ### Added
 
-- Functions {func}`snek5000.util.restart.load_for_restart`, {func}`snek5000.params.load_params`
+- Functions {func}`snek5000.util.restart.load_for_restart`,
+  {func}`snek5000.params.load_params`
 - {mod}`snek5000.util.files`
 - {meth}`snek5000.output.base.Output.get_field_file` to locate a field file
 - Mandatory key `MPIEXEC_FLAGS` in Snakemake config
-- {class}`snek5000.output.history_points.HistoryPoints` for {ref}`Nek5000 history points <nek:features_his>`
-- {class}`snek5000.output.phys_fields.PhysFields` now fully functional with
-  `load` and `get_var` methods provided by classes under {mod}`snek5000.output.readers`.
+- {class}`snek5000.output.history_points.HistoryPoints` for
+  {ref}`Nek5000 history points <nek:features_his>`
+- {class}`snek5000.output.phys_fields.PhysFields` now fully functional with `load` and
+  `get_var` methods provided by classes under {mod}`snek5000.output.readers`.
 - Support for number of processes detection in OAR clusters
-- {meth}`snek5000.output.base.Output._set_info_solver_classes` to customize Output child classes
+- {meth}`snek5000.output.base.Output._set_info_solver_classes` to customize Output child
+  classes
 - Environment variable `SNEK_UPDATE_CONFIG_ENV_SENSITIVE`,
-  {meth}`snek5000.output.base.Output.write_snakemake_config` to help the user
-  easily modify environment variables during Snakemake rule execution. See
+  {meth}`snek5000.output.base.Output.write_snakemake_config` to help the user easily
+  modify environment variables during Snakemake rule execution. See
   {ref}`override_config`.
 
 ### Changed
 
-- `params.oper.elem.staggered` has a new default value `auto`, which sets
-  staggered grid if a linear solver is used and a collocated one if some other
-  solver is used. Explicitly setting `params.oper.elem.staggered = True` is
-  required to maintain previous default behaviour.
+- `params.oper.elem.staggered` has a new default value `auto`, which sets staggered grid
+  if a linear solver is used and a collocated one if some other solver is used.
+  Explicitly setting `params.oper.elem.staggered = True` is required to maintain
+  previous default behaviour.
 - {func}`snek5000.util.files.next_path` gets `force_suffix` and `return_suffix`
   parameters
-- {meth}`snek5000.output.base.Output._save_info_solver_params_xml` updates
-  `.par` and `params_simul.xml` file on loading for restart
+- {meth}`snek5000.output.base.Output._save_info_solver_params_xml` updates `.par` and
+  `params_simul.xml` file on loading for restart
 - Shorter output while executing `genmap`
-- Field files will be stored in sessions enabling restart with symlinking of
-  restart files and avoids clobbering existing solution files
-- Support extension `.usr.f` to facilitate syntax highlighting and which would
-  be copied as a `.usr` file upon {meth}`snek5000.output.base.Output.copy`
+- Field files will be stored in sessions enabling restart with symlinking of restart
+  files and avoids clobbering existing solution files
+- Support extension `.usr.f` to facilitate syntax highlighting and which would be copied
+  as a `.usr` file upon {meth}`snek5000.output.base.Output.copy`
 - The use of `params.nek.general.user_params` are replaced by a more powerful
   {meth}`snek5000.params.Parameters._record_nek_user_params` method.
 
 ### Deprecated
 
 - {func}`snek5000.util.restart.prepare_for_restart`
-- Passing rules as iterables to {meth}`snek5000.make.Make.exec`. Pass positional parameters instead.
-- {func}`snek5000.source_root` (renamed as
-  {func}`snek5000.get_nek_source_root`).
+- Passing rules as iterables to {meth}`snek5000.make.Make.exec`. Pass positional
+  parameters instead.
+- {func}`snek5000.source_root` (renamed as {func}`snek5000.get_nek_source_root`).
 - {meth}`snek5000.output.base.Output.get_root` (renamed as
   {meth}`snek5000.output.base.Output.get_path_solver_package`).
-- {meth}`snek5000.output.base.Output.get_configfile` (use a string `"config_simul.yml"` instead in user Snakefile).
+- {meth}`snek5000.output.base.Output.get_configfile` (use a string `"config_simul.yml"`
+  instead in user Snakefile).
 
 ### Fixed
 
@@ -90,9 +94,12 @@ Security in case of vulnerabilities.
 
 - Use rich for logging
 - No need to wait for `<case>.f` file which is deleted by new Nek5000 version
-- {func}`snek5000.load` alias for {func}`snek5000.load_simul` which also loads from current directory when no argument is passed
-- Fix {meth}`snek5000.solvers.base.InfoSolver._complete_params_with_default` into a classmethod (thanks [@paugier])
-- `params.oper.max.order_time` is now a property {any}`snek5000.operators.Operators.max_order_time`
+- {func}`snek5000.load` alias for {func}`snek5000.load_simul` which also loads from
+  current directory when no argument is passed
+- Fix {meth}`snek5000.solvers.base.InfoSolver._complete_params_with_default` into a
+  classmethod (thanks [@paugier])
+- `params.oper.max.order_time` is now a property
+  {any}`snek5000.operators.Operators.max_order_time`
 
 ### Removed
 
@@ -100,16 +107,16 @@ Security in case of vulnerabilities.
 
 ### Fixed
 
-- Allow ``name_solver`` to be different from the "package name" (thanks [@paugier])
+- Allow `name_solver` to be different from the "package name" (thanks [@paugier])
 
 ## [0.6.1b0] - 2021-05-18
 
 ### Changed
 
-- {meth}`update_snakemake_config` and {func}`append_debug_flags` has a new
-  parameter to optionally suppress compiler warnings during debug.
-- Keyword arguments to pass optional template variables via `write_...` methods
-  which render templates for `.box`, `SIZE` and `makefile_usr.inc` files.
+- {meth}`update_snakemake_config` and {func}`append_debug_flags` has a new parameter to
+  optionally suppress compiler warnings during debug.
+- Keyword arguments to pass optional template variables via `write_...` methods which
+  render templates for `.box`, `SIZE` and `makefile_usr.inc` files.
 
 ### Fixed
 
@@ -151,32 +158,37 @@ Security in case of vulnerabilities.
 
 - Depend on `fluidsim-core` instead of `fluidsim`
 - Parameters, entry points and magic implementation from fluidsim-core (#15)
-- Output class now conforms to `fluidsim-core` API. File `params.xml` renamed
-  to `params_simul.xml` (#16)
+- Output class now conforms to `fluidsim-core` API. File `params.xml` renamed to
+  `params_simul.xml` (#16)
 
 ## [0.4.1b1] - 2020-10-26
 
 ### Changed
-* Rewrite README and docs for better onboarding
+
+- Rewrite README and docs for better onboarding
 
 ## [0.4.1b0] - 2020-10-26
 
 ### Fixed
-* Support for Python 3.6.x
-* Support for FluidSim 0.3.3
-* Descriptive error messages when class Output cannot resolve resources
+
+- Support for Python 3.6.x
+- Support for FluidSim 0.3.3
+- Descriptive error messages when class Output cannot resolve resources
 
 ## [0.4.0b1] - 2020-07-15
 
 ### Added
+
 - Parameters for specifying mesh origin and ratio
 - Coverage tests
 
 ### Changed
+
 - Support for Nek5000 v19
 - Cluster's default project
 
 ### Fixed
+
 - Activate `$PATH` logic, added tests
 - No error raised by `prepare_for_restart` after unlock
 - Bug fixes while archiving: choosing paths of new tarball
@@ -184,9 +196,11 @@ Security in case of vulnerabilities.
 ## [0.3.1a0] - 2020-05-10
 
 ### Added
+
 - More assets: templates, default snakemake config
 
 ### Fixed
+
 - Source root path expands ~ and environment variables
 
 ## [0.3.0a0] - 2020-05-09
@@ -232,58 +246,68 @@ Security in case of vulnerabilities.
 ## [0.2.1] - 2020-04-14
 
 ### Added
+
 - Tar shell functions in activate script
 - Module `snek5000.clusters` for job submission
 
 ### Changed
+
 - Conda environment packages
 - Reduced pressure residual tolerance for divergence check
 
 ### Fixed
+
 - Bugfixes for simulation parameter loading, restart
 - Snakefile dependencies for running a simulation
 
 ## [0.2.0] - 2020-03-22
 
 ### Added
+
 - KTH toolbox
 - Coriolis force
 - Job submission in cluster
 - More user_params
 
 ### Changed
+
 - Archives use zstd compression
 - user_params is a dictionary
 
 ### Fixed
+
 - Initial condition bug in setting velocities in `useric`
-- Cs - Cs**2 in `eddy_visc`
+- Cs - Cs\*\*2 in `eddy_visc`
 - Assert exit code of snakemake results in tests
-- Subroutine `set_forcing` uses ux..  instead of vx
+- Subroutine `set_forcing` uses ux.. instead of vx
 
 ## [0.1.1] - 2020-01-27
 
 ### Added
+
 - Templates in `abl.templates` subpackage
 - Expand parameters and write methods in class `Operators`
 - Improved tests and documentation
 - Solver `abl` respects parameters and writes box and SIZE files.
 
 ### Changed
+
 - Snakecase for `nek` parameters
 
 ## [0.1.0] - 2020-01-23
 
 ### Added
+
 - Uses `fluidsim` framework for creating a scripting layer
 - Package `abl` with a single module and an `abl.Output` class
-- New sub-packages and modules under `snek5000`: `solvers, output, info, log,
-  make, magic, operators`
+- New sub-packages and modules under `snek5000`:
+  `solvers, output, info, log, make, magic, operators`
 - Testing with `pytest`, and CI on GitHub actions
 - Detailed documentation
 - Versioning with `setuptools_scm`
 
 ### Changed
+
 - Extra requirements `[test]` renamed to `[tests]`
 - Rename case files `3D_ABL` -> `abl` and directory `abl_nek5000` -> `abl`
 - Overall reorganization of modules and Snakemake + configuration files.
@@ -291,24 +315,25 @@ Security in case of vulnerabilities.
 ## [0.0.1] - 2020-01-17
 
 ### Added
+
 - Scripting for managing run parameters `snek5000.params`
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
-[Unreleased]: https://github.com/snek5000/snek5000/compare/0.7.0b0...HEAD
-[0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
-[0.6.1b0]: https://github.com/snek5000/snek5000/compare/0.6.0b0...0.6.1b0
-[0.6.0b0]: https://github.com/snek5000/snek5000/compare/0.5.0b0...0.6.0b0
-[0.5.0b0]: https://github.com/snek5000/snek5000/compare/0.4.1b1...0.5.0b0
-[0.4.1b1]: https://github.com/snek5000/snek5000/compare/0.4.1b0...0.4.1b1
-[0.4.1b0]: https://github.com/snek5000/snek5000/compare/0.4.0b1...0.4.1b0
-[0.4.0b1]: https://github.com/snek5000/snek5000/compare/0.3.1a0...0.4.0b1
-[0.3.1a0]: https://github.com/snek5000/snek5000/compare/0.3.0a0...0.3.1a0
-[0.3.0a0]: https://github.com/snek5000/snek5000/compare/0.2.2...0.3.0a0
-[0.2.2]: https://github.com/snek5000/snek5000/compare/0.2.1...0.2.2
-[0.2.1]: https://github.com/snek5000/snek5000/compare/0.2.0...0.2.1
-[0.2.0]: https://github.com/snek5000/snek5000/compare/0.1.1...0.2.0
-[0.1.1]: https://github.com/snek5000/snek5000/compare/0.1.0...0.1.1
-[0.1.0]: https://github.com/snek5000/snek5000/compare/0.0.1...0.1.0
 [0.0.1]: https://github.com/snek5000/snek5000/releases/tag/0.0.1
+[0.1.0]: https://github.com/snek5000/snek5000/compare/0.0.1...0.1.0
+[0.1.1]: https://github.com/snek5000/snek5000/compare/0.1.0...0.1.1
+[0.2.0]: https://github.com/snek5000/snek5000/compare/0.1.1...0.2.0
+[0.2.1]: https://github.com/snek5000/snek5000/compare/0.2.0...0.2.1
+[0.2.2]: https://github.com/snek5000/snek5000/compare/0.2.1...0.2.2
+[0.3.0a0]: https://github.com/snek5000/snek5000/compare/0.2.2...0.3.0a0
+[0.3.1a0]: https://github.com/snek5000/snek5000/compare/0.3.0a0...0.3.1a0
+[0.4.0b1]: https://github.com/snek5000/snek5000/compare/0.3.1a0...0.4.0b1
+[0.4.1b0]: https://github.com/snek5000/snek5000/compare/0.4.0b1...0.4.1b0
+[0.4.1b1]: https://github.com/snek5000/snek5000/compare/0.4.1b0...0.4.1b1
+[0.5.0b0]: https://github.com/snek5000/snek5000/compare/0.4.1b1...0.5.0b0
+[0.6.0b0]: https://github.com/snek5000/snek5000/compare/0.5.0b0...0.6.0b0
+[0.6.1b0]: https://github.com/snek5000/snek5000/compare/0.6.0b0...0.6.1b0
+[0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
 [@paugier]: https://github.com/paugier
+[unreleased]: https://github.com/snek5000/snek5000/compare/0.7.0b0...HEAD

@@ -5,16 +5,26 @@ jupytext:
 kernelspec:
   display_name: Python 3
   name: python3
+execution:
+  timeout: 100
 ---
 
 <!-- #region tags=[] -->
+
 # Sidewall convection
 
 <!-- #endregion -->
 
 ## Initialize and setup simulation parameters
 
-This example is based on [this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045). The configuration is a square cavity. The control parameters are Prandtl $= 0.71$ and Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$ probes (history points) to record the variable signals. We will use these probe signals in monitoring and postprocessing of the simulation. See [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py) for the implementation. The simulation was executed as follows:
+This example is based on
+[this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045).
+The configuration is a square cavity. The control parameters are Prandtl $= 0.71$ and
+Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$
+probes (history points) to record the variable signals. We will use these probe signals
+in monitoring and postprocessing of the simulation. See
+[this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
+for the implementation. The simulation was executed as follows:
 
 ```{code-cell}
 import numpy as np
@@ -82,9 +92,7 @@ sim.make.exec('run', resources={"nproc": 4})
 
 Here we load and process the output.
 
-
 ## Postprocessing
-
 
 In this section, we give a brief tutorial of ...
 
@@ -140,7 +148,8 @@ growth_rate = slope
 print("Growth rate is:", growth_rate)
 ```
 
-There is also the possibility to load to whole field file in [xarray dataset](https://docs.xarray.dev/en/stable/index.html)
+There is also the possibility to load to whole field file in
+[xarray dataset](https://docs.xarray.dev/en/stable/index.html)
 
 ```python
 
