@@ -14,7 +14,7 @@ Tutorials
 .. toctree::
     :caption: Demo of the sidewall convection case
 
-    ipynb/executed/tuto_simul_cbox
+    tuto_simul_cbox.md
 
 .. toctree::
     :caption: Postprocessing
