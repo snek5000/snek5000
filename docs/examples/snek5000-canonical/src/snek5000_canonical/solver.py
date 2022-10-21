@@ -1,5 +1,6 @@
 from snek5000.info import InfoSolverMake
 from snek5000.solvers.base import SimulNek
+
 # To use KTH Framework import SimulKTH instead
 # from snek5000.solvers.kth import SimulKTH
 

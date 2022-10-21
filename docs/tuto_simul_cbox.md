@@ -1,15 +1,10 @@
 ---
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.14.1
-  kernelspec:
-    display_name: Python 3.9.13 ('env-snek')
-    language: python
-    name: python3
+jupytext:
+  text_representation:
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  name: python3
 ---
 
 <!-- #region tags=[] -->
@@ -19,10 +14,9 @@ jupyter:
 
 ## Initialize and setup simulation parameters
 
+This example is based on [this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045). The configuration is a square cavity. The control parameters are Prandtl $= 0.71$ and Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$ probes (history points) to record the variable signals. We will use these probe signals in monitoring and postprocessing of the simulation. See [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py) for the implementation. The simulation was executed as follows:
 
-This example is based on [this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045). The configuration is a square cavity. The contol parameters are Prandtl $= 0.71$ and Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$ probes (history points) to record the variable signals. We will use these probe signals in monitoring and postprocessing of the simulation. See [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py) for the implementation. The simulation was executed as follows:
-
-```py
+```{code-cell}
 import numpy as np
 
 from snek5000_cbox.solver import Simul

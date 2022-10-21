@@ -22,6 +22,6 @@ Tutorials
     ipynb/executed/tuto_load_print_stdout
 
 .. toctree::
-    :caption: Packaging
+    :caption: Create your own Snek5000 solver
 
-    packaging 
+    packaging
