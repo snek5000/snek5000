@@ -3,5 +3,7 @@
 ## What is it
 
 ```{include} ../README.md
-:start-after: <!-- badges -->
+---
+start-after: <!-- badges -->
+---
 ```

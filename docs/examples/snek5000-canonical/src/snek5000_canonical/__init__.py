@@ -1,4 +1,3 @@
-
 from .solver import Simul
 from .output import Output
 
