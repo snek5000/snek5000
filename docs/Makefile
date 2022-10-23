@@ -42,3 +42,6 @@ autobuild:
 cleanall: clean
 	@echo "Removing everything under '_generated'..."
 	@rm -rf _generated/*
+
+format:
+	mdformat --wrap 88 *.md

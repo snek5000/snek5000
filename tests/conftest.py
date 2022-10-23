@@ -166,6 +166,7 @@ def sim_cbox_executed():
     from snek5000_cbox.solver import Simul
 
     params = Simul.create_default_params()
+    params.Ra_side = 1.83e08
     params.output.sub_directory = "test_snek5000"
 
     params.nek.general.stop_at = "numSteps"

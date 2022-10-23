@@ -4,7 +4,6 @@ Tutorials
 .. toctree::
 
    configuring
-   packaging
 
 .. toctree::
     :caption: Demo of the Periodic Hill case
@@ -13,6 +12,16 @@ Tutorials
     ipynb/executed/tuto_simul_exec
 
 .. toctree::
+    :caption: Demo of the sidewall convection case
+
+    tuto_simul_cbox.md
+
+.. toctree::
     :caption: Postprocessing
 
     ipynb/executed/tuto_load_print_stdout
+
+.. toctree::
+    :caption: Create your own Snek5000 solver
+
+    packaging
