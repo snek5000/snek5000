@@ -67,7 +67,7 @@ class Make:
 
         For more on available keyword arguments refer to `Snakemake API documentation`_.
 
-        .. _Snakemake API documentation: https://snakemake.readthedocs.io/en/stable/api_reference/snakemake.html
+        .. _Snakemake API documentation: https://snakemake-api.readthedocs.io/en/stable/api_reference/snakemake.html
 
         Returns
         -------
