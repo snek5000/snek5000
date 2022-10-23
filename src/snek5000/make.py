@@ -216,6 +216,6 @@ class _Nek5000Make(Make):
         with self.lock:
             # Only one process can inspect at a time. No timeout
             if self.has_to_build(compiler_config):
-                return self.exec(*self.targets, config=config)
+                return self.exec(*self.targets, config=config, force_incomplete=True)
             else:
                 return True

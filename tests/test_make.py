@@ -1,4 +1,5 @@
 from concurrent.futures import ProcessPoolExecutor as Pool
+from concurrent.futures import as_completed
 from pathlib import Path
 
 
@@ -22,6 +23,8 @@ def test_nek5000_make(pytestconfig):
     snek5000_config = yaml.safe_load(Output.find_configfile().read_text())
 
     with Pool(max_workers=4) as pool:
-        # Launch simultaneous builds
-        for future in (pool.submit(nek5000_build, snek5000_config) for _ in range(4)):
+        simultaneous_builds = [
+            pool.submit(nek5000_build, snek5000_config) for _ in range(4)
+        ]
+        for future in as_completed(simultaneous_builds):
             assert future.result()
