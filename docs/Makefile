@@ -37,7 +37,7 @@ $(INTERSPHINX_TARGETS): intersphinx-%:
 	@python ls_intersphinx_targets.py $(subst intersphinx-,,$@)
 
 autobuild:
-	@sphinx-autobuild --watch ../src --re-ignore '_build\/.*' "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	@sphinx-autobuild --watch ../src --re-ignore '(_build|generated)\/.*' "$(SOURCEDIR)" "$(BUILDDIR)/html"
 
 cleanall: clean
 	@echo "Removing everything under '_generated'..."
