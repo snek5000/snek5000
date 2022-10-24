@@ -2,7 +2,6 @@
 
 """
 import re
-from datetime import datetime
 from pathlib import Path
 from warnings import warn
 
@@ -146,37 +145,6 @@ class PrintStdOut:
             "The property `dt` is deprecated. Use `load()` instead.", DeprecationWarning
         )
         return self.data.dt
-
-    def estimate_clock_times(self):
-        """Computed estimated walltime / clock time to complete the simulation
-        and clock time per time step
-
-        """
-        last_data = self.load().tail(1)
-
-        # FIXME: ctime is not creation time?
-        first_timestamp = datetime.fromtimestamp(self.path_file.stat().st_ctime)
-        last_timestamp = self._data_modif_time
-        time_elapsed = last_timestamp - first_timestamp
-
-        params = self.output.sim.params
-        if params.nek.general.stop_at == "end_time":
-            t_end = params.nek.general.end_time
-            t_last = last_data.t.astype(float)
-            walltime_end = time_elapsed * (t_end - t_last) / t_last
-        elif params.nek.general.stop_at == "num_steps":
-            it_end = params.nek.general.num_steps
-            it_last = last_data.index.astype(int)
-            walltime_end = time_elapsed * (it_end - it_last) / it_last
-        else:
-            raise ValueError("Unexpected value for params.nek.general.stop_at")
-
-        walltime_per_it = time_elapsed / last_data.index.astype(int)
-
-        return {
-            "Clock time remaining": walltime_end,
-            "Clock time per timestep": walltime_per_it,
-        }
 
     def __call__(self, *args):
         """Print to stdout and log file simultaneously."""
