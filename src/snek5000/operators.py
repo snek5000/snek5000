@@ -40,7 +40,7 @@ def next_power(value, base=2):
 
     """
     exponent = math.ceil(math.log(value, base))
-    return base ** exponent
+    return base**exponent
 
 
 class Operators:
