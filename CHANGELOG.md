@@ -77,6 +77,15 @@ Security in case of vulnerabilities.
   {meth}`snek5000.output.base.Output.get_path_solver_package`).
 - {meth}`snek5000.output.base.Output.get_configfile` (use a string `"config_simul.yml"`
   instead in user Snakefile).
+- The ``warnings`` parameter in
+  {meth}`snek5000.output.base.Output.update_snakemake_config` is deprecated!
+  Use `verbosity=0` (now default) to disable warnings.
+
+### Removed
+
+- Parameter `warnings` in {func}`snek5000.util.smake.append_debug_flags` is
+  replaced by a separate function
+  {func}`snek5000.util.smake.set_compiler_verbosity`.
 
 ### Fixed
 
