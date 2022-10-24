@@ -18,7 +18,25 @@ def ensure_env():
         os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")])
 
 
-def append_debug_flags(config, warnings):
+def set_compiler_verbosity(config, verbosity):
+    """Set Fortran compiler warnings verbosity:
+
+    Parameters
+    ----------
+    config: dict
+    verbosity: int
+        - 0 == suppress warnings
+        - 1 == do nothing
+        - 2 == all warnings
+
+    """
+    flags = {0: " -w ", 1: "", 2: " -Wall "}
+    warning_flag = flags[int(verbosity)]
+    config["FFLAGS"] = config.get("FFLAGS", "") + warning_flag
+    config["CFLAGS"] = config.get("CFLAGS", "") + warning_flag
+
+
+def append_debug_flags(config):
     """Append to commonly used gcc / gfortran debug flags if ``SNEK_DEBUG``
     environment is activated.
 
@@ -26,15 +44,11 @@ def append_debug_flags(config, warnings):
     ----------
     config: dict
         Snakemake configuration. Should contain ``CFLAGS`` and ``FFLAGS`` keys.
-    warnings: bool
-        Show most compiler warnings or suppress them.
 
     """
-    warnings_option = "-Wall" if warnings else "-w"
     if os.getenv("SNEK_DEBUG"):
         config["CFLAGS"] = config.get("CFLAGS", "") + " -O0 -g"
         config["FFLAGS"] = (
             config.get("FFLAGS", "")
             + " -O0 -g -ffpe-trap=invalid,zero,overflow -DDEBUG "
-            + warnings_option
         )

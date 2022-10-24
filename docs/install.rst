@@ -9,6 +9,12 @@ source code and the ``bin`` directory within
    export NEK_SOURCE_ROOT="/path/to/Nek5000"
    export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
 
+.. important::
+
+   **Nek5000 dependencies**: Ensure you have the necessary compilers, build
+   tools and libraries as recommended in the :doc:`Nek5000 documentation
+   <nek:quickstart>`.
+
 Install using pip
 =================
 

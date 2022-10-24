@@ -8,6 +8,7 @@ import pkgutil
 import shutil
 import stat
 import textwrap
+import warnings
 from itertools import chain
 from pathlib import Path
 from socket import gethostname
@@ -24,7 +25,7 @@ from snek5000.params import _save_par_file
 from snek5000.solvers import get_solver_package, is_package
 from snek5000.util import docstring_params
 from snek5000.util.files import bisect_nek_files_by_time
-from snek5000.util.smake import append_debug_flags
+from snek5000.util.smake import append_debug_flags, set_compiler_verbosity
 
 from . import _make_path_session
 
@@ -183,8 +184,6 @@ class Output(OutputCore):
     @classmethod
     def get_root(cls):
 
-        import warnings
-
         warnings.warn(
             (
                 "Method get_root will be removed on a later release. "
@@ -197,8 +196,6 @@ class Output(OutputCore):
 
     @classmethod
     def get_configfile(cls):
-
-        import warnings
 
         warnings.warn(
             (
@@ -262,7 +259,7 @@ class Output(OutputCore):
 
     @classmethod
     def update_snakemake_config(
-        cls, config, name_solver, warnings=True, env_sensitive=None
+        cls, config, name_solver, /, verbosity=0, env_sensitive=None, **kwargs
     ):
         """Update snakemake config in-place with name of the solver / case,
         path to configfile and compiler flags
@@ -273,14 +270,20 @@ class Output(OutputCore):
             Snakemake configuration
         name_solver: str
             Short name of the solver, also known as case name
-        warnings: bool
-            Show most compiler warnings (default) or suppress them.
+        verbosity: int
+            Set compiler verbosity level. See :func:`snek5000.util.smake.set_compiler_verbosity`
         env_sensitive: bool (None)
             If ``False``, the ``config`` dictionary is not modified (allows for
             reproducible runs). If ``True``, the ``config`` dictionary is
             modified based on environment variables. If ``None`` (default), the
             value of ``env_sensitive`` is obtained with
             ``os.environ.get("SNEK_UPDATE_CONFIG_ENV_SENSITIVE", False)``.
+
+        .. deprecated:: 0.8.0
+
+            The ``warnings`` parameter is deprecated! Use ``verbosity=0`` (now default)
+            to disable warnings. If you need ``warnings=True``, similar behaviour can
+            be obtained by ``verbosity=1`` or ``verbosity=2``.
 
         """
         mandatory_config = {
@@ -318,7 +321,15 @@ class Output(OutputCore):
                 }
             )
 
-            append_debug_flags(config, warnings)
+            if "warnings" in kwargs:
+                warnings.warn(
+                    "Parameter warnings is deprecated, use ``verbosity`` instead/",
+                    DeprecationWarning,
+                )
+                verbosity = int(kwargs["warnings"])
+
+            set_compiler_verbosity(config, verbosity)
+            append_debug_flags(config)
 
             if env_sensitive is None:
                 env_sensitive = os.environ.get(
