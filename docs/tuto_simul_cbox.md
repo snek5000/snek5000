@@ -24,7 +24,7 @@ Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to hav
 probes (history points) to record the variable signals. We will use these probe signals
 in monitoring and postprocessing of the simulation. See
 [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
-for the implementation. The simulation was executed as follows:
+for the implementation. The simulation was executed as following:
 
 ```{code-cell}
 import numpy as np
@@ -75,6 +75,9 @@ coords = [(x, y) for x in xs for y in ys]
 params.output.history_points.coords = coords
 params.oper.max.hist = len(coords) + 1
 
+params.nek.velocity.residual_tol = 1e-07 
+params.nek.pressure.residual_tol = 1e-05
+
 params.nek.general.end_time = 800
 params.nek.general.stop_at = "endTime"
 params.nek.general.target_cfl = 2.0
@@ -94,24 +97,22 @@ Here we load and process the output.
 
 ## Postprocessing
 
-In this section, we give a brief tutorial of ...
-
 We can load the simulation:
 
 ```python
 from snek5000 import load
 
-sim = load('examples_cbox/simple/SW/cbox_Ra1.860e+08_64x64_8x8_V1.x1._2022-10-19_14-08-46')
+sim = load(sim.path_run)
 ```
 
-we can plot all the history points for one variable like $u_x$
+then we are able to  plot all the history points for one variable like $u_x$,
 
 ```python
 sim.output.history_points.plot(key='ux')
 
 ```
 
-or just one history point
+or just one history point:
 
 ```python
 
@@ -119,7 +120,7 @@ sim.output.history_points.plot_1point(index_point=0, key='temperature', tmin=600
 
 ```
 
-Also we can load the history points data to compute growth rate
+Also we can load the history points data to compute growth rate:
 
 ```python
 import numpy as np
@@ -158,7 +159,7 @@ field = sim.output.phys_fields.load()
 field.temperature.plot()
 ```
 
-which makes postprocessing of data easier
+which makes postprocessing of data easier:
 
 ```python
 x_new = np.linspace(field.x[0], field.x[-1], field.x.size)

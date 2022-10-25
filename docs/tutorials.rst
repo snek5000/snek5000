@@ -8,8 +8,8 @@ Tutorials
 .. toctree::
     :caption: Demo of the Periodic Hill case
 
-    ipynb/tuto_simul_setup
-    ipynb/executed/tuto_simul_exec
+    tuto_simul_setup.md
+    tuto_simul_exec.md
 
 .. toctree::
     :caption: Demo of the sidewall convection case
@@ -19,7 +19,7 @@ Tutorials
 .. toctree::
     :caption: Postprocessing
 
-    ipynb/executed/tuto_load_print_stdout
+    tuto_load_print_stdout.md
 
 .. toctree::
     :caption: Create your own Snek5000 solver
