@@ -46,3 +46,11 @@ def test_phys_fields_get_var_before_load(sim_cbox_executed):
     sim.output.phys_fields.init_reader()
     ux = sim.output.phys_fields.get_var("ux")
     assert isinstance(ux, xr.DataArray)
+
+
+@pytest.mark.slow
+def test_print_stdout(sim_cbox_executed):
+    sim = sim_cbox_executed
+
+    sim.output.print_stdout.plot_nb_iterations()
+    sim.output.print_stdout.plot_dt_cfl()
