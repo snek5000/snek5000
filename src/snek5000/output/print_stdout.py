@@ -6,6 +6,7 @@ from pathlib import Path
 from warnings import warn
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from fluiddyn.util.util import modification_date
 from snek5000 import mpi
@@ -31,6 +32,7 @@ class PrintStdOut:
         warn(
             "The property `file` is deprecated. Use `path_file` instead.",
             DeprecationWarning,
+            stacklevel=2,
         )
         return self.path_file
 
@@ -62,7 +64,7 @@ class PrintStdOut:
 
     @property
     def text(self):
-        with open(self.file) as fp:
+        with open(self.path_file) as fp:
             return fp.read()
 
     def load(self, pressure_solver="gmres"):
@@ -142,7 +144,8 @@ class PrintStdOut:
     def dt(self):
         """Extract time step dt over the course of a simulation."""
         warn(
-            "The property `dt` is deprecated. Use `load()` instead.", DeprecationWarning
+            "The property `dt` is deprecated. Use `load()` instead.",
+            DeprecationWarning,
         )
         return self.data.dt
 
@@ -152,3 +155,38 @@ class PrintStdOut:
         if mpi.rank == 0 and self.output._has_to_save:
             with self.path_file.open("a") as f:
                 f.write(" ".join(str(a) for a in args) + "\n")
+
+    def plot_dt_cfl(self):
+        """Plot the evolution of the time step and the CFL number"""
+
+        df = self.load()
+
+        fig, (ax_top, ax_bot) = plt.subplots(nrows=2, sharex=True)
+
+        ax_bot.plot(df.t, df.dt)
+        ax_bot.set_title("time step")
+        ax_bot.set_xlabel("time")
+
+        ax_top.plot(df.t, df.CFL)
+        ax_top.set_title("CFL number")
+
+        params = self.output.sim.params
+
+        if params.nek.general.variable_dt:
+            ax_top.axhline(params.nek.general.target_cfl, color="r", label="Target CFL")
+            ax_top.legend(loc="lower right")
+
+        fig.tight_layout()
+
+    def plot_nb_iterations(self):
+        """Plot the evolution of the number of iterations for the Poisson solver"""
+
+        df = self.load()
+
+        fig, ax = plt.subplots()
+
+        ax.plot(df.t, df.pres_it)
+        ax.set_ylabel("number of iterations")
+        ax.set_xlabel("time")
+
+        fig.tight_layout()
