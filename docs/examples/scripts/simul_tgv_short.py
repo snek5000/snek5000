@@ -9,19 +9,11 @@ params.oper.elem.order = params.oper.elem.order_out = 8
 params.nek.general.end_time = 15
 params.nek.general.stop_at = "endTime"
 
-"""
-TODO: I (pa) don't manage to get adaptative dt. How whould I do that? Where is
-the documentation for that?
-
-TODO: I get only:
-
-In [3]: params.nek.general._print_docs()
-Documentation for info_simul.params.nek.general
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-"""
-params.nek.general.dt = 0.05
-
+params.nek.general.variable_dt = True
+# dt < 1 for variable_dt
+params.nek.general.dt = -1
 params.nek.general.target_cfl = 2.0
+
 params.nek.general.time_stepper = "BDF3"
 params.nek.general.extrapolation = "OIFS"
 
