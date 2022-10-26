@@ -54,7 +54,7 @@ Lz = params.oper.Lz = Ly / aspect_ratio
 
 order = params.oper.elem.order = params.oper.elem.order_out = 8
 
-params.oper.mesh_stretch_factor = 0.08  # zero means regular
+params.oper.mesh_stretch_factor = 0.1  # zero means regular
 
 params.short_name_type_run = f"Ra{params.Ra_side:.3e}_{nx*order}x{ny*order}"
 
@@ -75,7 +75,7 @@ coords = [(x, y) for x in xs for y in ys]
 params.output.history_points.coords = coords
 params.oper.max.hist = len(coords) + 1
 
-params.nek.velocity.residual_tol = 1e-07 
+params.nek.velocity.residual_tol = 1e-08 
 params.nek.pressure.residual_tol = 1e-05
 
 params.nek.general.end_time = 800
@@ -90,7 +90,7 @@ params.nek.general.write_interval = 10
 params.output.history_points.write_interval = 10
 
 sim = Simul(params)
-sim.make.exec('run', resources={"nproc": 4})
+sim.make.exec('run_fg', resources={"nproc": 4})
 ```
 
 Here we load and process the output.
@@ -99,7 +99,7 @@ Here we load and process the output.
 
 We can load the simulation:
 
-```python
+```{code-cell}
 from snek5000 import load
 
 sim = load(sim.path_run)
@@ -107,14 +107,14 @@ sim = load(sim.path_run)
 
 then we are able to  plot all the history points for one variable like $u_x$,
 
-```python
+```{code-cell}
 sim.output.history_points.plot(key='ux')
 
 ```
 
 or just one history point:
 
-```python
+```{code-cell}
 
 sim.output.history_points.plot_1point(index_point=0, key='temperature', tmin=600, tmax=800)
 
@@ -122,7 +122,7 @@ sim.output.history_points.plot_1point(index_point=0, key='temperature', tmin=600
 
 Also we can load the history points data to compute growth rate:
 
-```python
+```{code-cell}
 import numpy as np
 from scipy import stats
 from scipy.signal import argrelmax
@@ -152,7 +152,7 @@ print("Growth rate is:", growth_rate)
 There is also the possibility to load to whole field file in
 [xarray dataset](https://docs.xarray.dev/en/stable/index.html)
 
-```python
+```{code-cell}
 
 field = sim.output.phys_fields.load()
 
@@ -161,7 +161,7 @@ field.temperature.plot()
 
 which makes postprocessing of data easier:
 
-```python
+```{code-cell}
 x_new = np.linspace(field.x[0], field.x[-1], field.x.size)
 y_new = np.linspace(field.y[0], field.y[-1], field.y.size)
 
@@ -173,12 +173,12 @@ field.temperature.mean('x').plot()
 
 ## Versions used in this tutorial
 
-```python
+```{code-cell}
 import snakemake
 snakemake.__version__
 ```
 
-```python
+```{code-cell}
 import snek5000
 snek5000.__version__
 ```
