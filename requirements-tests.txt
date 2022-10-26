@@ -1,3 +1,5 @@
 phill @ git+https://github.com/snek5000/snek5000-phill.git
 snek5000_cbox @ git+https://github.com/snek5000/snek5000-cbox.git@stable
 ./docs/examples/snek5000-canonical
+pymech @ git+https://github.com/eX-Mech/pymech.git
+fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#egg=fluidsim-core&subdirectory=lib
