@@ -54,6 +54,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install .[tests]
         pip install --no-deps -r ./requirements-tests.txt
+        pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
 
     - name: Run tests
       run: |
