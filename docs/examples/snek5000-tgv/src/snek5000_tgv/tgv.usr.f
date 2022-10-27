@@ -100,9 +100,9 @@ c      call full_restart_save(iostep_full)
       call curl(omg,vx,vy,vz,.false.,w1,w2)
       do i = 1,n
          vv = vx(i,1,1,1)**2 + vy(i,1,1,1)**2 + vz(i,1,1,1)**2
-         oo = omg(i,1)**2 + omg(i,2)**2 + omg(i,3)**2 
-         sum_e1 = sum_e1 + vv*bm1(i,1,1,1) 
-         sum_e2 = sum_e2 + oo*bm1(i,1,1,1) 
+         oo = omg(i,1)**2 + omg(i,2)**2 + omg(i,3)**2
+         sum_e1 = sum_e1 + vv*bm1(i,1,1,1)
+         sum_e2 = sum_e2 + oo*bm1(i,1,1,1)
       enddo
       e1 = 0.5 * glsum(sum_e1,1) / volvm1
       e2 = 0.5 * glsum(sum_e2,1) / volvm1
@@ -122,13 +122,6 @@ c-----------------------------------------------------------------------
       subroutine usrdat2()  ! This routine to modify mesh coordinates
       include 'SIZE'
       include 'TOTAL'
-
-      ! NOTE: the only change we make here from the original code
-      a = -uparam(1)
-      b = uparam(1)
-      call rescale_x(xm1,a,b)
-      call rescale_x(ym1,a,b)
-      call rescale_x(zm1,a,b)
 
       return
       end
