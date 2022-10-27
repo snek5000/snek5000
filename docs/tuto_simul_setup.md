@@ -29,7 +29,7 @@ name as the `usr` files. More on packaging Nek5000 files can be found in the
 
 ## Initialize and setup up simulation parameters
 
-```python
+```{code-cell}
 from phill.solver import Simul
 
 params = Simul.create_default_params()
@@ -39,13 +39,13 @@ The `params` object gives you a consolidated view of the parameters which are sp
 
 Now let us take a look at all the compilation parameters that we can modify. In a console the params would also output as follows:
 
-```python
+```{code-cell}
 print(params)
 ```
 
 One can print some help about some parameters. For example, for `params.oper`:
 
-```python
+```{code-cell}
 params.oper._print_docs()
 ```
 
@@ -70,12 +70,12 @@ params.nek.stat.io_step = 10
 
 Now initialize the simulation. This would copy the files based on the templates we have specified.
 
-```python
+```{code-cell}
 sim = Simul(params)
 sim.path_run
 ```
 
-```python
+```{code-cell}
 !ls {sim.path_run}
 ```
 
@@ -83,16 +83,16 @@ sim.path_run
 ## Versions used in this tutorial
 <!-- #endregion -->
 
-```python
+```{code-cell}
 import snakemake
 snakemake.__version__
 ```
 
-```python
+```{code-cell}
 import snek5000
 snek5000.__version__
 ```
-```python
+```{code-cell}
 import phill
 phill.__version__
 ```

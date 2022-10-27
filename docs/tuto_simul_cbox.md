@@ -6,7 +6,7 @@ kernelspec:
   display_name: Python 3
   name: python3
 execution:
-  timeout: 100
+  timeout: 120
 ---
 
 <!-- #region tags=[] -->
@@ -85,9 +85,9 @@ params.nek.general.time_stepper = "BDF3"
 params.nek.general.extrapolation = "OIFS"
 
 params.nek.general.write_control = "runTime"
-params.nek.general.write_interval = 10
+params.nek.general.write_interval = 50
 
-params.output.history_points.write_interval = 10
+params.output.history_points.write_interval = 30
 
 sim = Simul(params)
 sim.make.exec('run_fg', resources={"nproc": 4})

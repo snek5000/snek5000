@@ -20,7 +20,7 @@ execution:
 
 In the previous tutorial we saw how to install the packages and setup a simulation run. Let us do it here in one step.
 
-```python
+```{code-cell}
 from phill.solver import Simul
 
 params = Simul.create_default_params()
@@ -40,7 +40,7 @@ params.nek.stat.io_step = 10
 sim = Simul(params)
 ```
 
-```python
+```{code-cell}
 !ls {sim.path_run}
 ```
 
@@ -51,7 +51,7 @@ using [snakemake](https://snakemake.rtfd.io) in the Snakefile. Let's look at
 the rules defined in the Snakefile (which are nearly generic for any Nek5000
 case).
 
-```python
+```{code-cell}
 sim.make.list()
 ```
 
@@ -73,7 +73,7 @@ From a user's perspective the following rules are essential:
 During development, it is useful to turn on the debug environment variable.
 <!-- #endregion -->
 
-```python
+```{code-cell}
 import os
 os.environ["SNEK_DEBUG"] = "1"
 ```
@@ -88,15 +88,15 @@ SNEK_DEBUG=1``. By doing so, snek5000 would:
 
 Now let's execute the simulation
 
-```python
+```{code-cell}
 sim.make.exec?
 ```
 
-```python
+```{code-cell}
 sim.make.exec('run_fg')
 ```
 
-```python
+```{code-cell}
 !ls {sim.path_run}
 ```
 
@@ -104,16 +104,16 @@ The simulation is done!
 
 ## Versions used in this tutorial
 
-```python
+```{code-cell}
 import snakemake
 snakemake.__version__
 ```
 
-```python
+```{code-cell}
 import snek5000
 snek5000.__version__
 ```
-```python
+```{code-cell}
 import phill
 phill.__version__
 ```
