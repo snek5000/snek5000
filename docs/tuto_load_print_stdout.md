@@ -69,7 +69,7 @@ df.head()
 
 ```{code-cell}
 ref = pd.read_csv(
-    "examples/snek5000-tgv/ref_data",
+    "examples/snek5000-tgv/ref_data_spectral_code.csv",
     sep=" ",
     names=("time", "ref:energy", "ref:dE/dt", "ref:enstrophy"),
     comment="#"

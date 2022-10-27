@@ -6,7 +6,7 @@ kernelspec:
   display_name: Python 3
   name: python3
 execution:
-  timeout: 100
+  timeout: 200
 ---
 
 <!-- #region tags=[] -->
