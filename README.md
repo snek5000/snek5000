@@ -16,9 +16,10 @@ Python framework for Nek5000
 **Documentation**: <https://snek5000.readthedocs.io/>
 
 Snek5000 is a Python package which allows one to write [Fluidsim] solvers based
-on the Fortran code [Nek5000] for the simulations. There are open-source
+for the simulations on the Fortran [CFD] code [Nek5000]. There are open-source
 solvers (in particular [snek5000-phill], [snek5000-cbox] and [snek5000-tgv])
-and it's not difficult to write your own solver (as shown in [this
+and it's not difficult to write your own solver based on your Nek5000 cases (as
+shown in [this
 tutorial](https://snek5000.readthedocs.io/en/latest/packaging.html)).
 
 With a Snek5000-Fluidsim solver, it becomes very easy to
@@ -27,8 +28,17 @@ With a Snek5000-Fluidsim solver, it becomes very easy to
 - load simulations, read the associated parameters/data and produce nice
   figures/movies
 
+Snek5000 can be seen as a workflow manager for Nek5000 or a thin Python wrapper
+around Nek5000. It uses Nek5000 on the background and is thus NOT a rewrite of
+Nek5000!
+
+Snek5000 is powered by nice Python packages such as [Snakemake], [Fluidsim],
+Matplotlib, Jinja, Pytest, Xarray, etc.
+
+[CFD]: https://en.wikipedia.org/wiki/Computational_fluid_dynamics
 [Nek5000]: https://nek5000.mcs.anl.gov/
 [Fluidsim]: https://fluidsim.readthedocs.io
+[Snakemake]: https://snakemake.readthedocs.io
 [snek5000-phill]: https://github.com/snek5000/snek5000-phill
 [snek5000-cbox]: https://github.com/snek5000/snek5000-cbox
 [snek5000-tgv]: https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv
@@ -106,7 +116,7 @@ data = sim.output.history_points.load_1point(2)
 sim.output.phys_fields.plot_hexa()
 sim.output.phys_fields.animate("pressure", interactive=True)
 sim.output.phys_fields.animate(
-    "pressure", dt_frame_in_sec=0.1, save_file="my_great_movie.gif"
+    "pressure", dt_frame_in_sec=0.1, equation="y=0.5", save_file="my_great_movie.gif"
 )
 ```
 
@@ -123,11 +133,24 @@ Need more reasons to use snek5000?
 
 #### Advantages
 
+##### Parameters, get started without studying the whole documentation
+
 - Saves you from the trouble in setting up multiple source files (`.box`, `.par`, `SIZE`)
+- Uses sensible names and defaults for the parameters
+- Avoids typos and human errors thanks to a nice [parameter container object]
+- Records metadata related to the simulation into human and machine readable files (`params_simul.xml`, `config_simul.yml`)
 - Checks for consistency of parameters
-- Out of source builds and runs, which can be inspected or executed using the
+- Automatically sets some parameters as Python properties
+
+[parameter container object]: https://fluiddyn.readthedocs.io/en/latest/generated/fluiddyn.util.paramcontainer.html
+
+##### Workflow
+
+- Out of source build (per run), which can be inspected or executed using the
   conventional `makenek` for debugging
-- Avoid typos and human errors
+- Reproducible workflows, not susceptible to changes in environment variables by default
+- Scriptable simulation execution allowing parametric studies
+- Easy to load simulation for performing offline post-processing and restarting the simulation
 - Better than Bash scripting like:
 
   ```sh
@@ -148,13 +171,18 @@ Need more reasons to use snek5000?
 
   # Clean
   makenek clean
-
   ```
 
-- Use of [Snakemake](https://snakemake.readthedocs.io/en/stable/) which
-  is similar to GNU Make, but allows one to blend bash and python scripting and
-  uses simple YAML files for managing custom configurations of compilers and flags
-  for different computers.
+- Use of [Snakemake](https://snakemake.readthedocs.io/en/stable/) which is
+  similar to GNU Make, but allows one to blend Bash and Python scripting and uses
+  simple YAML files for managing custom configurations of compilers and flags for
+  different computers.
+
+##### Coding
+
+- User friendly, modular, object oriented API
+- Reuse of code (inheritance)
+- Tested with a good code coverage (>90%)
 
 #### Disadvantages
 
