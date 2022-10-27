@@ -6,7 +6,7 @@ kernelspec:
   display_name: Python 3
   name: python3
 execution:
-  timeout: 200
+  timeout: 300
 ---
 
 <!-- #region tags=[] -->
@@ -22,7 +22,7 @@ from snek5000_tgv.solver import Simul
 
 params = Simul.create_default_params()
 sim = Simul(params)
-sim.make.exec()
+sim.make.exec("run_fg")
 ```
 
 Here we load and process the output.
@@ -69,7 +69,7 @@ df.head()
 
 ```{code-cell}
 ref = pd.read_csv(
-    "../../../lib/Nek5000/examples/tgv/ref/data",
+    "examples/snek5000-tgv/ref_data",
     sep=" ",
     names=("time", "ref:energy", "ref:dE/dt", "ref:enstrophy"),
     comment="#"
