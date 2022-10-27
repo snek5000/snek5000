@@ -59,7 +59,9 @@ params.oper.nz = 8
 
 params.oper.nproc_min = 2
 
-# This affects the par file 
+# This affects the par file
+params.nek.velocity.residual_tol = 1e-8
+params.nek.pressure.residual_tol = 1e-6 
 params.nek.general.num_steps = 10
 params.nek.general.time_stepper = "bdf2"
 params.nek.general.write_interval = 10

@@ -27,6 +27,7 @@ params = Simul.create_default_params()
 params.oper.nx = 12
 params.oper.ny = 10
 params.oper.nz = 8
+params.oper.elem.order = params.oper.elem.order_out = 6
 
 params.oper.nproc_min = 2
 
