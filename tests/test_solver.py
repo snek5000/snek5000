@@ -39,7 +39,7 @@ def test_output(sim_data):
     sim = load_simul(sim_data)
 
     assert (
-        sim.output.print_stdout.file.exists()
+        sim.output.print_stdout.path_file.exists()
     ), "Cannot find .log file for print_stdout"
     try:
         sim.output.phys_fields

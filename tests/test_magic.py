@@ -4,7 +4,7 @@ try:
     from IPython.testing.globalipapp import get_ipython
 
     ip = get_ipython()
-    ip.magic("load_ext snek5000.magic")
+    ip.run_line_magic("load_ext", "snek5000.magic")
 except ImportError:
     ip = False
 
