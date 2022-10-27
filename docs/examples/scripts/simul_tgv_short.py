@@ -12,7 +12,7 @@ params.nek.general.stop_at = "endTime"
 params.nek.general.variable_dt = True
 # dt < 1 for variable_dt
 params.nek.general.dt = -1
-params.nek.general.target_cfl = 2.0
+params.nek.general.target_cfl = 1.0
 
 params.nek.general.time_stepper = "BDF3"
 params.nek.general.extrapolation = "OIFS"
