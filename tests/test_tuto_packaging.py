@@ -13,7 +13,7 @@ def test_load(sim_canonical):
             del sys.modules[module]
 
     sim2 = load(sim_canonical.path_run, reader="pymech_avg")
-    with pytest.raises(IOError, match="No data has been loaded yet."):
+    with pytest.raises(IOError, match="no files to open"):
         sim2.output.phys_fields.plot_mean_vel()
 
 

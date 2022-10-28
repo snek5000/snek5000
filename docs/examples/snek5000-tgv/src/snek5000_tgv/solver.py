@@ -36,7 +36,7 @@ class SimulTGV(SimulNek):
         # Re-define default values for parameters here, if necessary
 
         # Mesh: from ms0.box and SIZE files
-        params.oper.Lx = params.oper.Ly = params.oper.Lz = pi
+        params.oper.Lx = params.oper.Ly = params.oper.Lz = 2 * pi
         params.oper.nx = params.oper.ny = params.oper.nz = 8
         params.oper.elem.order = params.oper.elem.order_out = 8
         params.oper.elem.staggered = False

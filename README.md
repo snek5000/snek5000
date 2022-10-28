@@ -14,8 +14,6 @@
 Python framework for Nek5000
 </div>
 
-**Warning:** This framework is experimental and of beta-quality.
-
 **Documentation**: <https://snek5000.readthedocs.io/>
 
 ## Quick start
