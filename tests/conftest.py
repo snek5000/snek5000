@@ -2,8 +2,13 @@ import os
 import shutil
 from contextlib import contextmanager
 from pathlib import Path
+import sys
 
 import pytest
+
+import numpy as np
+
+import pymech
 
 from snek5000.util.gfortran_log import log_matches
 
@@ -200,6 +205,48 @@ def sim_cbox_executed():
     return sim
 
 
+def create_fake_nek_files(path_dir, name_solver, nb_files=1):
+
+    nx = 2
+    ny = 4
+    nz = 6
+    nx_elem = ny_elem = nz_elem = 2
+
+    hexa_data = pymech.core.HexaData(
+        ndim=3,
+        nel=nx_elem * ny_elem * nz_elem,
+        lr1=(nx, ny, nz),
+        var=(3, 3, 1, 1, 0),
+    )
+    hexa_data.wdsz = 8
+    hexa_data.istep = 0
+    hexa_data.endian = sys.byteorder
+
+    x1d = np.linspace(0, 1, nx)
+    y1d = np.linspace(0, 1, ny)
+    z1d = np.linspace(0, 1, nz)
+
+    y3d, z3d, x3d = np.meshgrid(y1d, z1d, x1d)
+    assert y3d.shape == (nz, ny, nx)
+
+    ielem = 0
+    for iz_elem in range(nz_elem):
+        for iy_elem in range(ny_elem):
+            for ix_elem in range(nx_elem):
+                elem = hexa_data.elem[ielem]
+                ielem += 1
+                elem.pos[0] = x3d + ix_elem
+                elem.pos[1] = y3d + iy_elem
+                elem.pos[2] = z3d + iz_elem
+                elem.vel.fill(1)
+
+    time = 2.0
+    for it in range(nb_files):
+        hexa_data.time = time
+        pymech.writenek(path_dir / f"{name_solver}0.f{it:05d}", hexa_data)
+        time += 0.5
+
+
 @pytest.fixture(scope="function")
 def sim_data(tmpdir_factory):
     """Generate fake simulation data."""
@@ -236,7 +283,7 @@ phill0.f00001
         path_session = _make_path_session(path_run, session_id)
         path_session.mkdir()
         for f in session_files:
-            (path_session / f).touch()
+            create_fake_nek_files(path_session, "phill")
 
     from phill.solver import Simul
 

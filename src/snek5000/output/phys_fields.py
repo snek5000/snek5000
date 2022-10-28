@@ -4,7 +4,10 @@ plotting and reading arrays from the solution field files. Loading of data
 files are managed by the classes in the :mod:`snek5000.output.readers`.
 
 """
+
 from fluidsim_core.params import iter_complete_params
+from fluidsim_core.output.phys_fields_snek5000 import PhysFields4Snek5000
+
 
 from ..log import logger
 
@@ -12,7 +15,7 @@ from ..log import logger
 from .readers import pymech_ as pm
 
 
-class PhysFields:
+class PhysFields(PhysFields4Snek5000):
     """Class for loading, plotting simulation files."""
 
     @staticmethod
@@ -63,15 +66,12 @@ class PhysFields:
     def data(self):
         data = self._reader.data
         if not data:
-            raise IOError(
-                "No data has been loaded yet. Try calling sim.output.phys_fields.load() first."
-            )
+            self.load()
+            data = self._reader.data
         return data
 
     def __init__(self, output=None):
-        self.output = output
-        self.params = output.params
-
+        super().__init__(output)
         self._reader = None  #: Reader instance
 
         self.load = self._uninitialized
@@ -122,7 +122,6 @@ class PhysFields:
         reader_key: str
             String denoting the reader class. Should be one of
             ``params.output.phys_fields.available_readers``.
-
         """
         sim = self.output.sim
 

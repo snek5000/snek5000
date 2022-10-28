@@ -54,6 +54,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install .[tests]
         pip install --no-deps -r ./requirements-tests.txt
+        pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
 
     - name: Run tests
       run: |
@@ -106,6 +107,8 @@ jobs:
         pip install .[docs]
         pip install --no-deps "phill @ git+https://github.com/snek5000/snek5000-phill.git"
         pip install --no-deps "snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git@stable"
+        pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
+        pip install --no-deps --force-reinstall "pymech @ git+https://github.com/eX-Mech/pymech.git"
 
     - name: Build docs
       run: |
