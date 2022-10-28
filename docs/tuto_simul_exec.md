@@ -24,10 +24,10 @@ In the previous tutorial we saw how to install the packages and setup a simulati
 from phill.solver import Simul
 
 params = Simul.create_default_params()
-params.oper.nx = 12
-params.oper.ny = 10
-params.oper.nz = 8
-params.oper.elem.order = params.oper.elem.order_out = 6
+params.oper.nx = 6
+params.oper.ny = 5
+params.oper.nz = 4
+params.oper.elem.order = params.oper.elem.order_out = 10
 
 params.oper.nproc_min = 2
 
