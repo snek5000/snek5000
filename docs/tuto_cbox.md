@@ -11,7 +11,7 @@ execution:
 
 <!-- #region tags=[] -->
 
-# Sidewall convection
+# Demo sidewall convection (snek5000-cbox solver)
 
 <!-- #endregion -->
 
@@ -42,6 +42,7 @@ params.Ra_side = 1.86e8
 params.output.sub_directory = "examples_cbox/simple/SW"
 
 params.oper.dim = 2
+params.oper.nproc_min = 2
 
 nb_elements = ny = 8
 params.oper.ny = nb_elements
@@ -75,7 +76,7 @@ coords = [(x, y) for x in xs for y in ys]
 params.output.history_points.coords = coords
 params.oper.max.hist = len(coords) + 1
 
-params.nek.velocity.residual_tol = 1e-08 
+params.nek.velocity.residual_tol = 1e-08
 params.nek.pressure.residual_tol = 1e-05
 
 params.nek.general.end_time = 800
@@ -90,7 +91,7 @@ params.nek.general.write_interval = 50
 params.output.history_points.write_interval = 30
 
 sim = Simul(params)
-sim.make.exec('run_fg', resources={"nproc": 4})
+sim.make.exec('run_fg', resources={"nproc": 2})
 ```
 
 Here we load and process the output.

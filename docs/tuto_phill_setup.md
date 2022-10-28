@@ -10,7 +10,7 @@ execution:
 ---
 
 <!-- #region tags=[] -->
-#  Part 1: Setting up the simulation
+# First step with snek5000-phill: setting up the simulation
 
 The [phill example](https://github.com/KTH-Nek5000/KTH_Examples/tree/master/phill_STAT) has been adapted for a workflow using snek5000 and pymech. Here we will show how a workflow looks like. To get started, we install everything we need:
 
@@ -57,11 +57,9 @@ params.oper.nx = 12
 params.oper.ny = 10
 params.oper.nz = 8
 
-params.oper.nproc_min = 2
-
 # This affects the par file
 params.nek.velocity.residual_tol = 1e-8
-params.nek.pressure.residual_tol = 1e-6 
+params.nek.pressure.residual_tol = 1e-6
 params.nek.general.num_steps = 10
 params.nek.general.time_stepper = "bdf2"
 params.nek.general.write_interval = 10

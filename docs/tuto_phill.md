@@ -10,8 +10,7 @@ execution:
 ---
 
 <!-- #region tags=[] -->
-# Part 2: Executing the simulation
-
+# Demo periodic hill (snek5000-phill)
 
 <!-- #endregion -->
 
@@ -94,7 +93,7 @@ sim.make.exec?
 ```
 
 ```{code-cell}
-sim.make.exec('run_fg')
+sim.make.exec('run_fg', resources={"nproc": 2})
 ```
 
 ```{code-cell}
