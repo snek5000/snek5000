@@ -43,8 +43,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install .[tests]
-        pip install --no-deps -r ./requirements-tests.txt
+        pip install -r requirements/tests.txt
         pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
 
     - name: Run tests
@@ -64,7 +63,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
 
@@ -74,30 +73,22 @@ jobs:
         sudo apt-get install gfortran libopenmpi-dev
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
-
-    - name: Cache pip requirements
-      id: pip-cache-docs
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.PIP_CACHE_DIR }}
-        key: ${{ runner.os }}-pip-docs-${{ hashFiles('**/setup.*') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-docs-
+        cache: "pip"
+        cache-dependency-path: "requirements/docs.txt"
 
     - name: Verify Python environment
       run: |
         pip list
         pip cache list
+        pip check
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install .[docs]
-        pip install --no-deps "phill @ git+https://github.com/snek5000/snek5000-phill.git"
-        pip install --no-deps "snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git@stable"
+        pip install -r requirements/docs.txt
         pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
         pip install --no-deps --force-reinstall "pymech @ git+https://github.com/eX-Mech/pymech.git"
 
@@ -127,6 +118,6 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        password: ${{ secrets.TEST_PYPI_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
         # password: ${{ secrets.PYPI_API_TOKEN }}
