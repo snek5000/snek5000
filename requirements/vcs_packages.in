@@ -1,0 +1,5 @@
+-e .
+-e ./docs/examples/snek5000-canonical
+-e ./docs/examples/snek5000-tgv
+snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git@fix/package-name
+snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git@stable
