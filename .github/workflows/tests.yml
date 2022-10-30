@@ -45,6 +45,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements/tests.txt
         pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
+        pip install --no-deps --force-reinstall "pymech @ git+https://github.com/eX-Mech/pymech.git"
 
     - name: Run tests
       run: |
