@@ -42,16 +42,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements/tests.txt
-        pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
-        pip install --no-deps --force-reinstall "pymech @ git+https://github.com/eX-Mech/pymech.git"
+        python -m pip install --upgrade pip nox
 
     - name: Run tests
       run: |
-        source activate.sh
-        export SNEK_DEBUG=1
-        pytest -v -s --runslow --cov-report=xml --cov-report=term-missing
+        nox --session tests-cov -- -v -s --runslow
 
     - name: Upload coverage to codecov
       if: ${{ success() }}
@@ -88,14 +83,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements/docs.txt
-        pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
-        pip install --no-deps --force-reinstall "pymech @ git+https://github.com/eX-Mech/pymech.git"
+        python -m pip install --upgrade pip nox
 
     - name: Build docs
       run: |
-        SPHINXOPTS="-W" make -C docs html
+        nox --session docs -- -W
 
   deploy:
     needs: [docs, build]
