@@ -75,13 +75,19 @@ def pip_compile(session):
         packages = txt.read_text()
         rel_path_packages = packages.replace("file://" + str(Path.cwd().resolve()), ".")
         if txt.name == "tests.txt":
-            rel_path_packages = re.sub(r"^-e\ \.", ".", rel_path_packages, flags=re.M)
-
-        txt.write_text(rel_path_packages)
+            tests_editable = txt.parent / txt.name.replace("tests", "tests-editable")
+            tests_editable.write_text(rel_path_packages)
+            rel_path_no_editable_packages = re.sub(
+                r"^-e\ \.", ".", rel_path_packages, flags=re.M
+            )
+            txt.write_text(rel_path_no_editable_packages)
+        else:
+            txt.write_text(rel_path_packages)
 
 
 @nox.session
 def tests(session):
+    """Execute unit-tests using pytest with requirements/tests.txt"""
     session.install("-r", "requirements/tests.txt")
     session.run(
         "pytest",
@@ -90,8 +96,24 @@ def tests(session):
     )
 
 
+@nox.session(name="tests-cov")
+def tests_cov(session):
+    """Execute unit-tests using pytest+coverage with requirements/tests-cov.txt"""
+    session.install("-r", "requirements/tests.txt")
+    session.run(
+        "pytest",
+        "--cov",
+        "--cov-config=pyproject.toml",
+        "--no-cov-on-fail",
+        "--cov-report=term-missing",
+        *session.posargs,
+        env={"NEK_SOURCE_ROOT": str(Path.cwd() / "lib" / "Nek5000"), "SNEK_DEBUG": "1"},
+    )
+
+
 @nox.session(name="coverage-html")
 def coverage_html(session, nox=False):
+    """Generate coverage report in HTML. Requires `tests-cov` session."""
     report = Path.cwd() / ".coverage" / "html" / "index.html"
     session.install("coverage[toml]")
     session.run("coverage", "html")
@@ -109,6 +131,7 @@ def format_lint(session):
 
 @nox.session
 def docs(session):
+    """Build documentation using Sphinx."""
     session.install("-r", "requirements/docs.txt")
     session.chdir("./docs")
 
