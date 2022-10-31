@@ -62,7 +62,7 @@ def pip_compile(session):
                 executor.submit(
                     session.run,
                     *shlex.split(
-                        "pip-compile --resolver backtracking --quiet "
+                        "python -m piptools compile --resolver backtracking --quiet "
                         f"{in_extra} {in_file} {in_package} "
                         f"-o {out_file}"
                     ),
@@ -106,3 +106,17 @@ def format_lint(session):
     """Run pre-commit hooks on all files"""
     run_ext(session, "pre-commit install")
     run_ext(session, "pre-commit run --all-files")
+
+
+@nox.session
+def docs(session):
+    session.install("-r", "requirements/docs.txt")
+    session.chdir("./docs")
+
+    build_dir = Path.cwd() / "_build"
+    source_dir = "."
+    output_dir = str(build_dir.resolve() / "html")
+
+    session.run("sphinx-build", "-b", "html", source_dir, output_dir)
+    print("Build finished.")
+    print(f"file://{output_dir}/index.html")
