@@ -86,9 +86,8 @@ def tests(session):
     session.run(
         "pytest",
         *session.posargs,
-        env={"NEK_SOURCE_ROOT": str(Path.cwd() / "lib" / "Nek5000")},
+        env={"NEK_SOURCE_ROOT": str(Path.cwd() / "lib" / "Nek5000"), "SNEK_DEBUG": "1"},
     )
-    session.notify("coverage-html")
 
 
 @nox.session(name="coverage-html")
