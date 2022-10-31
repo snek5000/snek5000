@@ -59,11 +59,10 @@ See here for [detailed installation instructions](https://snek5000.readthedocs.i
 ### Why Snek5000?
 
 The [`snek5000` Python
-API](https://snek5000.readthedocs.io/en/latest/_generated/snek5000.html) is
-based on [fluidsim](https://fluidsim.readthedocs.io), which allows you to
-launch/restart/load simulations with Python. For example, the [periodic hill
-Nek5000 example](https://nek5000.github.io/NekDoc/tutorials/perhill.html) can
-be launched with our [snek5000-phill] solver (installable with `pip install
+API](https://snek5000.readthedocs.io/en/latest/_generated/snek5000.html) allows
+you to launch/restart/load simulations. For example, the [periodic hill Nek5000
+example](https://nek5000.github.io/NekDoc/tutorials/perhill.html) can be
+launched with our [snek5000-phill] solver (installable with `pip install
 snek5000-phill`) as follow:
 
 ```python
