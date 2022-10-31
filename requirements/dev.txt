@@ -33,6 +33,7 @@ attrs==22.1.0
     # via
     #   jsonschema
     #   jupyter-cache
+    #   pymech
     #   pytest
 babel==2.10.3
     # via sphinx
@@ -128,8 +129,9 @@ fluiddyn==0.5.1
     #   fluidsim-core
     #   snek5000
     #   snek5000 (setup.cfg)
-fluidsim-core==0.6.1
+fluidsim-core @ https://foss.heptapod.net/fluiddyn/fluidsim/-/archive/branch/default/fluidsim-branch-default.tar.gz#subdirectory=lib
     # via
+    #   -r requirements/vcs_packages.in
     #   snek5000
     #   snek5000 (setup.cfg)
 fonttools==4.38.0
@@ -379,8 +381,9 @@ pygments==2.13.0
     #   rich
     #   snek5000 (setup.cfg)
     #   sphinx
-pymech==1.4.1
+pymech @ git+https://github.com/eX-Mech/pymech.git
     # via
+    #   -r requirements/vcs_packages.in
     #   snek5000
     #   snek5000 (setup.cfg)
 pyparsing==3.0.9
