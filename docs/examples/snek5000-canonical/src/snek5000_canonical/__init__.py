@@ -1,5 +1,5 @@
-from .solver import Simul
 from .output import Output
+from .solver import Simul
 
 short_name = "canonical"
 
