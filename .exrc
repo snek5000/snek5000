@@ -22,13 +22,3 @@ set tags^=.tags
 " See https://arjanvandergaag.nl/blog/navigating-project-files-with-vim.html
 " Use gf in normal mode to go to a file
 set suffixesadd+=.py,.f
-
-" Quickfix with pre-commit
-set makeprg=pre-commit\ run\ \-\-all\-files
-function s:pre_commit()
-    let old_make = &makeprg
-    let &makeprg = 'pre-commit run --all-files'
-    make
-    let &makeprg = old_make
-endfunction
-command! PreCommit call s:pre_commit()

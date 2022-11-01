@@ -2,20 +2,15 @@
 requires = [
     "setuptools>=49.5.0",
     "wheel",
-    "setuptools_scm[toml]",
-    "setuptools_scm_git_archive",
+    "setuptools_scm[toml]>=7.0.0",
     ]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 write_to = "src/snek5000/_version.py"
-write_to_template = "__version__ = \"{version}\"\n"
-
-[tool.pytest.ini_options]
-addopts = "--cov --cov-config=pyproject.toml --no-cov-on-fail"
 
 [tool.isort]
-known_first_party = ["fluiddyn", "fluidsim", "snek5000"]
+known_first_party = ["fluiddyn", "fluidsim_core", "snek5000"]
 # multi_line_output = 3
 profile = "black"
 line_length = 82
@@ -27,6 +22,20 @@ omit = [
     "*/try_*.py",
     "*/_old_*.py"
 ]
+
+# Note
+# ----
+# This seemed the right way to run tests. Install out of place and run tests,
+# but report coverage to the source code. However, measuring coverage of
+# multiple packages (inc. packages in docs/examples) when installed this way
+# seems to be unsupported by Coverage.py.
+#
+# [tool.coverage.paths]
+# source = [
+#     "./src/",
+#     ".nox/tests-cov/lib/python*/site-packages/",
+# ]
+
 
 [tool.coverage.report]
 show_missing = true

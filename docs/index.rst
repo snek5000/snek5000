@@ -3,15 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to *snek5000*'s documentation!
-===========================================
+Welcome to *Snek5000*'s documentation!
+======================================
 
 Snek5000 is a Python package and a thin interface over Nek5000_. It provides a
 framework to organize parameters and launch multiple simulations. Snek5000's
 internals rely on FluidSim's core_ to build its API.
 
 .. raw:: html
-
 
    <!--
       Icon derived from "wind slap icon" by Lorc. Available at

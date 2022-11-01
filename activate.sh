@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 DIR="$(pwd)"
 export NEK_SOURCE_ROOT="$DIR/lib/Nek5000"
 export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
@@ -11,7 +12,7 @@ function tar-help() {
   echo "tar -xf --wildcards 'glob_pattern': Extract using a glob pattern"
 }
 function tar-ls() {
-  bsdtar tvf $@
+  bsdtar tvf "$@"
   # tar -tvf $@ --use-compress-program=zstdmt
 }
 function tar-diff() {
@@ -20,7 +21,7 @@ function tar-diff() {
     echo "Usage: tar-diff FILE1 FILE2"
     return
   fi
-  diff --color=auto <(tar-ls $1) <(tar-ls $2)
+  diff --color=auto <(tar-ls "$1") <(tar-ls "$2")
 }
 
 if [ -d venv ]; then
@@ -31,7 +32,7 @@ elif [[ -z "$CONDA_PREFIX" ]] && [[ -z "$VIRTUAL_ENV" ]]; then
 fi
 
 if [ "$BASH_VERSION" ]; then
-  if [ $(type -P "snakemake") ]; then
-    eval $(snakemake --bash-completion)
+  if [ "$(type -P "snakemake")" ]; then
+    eval "$(snakemake --bash-completion)"
   fi
 fi
