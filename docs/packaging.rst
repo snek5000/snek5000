@@ -1,7 +1,7 @@
 .. _packaging:
 
-Packaging your Nek5000 user source code
-=======================================
+Create your own Snek5000 solver, packaging your Nek5000 user source code
+========================================================================
 
 This document describes how to package a Nek5000 source code in your own
 repository via ``snek5000``'s API. What is described is the bare minimum to

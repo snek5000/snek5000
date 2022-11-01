@@ -6,12 +6,12 @@ kernelspec:
   display_name: Python 3
   name: python3
 execution:
-  timeout: 100
+  timeout: 300
 ---
 
 <!-- #region tags=[] -->
 
-# Sidewall convection
+# Demo sidewall convection (snek5000-cbox solver)
 
 <!-- #endregion -->
 
@@ -24,7 +24,7 @@ Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to hav
 probes (history points) to record the variable signals. We will use these probe signals
 in monitoring and postprocessing of the simulation. See
 [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
-for the implementation. The simulation was executed as follows:
+for the implementation. The simulation was executed as following:
 
 ```{code-cell}
 import numpy as np
@@ -42,6 +42,7 @@ params.Ra_side = 1.86e8
 params.output.sub_directory = "examples_cbox/simple/SW"
 
 params.oper.dim = 2
+params.oper.nproc_min = 2
 
 nb_elements = ny = 8
 params.oper.ny = nb_elements
@@ -54,7 +55,7 @@ Lz = params.oper.Lz = Ly / aspect_ratio
 
 order = params.oper.elem.order = params.oper.elem.order_out = 8
 
-params.oper.mesh_stretch_factor = 0.08  # zero means regular
+params.oper.mesh_stretch_factor = 0.1  # zero means regular
 
 params.short_name_type_run = f"Ra{params.Ra_side:.3e}_{nx*order}x{ny*order}"
 
@@ -75,6 +76,9 @@ coords = [(x, y) for x in xs for y in ys]
 params.output.history_points.coords = coords
 params.oper.max.hist = len(coords) + 1
 
+params.nek.velocity.residual_tol = 1e-08
+params.nek.pressure.residual_tol = 1e-05
+
 params.nek.general.end_time = 800
 params.nek.general.stop_at = "endTime"
 params.nek.general.target_cfl = 2.0
@@ -82,46 +86,44 @@ params.nek.general.time_stepper = "BDF3"
 params.nek.general.extrapolation = "OIFS"
 
 params.nek.general.write_control = "runTime"
-params.nek.general.write_interval = 10
+params.nek.general.write_interval = 50
 
-params.output.history_points.write_interval = 10
+params.output.history_points.write_interval = 30
 
 sim = Simul(params)
-sim.make.exec('run', resources={"nproc": 4})
+sim.make.exec('run_fg', resources={"nproc": 2})
 ```
 
 Here we load and process the output.
 
 ## Postprocessing
 
-In this section, we give a brief tutorial of ...
-
 We can load the simulation:
 
-```python
+```{code-cell}
 from snek5000 import load
 
-sim = load('examples_cbox/simple/SW/cbox_Ra1.860e+08_64x64_8x8_V1.x1._2022-10-19_14-08-46')
+sim = load(sim.path_run)
 ```
 
-we can plot all the history points for one variable like $u_x$
+then we are able to  plot all the history points for one variable like $u_x$,
 
-```python
+```{code-cell}
 sim.output.history_points.plot(key='ux')
 
 ```
 
-or just one history point
+or just one history point:
 
-```python
+```{code-cell}
 
 sim.output.history_points.plot_1point(index_point=0, key='temperature', tmin=600, tmax=800)
 
 ```
 
-Also we can load the history points data to compute growth rate
+Also we can load the history points data to compute growth rate:
 
-```python
+```{code-cell}
 import numpy as np
 from scipy import stats
 from scipy.signal import argrelmax
@@ -151,16 +153,16 @@ print("Growth rate is:", growth_rate)
 There is also the possibility to load to whole field file in
 [xarray dataset](https://docs.xarray.dev/en/stable/index.html)
 
-```python
+```{code-cell}
 
 field = sim.output.phys_fields.load()
 
 field.temperature.plot()
 ```
 
-which makes postprocessing of data easier
+which makes postprocessing of data easier:
 
-```python
+```{code-cell}
 x_new = np.linspace(field.x[0], field.x[-1], field.x.size)
 y_new = np.linspace(field.y[0], field.y[-1], field.y.size)
 
@@ -172,12 +174,12 @@ field.temperature.mean('x').plot()
 
 ## Versions used in this tutorial
 
-```python
+```{code-cell}
 import snakemake
 snakemake.__version__
 ```
 
-```python
+```{code-cell}
 import snek5000
 snek5000.__version__
 ```
