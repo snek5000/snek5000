@@ -1,14 +1,12 @@
 import os
 import shutil
+import sys
 from contextlib import contextmanager
 from pathlib import Path
-import sys
-
-import pytest
 
 import numpy as np
-
 import pymech
+import pytest
 
 from snek5000.util.gfortran_log import log_matches
 

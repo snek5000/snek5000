@@ -11,6 +11,7 @@
 <!-- badges -->
 
 Python framework for Nek5000
+
 </div>
 
 **Documentation**: <https://snek5000.readthedocs.io/>
@@ -35,14 +36,6 @@ Nek5000!
 Snek5000 is powered by nice Python packages such as [Snakemake], [Fluidsim],
 Matplotlib, Jinja, Pytest, Xarray, etc.
 
-[CFD]: https://en.wikipedia.org/wiki/Computational_fluid_dynamics
-[Nek5000]: https://nek5000.mcs.anl.gov/
-[Fluidsim]: https://fluidsim.readthedocs.io
-[Snakemake]: https://snakemake.readthedocs.io
-[snek5000-phill]: https://github.com/snek5000/snek5000-phill
-[snek5000-cbox]: https://github.com/snek5000/snek5000-cbox
-[snek5000-tgv]: https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv
-
 ## Quick start
 
 Install it as follows:
@@ -62,8 +55,7 @@ The [`snek5000` Python
 API](https://snek5000.readthedocs.io/en/latest/_generated/snek5000.html) allows
 you to launch/restart/load simulations. For example, the [periodic hill Nek5000
 example](https://nek5000.github.io/NekDoc/tutorials/perhill.html) can be
-launched with our [snek5000-phill] solver (installable with `pip install
-snek5000-phill`) as follow:
+launched with our [snek5000-phill] solver (installable with `pip install snek5000-phill`) as follow:
 
 ```python
 from phill.solver import Simul
@@ -141,15 +133,17 @@ Need more reasons to use snek5000?
 - Checks for consistency of parameters
 - Automatically sets some parameters as Python properties
 
-[parameter container object]: https://fluiddyn.readthedocs.io/en/latest/generated/fluiddyn.util.paramcontainer.html
-
 ##### Workflow
 
 - Out of source build (per run), which can be inspected or executed using the
   conventional `makenek` for debugging
+
 - Reproducible workflows, not susceptible to changes in environment variables by default
+
 - Scriptable simulation execution allowing parametric studies
+
 - Easy to load simulation for performing offline post-processing and restarting the simulation
+
 - Better than Bash scripting like:
 
   ```sh
@@ -200,3 +194,12 @@ Need more reasons to use snek5000?
 
 Contributions are welcome! You can help by testing out the code, filing issues
 and submitting patches. See [contributing guidelines](CONTRIBUTING.md).
+
+[cfd]: https://en.wikipedia.org/wiki/Computational_fluid_dynamics
+[fluidsim]: https://fluidsim.readthedocs.io
+[nek5000]: https://nek5000.mcs.anl.gov/
+[parameter container object]: https://fluiddyn.readthedocs.io/en/latest/generated/fluiddyn.util.paramcontainer.html
+[snakemake]: https://snakemake.readthedocs.io
+[snek5000-cbox]: https://github.com/snek5000/snek5000-cbox
+[snek5000-phill]: https://github.com/snek5000/snek5000-phill
+[snek5000-tgv]: https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv

@@ -31,8 +31,8 @@ be done only once):
 Finally, to install in development mode:
 
 ```sh
-pip install -e '.[dev]'
-pip install --no-deps -r ./requirements-test.txt
+pip install pip-tools nox
+nox -s pip-sync
 ```
 
 ## General guidelines

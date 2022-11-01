@@ -1,6 +1,6 @@
-import pymech as pm
 import pytest
 import xarray as xr
+from pymech.neksuite.field import read_header
 
 import snek5000
 from snek5000.output import _make_path_session
@@ -65,7 +65,7 @@ def test_restart(sim_executed):
     # >>> sim_executed = snek5000.load()
     fld_file = sim_executed.output.get_field_file()
 
-    fld = pm.readnek(fld_file)
+    header = read_header(fld_file)
     params, Simul = load_for_restart(
         sim_executed.path_run, use_start_from=fld_file.name
     )
@@ -73,18 +73,18 @@ def test_restart(sim_executed):
     assert params.output.HAS_TO_SAVE
     assert not params.NEW_DIR_RESULTS
 
-    t_end = params.nek.general.end_time = fld.time + 10 * abs(
+    t_end = params.nek.general.end_time = header.time + 10 * abs(
         params.nek.general.dt
     )  # In phill for some reason dt is negative
 
     sim = Simul(params)
     sim.make.exec("run_fg")
 
-    fld = pm.readnek(sim.output.get_field_file())
-    assert fld.time == t_end
+    header = read_header(sim.output.get_field_file())
+    assert header.time == t_end
 
-    fld = pm.readnek(sim.output.get_field_file(t_approx=t_end))
-    assert fld.time == t_end
+    header = read_header(sim.output.get_field_file(t_approx=t_end))
+    assert header.time == t_end
 
     # check if params_simul.xml is updated
     params_in_filesystem = load_params(sim_executed.path_run)

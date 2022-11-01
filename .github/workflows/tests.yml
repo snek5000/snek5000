@@ -7,9 +7,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  PIP_CACHE_DIR: ~/.cache/pip
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,7 +17,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
         fetch-depth: 0
@@ -31,36 +28,25 @@ jobs:
         sudo apt-get install gfortran libopenmpi-dev
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-
-    - name: Cache pip requirements
-      id: pip-cache
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.PIP_CACHE_DIR }}
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.*') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+        cache: "pip"
+        cache-dependency-path: "requirements/tests.txt"
 
     - name: Verify Python environment
       run: |
         pip list
         pip cache list
+        pip check
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install .[tests]
-        pip install --no-deps -r ./requirements-tests.txt
-        pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
+        python -m pip install --upgrade pip nox
 
     - name: Run tests
       run: |
-        source activate.sh
-        export SNEK_DEBUG=1
-        pytest -v --runslow --cov-report=xml --cov-report=term-missing
+        nox --session tests-cov -- -v -s --runslow
 
     - name: Upload coverage to codecov
       if: ${{ success() }}
@@ -73,9 +59,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
+        fetch-depth: 0
 
     - name: Install apt packages
       run: |
@@ -83,36 +70,25 @@ jobs:
         sudo apt-get install gfortran libopenmpi-dev
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.9
-
-    - name: Cache pip requirements
-      id: pip-cache-docs
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.PIP_CACHE_DIR }}
-        key: ${{ runner.os }}-pip-docs-${{ hashFiles('**/setup.*') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-docs-
+        python-version: 3.8
+        cache: "pip"
+        cache-dependency-path: "requirements/docs.txt"
 
     - name: Verify Python environment
       run: |
         pip list
         pip cache list
+        pip check
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install .[docs]
-        pip install --no-deps "phill @ git+https://github.com/snek5000/snek5000-phill.git"
-        pip install --no-deps "snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git@stable"
-        pip install --no-deps --force-reinstall "fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib"
-        pip install --no-deps --force-reinstall "pymech @ git+https://github.com/eX-Mech/pymech.git"
+        python -m pip install --upgrade pip nox
 
     - name: Build docs
       run: |
-        SPHINXOPTS="-W" make -C docs html
+        nox --session docs -- -W
 
   deploy:
     needs: [docs, build]
@@ -122,13 +98,13 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
     - name: Package
       run: |
-        pip install build
+        python -m pip install build
         python -m build
 
     - name: Publish package
@@ -136,6 +112,6 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        password: ${{ secrets.TEST_PYPI_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
         # password: ${{ secrets.PYPI_API_TOKEN }}
