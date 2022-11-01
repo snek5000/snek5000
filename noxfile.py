@@ -14,6 +14,7 @@ execute ``make list-sessions```` or ``nox -l`` for a list of sessions.
 """
 import re
 import shlex
+import shutil
 from concurrent.futures import ThreadPoolExecutor as Pool
 from functools import partial
 from pathlib import Path
@@ -26,6 +27,11 @@ no_venv_session = partial(nox.session, venv_backend="none")
 def run_ext(session, cmd):
     """Run an external command, i.e. outside a nox managed virtual envionment"""
     session.run(*shlex.split(cmd), external=True)
+
+
+def rmdir(path_dir: str):
+    if Path(path_dir).exists():
+        shutil.rmtree(path_dir)
 
 
 @no_venv_session(name="pip-install")
@@ -142,3 +148,69 @@ def docs(session):
     session.run("sphinx-build", "-b", "html", source_dir, output_dir)
     print("Build finished.")
     print(f"file://{output_dir}/index.html")
+
+
+@no_venv_session
+def ctags(session):
+    """Runs universal-ctags to build .tags file"""
+    sources = {
+        "nek5000": "lib/Nek5000/core",
+        "snek5000": "src/snek5000",
+    }
+    output = ".tags"
+    excludes = " ".join(
+        (
+            f"--exclude={pattern}"
+            for pattern in (
+                ".snakemake",
+                "__pycache__",
+                "obj",
+                "logs",
+                "*.tar.gz",
+                "*.f?????",
+            )
+        )
+    )
+    run_ext(
+        session, f"ctags -f {output} --language-force=Fortran -R {sources['nek5000']}"
+    )
+    run_ext(session, f"ctags -f {output} {excludes} --append -R {sources['snek5000']}")
+
+
+@no_venv_session
+def release(session):
+    """Release clean, build, upload"""
+    session.notify("release-clean")
+    session.notify("release-build")
+    session.notify("release-upload", session.posargs)
+
+
+@no_venv_session(name="release-clean")
+def release_clean(session):
+    """Remove build and dist directories"""
+    session.log("Removing build and dist")
+    rmdir("./build/")
+    rmdir("./dist/")
+
+
+@nox.session(name="release-build")
+def release_build(session):
+    """Build package into dist."""
+    session.install("build")
+    session.run("python", "-m", "build")
+
+
+@nox.session(name="release-upload")
+def release_upload(session):
+    """Upload dist/* to repository testpypi (default, must be configured in ~/.pypirc).
+    Also accepts positional arguments to `twine upload` command.
+
+    """
+    session.install("twine")
+    session.run("twine", "check", "dist/*")
+    if session.posargs:
+        args = session.posargs
+    else:
+        args = "--repository", "testpypi"
+
+    session.run("twine", "upload", *args, "dist/*")
