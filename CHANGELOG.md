@@ -234,7 +234,7 @@ Security in case of vulnerabilities.
 
 - Pre-commit: black, flake8, isort fixing and linting support
 - Jupyterlab and ipykernel configuration snakemake rules
-- Job management script - organize.py
+- Job management script - `organize.py`
 - New module: const
 
 ### Changed
