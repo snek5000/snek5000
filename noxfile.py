@@ -15,7 +15,6 @@ execute ``make list-sessions```` or ``nox -l`` for a list of sessions.
 import re
 import shlex
 import shutil
-from concurrent.futures import ThreadPoolExecutor as Pool
 from functools import partial
 from pathlib import Path
 
@@ -47,48 +46,53 @@ def pip_sync(session):
 
 
 @nox.session(name="pip-compile", reuse_venv=True)
-def pip_compile(session):
-    """Upgrade and pin dependencies"""
+@nox.parametrize(
+    "extra", [nox.param(extra, id=extra) for extra in ("main", "docs", "tests", "dev")]
+)
+def pip_compile(session, extra):
+    """Pin dependencies to requirements/*.txt
+
+    How to run all in parallel::
+
+        pipx install nox
+        make -j requirements
+
+    """
     session.install("pip-tools")
     req = Path("requirements")
     in_package = "setup.cfg"
-    futures = []
 
-    with Pool(max_workers=4) as executor:
-        for extra in (None, "docs", "tests", "dev"):
-            if extra:
-                in_extra = f"--extra {extra}"
-                in_file = req / "vcs_packages.in"
-                out_file = req / f"{extra}.txt"
-            else:
-                in_extra = ""
-                in_file = ""
-                out_file = req / "main.txt"
-            futures.append(
-                executor.submit(
-                    session.run,
-                    *shlex.split(
-                        "python -m piptools compile --resolver backtracking --quiet "
-                        f"{in_extra} {in_file} {in_package} "
-                        f"-o {out_file}"
-                    ),
-                )
-            )
-        assert all(run.result() for run in futures)
+    if extra == "main":
+        in_extra = ""
+        in_file = ""
+        out_file = req / "main.txt"
+    else:
+        in_extra = f"--extra {extra}"
+        in_file = req / "vcs_packages.in"
+        out_file = req / f"{extra}.txt"
 
-    session.log("Removing absolute paths from txt files")
-    for txt in req.glob("*.txt"):
-        packages = txt.read_text()
-        rel_path_packages = packages.replace("file://" + str(Path.cwd().resolve()), ".")
-        if txt.name == "tests.txt":
-            tests_editable = txt.parent / txt.name.replace("tests", "tests-editable")
-            tests_editable.write_text(rel_path_packages)
-            rel_path_no_editable_packages = re.sub(
-                r"^-e\ \.", ".", rel_path_packages, flags=re.M
-            )
-            txt.write_text(rel_path_no_editable_packages)
-        else:
-            txt.write_text(rel_path_packages)
+    session.run(
+        *shlex.split(
+            "python -m piptools compile --resolver backtracking --quiet "
+            f"{in_extra} {in_file} {in_package} "
+            f"-o {out_file}"
+        )
+    )
+
+    session.log(f"Removing absolute paths from {out_file}")
+    packages = out_file.read_text()
+    rel_path_packages = packages.replace("file://" + str(Path.cwd().resolve()), ".")
+    if extra == "tests":
+        tests_editable = out_file.parent / out_file.name.replace(
+            "tests", "tests-editable"
+        )
+        session.log(f"Copying {out_file} with -e flag in {tests_editable}")
+        tests_editable.write_text(rel_path_packages)
+        session.log(f"Removing -e flag in {out_file}")
+        rel_path_packages = re.sub(r"^-e\ \.", ".", rel_path_packages, flags=re.M)
+
+    session.log(f"Writing {out_file}")
+    out_file.write_text(rel_path_packages)
 
 
 @nox.session

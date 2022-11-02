@@ -1,6 +1,6 @@
 NOX ?= nox
 
-.PHONY: Makefile
+.PHONY: dev test testslow coverage_html black list-sessions requirements Makefile
 
 dev:
 	pip install -e .[dev]
@@ -24,6 +24,8 @@ black:
 list-sessions:
 	@nox --version 2>/dev/null || pip install nox
 	@$(NOX) -l
+
+requirements: 'pip-compile(main)' 'pip-compile(docs)' 'pip-compile(tests)' 'pip-compile(dev)'
 
 # Catch-all target: route all unknown targets to nox sessions
 %: Makefile

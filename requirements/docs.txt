@@ -241,6 +241,7 @@ numpy==1.23.4
     #   h5py
     #   matplotlib
     #   pandas
+    #   scipy
     #   xarray
 packaging==21.3
     # via
@@ -344,6 +345,8 @@ requests==2.28.1
     #   sphinx
 reretry==0.11.1
     # via snakemake
+scipy==1.9.3
+    # via snek5000 (setup.cfg)
 send2trash==1.8.0
     # via jupyter-server
 setuptools-scm==7.0.5
