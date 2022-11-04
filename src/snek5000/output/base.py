@@ -33,13 +33,14 @@ from . import _make_path_session
 class MissingConfigFilter:
     def filter(self, record):
         if record.msg.startswith("Missing a configuration file"):
-            if hasattr(self, "emitted"):
+            if hasattr(self, "emitted") and self.emitted:
                 return False
             self.emitted = True
         return True
 
 
-logger.addFilter(MissingConfigFilter())
+missing_config_filter = MissingConfigFilter()
+logger.addFilter(missing_config_filter)
 
 
 class Output(OutputCore):
