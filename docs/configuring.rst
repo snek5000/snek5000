@@ -19,17 +19,18 @@ You are expected to keep one configuration file for per machine / cluster where
 ``snek5000`` is executed. When a file is not found during runtime it issues a
 warning similar to::
 
-   WARNING  Missing a configuration file describing compilers and flags. Create one at either of the following paths to avoid future warnings:
-            /home/avmo/.config/snek5000/<hostname>.yml
-            /home/avmo/.config/snek5000.yml
-            /home/avmo/src/snek5000/snek5000-canonical/src/snek5000_canonical/etc/<hostname>.yml
+   WARNING: Missing a configuration file describing compilers and flags. Create one at either of the following paths to avoid future warnings:
+      /home/docs/.config/snek5000/<hostname>.yml
+      /home/docs/.config/snek5000.yml
+      /home/docs/src/snek5000/snek5000-canonical/src/snek5000_canonical/etc/<hostname>.yml
    INFO     Using default configuration for now:
-            /home/avmo/src/snek5000/snek5000/src/snek5000/assets/default_configfile.yml
+      /home/docs/src/snek5000/snek5000/src/snek5000/assets/default_configfile.yml
 
-As the warnings suggest, there are two possible paths where you can save your configuration:
+As the warnings suggest, there are three possible paths where you can save your configuration:
 
 1. ``~/.config/snek5000/<hostname>.yml``
-2. ``<path to package root>/etc/<hostname>.yml``
+2. ``~/.config/snek5000.yml``
+3. ``<path to package root>/etc/<hostname>.yml``
 
 .. note::
 

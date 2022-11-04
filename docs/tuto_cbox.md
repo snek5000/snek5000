@@ -106,19 +106,18 @@ from snek5000 import load
 sim = load(sim.path_run)
 ```
 
-then we are able to  plot all the history points for one variable like $u_x$,
+then we are able to plot all the history points for one variable like $u_x$,
 
 ```{code-cell}
 sim.output.history_points.plot(key='ux')
-
 ```
 
 or just one history point:
 
 ```{code-cell}
-
-sim.output.history_points.plot_1point(index_point=0, key='temperature', tmin=600, tmax=800)
-
+sim.output.history_points.plot_1point(
+  index_point=0, key='temperature', tmin=600, tmax=800
+)
 ```
 
 Also we can load the history points data to compute growth rate:

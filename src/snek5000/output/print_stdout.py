@@ -40,7 +40,6 @@ class PrintStdOut:
     def path_file(self):
         output = self.output
         if output and not self._path_file:
-            logger.info("Searching for a log file...")
             path_run = Path(output.path_run)
             logfiles = sorted(path_run.glob("*.log"))
             if logfiles:
@@ -53,7 +52,6 @@ class PrintStdOut:
                 except StopIteration:
                     self._path_file = logfiles[-1]
             else:
-                logger.info(f"Cannot find a .log to parse in {path_run}.")
                 self._path_file = path_run / f"{output.name_solver}.log"
 
         return self._path_file.resolve()
