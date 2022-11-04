@@ -112,7 +112,7 @@ ref.plot(
     logy=True,
     colormap="Accent"
 )
-_ = ax.set(
+ax.set(
     title=f"Taylor-Green vortex: evolution of K.E. and enstrophy. Re={-sim.params.nek.velocity.viscosity}"
-)
+);
 ```
