@@ -32,7 +32,10 @@ from . import _make_path_session
 
 class MissingConfigFilter:
     def filter(self, record):
-        if record.msg.startswith("Missing a configuration file"):
+        msg = record.msg
+        if hasattr(msg, "startswith") and msg.startswith(
+            "Missing a configuration file"
+        ):
             if hasattr(self, "emitted") and self.emitted:
                 return False
             self.emitted = True
