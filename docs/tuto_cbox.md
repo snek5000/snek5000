@@ -106,7 +106,7 @@ from snek5000 import load
 sim = load(sim.path_run)
 ```
 
-then we are able to  plot all the history points for one variable like $u_x$,
+then we are able to plot all the history points for one variable like $u_x$,
 
 ```{code-cell}
 sim.output.history_points.plot(key='ux')
