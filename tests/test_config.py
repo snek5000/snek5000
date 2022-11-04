@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from snek5000.output.base import Output
+from snek5000.output.base import Output, missing_config_filter
 
 xdg_config = Path(os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config")))
 configfile_xdg_config = xdg_config / "snek5000.yml"
@@ -55,6 +55,7 @@ def test_update_snakemake_config():
 def test_find_configfile(caplog):
     hostname = "test_config"
 
+    missing_config_filter.emitted = False
     Output.find_configfile(host=hostname)
 
     for logger_name, level, message in caplog.record_tuples:
