@@ -30,6 +30,18 @@ from snek5000.util.smake import append_debug_flags, set_compiler_verbosity
 from . import _make_path_session
 
 
+class MissingConfigFilter:
+    def filter(self, record):
+        if record.msg.startswith("Missing a configuration file"):
+            if hasattr(self, "emitted"):
+                return False
+            self.emitted = True
+        return True
+
+
+logger.addFilter(MissingConfigFilter())
+
+
 class Output(OutputCore):
     """Container and methods for getting paths of and copying case files.
 
@@ -244,6 +256,7 @@ class Output(OutputCore):
             if configfile.exists():
                 break
         else:
+            configfile = configfile_default
             logger.warning(
                 (
                     "Missing a configuration file describing compilers and "
@@ -251,9 +264,8 @@ class Output(OutputCore):
                     "avoid future warnings:\n"
                 )
                 + "\n".join(map(str, custom_configfiles))
+                + f"\nUsing default configuration for now:\n{configfile}"
             )
-            configfile = configfile_default
-            logger.info(f"Using default configuration for now:\n{configfile}")
 
         return configfile
 
@@ -536,7 +548,6 @@ class Output(OutputCore):
             return exclude
 
         new_root = Path(new_dir)
-        logger.info("Copying with shutil.copytree ...")
         # `dirs_exist_ok`` new in Python 3.8
         shutil.copytree(
             src=path_solver_package,
@@ -550,8 +561,6 @@ class Output(OutputCore):
         paths_usr_f = list(path_solver_package.glob("*.usr.f"))
         for path_usr_f in paths_usr_f:
             shutil.copyfile(path_usr_f, new_root / path_usr_f.stem)
-
-        logger.info(f"Copied: {path_solver_package} -> {new_root}")
 
     def write_box(self, template):
         """Write <case name>.box file from box.j2 template.

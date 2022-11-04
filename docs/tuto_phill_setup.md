@@ -52,13 +52,13 @@ console the params would also output as follows:
 params
 ```
 
-One can print only one section:
+One can also print only one section:
 
 ```{code-cell}
-params.oper
+params.nek.general
 ```
 
-and print some help about these parameters:
+and print some help about some parameters:
 
 ```{code-cell}
 params.oper._print_docs()
