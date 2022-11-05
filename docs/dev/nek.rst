@@ -9,7 +9,7 @@ Nek5000 core library
     The following is auto-generated using Doxygen and represents Nek5000 v19.
     The official :doc:`Nek5000 documentation <nek:index>` is hand-written and is more general.
 
-* `Documentation produced with Doxygen <doxygen/index.html>`_
+* `Documentation produced with Doxygen <../doxygen/index.html>`_
 
 External links
 --------------

@@ -301,6 +301,7 @@ numpy==1.23.4
     #   h5py
     #   matplotlib
     #   pandas
+    #   scipy
     #   xarray
 packaging==21.3
     # via
@@ -454,6 +455,8 @@ rich==12.6.0
     # via
     #   snek5000 (setup.cfg)
     #   twine
+scipy==1.9.3
+    # via snek5000 (setup.cfg)
 secretstorage==3.3.3
     # via keyring
 send2trash==1.8.0

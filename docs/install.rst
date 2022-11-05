@@ -38,28 +38,31 @@ In certain cases, typically:
 
 a simple ``pip install snek5000`` may not cut it.  Then, it is recommended to use conda_ (or
 mamba_) to set up the Python environment first. To install Snek5000 with a Python
-interpreter of your choice:
+interpreter of your choice, download the `environment.yaml file`_ to your hard disk and
+then execute:
 
 .. tab:: PyPy
 
    ::
 
-      conda create -n my-env -c conda-forge pypy pip pandas xarray
-      conda activate my-env
+      conda create --name env-snek -c conda-forge pypy pip pandas xarray
+      conda activate env-snek
+      conda install --yes --file environment.yaml
       pypy -m pip install snek5000
 
 .. tab:: CPython
 
    ::
 
-      conda create -n my-env -c conda-forge python pip
-      conda activate my-env
+      conda create --name env-snek -c conda-forge python pip
+      conda activate env-snek
+      conda install --yes --file environment.yaml
       python -m pip install snek5000
 
 .. _PyPy: https://www.pypy.org/
 .. _conda: https://docs.conda.io/projects/conda/en/latest/user-guide/index.html
 .. _mamba: https://mamba.readthedocs.io/en/latest/installation.html
-
+.. _environment.yaml file: https://github.com/snek5000/snek5000/raw/main/requirements/environment.yaml
 
 .. toctree::
    :caption: Optional dependencies
