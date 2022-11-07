@@ -13,15 +13,16 @@ execution:
 
 # Demo Taylor-Green vortex (snek5000-tgv)
 
-Snek5000 repository contains a [small example
-solver](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv)
-for the Taylor-Green vortex flow. We are going to show how it can be used on a
-very small and short simulation.
+Snek5000 repository contains a
+[simple example solver](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv)
+for the Taylor-Green vortex flow. We are going to show how it can be used on a very
+small and short simulation.
 
 ## Run the simulation
 
 We will run the simulation by executing the script
-[docs/examples/scripts/tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py) which contains:
+[docs/examples/scripts/tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py)
+which contains:
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_tgv.py
@@ -46,11 +47,29 @@ process = subprocess.run(
 The script has now been executed. Let's look at its output:
 
 ```{code-cell}
-print(process.stdout)
+lines = process.stdout.split("\n")
+
+index_step2 = 0
+for line in lines:
+    if line.startswith("Step      2, t= "):
+        break
+    index_step2 += 1
+
+print("\n".join(lines[:index_step2+20]))
 ```
 
-To "load the simulation", i.e. recreate a simulation object, We now need to
-extract from this output the path of the directory of the simulation:
+```{code-cell}
+index_final_step = 0
+for line in lines[::-1]:
+    if line.startswith(" Final time step ="):
+        break
+    index_final_step -= 1
+
+print("\n".join(lines[index_final_step-10:]))
+```
+
+To "load the simulation", i.e. to recreate a simulation object, we now need to
+extract from the output the path of the directory of the simulation:
 
 ```{code-cell}
 path_run = None
@@ -58,7 +77,6 @@ for line in process.stdout.split("\n"):
     if "path_run: " in line:
         path_run = line.split("path_run: ")[1].split(" ", 1)[0]
         break
-
 if path_run is None:
     raise RuntimeError
 ```

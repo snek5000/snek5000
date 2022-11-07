@@ -24,7 +24,9 @@ Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to hav
 probes (history points) to record the variable signals. We will use these probe signals
 in monitoring and postprocessing of the simulation. See
 [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
-for the implementation. The simulation will be executed with the script [docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py) which contains:
+for the implementation. The simulation will be carried out with the script
+[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py)
+which contains:
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_cbox.py
@@ -46,14 +48,32 @@ process = subprocess.run(
 )
 ```
 
-The script has now been executed. Let's look at its output:
+The script has now been executed. Let's look at its output.
 
 ```{code-cell}
-print(process.stdout[:5000])
+lines = process.stdout.split("\n")
+
+index_step2 = 0
+for line in lines:
+    if line.startswith("Step      2, t= "):
+        break
+    index_step2 += 1
+
+print("\n".join(lines[:index_step2+20]))
 ```
 
-To "load the simulation", i.e. recreate a simulation object, We now need to
-extract from this output the path of the directory of the simulation:
+```{code-cell}
+index_final_step = 0
+for line in lines[::-1]:
+    if line.startswith(" Final time step ="):
+        break
+    index_final_step -= 1
+
+print("\n".join(lines[index_final_step-10:]))
+```
+
+To "load the simulation", i.e. to recreate a simulation object, we now need to
+extract from the output the path of the directory of the simulation:
 
 ```{code-cell}
 path_run = None
@@ -79,7 +99,7 @@ sim = load(path_run)
 then we are able to plot all the history points for one variable like $u_x$,
 
 ```{code-cell}
-sim.output.history_points.plot(key='ux')
+sim.output.history_points.plot(key='ux');
 ```
 
 or just one history point:
@@ -87,7 +107,7 @@ or just one history point:
 ```{code-cell}
 sim.output.history_points.plot_1point(
   index_point=0, key='temperature', tmin=600, tmax=800
-)
+);
 ```
 
 Also we can load the history points data to compute growth rate:
@@ -116,7 +136,7 @@ slope, intercept, r_value, p_value, std_err = stats.linregress(
 )
 
 growth_rate = slope
-print("Growth rate is:", growth_rate)
+print(f"the growth rate is {growth_rate:.2f}")
 ```
 
 There is also the possibility to load to whole field file in
@@ -126,7 +146,7 @@ There is also the possibility to load to whole field file in
 
 field = sim.output.phys_fields.load()
 
-field.temperature.plot()
+field.temperature.plot();
 ```
 
 which makes postprocessing of data easier:
@@ -138,7 +158,7 @@ y_new = np.linspace(field.y[0], field.y[-1], field.y.size)
 field = field.drop_duplicates(["x", "y"])
 field = field.interp(x=x_new, y=y_new)
 
-field.temperature.mean('x').plot()
+field.temperature.mean('x').plot();
 ```
 
 ## Versions used in this tutorial

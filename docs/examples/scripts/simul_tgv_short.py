@@ -20,6 +20,8 @@ params.nek.general.extrapolation = "OIFS"
 params.nek.general.write_control = "runTime"
 params.nek.general.write_interval = 1.0
 
+params.output.history_points.write_interval = 0.5
+
 sim = Simul(params)
 sim.make.exec("run_fg")
 
