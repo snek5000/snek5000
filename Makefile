@@ -19,7 +19,7 @@ coverage_html:
 	@echo "file://${PWD}/.coverage/html/index.html"
 
 black:
-	black src tests
+	black src tests docs/examples
 
 list-sessions:
 	@nox --version 2>/dev/null || pip install nox

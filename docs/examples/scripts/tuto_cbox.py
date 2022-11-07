@@ -10,9 +10,10 @@ params.prandtl = 0.71
 # The onset of oscillatory flow for aspect ratio 1.0 is at Ra_c = 1.825e8
 params.Ra_side = 1.86e8
 
-params.output.sub_directory = "examples_snek_cbox/tuto"
+params.output.sub_directory = "examples_snek/tuto"
 
 params.oper.dim = 2
+params.oper.nproc_min = 2
 
 nb_elements = ny = 8
 params.oper.ny = nb_elements

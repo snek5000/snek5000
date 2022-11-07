@@ -24,77 +24,67 @@ Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to hav
 probes (history points) to record the variable signals. We will use these probe signals
 in monitoring and postprocessing of the simulation. See
 [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
-for the implementation. The simulation was executed as following:
+for the implementation. The simulation will be carried out with the script
+[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py),
+which contains:
 
-```{code-cell}
-import numpy as np
-
-from snek5000_cbox.solver import Simul
-
-params = Simul.create_default_params()
-
-aspect_ratio = params.oper.aspect_ratio = 1.0
-params.prandtl = 0.71
-
-# The onset of oscillatory flow for aspect ratio 1.0 is at Ra_c = 1.825e8
-params.Ra_side = 1.86e8
-
-params.output.sub_directory = "examples_cbox/simple/SW"
-
-params.oper.dim = 2
-params.oper.nproc_min = 2
-
-nb_elements = ny = 8
-params.oper.ny = nb_elements
-nx = params.oper.nx = int(nb_elements / aspect_ratio)
-params.oper.nz = int(nb_elements / aspect_ratio)
-
-Ly = params.oper.Ly
-Lx = params.oper.Lx = Ly / aspect_ratio
-Lz = params.oper.Lz = Ly / aspect_ratio
-
-order = params.oper.elem.order = params.oper.elem.order_out = 8
-
-params.oper.mesh_stretch_factor = 0.1  # zero means regular
-
-params.short_name_type_run = f"Ra{params.Ra_side:.3e}_{nx*order}x{ny*order}"
-
-# creation of the coordinates of the points saved by history points
-n1d = 5
-small = Lx / 10
-
-xs = np.linspace(0, Lx, n1d)
-xs[0] = small
-xs[-1] = Lx - small
-
-ys = np.linspace(0, Ly, n1d)
-ys[0] = small
-ys[-1] = Ly - small
-
-coords = [(x, y) for x in xs for y in ys]
-
-params.output.history_points.coords = coords
-params.oper.max.hist = len(coords) + 1
-
-params.nek.velocity.residual_tol = 1e-08
-params.nek.pressure.residual_tol = 1e-05
-
-params.nek.general.end_time = 800
-params.nek.general.stop_at = "endTime"
-params.nek.general.target_cfl = 2.0
-params.nek.general.time_stepper = "BDF3"
-params.nek.general.extrapolation = "OIFS"
-
-params.nek.general.write_control = "runTime"
-params.nek.general.write_interval = 50
-
-params.output.history_points.write_interval = 30
-
-sim = Simul(params)
-sim.make.exec('run_fg', resources={"nproc": 2})
+```{eval-rst}
+.. literalinclude:: ./examples/scripts/tuto_cbox.py
 ```
 
-Here we load and process the output.
+In normal life, we would just execute this script with something like
+`python tuto_cbox.py`. However, in this notebook, we need a bit more code:
+
+```{code-cell}
+from pathlib import Path
+import subprocess
+import sys
+
+path_script = Path.cwd() / "examples/scripts/tuto_cbox.py"
+print(f"Running the script {path_script.name}... (It can take few minutes.)")
+process = subprocess.run(
+    [sys.executable, str(path_script)], check=True, text=True,
+    stdout=subprocess.PIPE,  stderr=subprocess.STDOUT
+)
+```
+
+The script has now been executed. Let's look at its output.
+
+```{code-cell}
+lines = process.stdout.split("\n")
+
+index_step2 = 0
+for line in lines:
+    if line.startswith("Step      2, t= "):
+        break
+    index_step2 += 1
+
+print("\n".join(lines[:index_step2+20]))
+```
+
+```{code-cell}
+index_final_step = 0
+for line in lines[::-1]:
+    if line.startswith(" Final time step ="):
+        break
+    index_final_step -= 1
+
+print("\n".join(lines[index_final_step-10:]))
+```
+
+To "load the simulation", i.e. to recreate a simulation object, we now need to
+extract from the output the path of the directory of the simulation:
+
+```{code-cell}
+path_run = None
+for line in process.stdout.split("\n"):
+    if "path_run: " in line:
+        path_run = line.split("path_run: ")[1].split(" ", 1)[0]
+        break
+
+if path_run is None:
+    raise RuntimeError
+```
 
 ## Postprocessing
 
@@ -103,13 +93,13 @@ We can load the simulation:
 ```{code-cell}
 from snek5000 import load
 
-sim = load(sim.path_run)
+sim = load(path_run)
 ```
 
 then we are able to plot all the history points for one variable like $u_x$,
 
 ```{code-cell}
-sim.output.history_points.plot(key='ux')
+sim.output.history_points.plot(key='ux');
 ```
 
 or just one history point:
@@ -117,7 +107,7 @@ or just one history point:
 ```{code-cell}
 sim.output.history_points.plot_1point(
   index_point=0, key='temperature', tmin=600, tmax=800
-)
+);
 ```
 
 Also we can load the history points data to compute growth rate:
@@ -146,7 +136,7 @@ slope, intercept, r_value, p_value, std_err = stats.linregress(
 )
 
 growth_rate = slope
-print("Growth rate is:", growth_rate)
+print(f"the growth rate is {growth_rate:.2f}")
 ```
 
 There is also the possibility to load to whole field file in
@@ -156,7 +146,7 @@ There is also the possibility to load to whole field file in
 
 field = sim.output.phys_fields.load()
 
-field.temperature.plot()
+field.temperature.plot();
 ```
 
 which makes postprocessing of data easier:
@@ -168,7 +158,7 @@ y_new = np.linspace(field.y[0], field.y[-1], field.y.size)
 field = field.drop_duplicates(["x", "y"])
 field = field.interp(x=x_new, y=y_new)
 
-field.temperature.mean('x').plot()
+field.temperature.mean('x').plot();
 ```
 
 ## Versions used in this tutorial

@@ -2,6 +2,7 @@ from snek5000_tgv.solver import Simul
 
 
 params = Simul.create_default_params()
+params.output.sub_directory = "examples_snek/tuto"
 
 params.oper.nx = params.oper.ny = params.oper.nz = 8
 params.oper.elem.order = params.oper.elem.order_out = 8

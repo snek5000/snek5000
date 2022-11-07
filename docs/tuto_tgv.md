@@ -13,44 +13,84 @@ execution:
 
 # Demo Taylor-Green vortex (snek5000-tgv)
 
+Snek5000 repository contains a
+[simple example solver](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv)
+for the Taylor-Green vortex flow. We are going to show how it can be used on a very
+small and short simulation.
+
 ## Run the simulation
 
-See
-[`snek5000-tgv`](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv)
-for the implementation. The simulation was executed as follows:
+We will run the simulation by executing the script
+[docs/examples/scripts/tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py),
+which contains:
+
+```{eval-rst}
+.. literalinclude:: ./examples/scripts/tuto_tgv.py
+```
+
+In normal life, we would just execute this script with something like
+`python tuto_tgv.py`. However, in this notebook, we need a bit more code:
 
 ```{code-cell}
-from snek5000_tgv.solver import Simul
+from pathlib import Path
+import subprocess
+import sys
 
+path_script = Path.cwd() / "examples/scripts/tuto_tgv.py"
+print(f"Running the script {path_script.name}... (It can take few minutes.)")
+process = subprocess.run(
+    [sys.executable, str(path_script)], check=True, text=True,
+    stdout=subprocess.PIPE,  stderr=subprocess.STDOUT
+)
+```
 
-params = Simul.create_default_params()
+The script has now been executed. Let's look at its output:
 
-params.oper.nx = params.oper.ny = params.oper.nz = 8
-params.oper.elem.order = params.oper.elem.order_out = 8
-params.oper.nproc_min = 2
+```{code-cell}
+lines = process.stdout.split("\n")
 
-params.nek.velocity.residual_tol = 1e-07
-params.nek.pressure.residual_tol = 1e-05
+index_step2 = 0
+for line in lines:
+    if line.startswith("Step      2, t= "):
+        break
+    index_step2 += 1
 
-params.nek.general.end_time = 15
-params.nek.general.dt = -1
-params.nek.general.target_cfl = 1.4
-params.nek.general.extrapolation = "OIFS"
+print("\n".join(lines[:index_step2+20]))
+```
 
-sim = Simul(params)
-sim.make.exec("run_fg", resources={"nproc": 2})
+```{code-cell}
+index_final_step = 0
+for line in lines[::-1]:
+    if line.startswith(" Final time step ="):
+        break
+    index_final_step -= 1
+
+print("\n".join(lines[index_final_step-10:]))
+```
+
+To "load the simulation", i.e. to recreate a simulation object, we now need to
+extract from the output the path of the directory of the simulation:
+
+```{code-cell}
+path_run = None
+for line in process.stdout.split("\n"):
+    if "path_run: " in line:
+        path_run = line.split("path_run: ")[1].split(" ", 1)[0]
+        break
+if path_run is None:
+    raise RuntimeError
 ```
 
 ## Load the simulation
 
-Here we load and process the output.
+We can now load the simulation and process the output.
 
 <!-- #endregion -->
 
 ```{code-cell}
 from snek5000 import load
 
-sim = load(sim.path_run)
+sim = load(path_run)
 ```
 
 ## Visualize raw data via `sim.output.print_stdout`
