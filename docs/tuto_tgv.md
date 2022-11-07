@@ -21,14 +21,14 @@ small and short simulation.
 ## Run the simulation
 
 We will run the simulation by executing the script
-[docs/examples/scripts/tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py)
+[docs/examples/scripts/tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py),
 which contains:
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_tgv.py
 ```
 
-In the normal life, we would just execute this script with something like
+In normal life, we would just execute this script with something like
 `python tuto_tgv.py`. However, in this notebook, we need a bit more code:
 
 ```{code-cell}

@@ -90,21 +90,62 @@ doing so, snek5000 would:
 - activate the code blocks under the preprocessing flag in Fortran sources
   `#ifdef DEBUG`
 
-Now let's execute the simulation
+Now let's execute the simulation. We will use the script
+[docs/examples/scripts/tuto_phill.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_phill.py),
+which contains:
 
-```{code-cell}
-sim.make.exec?
+```{eval-rst}
+.. literalinclude:: ./examples/scripts/tuto_phill.py
 ```
 
-```{code-cell}
-sim.make.exec('run_fg', resources={"nproc": 2})
-```
+In normal life, we would just execute this script with something like
+`python tuto_phill.py`. However, in this notebook, we need a bit more code:
 
 ```{code-cell}
-!ls {sim.path_run}
+from pathlib import Path
+import subprocess
+import sys
+
+path_script = Path.cwd() / "examples/scripts/tuto_phill.py"
+print(f"Running the script {path_script.name}... (It can take few minutes.)")
+process = subprocess.run(
+    [sys.executable, str(path_script)], check=True, text=True,
+    stdout=subprocess.PIPE,  stderr=subprocess.STDOUT
+)
 ```
 
-The simulation is done!
+The simulation is done! Let's look at its output:
+
+```{code-cell}
+print(process.stdout)
+```
+
+To "load the simulation", i.e. to recreate a simulation object, we now need to
+extract from the output the path of the directory of the simulation:
+
+```{code-cell}
+path_run = None
+for line in process.stdout.split("\n"):
+    if "path_run: " in line:
+        path_run = line.split("path_run: ")[1].split(" ", 1)[0]
+        break
+if path_run is None:
+    raise RuntimeError
+path_run
+```
+
+Let's look at the files in the directory of the simulation
+
+```{code-cell}
+!ls {path_run}
+```
+
+In Snek5000, we have the notion of sessions (used for restarts) and some files
+are saved in directories "session_00", "session_01", etc.
+
+```{code-cell}
+!ls {path_run}/session_00
+```
 
 ## Versions used in this tutorial
 

@@ -25,14 +25,14 @@ probes (history points) to record the variable signals. We will use these probe 
 in monitoring and postprocessing of the simulation. See
 [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
 for the implementation. The simulation will be carried out with the script
-[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py)
+[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py),
 which contains:
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_cbox.py
 ```
 
-In the normal life, we would just execute this script with something like
+In normal life, we would just execute this script with something like
 `python tuto_cbox.py`. However, in this notebook, we need a bit more code:
 
 ```{code-cell}
