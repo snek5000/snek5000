@@ -139,19 +139,39 @@ def format_lint(session):
     run_ext(session, "pre-commit run --all-files")
 
 
-@nox.session
-def docs(session):
-    """Build documentation using Sphinx."""
+def _prepare_docs_session(session):
     session.install("-r", "requirements/docs.txt")
     session.chdir("./docs")
 
     build_dir = Path.cwd() / "_build"
     source_dir = "."
     output_dir = str(build_dir.resolve() / "html")
+    return source_dir, output_dir
 
-    session.run("sphinx-build", "-b", "html", source_dir, output_dir)
+
+@nox.session
+def docs(session):
+    """Build documentation using Sphinx."""
+    args = _prepare_docs_session(session)
+    session.run("sphinx-build", "-b", "html", *args)
     print("Build finished.")
-    print(f"file://{output_dir}/index.html")
+    print(f"file://{args[0]}/index.html")
+
+
+@nox.session(name="docs-autobuild")
+def docs_autobuild(session):
+    """Build documentation using sphinx-autobuild."""
+    args = _prepare_docs_session(session)
+    session.run(
+        "sphinx-autobuild",
+        "--watch",
+        "../src",
+        "--re-ignore",
+        r"(_build|generated)\/.*",
+        *args,
+    )
+    print("Build finished.")
+    print(f"file://{args[0]}/index.html")
 
 
 @no_venv_session
