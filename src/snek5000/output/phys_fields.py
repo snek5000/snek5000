@@ -1,7 +1,9 @@
-"""Interface for Nek5000 field files. :class:`PhysFields` usually
-instantiated as ``sim.output.phys_fields`` provides a common interface for
-plotting and reading arrays from the solution field files. Loading of data
-files are managed by the classes in the :mod:`snek5000.output.readers`.
+"""Interface for Nek5000 field files.
+
+:class:`PhysFields` usually instantiated as ``sim.output.phys_fields`` provides
+a common interface for plotting and reading arrays from the solution field
+files. Loading of data files are managed by the classes in the
+:mod:`snek5000.output.readers`.
 
 """
 

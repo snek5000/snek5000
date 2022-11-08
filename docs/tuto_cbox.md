@@ -52,13 +52,11 @@ The script has now been executed. Let's look at its output.
 
 ```{code-cell}
 lines = process.stdout.split("\n")
-
 index_step2 = 0
 for line in lines:
     if line.startswith("Step      2, t= "):
         break
     index_step2 += 1
-
 print("\n".join(lines[:index_step2+20]))
 ```
 
@@ -68,7 +66,6 @@ for line in lines[::-1]:
     if line.startswith(" Final time step ="):
         break
     index_final_step -= 1
-
 print("\n".join(lines[index_final_step-10:]))
 ```
 
@@ -81,9 +78,9 @@ for line in process.stdout.split("\n"):
     if "path_run: " in line:
         path_run = line.split("path_run: ")[1].split(" ", 1)[0]
         break
-
 if path_run is None:
     raise RuntimeError
+path_run
 ```
 
 ## Postprocessing
