@@ -9,7 +9,6 @@ Manage outputs
    print_stdout
    phys_fields
 
-
 """
 from pathlib import Path
 

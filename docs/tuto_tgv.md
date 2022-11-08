@@ -11,7 +11,7 @@ execution:
 
 <!-- #region tags=[] -->
 
-# Demo Taylor-Green vortex (snek5000-tgv)
+# Demo Taylor-Green vortex (snek5000-tgv solver)
 
 Snek5000 repository contains a
 [simple example solver](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv)

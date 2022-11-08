@@ -1,4 +1,4 @@
-"""Manage user case files.
+"""Base class for ``sim.output``.
 
 """
 import inspect
@@ -9,17 +9,22 @@ import shutil
 import stat
 import textwrap
 import warnings
+from importlib import resources
 from itertools import chain
 from pathlib import Path
 from socket import gethostname
 
 import yaml
+
+from fluiddyn.util import mpi
+from fluiddyn.io import stdout_redirected
+
 from fluidsim_core.output import OutputCore
 from fluidsim_core.params import iter_complete_params
+
 from inflection import underscore
 
-from fluiddyn.io import stdout_redirected
-from snek5000 import __version__, get_asset, logger, mpi, resources
+from snek5000 import __version__, get_asset, logger
 from snek5000.make import _Nek5000Make
 from snek5000.params import _save_par_file
 from snek5000.solvers import get_solver_package, is_package

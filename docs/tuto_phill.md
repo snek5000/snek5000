@@ -11,7 +11,7 @@ execution:
 
 <!-- #region tags=[] -->
 
-# Demo periodic hill (snek5000-phill)
+# Demo periodic hill (snek5000-phill solver)
 
 <!-- #endregion -->
 
@@ -24,6 +24,7 @@ Let us do it here in one step.
 from phill.solver import Simul
 
 params = Simul.create_default_params()
+params.output.sub_directory = "examples_snek/tuto"
 params.oper.nx = 6
 params.oper.ny = 5
 params.oper.nz = 4
