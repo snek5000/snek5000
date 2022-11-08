@@ -103,16 +103,17 @@ In normal life, we would just execute this script with something like
 `python tuto_phill.py`. However, in this notebook, we need a bit more code:
 
 ```{code-cell}
-from pathlib import Path
-import subprocess
-import sys
+from subprocess import run, PIPE, STDOUT
+from time import perf_counter
 
-path_script = Path.cwd() / "examples/scripts/tuto_phill.py"
-print(f"Running the script {path_script.name}... (It can take few minutes.)")
-process = subprocess.run(
-    [sys.executable, str(path_script)], check=True, text=True,
-    stdout=subprocess.PIPE,  stderr=subprocess.STDOUT
+command = "python3 examples/scripts/tuto_phill.py"
+
+print("Running the script tuto_phill.py... (It can take few minutes.)")
+t_start = perf_counter()
+process = run(
+    command.split(), check=True, text=True, stdout=PIPE,  stderr=STDOUT
 )
+print(f"Script executed in {perf_counter() - t_start:.2f} s")
 ```
 
 The simulation is done! Let's look at its output:
