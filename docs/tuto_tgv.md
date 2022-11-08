@@ -47,7 +47,10 @@ process = subprocess.run(
 The script has now been executed. Let's look at its output:
 
 ```{code-cell}
-lines = process.stdout.split("\n")
+lines = [
+    line for line in process.stdout.split("\n")
+    if not line.endswith(", errno = 1")
+]
 
 index_step2 = 0
 for line in lines:
@@ -73,7 +76,7 @@ extract from the output the path of the directory of the simulation:
 
 ```{code-cell}
 path_run = None
-for line in process.stdout.split("\n"):
+for line in lines:
     if "path_run: " in line:
         path_run = line.split("path_run: ")[1].split(" ", 1)[0]
         break
