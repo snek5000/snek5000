@@ -153,7 +153,7 @@ def _prepare_docs_session(session):
 def docs(session):
     """Build documentation using Sphinx."""
     args = _prepare_docs_session(session)
-    session.run("sphinx-build", "-b", "html", *args)
+    session.run("python", "-m", "sphinx", "-b", "html", *args)  # Same as sphinx-build
     print("Build finished.")
     print(f"file://{args[0]}/index.html")
 
@@ -163,13 +163,15 @@ def docs_autobuild(session):
     """Build documentation using sphinx-autobuild."""
     args = _prepare_docs_session(session)
     session.run(
-        "sphinx-autobuild",
+        "python",
+        "-m",
+        "sphinx_autobuild",
         "--watch",
         "../src",
         "--re-ignore",
         r"(_build|generated)\/.*",
         *args,
-    )
+    )  # Same as sphinx-autobuild
     print("Build finished.")
     print(f"file://{args[0]}/index.html")
 
