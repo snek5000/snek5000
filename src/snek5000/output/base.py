@@ -273,7 +273,9 @@ class Output(OutputCore):
                     "avoid future warnings:\n"
                 )
                 + "\n".join(map(str, custom_configfiles))
-                + f"\nUsing default configuration for now:\n{configfile}"
+                + "\nThe command `snek5000-config-init` could be used to create "
+                "a user config file for you."
+                f"\nUsing default configuration for now:\n{configfile}"
             )
 
         return configfile
