@@ -1,0 +1,12 @@
+rule earth:
+    shell:
+        'echo "hello earthling"'
+
+
+rule space:
+    resources:
+        alien=1,
+    shell:
+        """
+        echo 'hello alien number {resources.alien}'
+        """
