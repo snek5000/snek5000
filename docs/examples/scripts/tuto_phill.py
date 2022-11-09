@@ -22,4 +22,4 @@ sim = Simul(params)
 
 os.environ["SNEK_DEBUG"] = "1"
 
-sim.make.exec('run_fg', resources={"nproc": 2})
+sim.make.exec("run_fg", resources={"nproc": 2})

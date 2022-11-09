@@ -1,11 +1,11 @@
-import snek5000
+from snek5000 import ensure_env, get_snek_resource
 from snek5000_canonical import short_name, Output
 
 
 configfile: "config_simul.yml"
 
 
-snek5000.ensure_env()
+ensure_env()
 
 # Necessary to pass configuration to other Snakemake modules
 Output.update_snakemake_config(config, short_name)
@@ -28,7 +28,7 @@ rule mesh:
 # ======================
 module compiler:
     snakefile:
-        snek5000.get_asset("compiler.smk")
+        get_snek_resource("compiler.smk")
     config:
         config
 
@@ -40,7 +40,7 @@ use rule * from compiler
 # =========
 module io:
     snakefile:
-        snek5000.get_asset("io.smk")
+        get_snek_resource("io.smk")
     config:
         config
 
@@ -52,7 +52,7 @@ use rule * from io
 # ==============
 module internal:
     snakefile:
-        snek5000.get_asset("internal.smk")
+        get_snek_resource("internal.smk")
     config:
         config
 

@@ -1,0 +1,25 @@
+{# A template for generating user makefiles.
+
+By using a user makefile, extra Fortran files can be included in the main
+makefile. This file takes care of generating object files (*.o) from a list of
+fortran files. The user makefile is rendered using the write_makefile_usr
+method of the Output class.
+#}
+# vim: set ft=make
+{% for comment in comments.splitlines() -%}
+# {{ comment }}
+{% endfor -%}
+{% macro make(sources) -%}
+{# A cosmetic macro to indent comments nicely #}
+{%- set target = sources[0].replace(".f", ".o").split("/")[-1] -%}
+{%- set rule_string = "$(OBJDIR)/{}:{}\n\t$(F77) -c $(FL2) -I./ $< -o $@".format(
+		target.ljust(20),
+		" ".join(sources),
+	)
+-%}
+{{ rule_string }}
+{% endmacro -%}
+
+{% for sources in list_of_sources -%}
+{{ make(sources) }}
+{% endfor -%}

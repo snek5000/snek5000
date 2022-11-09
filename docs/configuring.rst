@@ -8,8 +8,7 @@ run, but also the **compilation** and **execution**, you would often need to cus
 the compiler and its flags. By default it is configured to use the gcc,
 gfortran and OpenMPI to compile the code.
 
-
-.. literalinclude:: ../src/snek5000/assets/default_configfile.yml
+.. literalinclude:: ../src/snek5000/resources/default_configfile.yml
    :language: yaml
 
 Customization via config files
@@ -20,11 +19,11 @@ You are expected to keep one configuration file for per machine / cluster where
 warning similar to::
 
    WARNING: Missing a configuration file describing compilers and flags. Create one at either of the following paths to avoid future warnings:
-      /home/docs/.config/snek5000/<hostname>.yml
-      /home/docs/.config/snek5000.yml
-      /home/docs/src/snek5000/snek5000-canonical/src/snek5000_canonical/etc/<hostname>.yml
-   INFO     Using default configuration for now:
-      /home/docs/src/snek5000/snek5000/src/snek5000/assets/default_configfile.yml
+   /home/docs/.config/snek5000/<hostname>.yml
+   /home/docs/.config/snek5000.yml
+   /home/docs/src/snek5000/snek5000-canonical/src/snek5000_canonical/etc/<hostname>.yml
+   Using default configuration for now:
+   /home/docs/src/snek5000/snek5000/src/snek5000/resources/default_configfile.yml
 
 As the warnings suggest, there are three possible paths where you can save your configuration:
 

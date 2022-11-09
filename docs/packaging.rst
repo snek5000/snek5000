@@ -94,7 +94,7 @@ case.
 src/snek5000_canonical/templates/__init__.py
 --------------------------------------------
 
-Define your own Jinja templates or re-purpose them from :mod:`snek5000.assets`
+Define your own Jinja templates or re-purpose them from :mod:`snek5000.resources`
 if you may.
 
 .. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/templates/__init__.py
