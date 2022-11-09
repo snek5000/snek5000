@@ -57,7 +57,9 @@ print("sys.path =\n   ", "\n    ".join(sys.path))
 project = "snek5000"
 _meta = metadata.metadata(project)
 _today = date.today()
-copyright = f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
+copyright = (
+    f"2019 - {_today.year}, Ashwin Vishnu Mohanan. Published: {_today.isoformat()}"
+)
 author = "Ashwin Vishnu Mohanan"
 
 version = ".".join(snek5000.__version__.split(".")[:3])
@@ -160,9 +162,7 @@ try:
             f"Using old Doxygen XML output... Remove {timestamp} to force doxygen build."
         )
 except FileNotFoundError:
-    print(
-        "Can not find doxygen to generate the documentation of the Fortran code."
-    )
+    print("Can not find doxygen to generate the documentation of the Fortran code.")
 else:
     # -- Breathe configuration ---------------------------------------------------
     extensions.append("breathe")
@@ -258,9 +258,7 @@ html_context = {
     ],
 }
 # -- Options for Intersphinx -------------------------------------------------
-intersphinx_mapping = runpy.run_path("ls_intersphinx_targets.py")[
-    "intersphinx_mapping"
-]
+intersphinx_mapping = runpy.run_path("ls_intersphinx_targets.py")["intersphinx_mapping"]
 
 # -- Other options ------------------------------------------------------------
 autosummary_generate = True
@@ -308,3 +306,4 @@ myst_enable_extensions = [
     "substitution",
     "tasklist",
 ]
+myst_heading_anchors = 3
