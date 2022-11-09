@@ -160,3 +160,9 @@ ax.set(
     title=f"Taylor-Green vortex: evolution of K.E. and enstrophy. Re={-sim.params.nek.velocity.viscosity}"
 );
 ```
+
+## Versions used in this tutorial
+
+```{code-cell}
+!snek5000-info
+```

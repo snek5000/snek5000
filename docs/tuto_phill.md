@@ -156,16 +156,5 @@ are saved in directories "session_00", "session_01", etc.
 ## Versions used in this tutorial
 
 ```{code-cell}
-import snakemake
-snakemake.__version__
-```
-
-```{code-cell}
-import snek5000
-snek5000.__version__
-```
-
-```{code-cell}
-import phill
-phill.__version__
+!snek5000-info
 ```

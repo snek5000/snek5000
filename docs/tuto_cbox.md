@@ -162,11 +162,5 @@ field.temperature.mean('x').plot();
 ## Versions used in this tutorial
 
 ```{code-cell}
-import snakemake
-snakemake.__version__
-```
-
-```{code-cell}
-import snek5000
-snek5000.__version__
+!snek5000-info
 ```
