@@ -381,8 +381,6 @@ class Output(OutputCore):
             self.package = get_solver_package(self.name_solver)
 
         self.path_solver_package = self.get_path_solver_package()
-        # Check configfile early
-        self.find_configfile()
 
         if sim:
             self.oper = sim.oper
