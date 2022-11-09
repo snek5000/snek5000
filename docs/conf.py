@@ -33,6 +33,10 @@ import breathe
 import snek5000
 from snek5000 import util
 
+from snek5000.config import ensure_config_file
+
+ensure_config_file()
+
 
 def root(module):
     return os.fspath(Path(module.__file__).parent)

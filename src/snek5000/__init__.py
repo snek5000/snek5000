@@ -25,6 +25,7 @@ API reference
    make
    operators
    params
+   config
 
 """
 
