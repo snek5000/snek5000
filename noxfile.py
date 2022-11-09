@@ -152,16 +152,18 @@ def _prepare_docs_session(session):
 @nox.session
 def docs(session):
     """Build documentation using Sphinx."""
-    args = _prepare_docs_session(session)
-    session.run("python", "-m", "sphinx", "-b", "html", *args)  # Same as sphinx-build
+    source, output = _prepare_docs_session(session)
+    session.run(
+        "python", "-m", "sphinx", "-b", "html", source, output
+    )  # Same as sphinx-build
     print("Build finished.")
-    print(f"file://{args[0]}/index.html")
+    print(f"file://{output}/index.html")
 
 
 @nox.session(name="docs-autobuild")
 def docs_autobuild(session):
     """Build documentation using sphinx-autobuild."""
-    args = _prepare_docs_session(session)
+    source, output = _prepare_docs_session(session)
     session.run(
         "python",
         "-m",
@@ -170,10 +172,11 @@ def docs_autobuild(session):
         "../src",
         "--re-ignore",
         r"(_build|generated)\/.*",
-        *args,
+        source,
+        output,
     )  # Same as sphinx-autobuild
     print("Build finished.")
-    print(f"file://{args[0]}/index.html")
+    print(f"file://{output}/index.html")
 
 
 @no_venv_session
