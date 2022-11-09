@@ -7,6 +7,10 @@
 maxdepth: 1
 ---
 
+history_points
+
+
+
 ```
 
 ## For developer of Snek5000 solvers
@@ -16,6 +20,8 @@ maxdepth: 1
 maxdepth: 1
 ---
 
+
+
 ```
 
 ## For developer / maintainer of Snek5000 package
@@ -24,5 +30,7 @@ maxdepth: 1
 ---
 maxdepth: 1
 ---
+
+
 
 ```

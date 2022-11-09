@@ -1,7 +1,6 @@
 """Interface for Nek5000 history points
 
 """
-
 from io import StringIO
 
 import matplotlib.pyplot as plt
@@ -62,6 +61,33 @@ class HistoryPoints:
         )
         params.output.history_points._record_nek_user_params(
             {"write_interval": INDEX_USERPARAM_HISTORY_POINTS}
+        )
+        params.output.history_points._set_doc(
+            f"""
+User parameter for history_points (subroutine hpts):
+
+- ``coords``: list[tuple[float, float]] for 2D or list[tuple[float, float, float]] for 3D
+
+   Coordinates of probes which gets written into the *.his file. Serves as input
+   array for subroutine `hpts()` in Nek5000.
+
+- ``write_interval``: int
+
+   Interval to invoke `hpts()` subroutine. Gets recorded as user parameter number
+   {INDEX_USERPARAM_HISTORY_POINTS}. This should be coupled within `userchk()` subroutine
+   as follows:
+
+   .. code-block:: fortran
+
+      integer nit_hist
+
+      nit_hist = abs(UPARAM(10))
+      if (lhis.gt.1) then
+          if (mod(ISTEP,nit_hist).eq.0) then
+              call hpts()
+          endif
+      endif
+"""
         )
 
     def load(self):
