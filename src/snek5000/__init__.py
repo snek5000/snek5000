@@ -7,7 +7,7 @@ API reference
 .. autosummary::
    :toctree:
 
-   assets
+   resources
    output
    solvers
    util
@@ -27,8 +27,10 @@ API reference
    params
 
 """
-from importlib import resources
+
+from importlib import resources as _resources
 import os
+from warnings import warn
 import weakref
 
 from fluiddyn.util import mpi  # noqa: F401
@@ -46,7 +48,7 @@ def get_nek_source_root():
             "SOURCE_ROOT is deprecated in v19, use NEK_SOURCE_ROOT instead."
         )
 
-    with resources.path(__name__, "__init__.py") as f:
+    with _resources.path(__name__, "__init__.py") as f:
         root = f.parent
 
     nek5000 = os.path.expandvars(
@@ -65,9 +67,7 @@ def get_nek_source_root():
 
 def source_root():
 
-    import warnings
-
-    warnings.warn(
+    warn(
         (
             "Function source_root will be removed on a later release. "
             "Use get_nek_source_root instead."
@@ -80,11 +80,28 @@ def source_root():
 
 def get_asset(asset_name):
     """Fetches path of an asset from subpackage ``snek5000.assets``."""
+
+    warn(
+        (
+            "Function get_asset will be removed on a later release. "
+            "Use get_snek_resource instead. Also replace "
+            '`jinja2.PackageLoader("snek5000", "assets")` '
+            'by `jinja2.PackageLoader("snek5000", "resources")` '
+            "in the source of your snek5000 solver."
+        ),
+        DeprecationWarning,
+    )
+
+    return get_snek_resource(asset_name)
+
+
+def get_snek_resource(resource_name):
+    """Fetches path of a file from subpackage ``snek5000.resources``."""
     try:
-        asset = next(resources.path("snek5000.assets", asset_name).gen)
+        path = next(_resources.path("snek5000.resources", resource_name).gen)
     except AttributeError:
-        asset = resources.path("snek5000.assets", asset_name)
-    return asset
+        path = _resources.path("snek5000.resources", resource_name)
+    return path
 
 
 def load_simul(path_dir=".", session_id=None, reader=True):

@@ -24,7 +24,7 @@ from fluidsim_core.params import iter_complete_params
 
 from inflection import underscore
 
-from snek5000 import __version__, get_asset, logger
+from snek5000 import __version__, get_snek_resource, logger
 from snek5000.make import _Nek5000Make
 from snek5000.params import _save_par_file
 from snek5000.solvers import get_solver_package, is_package
@@ -253,7 +253,7 @@ class Output(OutputCore):
         configfile_root = path_solver_package / "etc" / f"{host}.yml"
         configfile_xdg_config_host = xdg_config / f"snek5000/{host}.yml"
         configfile_xdg_config = xdg_config / "snek5000.yml"
-        configfile_default = Path(get_asset("default_configfile.yml"))
+        configfile_default = Path(get_snek_resource("default_configfile.yml"))
 
         custom_configfiles = (
             configfile_xdg_config_host,
@@ -699,7 +699,7 @@ class Output(OutputCore):
         Parameters
         ----------
         template: jinja2.environment.Template
-            Template similar to ``snek5000/assets/compiler_sh.j2``
+            Template similar to ``snek5000/resources/compiler_sh.j2``
         config: dict
             Snakemake configuration
         fp: io.TextIOWrapper

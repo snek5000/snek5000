@@ -52,7 +52,7 @@ def jinja_env():
     import jinja2
 
     env = jinja2.Environment(
-        loader=jinja2.PackageLoader("snek5000", "assets"),
+        loader=jinja2.PackageLoader("snek5000", "resources"),
         undefined=jinja2.StrictUndefined,
     )
     return env

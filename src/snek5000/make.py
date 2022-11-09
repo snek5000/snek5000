@@ -146,8 +146,8 @@ class _Nek5000Make(Make):
         #: ``NEK_SOURCE_ROOT`` is the working directory
         self.path_run = Path(snek5000.get_nek_source_root())
 
-        #: The ``nek5000.smk`` Snakemake file from :mod:`snek5000.assets` is used here
-        self.file = snek5000.get_asset("nek5000.smk")
+        #: The ``nek5000.smk`` Snakemake file from :mod:`snek5000.resources` is used here
+        self.file = snek5000.get_snek_resource("nek5000.smk")
 
         #: A file lock ``nek5000_make_config.yml.lock`` used to prevent race conditions
         self.lock = FileLock(self.path_run / "nek5000_make_config.yml.lock")
