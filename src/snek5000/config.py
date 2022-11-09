@@ -25,6 +25,7 @@ def ensure_config_file():
         print("No user config file found")
         configfile_default = Path(get_snek_resource("default_configfile.yml"))
         print(f"Copying {configfile_default} to {configfile_xdg_config}")
+        configfile_xdg_config.parent.mkdir(exist_ok=True)
         shutil.copyfile(configfile_default, configfile_xdg_config)
     else:
         print(f"Found configuration file {config_files[0]}")

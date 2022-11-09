@@ -5,8 +5,11 @@ from pathlib import Path
 import pytest
 
 from snek5000.output.base import Output, missing_config_filter
+from snek5000.config import ensure_config_file
 
-xdg_config = Path(os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config")))
+xdg_config = Path(
+    os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config"))
+)
 configfile_xdg_config = xdg_config / "snek5000.yml"
 
 
@@ -67,4 +70,15 @@ def test_find_configfile(caplog):
             assert f"{hostname}.yml" in message
             break
     else:
-        raise IOError("Expected a warning message when configuration file is missing")
+        raise IOError(
+            "Expected a warning message when configuration file is missing"
+        )
+
+
+@pytest.mark.skipif(
+    configfile_xdg_config.exists(), reason=f"File {configfile_xdg_config} exists"
+)
+def test_ensure_config_file():
+    ensure_config_file()
+    ensure_config_file()
+    configfile_xdg_config.unlink()
