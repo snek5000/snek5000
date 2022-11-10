@@ -21,7 +21,15 @@ def create_handler(width=None):
 
 handler = create_handler()
 logger = logging.getLogger(__name__)
-logger.addHandler(handler)
+
+# adding a logging.StreamHandler leads to buggy logging
+# see https://github.com/snek5000/snek5000/issues/38
+try:
+    import rich
+except ImportError:
+    pass
+else:
+    logger.addHandler(handler)
 
 
 if os.getenv("SNEK_DEBUG"):
