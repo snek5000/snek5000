@@ -1,5 +1,8 @@
 #!/bin/bash
 set -xe
-snakemake -j1 earth space
-snakemake -j1 --resources="alien=42" earth space
-snakemake -j1 --set-resources="space:alien=42" earth space
+smake() {
+   snakemake -j1 --quiet=all "$@" earth space
+}
+smake
+smake --resources="alien=42"
+smake --set-resources="space:alien=42"
