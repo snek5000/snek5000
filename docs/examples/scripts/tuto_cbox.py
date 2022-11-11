@@ -1,5 +1,4 @@
 import numpy as np
-
 from snek5000_cbox.solver import Simul
 
 params = Simul.create_default_params()
@@ -62,4 +61,4 @@ params.nek.general.write_interval = 50
 params.output.history_points.write_interval = 30
 
 sim = Simul(params)
-sim.make.exec("run_fg", resources={"nproc": 2})
+sim.make.exec("run_fg", set_resources={"nproc": 2})

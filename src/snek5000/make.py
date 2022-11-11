@@ -50,13 +50,17 @@ class Make:
         with change_dir(self.path_run):
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
-    def exec(self, *rules, dryrun=False, keep_incomplete=True, **kwargs):
+    def exec(
+        self, *rules, set_resources=None, dryrun=False, keep_incomplete=True, **kwargs
+    ):
         """Execute snakemake rules in sequence.
 
         Parameters
         ----------
         rules: iterable of str, positional-only
             Snakemake rules to be executed. Default rule is `"run"`
+        set_resources: dict[str, int]
+            Resources to override (see example below).
         dryrun: bool
             Dry run snakemake rules without executing
         keep_incomplete: bool
@@ -79,13 +83,13 @@ class Make:
 
         >>> sim.make.exec('mesh', 'SESSION.NAME')
         >>> sim.make.exec('compile')
-        >>> sim.make.exec('run', resources={'nproc': 4})
+        >>> sim.make.exec('run', set_resources={'nproc': 4})
 
         It is also possible to do the same directly from command line
         by changing to the simulation directory and executing::
 
           snakemake -j1 compile
-          snakemake -j1 --resources nproc=2 run
+          snakemake -j1 --set-resources 'run:nproc=2' run
 
         The flag ``-j`` is short for ``--jobs`` and sets the number of
         threads available for snakemake rules to execute.
@@ -106,6 +110,22 @@ class Make:
         # Default rule
         if not rules:
             rules = ("run",)
+
+        if "resources" in kwargs and not set_resources:
+            warn(
+                (
+                    "Setting `resources` does not have the intended effect. "
+                    "Converting `resources` to `set_resources`. "
+                    "Use `set_resources` instead in the future."
+                ),
+                DeprecationWarning,
+            )
+            set_resources = kwargs.pop("resources")
+
+        if set_resources:
+            overwrite_resources = {rule: set_resources for rule in rules}
+        else:
+            overwrite_resources = None
 
         # Check if rules were passed as a list / tuple (old API)
         first_rule = rules[0]
@@ -131,6 +151,7 @@ class Make:
                 dryrun=dryrun,
                 keep_incomplete=keep_incomplete,
                 log_handler=self.log_handler,
+                overwrite_resources=overwrite_resources,
                 **kwargs,
             )
 

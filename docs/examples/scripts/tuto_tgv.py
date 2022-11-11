@@ -1,6 +1,5 @@
 from snek5000_tgv.solver import Simul
 
-
 params = Simul.create_default_params()
 params.output.sub_directory = "examples_snek/tuto"
 
@@ -17,4 +16,4 @@ params.nek.general.target_cfl = 1.4
 params.nek.general.extrapolation = "OIFS"
 
 sim = Simul(params)
-sim.make.exec("run_fg", resources={"nproc": 2})
+sim.make.exec("run_fg", set_resources={"nproc": 2})
