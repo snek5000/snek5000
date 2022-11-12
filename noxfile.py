@@ -76,7 +76,8 @@ def pip_compile(session, extra):
             "python -m piptools compile --resolver backtracking --quiet "
             f"{in_extra} {in_file} {in_package} "
             f"-o {out_file}"
-        )
+        ),
+        *session.posargs,
     )
 
     session.log(f"Removing absolute paths from {out_file}")
