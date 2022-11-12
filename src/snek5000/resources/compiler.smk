@@ -41,7 +41,7 @@ rule mpiexec:
         f"{config['CASE']}.par",
         "SESSION.NAME",
         "nek5000",
-    log:
+    output:
         "logs/run_" + now() + ".log",
     resources:
         nproc=nproc_available(),
@@ -50,10 +50,10 @@ rule mpiexec:
         end="",
     shell:
         """
-        ln -sf {log} {config[CASE]}.log
+        ln -sf {output} {config[CASE]}.log
         echo "Log file:"
         realpath {config[CASE]}.log
-        {config[MPIEXEC]} -n {resources.nproc} {config[MPIEXEC_FLAGS]} ./nek5000 {params.redirect} {log} {params.end}
+        {config[MPIEXEC]} -n {resources.nproc} {config[MPIEXEC_FLAGS]} ./nek5000 {params.redirect} {output} {params.end}
         echo $PWD
         """
 
