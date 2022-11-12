@@ -89,7 +89,7 @@ class Make:
         by changing to the simulation directory and executing::
 
           snakemake -j1 compile
-          snakemake -j1 --set-resources 'run:nproc=2' run
+          snakemake -j1 --set-resources 'run:nproc=4' run
 
         The flag ``-j`` is short for ``--jobs`` and sets the number of
         threads available for snakemake rules to execute.
