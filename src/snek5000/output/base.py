@@ -784,7 +784,7 @@ class Output(OutputCore):
         """
 
         if mpi.rank == 0:
-            logger.info(f"path_run: {self.path_run}")
+            print(f"path_run: {self.path_run}")
             logger.info(f"session_id: {self.params.session_id}")
 
         # This also calls _save_info_solver_params_xml
