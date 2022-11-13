@@ -41,7 +41,7 @@ from time import perf_counter
 
 command = "python3 examples/scripts/tuto_cbox.py"
 
-print("Running the script tuto_box.py... (It can take few minutes.)")
+print("Running the script tuto_cbox.py... (It can take few minutes.)")
 t_start = perf_counter()
 process = run(
     command.split(), check=True, text=True, stdout=PIPE,  stderr=STDOUT
