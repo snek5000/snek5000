@@ -16,4 +16,4 @@ params.nek.general.target_cfl = 1.4
 params.nek.general.extrapolation = "OIFS"
 
 sim = Simul(params)
-sim.make.exec("run_fg", set_resources={"nproc": 2})
+sim.make.exec("run_fg", nproc=2)

@@ -51,7 +51,13 @@ class Make:
             return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
     def exec(
-        self, *rules, set_resources=None, dryrun=False, keep_incomplete=True, **kwargs
+        self,
+        *rules,
+        set_resources=None,
+        dryrun=False,
+        keep_incomplete=True,
+        nproc=None,
+        **kwargs,
     ):
         """Execute snakemake rules in sequence.
 
@@ -65,6 +71,8 @@ class Make:
             Dry run snakemake rules without executing
         keep_incomplete: bool
             Keep incomplete output files of failed jobs
+        nproc: Optional[int]
+            Number of MPI processes
 
         Notes
         -----
@@ -84,12 +92,13 @@ class Make:
         >>> sim.make.exec('mesh', 'SESSION.NAME')
         >>> sim.make.exec('compile')
         >>> sim.make.exec('run', set_resources={'nproc': 4})
+        >>> sim.make.exec('run_fg', nproc=2)
 
         It is also possible to do the same directly from command line
         by changing to the simulation directory and executing::
 
           snakemake -j1 compile
-          snakemake -j1 --set-resources 'run:nproc=4' run
+          snakemake -j1 --set-resources='run:nproc=4' run
 
         The flag ``-j`` is short for ``--jobs`` and sets the number of
         threads available for snakemake rules to execute.
@@ -121,6 +130,12 @@ class Make:
                 DeprecationWarning,
             )
             set_resources = kwargs.pop("resources")
+
+        if nproc is not None:
+            if set_resources is None:
+                set_resources = {"nproc": nproc}
+            else:
+                set_resources["nproc"] = nproc
 
         if set_resources:
             overwrite_resources = {rule: set_resources for rule in rules}
