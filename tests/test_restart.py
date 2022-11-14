@@ -126,7 +126,7 @@ pymech_issue = (
 
 
 @pytest.mark.slow
-@pytest.mark.xfail(ValueError, reason=pymech_issue)
+@pytest.mark.xfail(NotImplementedError, reason=pymech_issue)
 def test_phys_fields_load_all(sim_executed):
     sim_executed.output.phys_fields.init_reader()
     ds = sim_executed.output.phys_fields.load(index="all")
@@ -134,7 +134,7 @@ def test_phys_fields_load_all(sim_executed):
 
 
 @pytest.mark.slow
-@pytest.mark.xfail(ValueError, reason=pymech_issue)
+@pytest.mark.xfail(NotImplementedError, reason=pymech_issue)
 def test_phys_fields_load_stats(sim_executed):
     sim_executed.output.phys_fields.change_reader("pymech_stats")
     ds = sim_executed.output.phys_fields.load(index="*0")
@@ -146,7 +146,7 @@ def test_phys_fields(sim_executed):
     sim_executed.output.phys_fields.init_reader()
     try:
         ds = sim_executed.output.phys_fields.load()
-    except ValueError:
+    except NotImplementedError:
         pytest.xfail(reason=pymech_issue)
     else:
         assert isinstance(ds, xr.Dataset)
