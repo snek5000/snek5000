@@ -12,15 +12,18 @@ or:
 execute ``make list-sessions```` or ``nox -l`` for a list of sessions.
 
 """
+import os
 import re
 import shlex
 import shutil
+import subprocess
 from functools import partial
 from pathlib import Path
 
 import nox
 
 no_venv_session = partial(nox.session, venv_backend="none")
+PACKAGE = "snek5000"
 
 
 def run_ext(session, cmd):
@@ -208,11 +211,63 @@ def ctags(session):
 
 
 @no_venv_session
-def release(session):
-    """Release clean, build, upload"""
+def testpypi(session):
+    """Release clean, build, upload to TestPyPI"""
     session.notify("release-clean")
     session.notify("release-build")
-    session.notify("release-upload", session.posargs)
+    session.notify("release-upload")
+
+
+@no_venv_session
+def pypi(session):
+    """Release clean, download from TestPyPI, test, upload to PyPI"""
+    session.notify("release-clean")
+    session.notify("download-testpypi")
+    session.notify("release-tests")
+    session.notify("release-upload", ["--repository", "pypi"])
+
+
+@nox.session(name="download-testpypi")
+def download_testpypi(session):
+    """Download from TestPyPI and run tests"""
+    (Path.cwd() / "dist").mkdir()
+    session.chdir("./dist")
+
+    git_tags = subprocess.check_output(
+        ["git", "tag", "--list", "--sort=version:refname"], text=True
+    )
+    latest_version = git_tags.splitlines()[-1]
+    spec = f"{PACKAGE}=={latest_version}"
+    session.run(
+        "python",
+        "-m",
+        "pip",
+        "index",
+        "versions",
+        "--index",
+        "https://test.pypi.org/simple",
+        "--pre",
+        PACKAGE,
+    )
+    session.run(
+        "python",
+        "-m",
+        "pip",
+        "download",
+        "--index",
+        "https://test.pypi.org/simple",
+        "--pre",
+        "--no-deps",
+        spec,
+    )
+
+
+@nox.session(name="release-tests")
+def release_tests(session):
+    """Execute test suite with build / downloaded package in ./dist"""
+    packages = [str(p) for p in Path("./dist").iterdir()]
+    session.install(*packages)
+    tests(session)
 
 
 @no_venv_session(name="release-clean")
@@ -240,7 +295,18 @@ def release_upload(session):
     session.run("twine", "check", "dist/*")
     if session.posargs:
         args = session.posargs
+        api_token = os.getenv("PYPI_TOKEN")
     else:
         args = "--repository", "testpypi"
+        api_token = os.getenv("TEST_PYPI_TOKEN")
 
-    session.run("twine", "upload", *args, "dist/*")
+    # See
+    # https://pypi.org/help/#apitoken and
+    # https://twine.readthedocs.io/en/latest/#environment-variables
+    session.run(
+        "twine",
+        "upload",
+        *args,
+        "dist/*",
+        env={"TWINE_USERNAME": "__token__", "TWINE_PASSWORD": api_token},
+    )
