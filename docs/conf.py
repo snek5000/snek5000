@@ -101,6 +101,7 @@ extensions = [
 nb_execution_mode = "cache"
 # ... except these ipynb files
 nb_execution_excludepatterns = ["ipynb/executed/*"]
+nb_execution_raise_on_error = True
 nb_execution_show_tb = True
 
 # CSS selector which modifies the sphinx-copybutton feature
