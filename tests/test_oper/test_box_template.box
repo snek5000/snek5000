@@ -12,7 +12,9 @@
 #                          with a geometric ratio given by "ratio".
 #                          ( ratio=1 implies uniform spacing )
 #    
-#    Note that the character bcs _must_ have 3 spaces.
+#    Note that the values for "x0 x1 ratio" _must_ be formatted as `.4f`.
+#    
+#    Note that each code for the boundary cond. _must_ have 3 spaces.
 #
 #========================================================
 #
