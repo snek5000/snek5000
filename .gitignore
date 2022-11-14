@@ -67,6 +67,7 @@ dist/
 
 # Jupyter
 .ipynb_checkpoints
+docs/tuto*.ipynb
 
 # Doxygen / Sphinx
 docs/_build

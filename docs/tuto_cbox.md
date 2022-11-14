@@ -1,12 +1,15 @@
 ---
 jupytext:
+  formats: ipynb,md:myst
   text_representation:
+    extension: .md
     format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.14.1
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
+  language: python
   name: python3
-execution:
-  timeout: 300
 ---
 
 <!-- #region tags=[] -->
@@ -35,7 +38,7 @@ which contains:
 In normal life, we would just execute this script with something like
 `python tuto_cbox.py`. However, in this notebook, we need a bit more code:
 
-```{code-cell}
+```{code-cell} ipython3
 from subprocess import run, PIPE, STDOUT
 from time import perf_counter
 
@@ -51,7 +54,7 @@ print(f"Script executed in {perf_counter() - t_start:.2f} s")
 
 The script has now been executed. Let's look at its output.
 
-```{code-cell}
+```{code-cell} ipython3
 lines = process.stdout.split("\n")
 index_step2 = 0
 for line in lines:
@@ -61,7 +64,7 @@ for line in lines:
 print("\n".join(lines[:index_step2+20]))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 index_final_step = 0
 for line in lines[::-1]:
     if line.startswith(" Final time step ="):
@@ -73,7 +76,7 @@ print("\n".join(lines[index_final_step-10:]))
 To "load the simulation", i.e. to recreate a simulation object, we now need to
 extract from the output the path of the directory of the simulation:
 
-```{code-cell}
+```{code-cell} ipython3
 path_run = None
 for line in process.stdout.split("\n"):
     if "path_run: " in line:
@@ -88,7 +91,7 @@ path_run
 
 We can load the simulation:
 
-```{code-cell}
+```{code-cell} ipython3
 from snek5000 import load
 
 sim = load(path_run)
@@ -96,13 +99,13 @@ sim = load(path_run)
 
 then we are able to plot all the history points for one variable like $u_x$,
 
-```{code-cell}
+```{code-cell} ipython3
 sim.output.history_points.plot(key='ux');
 ```
 
 or just one history point:
 
-```{code-cell}
+```{code-cell} ipython3
 sim.output.history_points.plot_1point(
   index_point=0, key='temperature', tmin=600, tmax=800
 );
@@ -110,7 +113,7 @@ sim.output.history_points.plot_1point(
 
 Also we can load the history points data to compute growth rate:
 
-```{code-cell}
+```{code-cell} ipython3
 import numpy as np
 from scipy import stats
 from scipy.signal import argrelmax
@@ -140,8 +143,7 @@ print(f"the growth rate is {growth_rate:.2f}")
 There is also the possibility to load to whole field file in
 [xarray dataset](https://docs.xarray.dev/en/stable/index.html)
 
-```{code-cell}
-
+```{code-cell} ipython3
 field = sim.output.phys_fields.load()
 
 field.temperature.plot();
@@ -149,7 +151,7 @@ field.temperature.plot();
 
 which makes postprocessing of data easier:
 
-```{code-cell}
+```{code-cell} ipython3
 x_new = np.linspace(field.x[0], field.x[-1], field.x.size)
 y_new = np.linspace(field.y[0], field.y[-1], field.y.size)
 
@@ -161,6 +163,6 @@ field.temperature.mean('x').plot();
 
 ## Versions used in this tutorial
 
-```{code-cell}
+```{code-cell} ipython3
 !snek5000-info
 ```
