@@ -61,4 +61,4 @@ params.nek.general.write_interval = 50
 params.output.history_points.write_interval = 30
 
 sim = Simul(params)
-sim.make.exec("run_fg", set_resources={"nproc": 2})
+sim.make.exec("run_fg", nproc=2)
