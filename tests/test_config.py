@@ -75,6 +75,10 @@ def test_find_configfile(caplog):
     configfile_xdg_config.exists(), reason=f"File {configfile_xdg_config} exists"
 )
 def test_ensure_config_file():
+
     ensure_config_file()
     ensure_config_file()
-    configfile_xdg_config.unlink()
+
+    config_file = Output.find_configfile()
+    if config_file.name == "default_configfile.yml":
+        configfile_xdg_config.unlink()
