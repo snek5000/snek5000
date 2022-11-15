@@ -98,7 +98,7 @@ fluiddyn==0.5.1
     #   fluidsim-core
     #   snek5000
     #   snek5000 (setup.cfg)
-fluidsim-core @ https://foss.heptapod.net/fluiddyn/fluidsim/-/archive/branch/default/fluidsim-branch-default.tar.gz#subdirectory=lib
+fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib
     # via
     #   -r requirements/vcs_packages.in
     #   snek5000

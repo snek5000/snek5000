@@ -23,7 +23,7 @@ kernelspec:
 In the previous tutorial we saw how to install the packages and setup a simulation run.
 Let us do it here in one step.
 
-```{code-cell}
+```{code-cell} ipython3
 from phill.solver import Simul
 
 params = Simul.create_default_params()
@@ -45,7 +45,7 @@ params.nek.stat.io_step = 10
 sim = Simul(params)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 !ls {sim.path_run}
 ```
 
@@ -55,7 +55,7 @@ To run the simulation we need to execute certain commands. These are described u
 [snakemake](https://snakemake.rtfd.io) in the Snakefile. Let's look at the rules defined
 in the Snakefile (which are nearly generic for any Nek5000 case).
 
-```{code-cell}
+```{code-cell} ipython3
 sim.make.list()
 ```
 
@@ -81,7 +81,7 @@ During development, it is useful to turn on the debug environment variable.
 
 <!-- #endregion -->
 
-```{code-cell}
+```{code-cell} ipython3
 import os
 os.environ["SNEK_DEBUG"] = "1"
 ```
@@ -105,7 +105,7 @@ which contains:
 In normal life, we would just execute this script with something like
 `python tuto_phill.py`. However, in this notebook, we need a bit more code:
 
-```{code-cell}
+```{code-cell} ipython3
 from subprocess import run, PIPE, STDOUT
 from time import perf_counter
 
@@ -121,7 +121,7 @@ print(f"Script executed in {perf_counter() - t_start:.2f} s")
 
 The simulation is done! Let's look at its output:
 
-```{code-cell}
+```{code-cell} ipython3
 lines = [
     line for line in process.stdout.split("\n")
     if not line.endswith(", errno = 1")
@@ -129,10 +129,10 @@ lines = [
 print("\n".join(lines))
 ```
 
-To "load the simulation", i.e. to recreate a simulation object, we now need to
-extract from the output the path of the directory of the simulation:
+To "load the simulation", i.e. to recreate a simulation object, we now need to extract
+from the output the path of the directory of the simulation:
 
-```{code-cell}
+```{code-cell} ipython3
 path_run = None
 for line in lines:
     if "path_run: " in line:
@@ -145,19 +145,65 @@ path_run
 
 Let's look at the files in the directory of the simulation
 
-```{code-cell}
+```{code-cell} ipython3
 !ls {path_run}
 ```
 
-In Snek5000, we have the notion of sessions (used for restarts) and some files
-are saved in directories "session_00", "session_01", etc.
+In Snek5000, we have the notion of sessions (used for restarts) and some files are saved
+in directories "session_00", "session_01", etc.
 
-```{code-cell}
+```{code-cell} ipython3
 !ls {path_run}/session_00
+```
+
+## Loading the simulation
+
+One can recreate a simulation object from the simulation directory.
+
+```{code-cell} ipython3
+from snek5000 import load
+
+sim = load(path_run)
+```
+
+## Read/plot state and stat files
+
+We saw that the directory `session_00` contains a state file (`phill0.f00001`) and a
+`sts` file (`stsphill0.f00001`).
+
+Snek5000 has different methods to load these files. With the phill solver, the mesh is
+not regular and we can only get the fields as hexahedral data.
+
+```{code-cell} ipython3
+hexa_data = sim.output.phys_fields.read_hexadata(index=-1)
+hexa_data
+```
+
+```{code-cell} ipython3
+sim.output.phys_fields.plot_hexa()
+```
+
+We can also do the same for the data produced by the KTH toolbox.
+
+```{code-cell} ipython3
+hexa_data_stat = sim.output.phys_fields.read_hexadata_stat(index=-1)
+hexa_data_stat
+```
+
+The elements contain a `scal` array corresponding to the 44 fields computed by the KTH
+toolbox (see
+https://github.com/KTH-Nek5000/KTH_Toolbox/blob/master/tools/stat/field_list.txt).
+
+```{code-cell} ipython3
+hexa_data_stat.elem[0].scal.shape
+```
+
+```{code-cell} ipython3
+sim.output.phys_fields.plot_hexa_stat(key="scalar 8", vmin=-0.4, vmax=0.4)
 ```
 
 ## Versions used in this tutorial
 
-```{code-cell}
+```{code-cell} ipython3
 !snek5000-info
 ```

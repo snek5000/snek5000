@@ -73,8 +73,8 @@ for line in lines[::-1]:
 print("\n".join(lines[index_final_step-10:]))
 ```
 
-To "load the simulation", i.e. to recreate a simulation object, we now need to
-extract from the output the path of the directory of the simulation:
+To "load the simulation", i.e. to recreate a simulation object, we now need to extract
+from the output the path of the directory of the simulation:
 
 ```{code-cell} ipython3
 path_run = None
