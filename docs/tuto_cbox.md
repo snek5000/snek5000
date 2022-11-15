@@ -107,7 +107,7 @@ or just one history point:
 
 ```{code-cell} ipython3
 sim.output.history_points.plot_1point(
-  index_point=0, key='temperature', tmin=600, tmax=800
+  index_point=0, key='temperature', tmin=400, tmax=800
 );
 ```
 
@@ -119,11 +119,14 @@ from scipy import stats
 from scipy.signal import argrelmax
 
 coords, df = sim.output.history_points.load()
+```
+
+```{code-cell} ipython3
 df_point = df[df.index_points == 12]
 time = df_point["time"].to_numpy()
 ux = df_point["ux"].to_numpy()
 
-indx = np.where(time > 700)[0][0]
+indx = np.where(time > 450)[0][0]
 time = time[indx:]
 ux = ux[indx:]
 signal = ux
@@ -137,7 +140,7 @@ slope, intercept, r_value, p_value, std_err = stats.linregress(
 )
 
 growth_rate = slope
-print(f"the growth rate is {growth_rate:.2f}")
+print(f"The growth rate is {growth_rate:.2e}")
 ```
 
 There is also the possibility to load to whole field file in
