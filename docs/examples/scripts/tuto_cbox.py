@@ -49,16 +49,16 @@ params.oper.max.hist = len(coords) + 1
 params.nek.velocity.residual_tol = 1e-08
 params.nek.pressure.residual_tol = 1e-05
 
-params.nek.general.end_time = 800
+params.nek.general.end_time = 650
 params.nek.general.stop_at = "endTime"
-params.nek.general.target_cfl = 2.0
+params.nek.general.target_cfl = 1.7
 params.nek.general.time_stepper = "BDF3"
 params.nek.general.extrapolation = "OIFS"
 
 params.nek.general.write_control = "runTime"
 params.nek.general.write_interval = 50
 
-params.output.history_points.write_interval = 30
+params.output.history_points.write_interval = 20
 
 sim = Simul(params)
 sim.make.exec("run_fg", nproc=2)

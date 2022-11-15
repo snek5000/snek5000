@@ -5,16 +5,16 @@ from snek5000_cbox.solver import Simul
 params = Simul.create_default_params()
 
 aspect_ratio = 1.0
-params.prandtl = 0.71
+params.prandtl = 0.1
 
-params.Ra_side = 2.0e8
+params.Ra_side = 2.0e6
 
 params.output.sub_directory = "examples_snek/tuto"
 
 params.oper.dim = 2
 params.oper.nproc_min = 2
 
-nb_elements = ny = 20
+nb_elements = ny = 10
 params.oper.ny = nb_elements
 nx = params.oper.nx = int(nb_elements / aspect_ratio)
 params.oper.nz = int(nb_elements / aspect_ratio)
@@ -58,7 +58,8 @@ params.nek.general.extrapolation = "OIFS"
 params.nek.general.write_control = "runTime"
 params.nek.general.write_interval = 10
 
-params.output.history_points.write_interval = 30
+params.output.history_points.write_interval = 20
 
 sim = Simul(params)
-sim.make.exec('run_fg', resources={"nproc": 2})
+sim.make.exec('run_fg', nproc=2)
+sim.output.phys_fields.animate()

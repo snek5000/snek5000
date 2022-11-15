@@ -107,7 +107,7 @@ or just one history point:
 
 ```{code-cell} ipython3
 sim.output.history_points.plot_1point(
-  index_point=0, key='temperature', tmin=600, tmax=800
+  index_point=0, key='temperature', tmin=500, tmax=650
 );
 ```
 
@@ -123,7 +123,7 @@ df_point = df[df.index_points == 12]
 time = df_point["time"].to_numpy()
 ux = df_point["ux"].to_numpy()
 
-indx = np.where(time > 700)[0][0]
+indx = np.where(time > 550)[0][0]
 time = time[indx:]
 ux = ux[indx:]
 signal = ux
