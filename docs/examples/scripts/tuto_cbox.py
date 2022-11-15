@@ -7,7 +7,7 @@ aspect_ratio = 1.0
 params.prandtl = 0.71
 
 # The onset of oscillatory flow for aspect ratio 1.0 is at Ra_c = 1.825e8
-params.Ra_side = 1.86e8
+params.Ra_side = 1.94e8
 
 params.output.sub_directory = "examples_snek/tuto"
 
@@ -17,11 +17,9 @@ params.oper.nproc_min = 2
 nb_elements = ny = 8
 params.oper.ny = nb_elements
 nx = params.oper.nx = int(nb_elements / aspect_ratio)
-params.oper.nz = int(nb_elements / aspect_ratio)
 
 Ly = params.oper.Ly
 Lx = params.oper.Lx = Ly / aspect_ratio
-Lz = params.oper.Lz = Ly / aspect_ratio
 
 order = params.oper.elem.order = params.oper.elem.order_out = 8
 
@@ -49,7 +47,7 @@ params.oper.max.hist = len(coords) + 1
 params.nek.velocity.residual_tol = 1e-08
 params.nek.pressure.residual_tol = 1e-05
 
-params.nek.general.end_time = 800
+params.nek.general.end_time = 600
 params.nek.general.stop_at = "endTime"
 params.nek.general.target_cfl = 2.0
 params.nek.general.time_stepper = "BDF3"
@@ -58,7 +56,8 @@ params.nek.general.extrapolation = "OIFS"
 params.nek.general.write_control = "runTime"
 params.nek.general.write_interval = 50
 
-params.output.history_points.write_interval = 30
+params.output.history_points.write_interval = 10
 
-sim = Simul(params)
-sim.make.exec("run_fg", nproc=2)
+if __name__ == "__main__":
+    sim = Simul(params)
+    sim.make.exec("run_fg", nproc=2)
