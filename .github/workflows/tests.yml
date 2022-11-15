@@ -46,7 +46,7 @@ jobs:
 
     - name: Run tests
       run: |
-        nox --session tests-cov -- -v -s --runslow
+        nox --session tests-cov -- -v -s --runslow --cov-report=xml
 
     - name: Upload coverage to codecov
       if: ${{ success() }}
