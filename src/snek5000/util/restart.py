@@ -5,7 +5,10 @@
 import os
 from enum import Enum
 from pathlib import Path
+import sys
 from warnings import warn
+
+from fluidsim_core.scripts.restart import RestarterABC
 
 from ..log import logger
 from ..output import _make_path_session, _parse_path_run_session_id
@@ -168,7 +171,7 @@ def load_for_restart(
     session_id: int
         Indicate which session directory should be used to look for restart files.
         If not specified it would default to the `path_session` value last
-        recorded in the `params_simul.xml` file
+        recorded in the `params_simul.xml` file.
 
     verify_contents: bool
         Verify directory contents to avoid runtime errors.
@@ -270,3 +273,98 @@ def load_for_restart(
     params.NEW_DIR_RESULTS = False
 
     return params, Simul
+
+
+class Restarter(RestarterABC):
+    def create_parser(self):
+        parser = super().create_parser()
+
+        parser.add_argument(
+            "-np",
+            "--nb-mpi-procs",
+            type=int,
+            default=4,
+            help="Number of MPI processes",
+        )
+
+        parser.add_argument(
+            "--use-start-from",
+            type=str,
+            default=None,
+            help=(
+                "Name of the field file to restart from. "
+                "Mutually exclusive option with `use_checkpoint`."
+            ),
+        )
+
+        parser.add_argument(
+            "--use-checkpoint",
+            type=int,
+            default=1,
+            help=(
+                "Number of the multi-file checkpoint file set to restart from. "
+                "Mutually exclusive parameter with `use_start_from`."
+            ),
+        )
+
+        parser.add_argument(
+            "--session-id",
+            type=int,
+            default=None,
+            help=(
+                "Indicate which session directory should be used to look for "
+                "restart files. If not specified it would default to the "
+                "`path_session` value last recorded in the `params_simul.xml` file."
+            ),
+        )
+
+        parser.add_argument(
+            "--skip-verify-contents",
+            action="store_true",
+            help="Do not verify directory contents to avoid runtime errors.",
+        )
+
+        return parser
+
+    def _get_params_simul_class(self, args):
+        return load_for_restart(
+            args.path,
+            use_start_from=args.use_start_from,
+            use_checkpoint=args.use_checkpoint,
+            session_id=args.session_id,
+            verify_contents=not args.skip_verify_contents,
+        )
+
+    def _set_params_time_stepping(self, params, args):
+        # TODO
+        pass
+
+    def _start_sim(self, sim, args):
+        sim.make.exec("run_fg", nproc=args.nb_mpi_procs)
+
+    def _check_params_time_stepping(self, params, path_file, args):
+        # TODO
+        pass
+
+
+_restarter = Restarter()
+
+create_parser = _restarter.create_parser
+main = _restarter.restart
+
+if "sphinx" in sys.modules:
+    from textwrap import indent
+    from unittest.mock import patch
+
+    with patch.object(sys, "argv", ["fluidsim-restart"]):
+        parser = create_parser()
+
+    __doc__ += """
+Help message
+------------
+
+.. code-block::
+
+""" + indent(
+        parser.format_help(), "    "
+    )
