@@ -167,5 +167,5 @@ field.temperature.mean('x').plot();
 ## Versions used in this tutorial
 
 ```{code-cell} ipython3
-!snek5000-info
+!snek-info
 ```

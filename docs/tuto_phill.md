@@ -205,5 +205,5 @@ sim.output.phys_fields.plot_hexa_stat(key="scalar 8", vmin=-0.4, vmax=0.4)
 ## Versions used in this tutorial
 
 ```{code-cell} ipython3
-!snek5000-info
+!snek-info
 ```
