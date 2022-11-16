@@ -167,5 +167,5 @@ ax.set(
 ## Versions used in this tutorial
 
 ```{code-cell}
-!snek5000-info
+!snek-info
 ```

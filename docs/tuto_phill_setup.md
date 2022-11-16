@@ -120,5 +120,5 @@ Let's check that the .par, .box and SIZE file are present:
 <!-- #endregion -->
 
 ```{code-cell}
-!snek5000-info
+!snek-info
 ```

@@ -104,6 +104,7 @@ nb_execution_excludepatterns = ["**/*.ipynb", "debug/**/*"]
 nb_execution_raise_on_error = True
 nb_execution_show_tb = True
 nb_execution_timeout = 600
+nb_merge_streams = True
 
 # CSS selector which modifies the sphinx-copybutton feature
 copybutton_selector = ",".join(
