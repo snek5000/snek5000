@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 import xarray as xr
 from pymech.neksuite.field import read_header
@@ -5,7 +7,7 @@ from pymech.neksuite.field import read_header
 import snek5000
 from snek5000.output import _make_path_session
 from snek5000.params import load_params
-from snek5000.util.restart import SnekRestartError, get_status, load_for_restart
+from snek5000.util.restart import SnekRestartError, get_status, load_for_restart, main
 
 
 def test_too_early(sim_data):
@@ -102,6 +104,14 @@ def test_phys_fields_uninit(sim):
         RuntimeError, match="The reader and the method has not initialized yet."
     ):
         sim.output.phys_fields.get_var()
+
+
+def test_restart_command_help():
+    from unittest.mock import patch
+
+    with patch.object(sys, "argv", ["snek-restart", "-h"]):
+        with pytest.raises(SystemExit):
+            main()
 
 
 @pytest.mark.parametrize("reader", (True, "pymech_stats"))
