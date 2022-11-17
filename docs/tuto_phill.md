@@ -166,6 +166,11 @@ from snek5000 import load
 sim = load(path_run)
 ```
 
+```{admonition} Quickly start IPython and load a simulation
+The command `snek-ipy-load` can be used to start a IPython session and load the
+simulation saved in the current directory.
+```
+
 ## Read/plot state and stat files
 
 We saw that the directory `session_00` contains a state file (`phill0.f00001`) and a
