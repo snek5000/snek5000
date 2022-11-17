@@ -5,7 +5,6 @@ from time import perf_counter, sleep
 
 import numpy as np
 from scipy.signal import argrelmax
-
 from snek5000_cbox.solver import Simul
 
 from fluiddyn.util import time_as_str
