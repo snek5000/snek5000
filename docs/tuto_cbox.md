@@ -97,7 +97,12 @@ from snek5000 import load
 sim = load(path_run)
 ```
 
-then we are able to plot all the history points for one variable like $u_x$,
+```{admonition} Quickly start IPython and load a simulation
+The command `snek-ipy-load` can be used to start a IPython session and load the
+simulation saved in the current directory.
+```
+
+Then we are able to plot all the history points for one variable like $u_x$,
 
 ```{code-cell} ipython3
 sim.output.history_points.plot(key='ux');

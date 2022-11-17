@@ -1,9 +1,9 @@
 """Utility for configuration files"""
 
-from pathlib import Path
 import os
-from socket import gethostname
 import shutil
+from pathlib import Path
+from socket import gethostname
 
 from snek5000 import get_snek_resource
 

@@ -100,6 +100,11 @@ from snek5000 import load
 sim = load(path_run)
 ```
 
+```{admonition} Quickly start IPython and load a simulation
+The command `snek-ipy-load` can be used to start a IPython session and load the
+simulation saved in the current directory.
+```
+
 ## Visualize raw data via `sim.output.print_stdout`
 
 In subroutine `userchk` of `tgv.usr.f`, the time stamp, kinetic energy and enstrophy are

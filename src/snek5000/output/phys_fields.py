@@ -7,9 +7,8 @@ files. Loading of data files are managed by the classes in the
 
 """
 
-from fluidsim_core.params import iter_complete_params
 from fluidsim_core.output.phys_fields_snek5000 import PhysFields4Snek5000
-
+from fluidsim_core.params import iter_complete_params
 
 from ..log import logger
 

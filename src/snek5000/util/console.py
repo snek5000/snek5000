@@ -2,15 +2,18 @@
 
 """
 
+from textwrap import dedent
+
 from snek5000.solvers import available_solvers
 
 
 def print_versions():
 
-    import snakemake
     import pymech
-    import fluidsim_core
+    import snakemake
+
     import fluiddyn
+    import fluidsim_core
     import snek5000
 
     versions = {"Package": "Version", "-------": "-------"}
@@ -24,3 +27,21 @@ def print_versions():
 
     names = sorted(set([entry_point.name for entry_point in available_solvers()]))
     print("\nInstalled solvers: " + ", ".join(names))
+
+
+def start_ipython_load_sim():
+    """Start IPython and load a simulation"""
+    from IPython import start_ipython
+
+    argv = ["--matplotlib", "-i", "-c"]
+    code = dedent(
+        """
+        from fluidsim import load
+        print("Loading simulation")
+        sim = load()
+        params = sim.params
+        print("`sim` and `params` variables are available")
+    """
+    )
+    argv.append("; ".join(code.strip().split("\n")))
+    start_ipython(argv=argv)
