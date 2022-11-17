@@ -10,7 +10,6 @@ import pandas as pd
 
 from fluiddyn.util.util import modification_date
 from snek5000 import mpi
-from snek5000.log import logger
 
 # Uses awkupy
 # %load_ext iawk
