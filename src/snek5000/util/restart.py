@@ -3,9 +3,9 @@
 
 """
 import os
+import sys
 from enum import Enum
 from pathlib import Path
-import sys
 from warnings import warn
 
 from fluidsim_core.scripts.restart import RestarterABC
