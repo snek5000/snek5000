@@ -324,6 +324,26 @@ class Restarter(RestarterABC):
             help="Do not verify directory contents to avoid runtime errors.",
         )
 
+        parser.add_argument(
+            "--add-to-end-time",
+            type=float,
+            default=None,
+            help="Time added to params.nek.general.end_time",
+        )
+
+        parser.add_argument(
+            "--end-time",
+            type=float,
+            default=None,
+            help="params.nek.general.end_time",
+        )
+        parser.add_argument(
+            "--num-steps",
+            type=int,
+            default=None,
+            help="params.nek.general.num_steps",
+        )
+
         return parser
 
     def _get_params_simul_class(self, args):
