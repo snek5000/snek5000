@@ -98,7 +98,6 @@ User parameter for history_points (subroutine hpts):
             nb_data_lines_read = len(self._data)
 
             size_file = self.path_file.stat().st_size
-            print(f"  {size_file = }")
 
             with open(self.path_file) as file:
                 first_line = file.readline()
@@ -114,9 +113,6 @@ User parameter for history_points (subroutine hpts):
                 + nb_data_lines_read * len(line_data)
             )
             nb_chars_not_read = size_file - nb_chars_read
-
-            print(f"  {nb_chars_not_read = }")
-
             if nb_chars_not_read == 0:
                 return self.coords, self._data
 

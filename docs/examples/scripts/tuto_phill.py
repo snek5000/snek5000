@@ -15,7 +15,7 @@ params.nek.general.num_steps = 10
 params.nek.general.time_stepper = "bdf2"
 params.nek.general.write_interval = 10
 
-params.nek.stat.av_step = 3
+params.nek.stat.av_step = 2
 params.nek.stat.io_step = 10
 
 sim = Simul(params)
