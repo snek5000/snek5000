@@ -23,13 +23,22 @@ kernelspec:
 This example is based on
 [this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045).
 The configuration is a square cavity. The control parameters are Prandtl $= 0.71$ and
-Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$
+Rayleigh $= 2 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$
 probes (history points) to record the variable signals. We will use these probe signals
 in monitoring and postprocessing of the simulation. See
 [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
-for the implementation. The simulation will be carried out with the script
-[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py),
-which contains:
+for the implementation.
+
+The simulation will be carried out with the script
+[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py).
+Note that this script is more complicated than for the previous tutorial. Here,
+we want to demonstrate that it is possible to check what happen in the
+simulation from Python and to stop the simulation depending on its outputs. We
+know that for moderate Rayleigh number, the side wall convection in a box first
+reach a quasi-steady state from which emerges an oscillatory instability. Here,
+we want to stop the simulation as soon as the linear instability starts to
+saturate, i.e. as soon as the growth of the unstable mode becomes slower than
+exponential.
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_cbox.py
@@ -112,7 +121,8 @@ The command `snek-ipy-load` can be used to start a IPython session and load the
 simulation saved in the current directory.
 ```
 
-Then we are able to plot all the history points for one variable like $u_x$,
+Then we are able to plot all the history points for one variable (here the
+temperature),
 
 ```{code-cell} ipython3
 sim.output.history_points.plot(key='temperature');
@@ -145,9 +155,9 @@ cond = times > 400
 times = times[cond]
 signal = signal[cond]
 
-arg_maxima = argrelmax(signal)
-times_maxima = times[arg_maxima]
-signal_maxima = signal[arg_maxima]
+indices_maxima = argrelmax(signal)
+times_maxima = times[indices_maxima]
+signal_maxima = signal[indices_maxima]
 
 ax.plot(times_maxima, signal_maxima, "xr")
 ```

@@ -5,6 +5,7 @@ from time import perf_counter, sleep
 
 import numpy as np
 from scipy.signal import argrelmax
+
 from snek5000_cbox.solver import Simul
 
 from fluiddyn.util import time_as_str
@@ -70,13 +71,16 @@ params.output.history_points.write_interval = 10
 if __name__ == "__main__":
     sim = Simul(params)
 
+    # to save the PID of the simulation (a number associated with the process)
     sim.output.write_snakemake_config(
         custom_env_vars={"MPIEXEC_FLAGS": "--report-pid PID.txt"}
     )
+    # run the simulation in the background (non blocking call)
     sim.make.exec("run", nproc=2)
 
     pid_file = sim.path_run / "PID.txt"
 
+    # we wait for the simulation to be started and the PID file to be created
     n = 0
     while not pid_file.exists():
         sleep(1)
@@ -87,6 +91,9 @@ if __name__ == "__main__":
     with open(pid_file) as file:
         pid = int(file.read().strip())
 
+    # we know the PID of the simulation so we can control it!
+
+    # a simple way to print in stdout and in a file
     path_log_py = sim.path_run / f"log_py_{time_as_str()}.txt"
 
     def print(*args, sep=" ", end="\n", **kwargs):
@@ -97,7 +104,7 @@ if __name__ == "__main__":
     print(f"{pid = }")
 
     def check_running():
-        """Check For the existence of a unix pid."""
+        """Check for the existence of a running process"""
         try:
             os.kill(pid, 0)
         except OSError:
@@ -120,19 +127,23 @@ if __name__ == "__main__":
         if t_last < 500:
             continue
 
-        temperature = np.array(df.temperature)
-        times = np.array(df.time)
+        temperature = df.temperature.to_numpy()
+        times = df.time.to_numpy()
 
         temperature = temperature[times > 500]
         times = times[times > 500]
 
-        arg_maxima = argrelmax(temperature)
-        temp_maxima = abs(temperature[arg_maxima])
+        # we know that there are oscillations growing exponentially
+        # we look for the positive maxima of the signal
+        indices_maxima = argrelmax(temperature)
+        temp_maxima = temperature[indices_maxima]
+        temp_maxima = temp_maxima[temp_maxima > 0]
+
+        # similar to a second order derivative
         diff_maxima = np.diff(np.diff(temp_maxima))
 
-        print(diff_maxima)
-
         if any(diff_maxima < 0):
+            # as soon as the growth starts to saturate
             print(
                 f"Saturation of the instability detected at t = {t_last}\n"
                 "Terminate simulation."
