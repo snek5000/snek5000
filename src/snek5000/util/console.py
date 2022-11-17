@@ -9,10 +9,11 @@ from snek5000.solvers import available_solvers
 
 def print_versions():
 
-    import snakemake
     import pymech
-    import fluidsim_core
+    import snakemake
+
     import fluiddyn
+    import fluidsim_core
     import snek5000
 
     versions = {"Package": "Version", "-------": "-------"}

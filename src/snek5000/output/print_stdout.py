@@ -5,8 +5,8 @@ import re
 from pathlib import Path
 from warnings import warn
 
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from fluiddyn.util.util import modification_date
 from snek5000 import mpi

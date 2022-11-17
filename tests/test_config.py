@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from snek5000.output.base import Output, missing_config_filter
 from snek5000.config import ensure_config_file
+from snek5000.output.base import Output, missing_config_filter
 
 xdg_config = Path(os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config")))
 configfile_xdg_config = xdg_config / "snek5000.yml"

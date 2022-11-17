@@ -10,4 +10,4 @@ notebook in the Jupyter interface should also saved the MyST file!
 
 Note that some files are coupled with a Python script in `docs/examples/scripts`.
 
-[Jupytext]: https://jupytext.readthedocs.io
+[jupytext]: https://jupytext.readthedocs.io
