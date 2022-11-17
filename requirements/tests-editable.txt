@@ -74,7 +74,7 @@ fluiddyn==0.5.1
     #   fluidsim-core
     #   snek5000
     #   snek5000 (setup.cfg)
-fluidsim-core @ https://foss.heptapod.net/fluiddyn/fluidsim/-/archive/branch/default/fluidsim-branch-default.tar.gz#subdirectory=lib
+fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib
     # via
     #   -r requirements/vcs_packages.in
     #   snek5000
@@ -200,10 +200,13 @@ pytest==7.2.0
     # via
     #   pytest-cov
     #   pytest-datadir
+    #   pytest-mock
     #   snek5000 (setup.cfg)
 pytest-cov==4.0.0
     # via snek5000 (setup.cfg)
 pytest-datadir==1.4.1
+    # via snek5000 (setup.cfg)
+pytest-mock==3.10.0
     # via snek5000 (setup.cfg)
 python-dateutil==2.8.2
     # via
