@@ -1,14 +1,13 @@
 import builtins
 import os
 import signal
-from time import sleep, perf_counter
+from time import perf_counter, sleep
 
 import numpy as np
 from scipy.signal import argrelmax
+from snek5000_cbox.solver import Simul
 
 from fluiddyn.util import time_as_str
-
-from snek5000_cbox.solver import Simul
 
 params = Simul.create_default_params()
 
