@@ -22,7 +22,7 @@ warning similar to::
    /home/docs/.config/snek5000/<hostname>.yml
    /home/docs/.config/snek5000.yml
    /home/docs/src/snek5000/snek5000-canonical/src/snek5000_canonical/etc/<hostname>.yml
-   The command `snek5000-config-init` could be used to create a user config file for you.
+   The command `snek-generate-config` could be used to create a user config file for you.
    Using default configuration for now:
    /home/docs/src/snek5000/snek5000/src/snek5000/resources/default_configfile.yml
 

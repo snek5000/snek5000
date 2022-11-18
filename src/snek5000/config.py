@@ -11,7 +11,7 @@ from snek5000 import get_snek_resource
 def ensure_config_file():
     """Ensure that a configuration file is present.
 
-    This function is used by the console script `snek5000-config-init`.
+    This function is used by the console script `snek-generate-config`.
     """
     host = os.getenv("SNIC_RESOURCE", os.getenv("GITHUB_WORKFLOW", gethostname()))
     xdg_config = Path(os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config")))
