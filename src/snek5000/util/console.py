@@ -36,11 +36,13 @@ def start_ipython_load_sim():
     argv = ["--matplotlib", "-i", "-c"]
     code = dedent(
         """
+        import numpy as np
+        import matplotlib.pyplot as plt
         from fluidsim import load
         print("Loading simulation")
         sim = load()
         params = sim.params
-        print("`sim` and `params` variables are available")
+        print("`sim`, `params`, `np` and `plt` variables are available")
     """
     )
     argv.append("; ".join(code.strip().split("\n")))
