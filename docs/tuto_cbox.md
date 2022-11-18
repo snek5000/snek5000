@@ -100,7 +100,7 @@ print("\n".join(lines[:index_step2+20]))
 ```{code-cell} ipython3
 index_final_step = 0
 for line in lines[::-1]:
-    if line.startswith(" Final time step ="):
+    if line.startswith("Step") and ", t= " in line:
         break
     index_final_step -= 1
 print("\n".join(lines[index_final_step-10:]))
@@ -159,7 +159,11 @@ indices_maxima = argrelmax(signal)
 times_maxima = times[indices_maxima]
 signal_maxima = signal[indices_maxima]
 
-ax.plot(times_maxima, signal_maxima, "xr")
+cond = signal_maxima > 0
+times_maxima = times_maxima[cond]
+signal_maxima = signal_maxima[cond]
+
+ax.plot(times_maxima, signal_maxima, "xr");
 ```
 
 Also we can also compute an approximation of the growth rate:
