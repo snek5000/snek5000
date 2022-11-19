@@ -111,6 +111,11 @@ sim.output.phys_fields.animate(
 )
 ```
 
+For example, this movie has been produced by a `sim.output.phys_fields.animate`
+from a snek5000-cbox simulation:
+
+https://user-images.githubusercontent.com/8842662/202872147-4ea3c749-dc63-4a73-98a0-6c787edb9cd3.mp4
+
 Check out the
 [tutorials](https://snek5000.readthedocs.io/en/latest/tutorials.html) to learn
 how to use Snek5000.
