@@ -2,6 +2,8 @@
 ======================
 
 """
+import argparse
+import sys
 from pathlib import Path
 from typing import Iterable
 from warnings import warn
@@ -27,15 +29,30 @@ class Make:
 
     """
 
-    def __init__(self, sim):
-        self.sim = sim
-        self.path_run = sim.output.path_run
-        try:
-            self.file = next(f for f in sim.output.get_paths() if f.name == "Snakefile")
-        except AttributeError:
-            raise AttributeError("Unable to get path of Snakefile via Output class")
-        except StopIteration:
-            raise FileNotFoundError(f"No Snakefile in {self.path_run}")
+    def __init__(self, sim=None, path_run=None):
+
+        if (sim is None and path_run is None) or (
+            sim is not None and path_run is not None
+        ):
+            raise ValueError("Either sim of path_run has to be given.")
+
+        if path_run is None:
+            self.path_run = sim.output.path_run
+            try:
+                self.file = next(
+                    f for f in sim.output.get_paths() if f.name == "Snakefile"
+                )
+            except AttributeError:
+                raise AttributeError("Unable to get path of Snakefile via Output class")
+            except StopIteration:
+                raise FileNotFoundError(f"No Snakefile in {self.path_run}")
+        else:
+            if not path_run.exists():
+                raise FileNotFoundError(f"{path_run} does not exist.")
+            self.path_run = Path(path_run)
+            self.file = self.path_run / "Snakefile"
+            if not self.file.exists():
+                raise FileNotFoundError(f"No Snakefile in {path_run}")
 
         self.log_handler = []
 
@@ -97,6 +114,8 @@ class Make:
         It is also possible to do the same directly from command line
         by changing to the simulation directory and executing::
 
+          snek-make -h
+          snek-make compile
           snakemake -j1 compile
           snakemake -j1 --set-resources='run:nproc=4' run
 
@@ -109,6 +128,7 @@ class Make:
 
         or from command line with::
 
+          snek-make -l
           snakemake --list-target-rules
 
         .. seealso:: Useful Snakemake `command line arguments`_
@@ -255,3 +275,61 @@ class _Nek5000Make(Make):
                 return self.exec(*self.targets, config=config, force_incomplete=True)
             else:
                 return True
+
+
+def snek_make():
+    """Used for the command snek-make"""
+    parser = argparse.ArgumentParser(
+        prog="snek-make",
+        description="Execute Snakemake rules",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+
+    parser.add_argument(
+        "rule",
+        nargs="?",
+        default=None,
+        help="Snakemake rule to be executed.",
+    )
+    parser.add_argument(
+        "-l",
+        "--list-rules",
+        action="store_true",
+        help="List rules and exit.",
+    )
+    parser.add_argument(
+        "-d",
+        "--dry-run",
+        action="store_true",
+        help="Dry run snakemake rules without executing.",
+    )
+    parser.add_argument(
+        "-np",
+        "--nproc",
+        type=int,
+        default=None,
+        help="Number of MPI processes.",
+    )
+    parser.add_argument(
+        "--clean-after-fail",
+        action="store_true",
+        help="Keep incomplete output files of failed jobs.",
+    )
+
+    args = parser.parse_args()
+
+    make = Make(path_run=Path.cwd())
+
+    if args.rule is None:
+        print("You need to specify a rule to be executed")
+
+    if args.list_rules or args.rule is None:
+        make.list()
+        sys.exit(0)
+
+    make.exec(
+        args.rule,
+        dryrun=args.dry_run,
+        keep_incomplete=not args.clean_after_fail,
+        nproc=args.nproc,
+    )
