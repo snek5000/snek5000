@@ -29,7 +29,8 @@ sim = Simul(params)
 
 sim.make.exec("run_fg", nproc=4)
 
-print(f"""You can run:
+print(
+    f"""You can run:
 
 cd {sim.output.path_run}; snek-ipy-load
 
@@ -45,4 +46,5 @@ animate = partial(
 animate(interactive=True)
 animate(save_file="movie.gif")
 
-""")
+"""
+)
