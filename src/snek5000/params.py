@@ -14,8 +14,9 @@ from io import StringIO
 from math import nan
 from pathlib import Path
 
-from fluidsim_core.params import Parameters as _Parameters
 from inflection import camelize, underscore
+
+from fluidsim_core.params import Parameters as _Parameters
 
 from .log import logger
 from .solvers import get_solver_short_name, import_cls_simul

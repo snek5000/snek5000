@@ -21,6 +21,9 @@ coverage_html:
 black:
 	black src tests docs
 
+isort:
+	isort src tests docs
+
 list-sessions:
 	@nox --version 2>/dev/null || pip install nox
 	@$(NOX) -l

@@ -42,12 +42,14 @@ show_missing = true
 exclude_lines = [
     "if __name__ == .__main__.:",
     'if "sphinx" in sys.modules:',
-    "raise ValueError",
+    "raise FileNotFoundError",
     "raise NotImplementedError",
+    "raise ValueError",
     "except KeyError:",
     "except ImportError:",
     "except AttributeError:",
-    "except NotImplementedError:"
+    "except NotImplementedError:",
+    "except StopIteration:",
 ]
 
 [tool.coverage.html]

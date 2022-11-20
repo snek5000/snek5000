@@ -32,7 +32,6 @@ import breathe
 
 import snek5000
 from snek5000 import util
-
 from snek5000.config import ensure_config_file
 
 ensure_config_file()
@@ -100,10 +99,11 @@ extensions = [
 # Execute ipynb files into with a cache ...
 nb_execution_mode = "cache"
 # ... except these ipynb files
-nb_execution_excludepatterns = ["**/*.ipynb"]
+nb_execution_excludepatterns = ["**/*.ipynb", "debug/**/*"]
 nb_execution_raise_on_error = True
 nb_execution_show_tb = True
 nb_execution_timeout = 600
+nb_merge_streams = True
 
 # CSS selector which modifies the sphinx-copybutton feature
 copybutton_selector = ",".join(

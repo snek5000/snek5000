@@ -8,8 +8,9 @@ import math
 import textwrap
 from pathlib import Path
 
-from fluidsim_core.solver import SimulCore
 from inflection import underscore
+
+from fluidsim_core.solver import SimulCore
 
 from .. import logger, mpi
 from ..info import InfoSolverNek

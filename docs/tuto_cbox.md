@@ -23,13 +23,22 @@ kernelspec:
 This example is based on
 [this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045).
 The configuration is a square cavity. The control parameters are Prandtl $= 0.71$ and
-Rayleigh $= 1.86 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$
+Rayleigh $= 2 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$
 probes (history points) to record the variable signals. We will use these probe signals
 in monitoring and postprocessing of the simulation. See
 [this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
-for the implementation. The simulation will be carried out with the script
-[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py),
-which contains:
+for the implementation.
+
+The simulation will be carried out with the script
+[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py).
+Note that this script is more complicated than for the previous tutorial. Here,
+we want to demonstrate that it is possible to check what happen in the
+simulation from Python and to stop the simulation depending on its outputs. We
+know that for moderate Rayleigh number, the side wall convection in a box first
+reach a quasi-steady state from which emerges an oscillatory instability. Here,
+we want to stop the simulation as soon as the linear instability starts to
+saturate, i.e. as soon as the growth of the unstable mode becomes slower than
+exponential.
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_cbox.py
@@ -55,26 +64,11 @@ print(f"Script executed in {perf_counter() - t_start:.2f} s")
 The script has now been executed. Let's look at its output.
 
 ```{code-cell} ipython3
-lines = process.stdout.split("\n")
-index_step2 = 0
-for line in lines:
-    if line.startswith("Step      2, t= "):
-        break
-    index_step2 += 1
-print("\n".join(lines[:index_step2+20]))
+print(process.stdout)
 ```
 
-```{code-cell} ipython3
-index_final_step = 0
-for line in lines[::-1]:
-    if line.startswith(" Final time step ="):
-        break
-    index_final_step -= 1
-print("\n".join(lines[index_final_step-10:]))
-```
-
-To "load the simulation", i.e. to recreate a simulation object, we now need to
-extract from the output the path of the directory of the simulation:
+To "load the simulation", i.e. to recreate a simulation object, we now need to extract
+from the output the path of the directory of the simulation:
 
 ```{code-cell} ipython3
 path_run = None
@@ -87,6 +81,31 @@ if path_run is None:
 path_run
 ```
 
+We can now read the Nek5000 log file.
+
+```{code-cell} ipython3
+from pathlib import Path
+
+path_log = Path(path_run) / "cbox.log"
+lines = path_log.read_text().split("\n")
+
+index_step2 = 0
+for line in lines:
+    if line.startswith("Step      2, t= "):
+        break
+    index_step2 += 1
+print("\n".join(lines[:index_step2+20]))
+```
+
+```{code-cell} ipython3
+index_final_step = 0
+for line in lines[::-1]:
+    if line.startswith("Step") and ", t= " in line:
+        break
+    index_final_step -= 1
+print("\n".join(lines[index_final_step-10:]))
+```
+
 ## Postprocessing
 
 We can load the simulation:
@@ -97,51 +116,68 @@ from snek5000 import load
 sim = load(path_run)
 ```
 
-then we are able to plot all the history points for one variable like $u_x$,
+```{admonition} Quickly start IPython and load a simulation
+The command `snek-ipy-load` can be used to start a IPython session and load the
+simulation saved in the current directory.
+```
+
+Then we are able to plot all the history points for one variable (here the
+temperature),
 
 ```{code-cell} ipython3
-sim.output.history_points.plot(key='ux');
+sim.output.history_points.plot(key='temperature');
+```
+
+```{code-cell} ipython3
+ax = sim.output.history_points.plot(key='temperature')
+ax.set_xlim(left=300)
+ax.set_ylim([0.2, 0.36]);
 ```
 
 or just one history point:
 
 ```{code-cell} ipython3
-sim.output.history_points.plot_1point(
-  index_point=0, key='temperature', tmin=400, tmax=800
-);
-```
+ax = sim.output.history_points.plot_1point(
+  index_point=12, key='temperature', tmin=300, tmax=800
+)
 
-Also we can load the history points data to compute growth rate:
+coords, df = sim.output.history_points.load()
 
-```{code-cell} ipython3
 import numpy as np
 from scipy import stats
 from scipy.signal import argrelmax
 
-coords, df = sim.output.history_points.load()
+df_point = df[df.index_points == 12]
+times = df_point["time"].to_numpy()
+signal = df_point["temperature"].to_numpy()
+
+cond = times > 400
+times = times[cond]
+signal = signal[cond]
+
+indices_maxima = argrelmax(signal)
+times_maxima = times[indices_maxima]
+signal_maxima = signal[indices_maxima]
+
+cond = signal_maxima > 0
+times_maxima = times_maxima[cond]
+signal_maxima = signal_maxima[cond]
+
+ax.plot(times_maxima, signal_maxima, "xr");
 ```
 
+Also we can also compute an approximation of the growth rate:
+
 ```{code-cell} ipython3
-df_point = df[df.index_points == 12]
-time = df_point["time"].to_numpy()
-ux = df_point["ux"].to_numpy()
-
-indx = np.where(time > 450)[0][0]
-time = time[indx:]
-ux = ux[indx:]
-signal = ux
-
-arg_local_max = argrelmax(signal)
-time_local_max = time[arg_local_max]
-signal_local_max = signal[arg_local_max]
-
 slope, intercept, r_value, p_value, std_err = stats.linregress(
-    time_local_max, np.log(signal_local_max)
+    times_maxima, np.log(abs(signal_maxima))
 )
 
 growth_rate = slope
 print(f"The growth rate is {growth_rate:.2e}")
 ```
+
+## Load the flow field as xarray dataset
 
 There is also the possibility to load to whole field file in
 [xarray dataset](https://docs.xarray.dev/en/stable/index.html)
@@ -167,5 +203,5 @@ field.temperature.mean('x').plot();
 ## Versions used in this tutorial
 
 ```{code-cell} ipython3
-!snek5000-info
+!snek-info
 ```

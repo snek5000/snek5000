@@ -14,9 +14,10 @@ Usage example in an IPython console:
    In [3]: sim = Simul(params)
 
 """
-from fluidsim_core.magic import MagicsCore
 from IPython.core.magic import line_magic, magics_class
 from IPython.core.magic_arguments import argument, magic_arguments
+
+from fluidsim_core.magic import MagicsCore
 
 
 @magics_class

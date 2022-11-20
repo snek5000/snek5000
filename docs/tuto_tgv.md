@@ -75,8 +75,8 @@ for line in lines[::-1]:
 print("\n".join(lines[index_final_step-10:]))
 ```
 
-To "load the simulation", i.e. to recreate a simulation object, we now need to
-extract from the output the path of the directory of the simulation:
+To "load the simulation", i.e. to recreate a simulation object, we now need to extract
+from the output the path of the directory of the simulation:
 
 ```{code-cell}
 path_run = None
@@ -98,6 +98,11 @@ We can now load the simulation and process the output.
 from snek5000 import load
 
 sim = load(path_run)
+```
+
+```{admonition} Quickly start IPython and load a simulation
+The command `snek-ipy-load` can be used to start a IPython session and load the
+simulation saved in the current directory.
 ```
 
 ## Visualize raw data via `sim.output.print_stdout`
@@ -167,5 +172,5 @@ ax.set(
 ## Versions used in this tutorial
 
 ```{code-cell}
-!snek5000-info
+!snek-info
 ```
