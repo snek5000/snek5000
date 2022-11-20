@@ -54,5 +54,5 @@ def nproc_available():
         var = "os.cpu_count()"
         nproc = os.cpu_count()
 
-    logger.info(f"Using {var} to detect maximum number of processors available")
+    logger.debug(f"Using {var} to detect maximum number of processors available")
     return nproc
