@@ -31,11 +31,3 @@ To install ParaView package:
   create a virtual environment using the same Python version as in ``pvpython``
   and append the virtual environment's site-packages path to ``sys.path`` or
   environment variable ``$PYTHONPATH``.
-
-
-
-
-
-
-
-
