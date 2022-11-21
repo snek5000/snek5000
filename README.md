@@ -34,7 +34,7 @@ around Nek5000. It uses Nek5000 on the background and is thus NOT a rewrite of
 Nek5000!
 
 Snek5000 is powered by nice Python packages such as [Snakemake], [Fluidsim],
-Matplotlib, Jinja, Pytest, Xarray, etc.
+[Pymech], Matplotlib, Jinja, Pytest, Xarray, etc.
 
 ## Quick start
 
@@ -203,6 +203,7 @@ and submitting patches. See [contributing guidelines](CONTRIBUTING.md).
 
 [cfd]: https://en.wikipedia.org/wiki/Computational_fluid_dynamics
 [fluidsim]: https://fluidsim.readthedocs.io
+[pymech]: https://github.com/eX-Mech/pymech
 [nek5000]: https://nek5000.mcs.anl.gov/
 [parameter container object]: https://fluiddyn.readthedocs.io/en/latest/generated/fluiddyn.util.paramcontainer.html
 [snakemake]: https://snakemake.readthedocs.io
