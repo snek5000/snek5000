@@ -25,11 +25,11 @@ tutorial](https://snek5000.readthedocs.io/en/latest/packaging.html)).
 
 With a Snek5000-Fluidsim solver, it becomes very easy to
 
-- launch/restart simulations with Python scripts
+- launch/restart simulations with Python scripts,
 - load simulations, read the associated parameters/data and produce nice
-  figures/movies
+  figures/movies.
 
-Snek5000 can be seen as a workflow manager for Nek5000 or a thin Python wrapper
+Snek5000 can be seen as a workflow manager for Nek5000 or a Python wrapper
 around Nek5000. It uses Nek5000 on the background and is thus NOT a rewrite of
 Nek5000!
 
@@ -85,14 +85,10 @@ A simulation directory is created automatically (with this example, something
 like
 `~/Sim_data/examples_snek_phill/phill_readme_12x10x8_V1.x1.x1._2022-10-27_15-21-58`).
 Then, the simulation object can be recreated from this directory. An easy way
-would be to go into this directory, start IPython with `ipython --matplotlib`
-and run:
+would be to go into this directory, start IPython with the `snek-ipy-load`
+command, and run:
 
 ```python
-from snek5000 import load
-
-sim = load()
-
 # get/print the simulation parameters from the object
 sim.params
 
