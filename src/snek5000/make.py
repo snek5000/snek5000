@@ -313,7 +313,7 @@ def snek_make():
     parser.add_argument(
         "--clean-after-fail",
         action="store_true",
-        help="Keep incomplete output files of failed jobs.",
+        help="Clean incomplete output files of failed jobs.",
     )
 
     args = parser.parse_args()
