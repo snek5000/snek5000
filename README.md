@@ -203,9 +203,9 @@ and submitting patches. See [contributing guidelines](CONTRIBUTING.md).
 
 [cfd]: https://en.wikipedia.org/wiki/Computational_fluid_dynamics
 [fluidsim]: https://fluidsim.readthedocs.io
-[pymech]: https://github.com/eX-Mech/pymech
 [nek5000]: https://nek5000.mcs.anl.gov/
 [parameter container object]: https://fluiddyn.readthedocs.io/en/latest/generated/fluiddyn.util.paramcontainer.html
+[pymech]: https://github.com/eX-Mech/pymech
 [snakemake]: https://snakemake.readthedocs.io
 [snek5000-cbox]: https://github.com/snek5000/snek5000-cbox
 [snek5000-phill]: https://github.com/snek5000/snek5000-phill
