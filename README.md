@@ -26,7 +26,7 @@ tutorial](https://snek5000.readthedocs.io/en/latest/packaging.html)).
 
 With a Snek5000-Fluidsim solver, it becomes very easy to
 
-- launch/restart simulations with Python scripts,
+- launch/restart simulations with Python scripts and terminal commands,
 - load simulations, read the associated parameters/data and produce nice
   figures/movies.
 
