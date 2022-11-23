@@ -1,8 +1,6 @@
-import os
 import sys
 from concurrent.futures import ProcessPoolExecutor as Pool
 from concurrent.futures import as_completed
-from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
@@ -42,24 +40,14 @@ def test_snek_make_help():
             snek_make()
 
 
-@contextmanager
-def current_dir_changed_to(path):
-    cwd = Path.cwd()
-    os.chdir(path)
-    try:
-        yield
-    finally:
-        os.chdir(cwd)
-
-
-def test_snek_make_no_rule(sim_data):
+def test_snek_make_no_rule(sim_data, monkeypatch):
+    monkeypatch.chdir(sim_data)
     with patch.object(sys, "argv", ["snek-make"]):
         with pytest.raises(SystemExit):
-            with current_dir_changed_to(sim_data):
-                snek_make()
-
-
-def test_snek_make_clean(sim_data):
-    with patch.object(sys, "argv", ["snek-make", "clean"]):
-        with current_dir_changed_to(sim_data):
             snek_make()
+
+
+def test_snek_make_clean(sim_data, monkeypatch):
+    monkeypatch.chdir(sim_data)
+    with patch.object(sys, "argv", ["snek-make", "clean"]):
+        snek_make()

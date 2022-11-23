@@ -26,16 +26,16 @@ tutorial](https://snek5000.readthedocs.io/en/latest/packaging.html)).
 
 With a Snek5000-Fluidsim solver, it becomes very easy to
 
-- launch/restart simulations with Python scripts
+- launch/restart simulations with Python scripts and terminal commands,
 - load simulations, read the associated parameters/data and produce nice
-  figures/movies
+  figures/movies.
 
-Snek5000 can be seen as a workflow manager for Nek5000 or a thin Python wrapper
+Snek5000 can be seen as a workflow manager for Nek5000 or a Python wrapper
 around Nek5000. It uses Nek5000 on the background and is thus NOT a rewrite of
 Nek5000!
 
 Snek5000 is powered by nice Python packages such as [Snakemake], [Fluidsim],
-Matplotlib, Jinja, Pytest, Xarray, etc.
+[Pymech], Matplotlib, Jinja, Pytest, Xarray, etc.
 
 ## Quick start
 
@@ -86,14 +86,10 @@ A simulation directory is created automatically (with this example, something
 like
 `~/Sim_data/examples_snek_phill/phill_readme_12x10x8_V1.x1.x1._2022-10-27_15-21-58`).
 Then, the simulation object can be recreated from this directory. An easy way
-would be to go into this directory, start IPython with `ipython --matplotlib`
-and run:
+would be to go into this directory, start IPython with the `snek-ipy-load`
+command, and run:
 
 ```python
-from snek5000 import load
-
-sim = load()
-
 # get/print the simulation parameters from the object
 sim.params
 
@@ -206,6 +202,7 @@ and submitting patches. See [contributing guidelines](CONTRIBUTING.md).
 [fluidsim]: https://fluidsim.readthedocs.io
 [nek5000]: https://nek5000.mcs.anl.gov/
 [parameter container object]: https://fluiddyn.readthedocs.io/en/latest/generated/fluiddyn.util.paramcontainer.html
+[pymech]: https://github.com/eX-Mech/pymech
 [snakemake]: https://snakemake.readthedocs.io
 [snek5000-cbox]: https://github.com/snek5000/snek5000-cbox
 [snek5000-phill]: https://github.com/snek5000/snek5000-phill
