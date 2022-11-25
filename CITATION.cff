@@ -7,7 +7,7 @@ abstract: |
   for the simulations on the Fortran CFD code Nek5000. With a Snek5000-Fluidsim
   solver, it becomes very easy to (i) launch/restart simulations with Python scripts
   and (ii) load simulations, read the associated parameters/data and
-  produce nice figures/movies"
+  produce nice figures/movies."
 authors:
   - family-names: Mohanan
     given-names: Ashwin Vishnu
