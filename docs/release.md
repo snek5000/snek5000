@@ -62,4 +62,3 @@ For demonstration's sake, we assume that the next version is `$VERSION`.
 [new release]: https://github.com/snek5000/snek5000/releases/new
 [pypi]: https://pypi.org/project/snek5000/
 [testpypi]: https://test.pypi.org/project/snek5000/
-[twine]: https://twine.readthedocs.io/en/latest/
