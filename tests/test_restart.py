@@ -102,6 +102,17 @@ def test_restart_new_dir_results(sim_executed):
     assert params.nek.general.start_from == "init_state.restart"
 
 
+@pytest.mark.slow
+def test_restart_new_dir_results_checkpoint(sim_cbox_executed):
+    params, Simul = load_for_restart(
+        sim_cbox_executed.path_run, use_checkpoint=1, new_dir_results=True
+    )
+    assert params.output.HAS_TO_SAVE
+    assert params.NEW_DIR_RESULTS
+    assert params.nek.chkpoint.chkp_fnumber == 1
+    assert params.nek.chkpoint.read_chkpt is True
+
+
 def test_phys_fields_uninit(sim):
     """Should error if trying to load / get_var without executing init_reader."""
     with pytest.raises(

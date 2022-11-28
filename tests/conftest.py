@@ -131,7 +131,7 @@ def sim_canonical():
     return Simul(params)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def sim_executed():
     from phill.solver import Simul
 
@@ -164,7 +164,7 @@ def unset_snek_debug():
             os.environ["SNEK_DEBUG"] = old_snek_debug
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def sim_cbox_executed():
     from snek5000_cbox.solver import Simul
 

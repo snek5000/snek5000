@@ -221,6 +221,11 @@ def load_for_restart(
             "Options use_start_from and use_checkpoint are mutually exclusive. "
             "Use only one option at a time."
         )
+    elif not use_start_from and not use_checkpoint:
+        raise SnekRestartError(
+            "No restart files were requested. "
+            "This would result in a fresh simulation in a new session."
+        )
     elif use_checkpoint:
         if use_checkpoint in (1, 2) and status in (
             SimStatus.OK,
@@ -273,10 +278,5 @@ def load_for_restart(
                 raise SnekRestartError(
                     f"Restart file {old_path_session / use_start_from} not found"
                 )
-        else:
-            logger.info(
-                "No restart files were requested. "
-                "This would result in a fresh simulation in a new session."
-            )
 
     return params, Simul
