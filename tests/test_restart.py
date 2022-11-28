@@ -91,6 +91,32 @@ def test_restart(sim_executed):
     assert params.output.session_id == params_in_filesystem.output.session_id
 
 
+@pytest.mark.slow
+def test_restart_new_dir_results(sim_executed):
+    params, Simul = load_for_restart(
+        sim_executed.path_run, use_start_from=True, new_dir_results=True
+    )
+    assert params.output.HAS_TO_SAVE
+    assert params.NEW_DIR_RESULTS
+    assert params.nek.general.start_from == "init_state.restart"
+    sim = Simul(params)
+    fld_file = sim_executed.output.get_field_file()
+    sim.create_symlink_start_from_file(fld_file)
+
+
+@pytest.mark.slow
+def test_restart_new_dir_results_checkpoint(sim_cbox_executed):
+    params, Simul = load_for_restart(
+        sim_cbox_executed.path_run, use_checkpoint=1, new_dir_results=True
+    )
+    assert params.output.HAS_TO_SAVE
+    assert params.NEW_DIR_RESULTS
+    assert params.nek.chkpoint.chkp_fnumber == 1
+    assert params.nek.chkpoint.read_chkpt is True
+    sim = Simul(params)
+    sim.create_symlinks_ckeckpoint_files(sim_cbox_executed.output.path_run)
+
+
 def test_phys_fields_uninit(sim):
     """Should error if trying to load / get_var without executing init_reader."""
     with pytest.raises(

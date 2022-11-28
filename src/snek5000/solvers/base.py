@@ -280,6 +280,29 @@ class SimulNek(SimulCore):
             if mpi.rank == 0:
                 logger.warning("No output class initialized!")
 
+    def create_symlinks_ckeckpoint_files(self, path_run):
+        """Create symlinks towards ckeckpoint files"""
+        paths = sorted(Path(path_run).glob("rs6*"))
+        if not paths:
+            raise FileNotFoundError("No restart file in {path_run}")
+        logger.info("Symlinking ckeckpoint files")
+        for src in paths:
+            dest = Path(self.output.path_run) / src.name
+            dest.symlink_to(src)
+
+    def create_symlink_start_from_file(self, path):
+        """Create a symlink towards the start_from file"""
+        path = Path(path)
+        if not path.exists():
+            raise FileNotFoundError(f"{path} does not exist.")
+        path_session = Path(self.output.path_session)
+        path_session.mkdir(exist_ok=True)
+        dest = path_session / self.params.nek.general.start_from
+        if dest.exists():
+            raise FileExistsError(f"{dest} already exists.")
+        logger.info(f"Symlinking {path} -> {dest}")
+        dest.symlink_to(path)
+
 
 Simul = SimulNek
 Simul.__doc__ += """
