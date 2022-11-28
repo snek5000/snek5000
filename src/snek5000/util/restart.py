@@ -366,21 +366,50 @@ class Restarter(RestarterABC):
         )
 
     def _set_params_time_stepping(self, params, args):
-        # TODO
-        pass
+        if args.num_steps is not None:
+            params.nek.general.stop_at == "numSteps"
+            params.nek.general.num_steps = int(args.num_steps)
+        elif args.end_time is not None or args.add_to_end_time is not None:
+            params.nek.general.stop_at = "endTime"
+            if args.end_time is not None:
+                end_time = args.end_time
+            else:
+                end_time = float(params.nek.general.end_time) + args.add_to_end_time
+            params.nek.general.end_time = end_time
 
     def _start_sim(self, sim, args):
         sim.make.exec("run_fg", nproc=args.nb_mpi_procs)
 
     def _check_params_time_stepping(self, params, path_file, args):
-        # TODO
-        pass
+        args_times = [args.num_steps, args.end_time, args.add_to_end_time]
+        if sum(arg is not None for arg in args_times) > 1:
+            raise ValueError(
+                "--add-to-end-time, --end-time and --num-steps are exclusive options."
+            )
+
+        if params.nek.general.stop_at == "numSteps" and args.num_steps is None:
+            raise ValueError(
+                'When params.nek.general.stop_at == "numSteps", '
+                "--num-steps should be given."
+            )
+
+    def _get_path_init_field(self, params, args):
+        if args.use_start_from is not None:
+            path_file = args.use_start_from
+        elif args.use_checkpoint is not None:
+            path_file = args.use_checkpoint
+        print(path_file)
+        return path_file
 
 
 _restarter = Restarter()
 
 create_parser = _restarter.create_parser
-main = _restarter.restart
+
+
+def main():
+    _restarter.restart()
+
 
 if "sphinx" in sys.modules:
     from textwrap import indent
