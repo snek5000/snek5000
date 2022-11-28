@@ -22,4 +22,3 @@ Class _Nek5000Make
 :meth:`snek5000.output.base.Output.build_nek5000` relies on:
 
 .. autoclass:: snek5000.make._Nek5000Make
-

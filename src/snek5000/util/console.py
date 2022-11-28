@@ -38,7 +38,7 @@ def start_ipython_load_sim():
         """
         import numpy as np
         import matplotlib.pyplot as plt
-        from fluidsim import load
+        from snek5000 import load
         print("Loading simulation")
         sim = load()
         params = sim.params

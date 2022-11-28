@@ -15,6 +15,5 @@ CI servers and developers.
 Run:
 
 ```sh
-pip install invoke
-invoke --help
+make list-sessions
 ```

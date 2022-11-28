@@ -68,8 +68,3 @@ then execute:
    :caption: Optional dependencies
 
    install_opt.rst
-
-
-
-
-

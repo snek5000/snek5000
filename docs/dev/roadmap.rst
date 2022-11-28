@@ -29,4 +29,3 @@ Miscellaneous
 -------------
 
 .. todolist::
-

@@ -6,4 +6,3 @@ MPIEXEC: "mpiexec"
 MPIEXEC_FLAGS: "--oversubscribe"
 CFLAGS: "-march=native"
 FFLAGS: "-march=native -mcmodel=medium -std=legacy"
-
