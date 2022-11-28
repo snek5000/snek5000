@@ -144,6 +144,7 @@ def load_for_restart(
     use_checkpoint=None,
     session_id=None,
     verify_contents=True,
+    new_dir_results=False,
 ):
     """Load params and Simul for a restart.
 
@@ -172,6 +173,9 @@ def load_for_restart(
 
     verify_contents: bool
         Verify directory contents to avoid runtime errors.
+
+    new_dir_results: bool (default False)
+        Create a new directory for the new simulation.
 
     Notes
     -----
@@ -217,6 +221,31 @@ def load_for_restart(
             "Options use_start_from and use_checkpoint are mutually exclusive. "
             "Use only one option at a time."
         )
+    elif use_checkpoint:
+        if use_checkpoint in (1, 2) and status in (
+            SimStatus.OK,
+            SimStatus.RESET_CONTENT,
+        ):
+            params.nek.chkpoint.chkp_fnumber = use_checkpoint
+            params.nek.chkpoint.read_chkpt = True
+        else:
+            raise SnekRestartError(
+                f"Restart checkpoint {use_checkpoint} is invalid / does not exist"
+            )
+
+    if hasattr(params, "output") and hasattr(params.output, "HAS_TO_SAVE"):
+        params.output.HAS_TO_SAVE = True
+
+    params.NEW_DIR_RESULTS = bool(new_dir_results)
+
+    if new_dir_results:
+        params.path_run = None
+        params.output.path_session = None
+        params.output.session_id = 0
+        if use_start_from:
+            params.nek.general.start_from = "init_state.restart"
+            # new option Nek5000 master for interpolation on a new mesh
+            # params.nek.general.start_from = "init_state.restart int"
     else:
         if session_id:
             old_path_session = _make_path_session(path, session_id)
@@ -228,45 +257,26 @@ def load_for_restart(
         )
         params.output.session_id = new_session_id
         params.output.path_session = new_path_session
-
         new_path_session.mkdir()
 
-    def make_relative_symlink(file_name):
-        src = new_path_session / file_name
-        dest = f"../{old_path_session.name}/{file_name}"
-        logger.debug(f"Symlinking {src} -> {dest}")
-        src.symlink_to(dest)
+        def make_relative_symlink(file_name):
+            src = new_path_session / file_name
+            dest = f"../{old_path_session.name}/{file_name}"
+            logger.debug(f"Symlinking {src} -> {dest}")
+            src.symlink_to(dest)
 
-    if use_start_from:
-        if (old_path_session / use_start_from).exists():
-            params.nek.general.start_from = use_start_from
-            make_relative_symlink(use_start_from)
+        if use_start_from:
+            if (old_path_session / use_start_from).exists():
+                params.nek.general.start_from = use_start_from
+                make_relative_symlink(use_start_from)
+            else:
+                raise SnekRestartError(
+                    f"Restart file {old_path_session / use_start_from} not found"
+                )
         else:
-            raise SnekRestartError(f"Restart file {use_start_from} not found")
-    elif use_checkpoint:
-        if use_checkpoint in (1, 2) and status in (
-            SimStatus.OK,
-            SimStatus.RESET_CONTENT,
-        ):
-            params.nek.chkpoint.chkp_fnumber = use_checkpoint
-            params.nek.chkpoint.read_chkpt = True
-
-            # NOTE: restart files are written into in path_run and not old_path_session
-            #  for restart_file in old_path_session.glob(f"rs6{short_name}0.f?????"):
-            #      make_relative_symlink(restart_file.name)
-        else:
-            raise SnekRestartError(
-                f"Restart checkpoint {use_checkpoint} is invalid / does not exist"
+            logger.info(
+                "No restart files were requested. "
+                "This would result in a fresh simulation in a new session."
             )
-    else:
-        logger.info(
-            "No restart files were requested. "
-            "This would result in a fresh simulation in a new session."
-        )
-
-    if hasattr(params, "output") and hasattr(params.output, "HAS_TO_SAVE"):
-        params.output.HAS_TO_SAVE = True
-
-    params.NEW_DIR_RESULTS = False
 
     return params, Simul
