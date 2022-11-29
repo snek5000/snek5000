@@ -2,9 +2,12 @@
 ==================
 
 """
+from pathlib import Path
+
 # NOTE: Ideally InfoSolverMake should be used. Here, this won't work because
 # user files are missing.
 # from ..info import InfoSolverMake as _InfoSolver
+from .. import logger
 from ..info import InfoSolverNek as _InfoSolver
 from ..util import docstring_params
 from .base import SimulNek
@@ -95,6 +98,16 @@ class SimulKTH(SimulNek):
             child._autodoc_par(indent=4)
 
         return params
+
+    def create_symlinks_checkpoint_files(self, path_run):
+        """Create symlinks towards checkpoint files"""
+        paths = sorted(Path(path_run).glob("rs6*"))
+        if not paths:
+            raise FileNotFoundError("No restart file in {path_run}")
+        logger.info("Symlinking checkpoint files")
+        for src in paths:
+            dest = Path(self.output.path_run) / src.name
+            dest.symlink_to(src)
 
 
 Simul = SimulKTH

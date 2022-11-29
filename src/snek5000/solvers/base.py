@@ -280,16 +280,6 @@ class SimulNek(SimulCore):
             if mpi.rank == 0:
                 logger.warning("No output class initialized!")
 
-    def create_symlinks_checkpoint_files(self, path_run):
-        """Create symlinks towards checkpoint files"""
-        paths = sorted(Path(path_run).glob("rs6*"))
-        if not paths:
-            raise FileNotFoundError("No restart file in {path_run}")
-        logger.info("Symlinking checkpoint files")
-        for src in paths:
-            dest = Path(self.output.path_run) / src.name
-            dest.symlink_to(src)
-
     def create_symlink_start_from_file(self, path):
         """Create a symlink towards the start_from file"""
         path = Path(path)
