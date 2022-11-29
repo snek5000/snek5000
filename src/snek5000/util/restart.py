@@ -250,12 +250,13 @@ def load_for_restart(
 
     params.NEW_DIR_RESULTS = bool(new_dir_results)
 
+    name_restart_file = "init_state.restart"
     if new_dir_results:
         params.path_run = None
         params.output.path_session = None
         params.output.session_id = 0
         if use_start_from:
-            params.nek.general.start_from = "init_state.restart"
+            params.nek.general.start_from = name_restart_file
             # new option Nek5000 master for interpolation on a new mesh
             # params.nek.general.start_from = "init_state.restart int"
     else:
@@ -274,7 +275,7 @@ def load_for_restart(
 
         def make_relative_symlink(file_name):
             src = f"../{old_path_session.name}/{file_name}"
-            dest = new_path_session / "init_state.restart"
+            dest = new_path_session / name_restart_file
             logger.debug(f"Symlinking {dest} -> {src}")
             dest.symlink_to(src)
 
@@ -288,7 +289,7 @@ def load_for_restart(
                 path_start_from = paths[index_start_from]
                 use_start_from = path_start_from.name
             if path_start_from.exists():
-                params.nek.general.start_from = "init_state.restart"
+                params.nek.general.start_from = name_restart_file
                 make_relative_symlink(use_start_from)
             else:
                 raise SnekRestartError(
