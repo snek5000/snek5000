@@ -34,14 +34,16 @@ class SimStatus(Enum):
         (
             "Reset Content: Multi-file restart found. Some field files exist. "
             "Restarting in the same session would overwrite files. "
-            "Ensure current session is archived or restart in a new session."
+            "Ensure current session is archived or restart in a new session or "
+            "a new directory."
         ),
     )
     PARTIAL_CONTENT = (
         206,
         (
-            "Partial Content: No multi-file restart found. Some field files exist."
-            "Ensure current session is archived or restart in a new session."
+            "Partial Content: No multi-file restart found. Some field files exist. "
+            "Ensure current session is archived or restart in a new session or "
+            "a new directory."
         ),
     )
     NOT_FOUND = (
@@ -148,6 +150,7 @@ def load_for_restart(
     session_id=None,
     verify_contents=True,
     new_dir_results=False,
+    only_check=False,
 ):
     """Load params and Simul for a restart.
 
@@ -265,7 +268,8 @@ def load_for_restart(
         )
         params.output.session_id = new_session_id
         params.output.path_session = new_path_session
-        new_path_session.mkdir()
+        if not only_check:
+            new_path_session.mkdir(exist_ok=True)
 
         def make_relative_symlink(file_name):
             src = new_path_session / file_name
@@ -273,7 +277,7 @@ def load_for_restart(
             logger.debug(f"Symlinking {src} -> {dest}")
             src.symlink_to(dest)
 
-        if use_start_from:
+        if not only_check and use_start_from:
             if (old_path_session / use_start_from).exists():
                 params.nek.general.start_from = use_start_from
                 make_relative_symlink(use_start_from)
@@ -296,27 +300,25 @@ class Restarter(RestarterABC):
             default=4,
             help="Number of MPI processes",
         )
-
         parser.add_argument(
             "--use-start-from",
             type=str,
             default=None,
             help=(
-                "Name of the field file to restart from. "
+                "Name (relative to the session path) of the field file "
+                "to restart from. "
                 "Mutually exclusive option with `use_checkpoint`."
             ),
         )
-
         parser.add_argument(
             "--use-checkpoint",
             type=int,
-            default=1,
+            default=None,
             help=(
                 "Number of the multi-file checkpoint file set to restart from. "
                 "Mutually exclusive parameter with `use_start_from`."
             ),
         )
-
         parser.add_argument(
             "--session-id",
             type=int,
@@ -327,20 +329,17 @@ class Restarter(RestarterABC):
                 "`path_session` value last recorded in the `params_simul.xml` file."
             ),
         )
-
         parser.add_argument(
             "--skip-verify-contents",
             action="store_true",
             help="Do not verify directory contents to avoid runtime errors.",
         )
-
         parser.add_argument(
             "--add-to-end-time",
             type=float,
             default=None,
             help="Time added to params.nek.general.end_time",
         )
-
         parser.add_argument(
             "--end-time",
             type=float,
@@ -357,12 +356,17 @@ class Restarter(RestarterABC):
         return parser
 
     def _get_params_simul_class(self, args):
+        if args.use_start_from is None and args.use_checkpoint is None:
+            logger.error("Either --use-start-from or --use-checkpoint have to be given")
+            sys.exit(1)
         return load_for_restart(
             args.path,
             use_start_from=args.use_start_from,
             use_checkpoint=args.use_checkpoint,
             session_id=args.session_id,
             verify_contents=not args.skip_verify_contents,
+            new_dir_results=args.new_dir_results,
+            only_check=args.only_check,
         )
 
     def _set_params_time_stepping(self, params, args):
@@ -393,12 +397,12 @@ class Restarter(RestarterABC):
                 "--num-steps should be given."
             )
 
-    def _get_path_init_field(self, params, args):
+    def _get_path_restart_file(self, params, args):
         if args.use_start_from is not None:
             path_file = args.use_start_from
         elif args.use_checkpoint is not None:
-            path_file = args.use_checkpoint
-        print(path_file)
+            path_file = f"Use checkpoint files (use_checkpoint={args.use_checkpoint})"
+        logger.info(path_file)
         return path_file
 
 

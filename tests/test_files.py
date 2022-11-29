@@ -57,6 +57,7 @@ def test_next_path_dir_no_suffix(tmpdir):
     # Create a directory
     target = tmpdir / "test_dir"
     target.mkdir()
+    (target / "foo").touch()
 
     assert str(files.next_path(target)) == str(tmpdir / "test_dir_00")
 
@@ -79,6 +80,7 @@ def test_next_path_relative(tmpdir):
     assert files.next_path("session", force_suffix=True) == session_00
 
     session_00.mkdir()
+    (session_00 / "foo").touch()
     int_suffix, session_dir = files.next_path(
         "session", force_suffix=True, return_suffix=True
     )
