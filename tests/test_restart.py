@@ -114,7 +114,7 @@ def test_restart_new_dir_results_checkpoint(sim_cbox_executed):
     assert params.nek.chkpoint.chkp_fnumber == 1
     assert params.nek.chkpoint.read_chkpt is True
     sim = Simul(params)
-    sim.create_symlinks_ckeckpoint_files(sim_cbox_executed.output.path_run)
+    sim.create_symlinks_checkpoint_files(sim_cbox_executed.output.path_run)
 
 
 def test_phys_fields_uninit(sim):
