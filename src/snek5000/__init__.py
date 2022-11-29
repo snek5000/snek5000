@@ -80,7 +80,12 @@ def source_root():
 
 
 def get_asset(asset_name):
-    """Fetches path of an asset from subpackage ``snek5000.assets``."""
+    """Fetches path of an asset from subpackage ``snek5000.assets``.
+
+    .. deprecated:: 0.8.0
+       Use :func:`get_snek_resource` instead
+
+    """
 
     warn(
         (
@@ -97,7 +102,15 @@ def get_asset(asset_name):
 
 
 def get_snek_resource(resource_name):
-    """Fetches path of a file from subpackage ``snek5000.resources``."""
+    """Fetches path of a file from subpackage ``snek5000.resources``.
+
+    Parameters
+    ----------
+    resource_name: str
+
+        Name of a file packaged in :mod:`snek5000.resources`
+
+    """
     try:
         path = next(_resources.path("snek5000.resources", resource_name).gen)
     except AttributeError:
@@ -200,11 +213,12 @@ load_for_restart = (
 
 
 __all__ = [
-    "load_simul",
-    "load",
-    "load_params",
-    "load_for_restart",
     "get_nek_source_root",
-    "logger",
+    "get_snek_resource",
     "get_status",
+    "load",
+    "load_for_restart",
+    "load_params",
+    "load_simul",
+    "logger",
 ]

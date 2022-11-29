@@ -62,5 +62,4 @@ Jinja templates
 .. literalinclude:: ../../src/snek5000/resources/SIZE.j2
     :language: jinja
 
-
 """
