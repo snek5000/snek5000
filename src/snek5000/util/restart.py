@@ -371,7 +371,7 @@ class Restarter(RestarterABC):
 
     def _set_params_time_stepping(self, params, args):
         if args.num_steps is not None:
-            params.nek.general.stop_at == "numSteps"
+            params.nek.general.stop_at = "numSteps"
             params.nek.general.num_steps = int(args.num_steps)
         elif args.end_time is not None or args.add_to_end_time is not None:
             params.nek.general.stop_at = "endTime"
