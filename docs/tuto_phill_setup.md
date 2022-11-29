@@ -52,13 +52,13 @@ Now let us take a look at all the compilation parameters that we can modify. In 
 console the params would also output as follows:
 
 ```{code-cell}
-params
+print(params)
 ```
 
 One can also print only one section:
 
 ```{code-cell}
-params.nek.general
+print(params.nek.general)
 ```
 
 and print some help about some parameters:

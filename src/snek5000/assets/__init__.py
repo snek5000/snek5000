@@ -1,3 +1,8 @@
+""":orphan:
+
+Deprecated sub-package
+
+"""
 import warnings
 
 warnings.warn(

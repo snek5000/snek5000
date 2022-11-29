@@ -68,7 +68,7 @@ User parameter for history_points (subroutine hpts):
 
 - ``coords``: list[tuple[float, float]] for 2D or list[tuple[float, float, float]] for 3D
 
-   Coordinates of probes which gets written into the *.his file. Serves as input
+   Coordinates of probes which gets written into the ``*.his`` file. Serves as input
    array for subroutine `hpts()` in Nek5000.
 
 - ``write_interval``: int
