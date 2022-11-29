@@ -171,9 +171,57 @@ ax.set(
 
 ### Restart to run further
 
+We see that our first simulation was clearly too short. We can use the command line tool
+`snek-restart` to continue the simulation from the last saved file
+(`--use-start-from -1`):
+
 ```{code-cell} ipython3
-!snek-restart . --use-start-from -1 --add-to-end-time 1
+!snek-restart {sim.path_run} --use-start-from -1 --add-to-end-time 4
 ```
+
+The results of the new simulation were saved in a directory `session_01`
+
+```{code-cell} ipython3
+sorted(p.name for p in sim.path_run.iterdir())
+```
+
+which contains:
+
+```{code-cell} ipython3
+sorted(p.name for p in (sim.path_run / "session_01").iterdir())
+```
+
+The log files of the simulations are saved in `logs`:
+
+```{code-cell} ipython3
+paths_log = sorted(sim.path_run.glob("logs/*"))
+[p.name for p in paths_log]
+```
+
+Let's get the "monitor" points from the log of the second simulation:
+
+```{code-cell} ipython3
+path_log_new_simul = paths_log[-1]
+monitor = [
+    line[:-len("monitor")]  # Or in Python >= 3.9, line.removesuffix("monitor")
+    for line in path_log_new_simul.read_text().splitlines()
+    if line.endswith("monitor")
+]
+df_new = pd.DataFrame(
+    ((float(value) for value in line.split()) for line in monitor),
+    columns=("time", "energy", "enstrophy")
+)
+```
+
+We finally plot the new points!
+
+```{code-cell} ipython3
+df_new.plot("time", ["enstrophy", "energy"], ax=ax, logy=True, colormap="Accent", style=".-")
+ax.figure
+```
+
+Note that we use for this tutorial very small and coarse simulations, which explain the
+differences between our results and the reference!
 
 ## Versions used in this tutorial
 

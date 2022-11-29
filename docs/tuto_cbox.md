@@ -31,14 +31,13 @@ for the implementation.
 
 The simulation will be carried out with the script
 [docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py).
-Note that this script is more complicated than for the previous tutorial. Here,
-we want to demonstrate that it is possible to check what happen in the
-simulation from Python and to stop the simulation depending on its outputs. We
-know that for moderate Rayleigh number, the side wall convection in a box first
-reach a quasi-steady state from which emerges an oscillatory instability. Here,
-we want to stop the simulation as soon as the linear instability starts to
-saturate, i.e. as soon as the growth of the unstable mode becomes slower than
-exponential.
+Note that this script is more complicated than for the previous tutorial. Here, we want
+to demonstrate that it is possible to check what happen in the simulation from Python
+and to stop the simulation depending on its outputs. We know that for moderate Rayleigh
+number, the side wall convection in a box first reach a quasi-steady state from which
+emerges an oscillatory instability. Here, we want to stop the simulation as soon as the
+linear instability starts to saturate, i.e. as soon as the growth of the unstable mode
+becomes slower than exponential.
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_cbox.py
@@ -121,8 +120,7 @@ The command `snek-ipy-load` can be used to start a IPython session and load the
 simulation saved in the current directory.
 ```
 
-Then we are able to plot all the history points for one variable (here the
-temperature),
+Then we are able to plot all the history points for one variable (here the temperature),
 
 ```{code-cell} ipython3
 sim.output.history_points.plot(key='temperature');
