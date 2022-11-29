@@ -6,6 +6,7 @@ import os
 import sys
 from enum import Enum
 from pathlib import Path
+from textwrap import dedent
 from warnings import warn
 
 from fluidsim_core.scripts.restart import RestarterABC
@@ -164,9 +165,9 @@ def load_for_restart(
         data in the current directory.  Can be an absolute path, a relative path,
         or even simply just the name of the directory under $FLUIDSIM_PATH.
 
-    use_start_from: str
-        Name of the field file to restart from. Mutually exclusive option with
-        ``use_checkpoint``.
+    use_start_from: str or int
+        Name or index of the field file to restart from. Mutually exclusive option
+        with ``use_checkpoint``.
 
     use_checkpoint: int, {1, 2}
         Number of the multi-file checkpoint file set to restart from. Mutually
@@ -272,14 +273,22 @@ def load_for_restart(
             new_path_session.mkdir(exist_ok=True)
 
         def make_relative_symlink(file_name):
-            src = new_path_session / file_name
-            dest = f"../{old_path_session.name}/{file_name}"
-            logger.debug(f"Symlinking {src} -> {dest}")
-            src.symlink_to(dest)
+            src = f"../{old_path_session.name}/{file_name}"
+            dest = new_path_session / "init_state.restart"
+            logger.debug(f"Symlinking {dest} -> {src}")
+            dest.symlink_to(src)
 
         if not only_check and use_start_from:
-            if (old_path_session / use_start_from).exists():
-                params.nek.general.start_from = use_start_from
+            try:
+                index_start_from = int(use_start_from)
+            except ValueError:
+                path_start_from = old_path_session / use_start_from
+            else:
+                paths = sorted(old_path_session.glob(f"{short_name}0.*"))
+                path_start_from = paths[index_start_from]
+                use_start_from = path_start_from.name
+            if path_start_from.exists():
+                params.nek.general.start_from = "init_state.restart"
                 make_relative_symlink(use_start_from)
             else:
                 raise SnekRestartError(
@@ -354,6 +363,14 @@ class Restarter(RestarterABC):
         )
 
         return parser
+
+    _str_command_after_simul = dedent(
+        """
+        # To visualize with IPython:
+
+        cd {path_run}; snek-ipy-load
+    """
+    )
 
     def _get_params_simul_class(self, args):
         if args.use_start_from is None and args.use_checkpoint is None:

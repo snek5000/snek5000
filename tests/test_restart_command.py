@@ -43,7 +43,7 @@ def test_restart_command_only_init(sim_cbox_executed):
         sim_cbox_executed.output.path_run,
         "-oi",
         "--use-start-from",
-        "cbox0.f00001",
+        "-1",
         "--new-dir-results",
         "--end-time",
         "0.015",

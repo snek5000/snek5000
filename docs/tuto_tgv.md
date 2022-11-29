@@ -34,7 +34,7 @@ which contains:
 In normal life, we would just execute this script with something like
 `python tuto_tgv.py`. However, in this notebook, we need a bit more code:
 
-```{code-cell}
+```{code-cell} ipython3
 from subprocess import run, PIPE, STDOUT
 from time import perf_counter
 
@@ -50,7 +50,7 @@ print(f"Script executed in {perf_counter() - t_start:.2f} s")
 
 The script has now been executed. Let's look at its output:
 
-```{code-cell}
+```{code-cell} ipython3
 lines = [
     line for line in process.stdout.split("\n")
     if not line.endswith(", errno = 1")
@@ -65,7 +65,7 @@ for line in lines:
 print("\n".join(lines[:index_step2+20]))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 index_final_step = 0
 for line in lines[::-1]:
     if line.startswith(" Final time step ="):
@@ -78,7 +78,7 @@ print("\n".join(lines[index_final_step-10:]))
 To "load the simulation", i.e. to recreate a simulation object, we now need to extract
 from the output the path of the directory of the simulation:
 
-```{code-cell}
+```{code-cell} ipython3
 path_run = None
 for line in lines:
     if "path_run: " in line:
@@ -94,7 +94,7 @@ We can now load the simulation and process the output.
 
 <!-- #endregion -->
 
-```{code-cell}
+```{code-cell} ipython3
 from snek5000 import load
 
 sim = load(path_run)
@@ -112,7 +112,7 @@ output into standard output, with a keyword `monitor` at the end of the line. We
 regular expressions to extract these lines. If you are new to regular expressions, this
 website can help you <https://regex101.com/>.
 
-```{code-cell}
+```{code-cell} ipython3
 import re
 
 monitor = re.findall('(.*)monitor$', sim.output.print_stdout.text, re.MULTILINE)
@@ -122,7 +122,7 @@ monitor
 It is also possible to achieve the same using Python's string manipulation and list
 comprehension:
 
-```{code-cell}
+```{code-cell} ipython3
 monitor = [
     line[:-len("monitor")]  # Or in Python >= 3.9, line.removesuffix("monitor")
     for line in sim.output.print_stdout.text.splitlines()
@@ -130,7 +130,7 @@ monitor = [
 ]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 import pandas as pd
 
 df = pd.DataFrame(
@@ -142,7 +142,7 @@ df.head()
 
 ### Reference data
 
-```{code-cell}
+```{code-cell} ipython3
 ref = pd.read_csv(
     "examples/snek5000-tgv/ref_data_spectral_code.csv",
     sep=" ",
@@ -154,7 +154,7 @@ ref.head()
 
 ### Result
 
-```{code-cell} tags=[]
+```{code-cell} ipython3
 ax = df.plot("time", ["enstrophy", "energy"], logy=True, colormap="Accent")
 ref.plot(
     "time",
@@ -169,8 +169,14 @@ ax.set(
 );
 ```
 
+### Restart to run further
+
+```{code-cell} ipython3
+!snek-restart . --use-start-from -1 --add-to-end-time 1
+```
+
 ## Versions used in this tutorial
 
-```{code-cell}
+```{code-cell} ipython3
 !snek-info
 ```
