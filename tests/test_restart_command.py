@@ -2,7 +2,9 @@ import sys
 from unittest.mock import patch
 
 import pytest
+from pymech.neksuite.field import read_header
 
+from snek5000 import load
 from snek5000.util.restart import main
 
 
@@ -53,15 +55,50 @@ def test_restart_command_only_init(sim_cbox_executed):
 
 
 @pytest.mark.slow
-def test_restart_command_run(sim_cbox_executed):
+def test_restart_command_run(sim_cbox_executed, capsys):
+    end_time = 0.012
     command = [
         "snek-restart",
         sim_cbox_executed.output.path_run,
         "--use-checkpoint",
         "1",
         "--new-dir-results",
-        "--add-to-end-time",
-        "0.002",
+        "--end-time",
+        str(end_time),
     ]
     with patch.object(sys, "argv", command):
         main()
+
+    out = capsys.readouterr().out
+    path_new = out.split("# To visualize with IPython:\n\ncd ")[-1].split(";")[0]
+    sim = load(path_new)
+    assert sim_cbox_executed.path_run != sim.path_run
+    assert (sim.path_run / "session_00").exists()
+
+    header = read_header(sim.output.get_field_file())
+    assert header.time == end_time
+
+
+@pytest.mark.slow
+def test_restart_command_run_start_from(sim_cbox_executed, capsys):
+    end_time = 0.012
+    command = [
+        "snek-restart",
+        sim_cbox_executed.output.path_run,
+        "--use-start-from",
+        "-1",
+        "--new-dir-results",
+        "--end-time",
+        str(end_time),
+    ]
+    with patch.object(sys, "argv", command):
+        main()
+
+    out = capsys.readouterr().out
+    path_new = out.split("# To visualize with IPython:\n\ncd ")[-1].split(";")[0]
+    sim = load(path_new)
+    assert sim_cbox_executed.path_run != sim.path_run
+    assert (sim.path_run / "session_00").exists()
+
+    header = read_header(sim.output.get_field_file())
+    assert header.time == end_time

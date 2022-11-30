@@ -250,6 +250,20 @@ def load_for_restart(
 
     params.NEW_DIR_RESULTS = bool(new_dir_results)
 
+    if use_start_from:
+        if session_id is not None:
+            old_path_session = _make_path_session(path, session_id)
+        else:
+            old_path_session = Path(params.output.path_session)
+        try:
+            index_start_from = int(use_start_from)
+        except ValueError:
+            path_start_from = old_path_session / use_start_from
+        else:
+            paths = sorted(old_path_session.glob(f"{short_name}0.*"))
+            path_start_from = paths[index_start_from]
+        params.nek.general._set_internal_attr("_path_start_from", path_start_from)
+
     name_restart_file = "init_state.restart"
     if new_dir_results:
         params.path_run = None
@@ -258,13 +272,8 @@ def load_for_restart(
         if use_start_from:
             params.nek.general.start_from = name_restart_file
             # new option Nek5000 master for interpolation on a new mesh
-            # params.nek.general.start_from = "init_state.restart int"
+            # params.nek.general.start_from = name_restart_file + " int"
     else:
-        if session_id:
-            old_path_session = _make_path_session(path, session_id)
-        else:
-            old_path_session = Path(params.output.path_session)
-
         new_session_id, new_path_session = next_path(
             path / "session", force_suffix=True, return_suffix=True
         )
@@ -273,28 +282,15 @@ def load_for_restart(
         if not only_check:
             new_path_session.mkdir(exist_ok=True)
 
-        def make_relative_symlink(file_name):
-            src = f"../{old_path_session.name}/{file_name}"
-            dest = new_path_session / name_restart_file
-            logger.debug(f"Symlinking {dest} -> {src}")
-            dest.symlink_to(src)
-
         if not only_check and use_start_from:
-            try:
-                index_start_from = int(use_start_from)
-            except ValueError:
-                path_start_from = old_path_session / use_start_from
-            else:
-                paths = sorted(old_path_session.glob(f"{short_name}0.*"))
-                path_start_from = paths[index_start_from]
-                use_start_from = path_start_from.name
             if path_start_from.exists():
                 params.nek.general.start_from = name_restart_file
-                make_relative_symlink(use_start_from)
+                src = f"../{old_path_session.name}/{path_start_from.name}"
+                dest = new_path_session / name_restart_file
+                logger.debug(f"Symlinking {dest} -> {src}")
+                dest.symlink_to(src)
             else:
-                raise SnekRestartError(
-                    f"Restart file {old_path_session / use_start_from} not found"
-                )
+                raise SnekRestartError(f"Restart file {path_start_from} not found")
 
     return params, Simul
 
@@ -400,6 +396,13 @@ class Restarter(RestarterABC):
             params.nek.general.end_time = end_time
 
     def _start_sim(self, sim, args):
+        if args.new_dir_results:
+            if args.use_start_from:
+                sim.create_symlink_start_from_file(
+                    sim.params.nek.general._path_start_from
+                )
+            elif args.use_checkpoint:
+                sim.create_symlinks_ckeckpoint_files(args.path)
         sim.make.exec("run_fg", nproc=args.nb_mpi_procs)
 
     def _check_params_time_stepping(self, params, path_file, args):
@@ -407,12 +410,6 @@ class Restarter(RestarterABC):
         if sum(arg is not None for arg in args_times) > 1:
             raise ValueError(
                 "--add-to-end-time, --end-time and --num-steps are exclusive options."
-            )
-
-        if params.nek.general.stop_at == "numSteps" and args.num_steps is None:
-            raise ValueError(
-                'When params.nek.general.stop_at == "numSteps", '
-                "--num-steps should be given."
             )
 
     def _get_path_restart_file(self, params, args):
@@ -437,7 +434,7 @@ if "sphinx" in sys.modules:
     from textwrap import indent
     from unittest.mock import patch
 
-    with patch.object(sys, "argv", ["fluidsim-restart"]):
+    with patch.object(sys, "argv", ["snek-restart"]):
         parser = create_parser()
 
     __doc__ += """
