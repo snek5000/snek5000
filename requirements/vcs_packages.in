@@ -1,8 +1,8 @@
 -e .
 -e ./docs/examples/snek5000-canonical
 -e ./docs/examples/snek5000-tgv
-snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git@fix/package-name
-snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git@stable
+snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git
+snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git
 # TODO before releases: comment out these 2 lines
 fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib
 # pymech @ git+https://github.com/eX-Mech/pymech.git
