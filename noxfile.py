@@ -19,7 +19,6 @@ import os
 import re
 import shlex
 import shutil
-import subprocess
 from functools import partial
 from pathlib import Path
 
@@ -41,6 +40,7 @@ TEST_ENV_VARS = {
 if os.getenv("CI"):
     TEST_ENV_VARS["PYTEST_ADDOPTS"] = "--color=yes"
 
+EXTRA_REQUIRES = ("main", "docs", "tests", "dev")
 
 no_venv_session = partial(nox.session, venv_backend="none")
 nox.options.sessions = ["tests"]
@@ -61,9 +61,12 @@ def poetry_install(session, *args):
     run_ext(session, "python -m poetry install " + " ".join(args))
 
 
-def pip_install(session, filename):
+def pip_install(session, filename, *args):
     """Install with dependencies pinned in requirements/*.txt"""
-    run_ext(session, f"python -m pip install -r requirements/{filename}.txt")
+    run_ext(
+        session,
+        f"python -m pip install -r requirements/{filename}.txt " + " ".join(args),
+    )
 
 
 def pip_sync(session, filename):
@@ -77,7 +80,7 @@ def install(session):
     if BUILD_SYSTEM == "poetry":
         poetry_install(session)
     else:
-        pip_install(session, "main")
+        pip_install(session, "main", ".")
 
 
 @no_venv_session
@@ -95,7 +98,7 @@ def sync(session):
     if BUILD_SYSTEM == "poetry":
         poetry_install(session, "--sync", "--with=dev")
     else:
-        pip_sync(session, ["dev"])
+        pip_sync(session, "dev")
 
 
 @no_venv_session
@@ -108,9 +111,7 @@ def requires(session):
 
 
 @nox.session(name="pip-compile", reuse_venv=True)
-@nox.parametrize(
-    "extra", [nox.param(extra, id=extra) for extra in ("main", "docs", "tests", "dev")]
-)
+@nox.parametrize("extra", [nox.param(extra, id=extra) for extra in EXTRA_REQUIRES])
 def pip_compile(session, extra):
     """Pin dependencies to requirements/*.txt
 
@@ -119,6 +120,10 @@ def pip_compile(session, extra):
         pipx install nox
         make -j requirements
 
+    or::
+
+        nox -l | awk '/pip-compile/{print $2}' | xargs -P6 -I_ nox -s _
+
     """
     session.install("pip-tools")
     req = Path("requirements")
@@ -126,11 +131,11 @@ def pip_compile(session, extra):
     if extra == "main":
         in_extra = ""
         in_file = ""
-        out_file = req / "main.txt"
     else:
         in_extra = f"--extra {extra}"
         in_file = req / "vcs_packages.in"
-        out_file = req / f"{extra}.txt"
+
+    out_file = req / f"{extra}.txt"
 
     session.run(
         *shlex.split(
@@ -236,7 +241,7 @@ def docs(session):
     """Build documentation using Sphinx."""
     source, output = _prepare_docs_session(session)
     session.run(
-        "python", "-m", "sphinx", "-b", "html", source, output
+        "python", "-m", "sphinx", "-b", "html", *session.posargs, source, output
     )  # Same as sphinx-build
     print("Build finished.")
     print(f"file://{output}/index.html")
@@ -315,8 +320,8 @@ def download_testpypi(session, dist_type):
     (Path.cwd() / "dist").mkdir(exist_ok=True)
     session.chdir("./dist")
 
-    git_tags = subprocess.check_output(
-        ["git", "tag", "--list", "--sort=version:refname"], text=True
+    git_tags = session.run(
+        "git", "tag", "--list", "--sort=committerdate", external=True, silent=True
     )
     latest_version = git_tags.splitlines()[-1]
     spec = f"{PACKAGE}=={latest_version}"
@@ -326,7 +331,7 @@ def download_testpypi(session, dist_type):
         "pip",
         "index",
         "versions",
-        "--index",
+        "--index-url",
         "https://test.pypi.org/simple",
         "--pre",
         PACKAGE,
@@ -336,12 +341,14 @@ def download_testpypi(session, dist_type):
         "-m",
         "pip",
         "download",
-        "--index",
+        "--index-url",
         "https://test.pypi.org/simple",
+        "--extra-index-url",
+        "https://pypi.org/simple",
         "--pre",
         "--no-deps",
         f"--{dist_type}",
-        ":all:",
+        PACKAGE,
         spec,
     )
 
@@ -411,9 +418,11 @@ def release_upload(session):
     # https://twine.readthedocs.io/en/latest/#environment-variables
     env = {"TWINE_USERNAME": "__token__"}
 
-    if "testpypi" in args and (api_token := os.getenv("TEST_PYPI_TOKEN")):
-        env["TWINE_PASSWORD"] = api_token
-    elif api_token := os.getenv("PYPI_TOKEN"):
-        env["TWINE_PASSWORD"] = api_token
+    test_pypi_token = os.getenv("TEST_PYPI_TOKEN")
+    pypi_token = os.getenv("PYPI_TOKEN")
+    if "testpypi" in args and test_pypi_token:
+        env["TWINE_PASSWORD"] = test_pypi_token
+    elif pypi_token:
+        env["TWINE_PASSWORD"] = pypi_token
 
     session.run("twine", "upload", *args, "dist/*", env=env)

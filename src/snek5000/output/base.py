@@ -61,6 +61,7 @@ class Output(OutputCore):
     and important attributes:
 
     .. autoattribute:: name_solver
+       :noindex:
 
         Initialized from ``sim.info.solver.short_name`` used to discover source
         code files, such as usr, box, par files. The value of ``name_solver``
@@ -74,6 +75,7 @@ class Output(OutputCore):
         source code files.
 
     .. autoattribute:: path_run
+       :noindex:
 
         Path to the generated simulation directory.
 

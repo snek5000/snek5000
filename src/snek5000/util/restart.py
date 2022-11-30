@@ -402,7 +402,7 @@ class Restarter(RestarterABC):
                     sim.params.nek.general._path_start_from
                 )
             elif args.use_checkpoint:
-                sim.create_symlinks_ckeckpoint_files(args.path)
+                sim.create_symlinks_checkpoint_files(args.path)
         sim.make.exec("run_fg", nproc=args.nb_mpi_procs)
 
     def _check_params_time_stepping(self, params, path_file, args):
