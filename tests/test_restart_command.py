@@ -54,6 +54,20 @@ def test_restart_command_only_init(sim_cbox_executed):
         main()
 
 
+def _test_run(sim_cbox_executed, capsys, command, end_time):
+    with patch.object(sys, "argv", command):
+        main()
+
+    out = capsys.readouterr().out
+    path_new = out.split("# To visualize with IPython:\n\ncd ")[-1].split(";")[0]
+    sim = load(path_new)
+    assert sim_cbox_executed.path_run != sim.path_run
+    assert (sim.path_run / "session_00").exists()
+
+    header = read_header(sim.output.get_field_file())
+    assert header.time == end_time
+
+
 @pytest.mark.slow
 def test_restart_command_run(sim_cbox_executed, capsys):
     end_time = 0.012
@@ -66,17 +80,7 @@ def test_restart_command_run(sim_cbox_executed, capsys):
         "--end-time",
         str(end_time),
     ]
-    with patch.object(sys, "argv", command):
-        main()
-
-    out = capsys.readouterr().out
-    path_new = out.split("# To visualize with IPython:\n\ncd ")[-1].split(";")[0]
-    sim = load(path_new)
-    assert sim_cbox_executed.path_run != sim.path_run
-    assert (sim.path_run / "session_00").exists()
-
-    header = read_header(sim.output.get_field_file())
-    assert header.time == end_time
+    _test_run(sim_cbox_executed, capsys, command, end_time)
 
 
 @pytest.mark.slow
@@ -91,14 +95,4 @@ def test_restart_command_run_start_from(sim_cbox_executed, capsys):
         "--end-time",
         str(end_time),
     ]
-    with patch.object(sys, "argv", command):
-        main()
-
-    out = capsys.readouterr().out
-    path_new = out.split("# To visualize with IPython:\n\ncd ")[-1].split(";")[0]
-    sim = load(path_new)
-    assert sim_cbox_executed.path_run != sim.path_run
-    assert (sim.path_run / "session_00").exists()
-
-    header = read_header(sim.output.get_field_file())
-    assert header.time == end_time
+    _test_run(sim_cbox_executed, capsys, command, end_time)
