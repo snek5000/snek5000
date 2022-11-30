@@ -7,6 +7,8 @@ from pymech.neksuite.field import read_header
 from snek5000 import load
 from snek5000.util.restart import main
 
+from conftest import unset_snek_debug
+
 
 def test_restart_command_help():
     with patch.object(sys, "argv", ["snek-restart", "-h"]):
@@ -56,7 +58,8 @@ def test_restart_command_only_init(sim_cbox_executed):
 
 def _test_run(sim_cbox_executed, capsys, command, end_time):
     with patch.object(sys, "argv", command):
-        main()
+        with unset_snek_debug():
+            main()
 
     out = capsys.readouterr().out
     path_new = out.split("# To visualize with IPython:\n\ncd ")[-1].split(";")[0]
