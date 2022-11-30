@@ -6,11 +6,8 @@
 ---
 maxdepth: 1
 ---
-
-history_points
-
-
-
+restart.md
+history_points.md
 ```
 
 ## For developer of Snek5000 solvers
@@ -19,9 +16,6 @@ history_points
 ---
 maxdepth: 1
 ---
-
-
-
 ```
 
 ## For developer / maintainer of Snek5000 package
@@ -30,8 +24,5 @@ maxdepth: 1
 ---
 maxdepth: 1
 ---
-
-edit_tutorials
-
-
+edit_tutorials.md
 ```
