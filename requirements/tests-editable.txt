@@ -74,8 +74,9 @@ fluiddyn==0.5.1
     #   fluidsim-core
     #   snek5000
     #   snek5000 (setup.cfg)
-fluidsim-core==0.7.0rc0
+fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib
     # via
+    #   -r requirements/vcs_packages.in
     #   snek5000
     #   snek5000 (setup.cfg)
 fonttools==4.38.0
@@ -233,9 +234,9 @@ snakemake==7.18.2
     # via
     #   snek5000
     #   snek5000 (setup.cfg)
-snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git@stable
+snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git
     # via -r requirements/vcs_packages.in
-snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git@fix/package-name
+snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git
     # via -r requirements/vcs_packages.in
 stack-data==0.6.0
     # via ipython

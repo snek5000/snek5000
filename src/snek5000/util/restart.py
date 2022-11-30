@@ -3,9 +3,13 @@
 
 """
 import os
+import sys
 from enum import Enum
 from pathlib import Path
+from textwrap import dedent
 from warnings import warn
+
+from fluidsim_core.scripts.restart import RestarterABC
 
 from ..log import logger
 from ..output import _make_path_session, _parse_path_run_session_id
@@ -31,14 +35,16 @@ class SimStatus(Enum):
         (
             "Reset Content: Multi-file restart found. Some field files exist. "
             "Restarting in the same session would overwrite files. "
-            "Ensure current session is archived or restart in a new session."
+            "Ensure current session is archived or restart in a new session or "
+            "a new directory."
         ),
     )
     PARTIAL_CONTENT = (
         206,
         (
-            "Partial Content: No multi-file restart found. Some field files exist."
-            "Ensure current session is archived or restart in a new session."
+            "Partial Content: No multi-file restart found. Some field files exist. "
+            "Ensure current session is archived or restart in a new session or "
+            "a new directory."
         ),
     )
     NOT_FOUND = (
@@ -145,6 +151,7 @@ def load_for_restart(
     session_id=None,
     verify_contents=True,
     new_dir_results=False,
+    only_check=False,
 ):
     """Load params and Simul for a restart.
 
@@ -158,9 +165,9 @@ def load_for_restart(
         data in the current directory.  Can be an absolute path, a relative path,
         or even simply just the name of the directory under $FLUIDSIM_PATH.
 
-    use_start_from: str
-        Name of the field file to restart from. Mutually exclusive option with
-        ``use_checkpoint``.
+    use_start_from: str or int
+        Name or index of the field file to restart from. Mutually exclusive option
+        with ``use_checkpoint``.
 
     use_checkpoint: int, {1, 2}
         Number of the multi-file checkpoint file set to restart from. Mutually
@@ -169,7 +176,7 @@ def load_for_restart(
     session_id: int
         Indicate which session directory should be used to look for restart files.
         If not specified it would default to the `path_session` value last
-        recorded in the `params_simul.xml` file
+        recorded in the `params_simul.xml` file.
 
     verify_contents: bool
         Verify directory contents to avoid runtime errors.
@@ -243,40 +250,199 @@ def load_for_restart(
 
     params.NEW_DIR_RESULTS = bool(new_dir_results)
 
+    if use_start_from:
+        if session_id is not None:
+            old_path_session = _make_path_session(path, session_id)
+        else:
+            old_path_session = Path(params.output.path_session)
+        try:
+            index_start_from = int(use_start_from)
+        except ValueError:
+            path_start_from = old_path_session / use_start_from
+        else:
+            paths = sorted(old_path_session.glob(f"{short_name}0.*"))
+            path_start_from = paths[index_start_from]
+        params.nek.general._set_internal_attr("_path_start_from", path_start_from)
+
+    name_restart_file = "init_state.restart"
     if new_dir_results:
         params.path_run = None
         params.output.path_session = None
         params.output.session_id = 0
         if use_start_from:
-            params.nek.general.start_from = "init_state.restart"
+            params.nek.general.start_from = name_restart_file
             # new option Nek5000 master for interpolation on a new mesh
-            # params.nek.general.start_from = "init_state.restart int"
+            # params.nek.general.start_from = name_restart_file + " int"
     else:
-        if session_id:
-            old_path_session = _make_path_session(path, session_id)
-        else:
-            old_path_session = Path(params.output.path_session)
-
         new_session_id, new_path_session = next_path(
             path / "session", force_suffix=True, return_suffix=True
         )
         params.output.session_id = new_session_id
         params.output.path_session = new_path_session
-        new_path_session.mkdir()
+        if not only_check:
+            new_path_session.mkdir(exist_ok=True)
 
-        def make_relative_symlink(file_name):
-            src = new_path_session / file_name
-            dest = f"../{old_path_session.name}/{file_name}"
-            logger.debug(f"Symlinking {src} -> {dest}")
-            src.symlink_to(dest)
-
-        if use_start_from:
-            if (old_path_session / use_start_from).exists():
-                params.nek.general.start_from = use_start_from
-                make_relative_symlink(use_start_from)
+        if not only_check and use_start_from:
+            if path_start_from.exists():
+                params.nek.general.start_from = name_restart_file
+                src = f"../{old_path_session.name}/{path_start_from.name}"
+                dest = new_path_session / name_restart_file
+                logger.debug(f"Symlinking {dest} -> {src}")
+                dest.symlink_to(src)
             else:
-                raise SnekRestartError(
-                    f"Restart file {old_path_session / use_start_from} not found"
-                )
+                raise SnekRestartError(f"Restart file {path_start_from} not found")
 
     return params, Simul
+
+
+class Restarter(RestarterABC):
+    def create_parser(self):
+        parser = super().create_parser()
+
+        parser.add_argument(
+            "-np",
+            "--nb-mpi-procs",
+            type=int,
+            default=4,
+            help="Number of MPI processes",
+        )
+        parser.add_argument(
+            "--use-start-from",
+            type=str,
+            default=None,
+            help=(
+                "Name (relative to the session path) of the field file "
+                "to restart from. "
+                "Mutually exclusive option with `use_checkpoint`."
+            ),
+        )
+        parser.add_argument(
+            "--use-checkpoint",
+            type=int,
+            default=None,
+            help=(
+                "Number of the multi-file checkpoint file set to restart from. "
+                "Mutually exclusive parameter with `use_start_from`."
+            ),
+        )
+        parser.add_argument(
+            "--session-id",
+            type=int,
+            default=None,
+            help=(
+                "Indicate which session directory should be used to look for "
+                "restart files. If not specified it would default to the "
+                "`path_session` value last recorded in the `params_simul.xml` file."
+            ),
+        )
+        parser.add_argument(
+            "--skip-verify-contents",
+            action="store_true",
+            help="Do not verify directory contents to avoid runtime errors.",
+        )
+        parser.add_argument(
+            "--add-to-end-time",
+            type=float,
+            default=None,
+            help="Time added to params.nek.general.end_time",
+        )
+        parser.add_argument(
+            "--end-time",
+            type=float,
+            default=None,
+            help="params.nek.general.end_time",
+        )
+        parser.add_argument(
+            "--num-steps",
+            type=int,
+            default=None,
+            help="params.nek.general.num_steps",
+        )
+
+        return parser
+
+    _str_command_after_simul = dedent(
+        """
+        # To visualize with IPython:
+
+        cd {path_run}; snek-ipy-load
+    """
+    )
+
+    def _get_params_simul_class(self, args):
+        if args.use_start_from is None and args.use_checkpoint is None:
+            logger.error("Either --use-start-from or --use-checkpoint have to be given")
+            sys.exit(1)
+        return load_for_restart(
+            args.path,
+            use_start_from=args.use_start_from,
+            use_checkpoint=args.use_checkpoint,
+            session_id=args.session_id,
+            verify_contents=not args.skip_verify_contents,
+            new_dir_results=args.new_dir_results,
+            only_check=args.only_check,
+        )
+
+    def _set_params_time_stepping(self, params, args):
+        if args.num_steps is not None:
+            params.nek.general.stop_at = "numSteps"
+            params.nek.general.num_steps = int(args.num_steps)
+        elif args.end_time is not None or args.add_to_end_time is not None:
+            params.nek.general.stop_at = "endTime"
+            if args.end_time is not None:
+                end_time = args.end_time
+            else:
+                end_time = float(params.nek.general.end_time) + args.add_to_end_time
+            params.nek.general.end_time = end_time
+
+    def _start_sim(self, sim, args):
+        if args.new_dir_results:
+            if args.use_start_from:
+                sim.create_symlink_start_from_file(
+                    sim.params.nek.general._path_start_from
+                )
+            elif args.use_checkpoint:
+                sim.create_symlinks_checkpoint_files(args.path)
+        sim.make.exec("run_fg", nproc=args.nb_mpi_procs)
+
+    def _check_params_time_stepping(self, params, path_file, args):
+        args_times = [args.num_steps, args.end_time, args.add_to_end_time]
+        if sum(arg is not None for arg in args_times) > 1:
+            raise ValueError(
+                "--add-to-end-time, --end-time and --num-steps are exclusive options."
+            )
+
+    def _get_path_restart_file(self, params, args):
+        if args.use_start_from is not None:
+            path_file = args.use_start_from
+        elif args.use_checkpoint is not None:
+            path_file = f"Use checkpoint files (use_checkpoint={args.use_checkpoint})"
+        logger.info(path_file)
+        return path_file
+
+
+_restarter = Restarter()
+
+create_parser = _restarter.create_parser
+
+
+def main():
+    _restarter.restart()
+
+
+if "sphinx" in sys.modules:
+    from textwrap import indent
+    from unittest.mock import patch
+
+    with patch.object(sys, "argv", ["snek-restart"]):
+        parser = create_parser()
+
+    __doc__ += """
+Help message
+------------
+
+.. code-block::
+
+""" + indent(
+        parser.format_help(), "    "
+    )

@@ -6,14 +6,14 @@
 - Update version and date in `CITATION.cff`.
 - Make a [new release] on Github.
 - Inspect upload in [TestPyPI].
-- Execute manual [deploy workflow] to download from [TestPyPI], run tests and
-  publish to [PyPI].
+- Execute manual [deploy workflow] to download from [TestPyPI], run tests and publish to
+  [PyPI].
 
 ## Manual method (not recommended)
 
-:::{note}
+```{note}
 For demonstration's sake, we assume that the next version is `$VERSION`.
-:::
+```
 
 - Install nox:
 

@@ -93,7 +93,7 @@ c
 c      iostep_full = iostep
 c      call full_restart_save(iostep_full)
 
-      if (mod(istep,50).ne.0) return
+      if (mod(istep,10).ne.0) return
 
       sum_e1 = 0.
       sum_e2 = 0.

@@ -1,4 +1,5 @@
 import bisect
+import os
 import re
 from pathlib import Path
 from shutil import copy2
@@ -9,6 +10,13 @@ from fluiddyn.io import FLUIDSIM_PATH
 
 from .. import logger
 from ..params import load_params
+
+
+def _is_empty_directory(path):
+    path = Path(path)
+    if not path.is_dir():
+        return False
+    return not bool(os.listdir(path))
 
 
 def next_path(old_path, force_suffix=False, return_suffix=False):
@@ -69,13 +77,14 @@ def next_path(old_path, force_suffix=False, return_suffix=False):
 
     old_path = Path(old_path)
 
-    if not force_suffix and not old_path.exists():
+    if not force_suffix and not (
+        old_path.exists() and not _is_empty_directory(old_path)
+    ):
         return old_path
 
     i = 0
     new_path = int_suffix(old_path, i)
-
-    while new_path.exists():
+    while new_path.exists() and not _is_empty_directory(new_path):
         logger.debug(f"Path exists: {new_path}")
         i += 1
         new_path = int_suffix(old_path, i)

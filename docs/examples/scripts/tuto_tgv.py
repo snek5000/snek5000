@@ -10,10 +10,13 @@ params.oper.nproc_min = 2
 params.nek.velocity.residual_tol = 1e-07
 params.nek.pressure.residual_tol = 1e-05
 
-params.nek.general.end_time = 15
+params.nek.general.end_time = 10
 params.nek.general.dt = -1
 params.nek.general.target_cfl = 1.4
 params.nek.general.extrapolation = "OIFS"
+
+params.nek.general.write_control = "runTime"
+params.nek.general.write_interval = 2.0
 
 sim = Simul(params)
 sim.make.exec("run_fg", nproc=2)
