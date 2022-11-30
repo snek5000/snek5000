@@ -2,12 +2,11 @@ import sys
 from unittest.mock import patch
 
 import pytest
+from conftest import unset_snek_debug
 from pymech.neksuite.field import read_header
 
 from snek5000 import load
 from snek5000.util.restart import main
-
-from conftest import unset_snek_debug
 
 
 def test_restart_command_help():
