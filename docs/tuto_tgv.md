@@ -172,11 +172,19 @@ ax.set(
 ### Restart to run further
 
 We see that our first simulation was clearly too short. We can use the command line tool
-`snek-restart` to continue the simulation from the last saved file
-(`--use-start-from -1`):
+`snek-restart` (see the [How to page dedicated to restart](./how-to/restart.md)) to
+continue the simulation from the last saved file (`--use-start-from -1`):
 
 ```{code-cell} ipython3
-!snek-restart {sim.path_run} --use-start-from -1 --add-to-end-time 4
+lines = !snek-restart {sim.path_run} --use-start-from -1 --add-to-end-time 4
+```
+
+Let's look at the end of the output of this command:
+
+```{code-cell} ipython3
+# filter to remove useless warnings
+lines = [line for line in lines if not line.endswith(", errno = 1")]
+print("\n".join(lines[-120:]))
 ```
 
 The results of the new simulation were saved in a directory `session_01`

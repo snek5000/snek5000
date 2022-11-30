@@ -2,7 +2,8 @@
 
 ## Via GitHub Actions
 
-- Update {ref}`changelog/unreleased` with version comparison links and detailed description.
+- Update {ref}`changelog/unreleased` with version comparison links and detailed
+  description.
 - Update version and date in `CITATION.cff`.
 - Make a [new release] on Github.
 - Inspect upload in [TestPyPI].
