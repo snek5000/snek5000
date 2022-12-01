@@ -38,7 +38,7 @@ fluiddyn==0.5.1
     # via
     #   fluidsim-core
     #   snek5000 (setup.cfg)
-fluidsim-core==0.7.0rc0
+fluidsim-core==0.7.1
     # via snek5000 (setup.cfg)
 fonttools==4.38.0
     # via matplotlib
