@@ -74,9 +74,8 @@ fluiddyn==0.5.1
     #   fluidsim-core
     #   snek5000
     #   snek5000 (setup.cfg)
-fluidsim-core @ hg+https://foss.heptapod.net/fluiddyn/fluidsim#subdirectory=lib
+fluidsim-core==0.7.1
     # via
-    #   -r requirements/vcs_packages.in
     #   snek5000
     #   snek5000 (setup.cfg)
 fonttools==4.38.0
