@@ -2,6 +2,7 @@ Tutorials
 =========
 
 .. toctree::
+    :maxdepth: 2
 
     configuring
     tuto_phill_setup.md

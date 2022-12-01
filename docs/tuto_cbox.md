@@ -164,15 +164,18 @@ signal_maxima = signal_maxima[cond]
 ax.plot(times_maxima, signal_maxima, "xr");
 ```
 
-Also we can also compute an approximation of the growth rate:
+Moreover, we can also compute an approximation of the growth rate:
 
 ```{code-cell} ipython3
-slope, intercept, r_value, p_value, std_err = stats.linregress(
-    times_maxima, np.log(abs(signal_maxima))
-)
-
-growth_rate = slope
-print(f"The growth rate is {growth_rate:.2e}")
+try:
+    slope, intercept, r_value, p_value, std_err = stats.linregress(
+        times_maxima, np.log(abs(signal_maxima))
+    )
+except ValueError:
+    pass
+else:
+    growth_rate = slope
+    print(f"The growth rate is {growth_rate:.2e}")
 ```
 
 ## Load the flow field as xarray dataset

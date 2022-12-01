@@ -8,6 +8,7 @@ build:
     - build-essential
     - gfortran
     - libopenmpi-dev
+    - graphviz
   jobs:
     pre_install:
       - git clone --depth=1 https://github.com/snek5000/Nek5000.git /home/docs/Nek5000
