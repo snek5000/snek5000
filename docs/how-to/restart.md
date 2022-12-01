@@ -27,8 +27,8 @@ Moreover, there are with Nek5000 two different methods to restart a simulation:
    toolbox).
 
 With Snek5000, restarting can be done with the command line `snek-restart` (recommanded)
-or with a Python function {func}`snek5000.load_for_restart`. In this page, with
-focus on the former method.
+or with a Python function {func}`snek5000.load_for_restart`. In this page, with focus on
+the former method.
 
 One can get the documentation of the command with
 

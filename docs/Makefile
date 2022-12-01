@@ -44,4 +44,4 @@ cleanall: clean
 	@rm -rf _generated/*
 
 format:
-	mdformat --wrap 88 *.md
+	mdformat --wrap 88 .
