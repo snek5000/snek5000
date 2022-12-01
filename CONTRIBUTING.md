@@ -6,8 +6,11 @@ Something does not work and you wish to fix it? Are you curious to see how it wo
 development:
 
 ```sh
-# Clone
-git clone --recursive https://github.com/snek5000/snek5000.git
+# First install Nek5000
+git clone https://github.com/snek5000/Nek5000.git
+export NEK_SOURCE_ROOT=$PWD/Nek5000
+
+git clone https://github.com/snek5000/snek5000.git
 
 # Activate paths: Start here. Always!
 cd snek5000
@@ -18,14 +21,17 @@ Now you should setup a Python environment. There are two ways to do this (and it
 be done only once):
 
 - Using `venv`
+
   ```sh
   python -m venv venv
   source venv/bin/activate
   ```
+
 - Using `conda`
+
   ```sh
-  conda env create -n snek5000
-  conda activate snek5000
+  conda env create -n env-snek5000
+  conda activate env-snek5000
   ```
 
 Finally, to install in development mode:
@@ -47,20 +53,13 @@ nox -s pip-sync
   ```
 
 - **Branching model**: The development uses branches and pull-requests for experimental
-  features. We also rely on [git submodules](https://www.git-scm.com/docs/git-submodule)
-  to track `Nek5000`. You may find the following git branches when you clone `snek5000`:
+  features. You may find the following git branches when you clone `snek5000`:
 
   - `master`: main branch
   - `fix/...`, `enh/...`: feature branches
 
   Executing the following command would configure git to work with submodules easily and
   ensures consistency:
-
-  ```sh
-  # Enable recursion for relevant commands, such that
-  # regular commands recurse into submodules by default
-  git config submodule.recurse true
-  ```
 
 - **Testing**: [Run `pytest`](https://pytest.readthedocs.io/) from the top-level
   directory. The test-cases can be found under `tests/` directory. To run the slow tests

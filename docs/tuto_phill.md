@@ -45,18 +45,23 @@ params.nek.stat.io_step = 10
 sim = Simul(params)
 ```
 
+We recall that this instanciation of the class `Simul` creates the simulation directory
+on the disk with the following files:
+
 ```{code-cell} ipython3
 !ls {sim.path_run}
 ```
 
 ## Execute the simulation
 
+### Snakemake rules
+
 To run the simulation we need to execute certain commands. These are described using
 [snakemake](https://snakemake.rtfd.io) in the Snakefile. Let's look at the rules defined
 in the Snakefile (which are nearly generic for any Nek5000 case).
 
 ```{code-cell} ipython3
-sim.make.list()
+sim.make.list();
 ```
 
 The rules in the Snakefile are either shell commands or Python code which handle
@@ -73,15 +78,28 @@ From a user's perspective the following rules are essential:
 - `run_fg`: Run the simulation in the foreground (blocking, till the simulation is over
   / terminated)
 
+```{note}
+
+In real life, simulations are usually submitted with Snek5000 from a script and
+we are going to call Snakemake from the Snek5000 Python API with a call similar
+to `sim.make.exec("run_fg", nproc=2)` (as in the following example).
+
+However, there is also a command `snek-make` that can be run from the
+simulation directory to list and invoke the Snakemake rules. See `snek-make -h`
+and `snek-make -l`.
+
+```
+
 <!-- #region tags=[] -->
 
 ### Debug mode
 
-During development, it is useful to turn on the debug environment variable.
+During development, it can be useful to turn on the debug environment variable which can
+be done in Python with:
 
 <!-- #endregion -->
 
-```{code-cell} ipython3
+```python
 import os
 os.environ["SNEK_DEBUG"] = "1"
 ```
@@ -93,6 +111,8 @@ doing so, snek5000 would:
   {func}`snek5000.util.smake.append_debug_flags`
 - activate the code blocks under the preprocessing flag in Fortran sources
   `#ifdef DEBUG`
+
+### Execution of the main script
 
 Now let's execute the simulation. We will use the script
 [docs/examples/scripts/tuto_phill.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_phill.py),
@@ -119,6 +139,8 @@ process = run(
 print(f"Script executed in {perf_counter() - t_start:.2f} s")
 ```
 
+### Snek5000 and Nek5000 log
+
 The simulation is done! Let's look at its output:
 
 ```{code-cell} ipython3
@@ -142,6 +164,8 @@ if path_run is None:
     raise RuntimeError
 path_run
 ```
+
+### Other files produced during the simulation
 
 Let's look at the files in the directory of the simulation
 

@@ -18,44 +18,44 @@ For demonstration's sake, we assume that the next version is `$VERSION`.
 
 - Install nox:
 
-  ```
+  ```bash
   pip install nox
   ```
 
 - Ensure tests pass locally and on CI:
 
-  ```
+  ```bash
   nox -s tests
   ```
 
 - Compile documentation:
 
-  ```
+  ```bash
   nox -s docs
   ```
 
 - Commit changes and make an annotated tag:
 
-  ```
+  ```bash
   git commit
   git tag -a $VERSION
   ```
 
 - Build and upload to [TestPyPI]:
 
-  ```
+  ```bash
   nox -s testpypi
   ```
 
 - Download, test and upload to [PyPI]:
 
-  ```
+  ```bash
   nox -s pypi
   ```
 
 - Upload to repository:
 
-  ```
+  ```bash
   git push --follow-tags --atomic origin main
   ```
 

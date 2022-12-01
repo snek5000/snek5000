@@ -17,12 +17,3 @@ history_points.md
 maxdepth: 1
 ---
 ```
-
-## For developer / maintainer of Snek5000 package
-
-```{toctree}
----
-maxdepth: 1
----
-edit_tutorials.md
-```
