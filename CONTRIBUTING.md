@@ -83,4 +83,4 @@ set secure exrc
 ```
 
 This sources the `.exrc` file which comes along with the repository and enables syntax
-highlighting for file extensions used in `lib/Nek5000`.
+highlighting for file extensions used in `Nek5000`.

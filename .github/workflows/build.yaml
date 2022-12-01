@@ -12,6 +12,7 @@ on:
 
 env:
   FORCE_COLOR: 1
+  NEK_SOURCE_ROOT: /home/runner/Nek5000
 
 jobs:
   tests:
@@ -25,8 +26,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        submodules: recursive
         fetch-depth: 0
+
+    - name: Clone Nek5000
+      run: git clone --depth=1 https://github.com/snek5000/Nek5000.git $HOME/Nek5000
 
     - name: Install apt packages
       run: |
@@ -101,8 +104,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        submodules: recursive
         fetch-depth: 0
+
+    - name: Clone Nek5000
+      run: git clone --depth=1 https://github.com/snek5000/Nek5000.git $HOME/Nek5000
 
     - name: Install apt packages
       run: |

@@ -33,8 +33,13 @@ else:
     BUILD_SYSTEM = "setuptools"
     PACKAGE_SPEC = "setup.cfg"
 
+try:
+    NEK_SOURCE_ROOT = os.environ["NEK_SOURCE_ROOT"]
+except KeyError:
+    raise RuntimeError("NEK_SOURCE_ROOT has point to Nek5000 top level directory.")
+
 TEST_ENV_VARS = {
-    "NEK_SOURCE_ROOT": str(CWD / "lib" / "Nek5000"),
+    "NEK_SOURCE_ROOT": NEK_SOURCE_ROOT,
     "SNEK_DEBUG": "1",
 }
 if os.getenv("CI"):
@@ -270,7 +275,7 @@ def docs_autobuild(session):
 def ctags(session):
     """Runs universal-ctags to build .tags file"""
     sources = {
-        "nek5000": "lib/Nek5000/core",
+        "nek5000": str(Path(NEK_SOURCE_ROOT) / "core"),
         "snek5000": "src/snek5000",
     }
     output = ".tags"

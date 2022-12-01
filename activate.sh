@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 DIR="$(pwd)"
-export NEK_SOURCE_ROOT="$DIR/lib/Nek5000"
 export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
 
 alias smake="snakemake -j all"

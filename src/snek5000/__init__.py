@@ -33,6 +33,7 @@ from importlib import resources as _resources
 import os
 from warnings import warn
 import weakref
+from pathlib import Path
 
 from fluiddyn.util import mpi  # noqa: F401
 
@@ -49,14 +50,15 @@ def get_nek_source_root():
             "SOURCE_ROOT is deprecated in v19, use NEK_SOURCE_ROOT instead."
         )
 
-    with _resources.path(__name__, "__init__.py") as f:
-        root = f.parent
-
-    nek5000 = os.path.expandvars(
-        os.path.expanduser(
-            os.getenv("NEK_SOURCE_ROOT", str((root / "../../lib/Nek5000").absolute()))
+    try:
+        NEK_SOURCE_ROOT = os.environ["NEK_SOURCE_ROOT"]
+    except KeyError:
+        raise RuntimeError(
+            "NEK_SOURCE_ROOT has to point to Nek5000 top level directory."
         )
-    )
+
+    nek5000 = str(Path(os.path.expandvars(NEK_SOURCE_ROOT)).expanduser().absolute())
+
     if not os.path.exists(nek5000):
         logger.error("NEK_SOURCE_ROOT: " + nek5000)
         raise IOError(
