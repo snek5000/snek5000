@@ -6,7 +6,7 @@ build:
     - gfortran
     - libopenmpi-dev
   jobs:
-    pre_create_environment:
+    pre_install:
       - git clone --depth=1 https://github.com/snek5000/Nek5000.git $HOME/Nek5000
       - export NEK_SOURCE_ROOT=$HOME/Nek5000
 
