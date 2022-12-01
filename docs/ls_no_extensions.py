@@ -1,5 +1,11 @@
 """List files with no extensions"""
+import os
 from pathlib import Path
+
+try:
+    NEK_SOURCE_ROOT = Path(os.environ["NEK_SOURCE_ROOT"])
+except KeyError:
+    raise RuntimeError("NEK_SOURCE_ROOT has to be defined")
 
 
 def is_upper(name):
@@ -15,8 +21,8 @@ def ls_no_ext(root, suffix="", prefix=""):
 
 if __name__ == "__main__":
     # For doxygen
-    ls_no_ext("../lib/Nek5000/core", " " * 25, " \\")
+    ls_no_ext(NEK_SOURCE_ROOT / "core", " " * 25, " \\")
     ls_no_ext("../src/abl/toolbox", " " * 25, " \\")
 
     # For vim
-    # ls_no_ext("../lib/Nek5000/core", " "*12 + "\\ ", ",")
+    # ls_no_ext(NEK_SOURCE_ROOT / "core", " "*12 + "\\ ", ",")

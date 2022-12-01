@@ -145,9 +145,10 @@ def sim_executed():
     params.oper.nproc_min = 2
     params.oper.nproc_max = 12
     params.oper.nx = params.oper.ny = params.oper.nz = 3
+    params.oper.elem.order = params.oper.elem.order_out = 8
 
-    params.nek.stat.av_step = 4
-    params.nek.stat.io_step = 8
+    params.nek.stat.av_step = 2
+    params.nek.stat.io_step = 4
 
     sim = Simul(params)
     assert sim.make.exec("run_fg"), "phill simulation failed"

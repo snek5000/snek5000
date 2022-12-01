@@ -1,15 +1,14 @@
 version: 2
 
-# VCS submodules configuration
-submodules:
-  include: all
-  recursive: true
-
 build:
   apt_packages:
     - build-essential
     - gfortran
     - libopenmpi-dev
+  jobs:
+    pre_create_environment:
+      - git clone --depth=1 https://github.com/snek5000/Nek5000.git $HOME/Nek5000
+      - export NEK_SOURCE_ROOT=$HOME/Nek5000
 
 # Optionally set the version of Python and requirements required to build your
 # docs

@@ -47,12 +47,9 @@ sys.path.insert(0, root(breathe))
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, root(snek5000))
-os.environ["NEK_SOURCE_ROOT"] = os.fspath(
-    (Path(__file__).parent.parent / "lib" / "Nek5000").resolve()
-)
 
-
-print("NEK_SOURCE_ROOT = ", snek5000.get_nek_source_root())
+NEK_SOURCE_ROOT = snek5000.get_nek_source_root()
+print("NEK_SOURCE_ROOT = ", NEK_SOURCE_ROOT)
 print("sys.path =\n   ", "\n    ".join(sys.path))
 
 # -- Project information -----------------------------------------------------
@@ -125,7 +122,7 @@ source_suffix = {
 os.makedirs("_build/html/doxygen", exist_ok=True)
 
 # Inspect whether to run doxygen or not
-last_modified = util.last_modified("../lib").stat().st_mtime
+last_modified = util.last_modified(NEK_SOURCE_ROOT).stat().st_mtime
 timestamp = Path("_build/.doxygen_timestamp")
 if timestamp.exists() and Path("_build/xml").exists():
     with open(timestamp) as fp:
