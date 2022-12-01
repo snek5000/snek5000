@@ -10,8 +10,7 @@ build:
     - libopenmpi-dev
   jobs:
     pre_install:
-      - git clone --depth=1 https://github.com/snek5000/Nek5000.git $HOME/Nek5000
-      - export NEK_SOURCE_ROOT=$HOME/Nek5000
+      - git clone --depth=1 https://github.com/snek5000/Nek5000.git /home/docs/Nek5000
 
 # Optionally set the version of Python and requirements required to build your
 # docs
