@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     # to save the PID of the simulation (a number associated with the process)
     sim.output.write_snakemake_config(
-        custom_env_vars={"MPIEXEC_FLAGS": "--report-pid PID.txt"}
+        custom_env_vars={"MPIEXEC_FLAGS": "--report-pid PID.txt --oversubscribe"}
     )
     # run the simulation in the background (non blocking call)
     sim.make.exec("run", nproc=2)
