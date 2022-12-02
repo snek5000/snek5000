@@ -10,6 +10,7 @@ build:
     - libopenmpi-dev
     # - graphviz
   commands:
+    - git checkout main
     - git pull --unshallow
     - apt-get update --assume-yes --quiet
     - apt-get install --assume-yes --quiet -- build-essential gfortran libopenmpi-dev
