@@ -12,8 +12,8 @@ build:
   commands:
     - git checkout main
     - git pull --unshallow
-    - apt-get update --assume-yes --quiet
-    - apt-get install --assume-yes --quiet -- build-essential gfortran libopenmpi-dev
+    # - apt-get update --assume-yes --quiet
+    # - apt-get install --assume-yes --quiet -- build-essential gfortran libopenmpi-dev
     - git clone --depth=1 https://github.com/snek5000/Nek5000_for_snek.git /home/docs/Nek5000
     - ls $NEK_SOURCE_ROOT
     - cat docs/conf.py
