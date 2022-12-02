@@ -9,19 +9,14 @@ build:
     - gfortran
     - libopenmpi-dev
     # - graphviz
-  commands:
-    - git checkout main
-    - git pull --unshallow
-    # - apt-get update --assume-yes --quiet
-    # - apt-get install --assume-yes --quiet -- build-essential gfortran libopenmpi-dev
-    - git clone --depth=1 https://github.com/snek5000/Nek5000_for_snek.git /home/docs/Nek5000
-    - ls $NEK_SOURCE_ROOT
-    - cat docs/conf.py
-    - python -m virtualenv /home/docs/checkouts/readthedocs.org/user_builds/snek5000/envs/latest
-    - /home/docs/checkouts/readthedocs.org/user_builds/snek5000/envs/latest/bin/python -m pip install --upgrade --no-cache-dir pip nox
-    - /home/docs/checkouts/readthedocs.org/user_builds/snek5000/envs/latest/bin/python -m nox --session docs
-    - mkdir _readthedocs
-    - mv -r docs/_build/html _readthedocs
+  jobs:
+    pre_create_environment:
+      # such that setuptools_scm can get the correct version
+      - git checkout main
+      - git pull --unshallow
+    pre_build:
+      - git clone --depth=1 https://github.com/snek5000/Nek5000_for_snek.git /home/docs/Nek5000
+      - ls $NEK_SOURCE_ROOT
 
 # Optionally set the version of Python and requirements required to build your
 # docs
