@@ -28,10 +28,25 @@ Security in case of vulnerabilities.
 
 (changelog/unreleased)=
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
+
+## [0.8.0] - 2022-12-04
+
+This is the first stable version and is the result of a huge work (more than
+550 commits and [60 closed
+issues](https://github.com/snek5000/snek5000/milestone/1)). To summarize, we
+work a lot on stability, on improving the API, the logging and the user
+experience, and on improving our
+[documentation](https://snek5000.readthedocs.io) and
+[tutorials](https://snek5000.readthedocs.io/en/latest/tutorials.html). The
+following lists are a very incomplete lists of the additions, changes and
+deprecations.
 
 ### Added
 
+- Commands [`snek-make`](https://snek5000.readthedocs.io/en/latest/how-to/snek-make.html),
+  [`snek-restart`](https://snek5000.readthedocs.io/en/latest/how-to/restart.html),
+  `snek-info`, `snek-ipy-load` and `snek-generate-config`.
 - Functions {func}`snek5000.util.restart.load_for_restart`,
   {func}`snek5000.params.load_params`
 - {mod}`snek5000.util.files`
@@ -51,6 +66,7 @@ Security in case of vulnerabilities.
 
 ### Changed
 
+- Mandatory environment variable `NEK_SOURCE_ROOT`.
 - `params.oper.elem.staggered` has a new default value `auto`, which sets staggered grid
   if a linear solver is used and a collocated one if some other solver is used.
   Explicitly setting `params.oper.elem.staggered = True` is required to maintain
@@ -328,6 +344,8 @@ Security in case of vulnerabilities.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
+<!-- [unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD -->
+
 [0.0.1]: https://github.com/snek5000/snek5000/releases/tag/0.0.1
 [0.1.0]: https://github.com/snek5000/snek5000/compare/0.0.1...0.1.0
 [0.1.1]: https://github.com/snek5000/snek5000/compare/0.1.0...0.1.1
@@ -343,5 +361,5 @@ Security in case of vulnerabilities.
 [0.6.0b0]: https://github.com/snek5000/snek5000/compare/0.5.0b0...0.6.0b0
 [0.6.1b0]: https://github.com/snek5000/snek5000/compare/0.6.0b0...0.6.1b0
 [0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
+[0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
 [@paugier]: https://github.com/paugier
-[unreleased]: https://github.com/snek5000/snek5000/compare/0.7.0b0...HEAD
