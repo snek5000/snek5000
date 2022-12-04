@@ -344,6 +344,8 @@ deprecations.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
+<!-- [unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD -->
+
 [0.0.1]: https://github.com/snek5000/snek5000/releases/tag/0.0.1
 [0.1.0]: https://github.com/snek5000/snek5000/compare/0.0.1...0.1.0
 [0.1.1]: https://github.com/snek5000/snek5000/compare/0.1.0...0.1.1
@@ -361,4 +363,3 @@ deprecations.
 [0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
 [@paugier]: https://github.com/paugier
-<!-- [unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD -->
