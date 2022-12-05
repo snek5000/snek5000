@@ -10,6 +10,7 @@ restart.myst.md
 history_points.md
 snek-make.md
 rebuild-nek.md
+export-sans-snek5000.myst.md
 ```
 
 ## For developer of Snek5000 solvers
