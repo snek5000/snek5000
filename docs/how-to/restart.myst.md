@@ -12,7 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Restart simulations
+# How to restart simulations
 
 Restarting simulations with Nek5000 can be tricky. For example, it is easy to erase some
 results from the initial simulation! To fix this issue Snek5000 uses the notion of

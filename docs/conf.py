@@ -88,7 +88,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_inline_tabs",
     "IPython.sphinxext.ipython_console_highlighting",
-    #  "recommonmark",
+    # "recommonmark",
     # "myst_parser",
     "myst_nb",
     "sphinx_copybutton",

@@ -18,4 +18,5 @@ rebuild-nek.md
 ---
 maxdepth: 1
 ---
+control-fortran-warnings.md
 ```
