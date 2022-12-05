@@ -1,6 +1,6 @@
 -e .
--e ./docs/examples/snek5000-canonical
--e ./docs/examples/snek5000-tgv
+./docs/examples/snek5000-canonical
+./docs/examples/snek5000-tgv
 snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git
 snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git
 # TODO before releases: comment out these 2 lines

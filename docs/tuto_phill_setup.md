@@ -24,7 +24,7 @@ looks like. To get started, we install everything we need:
 ```sh
 python -m venv venv
 source venv/bin/activate
-pip install -e "snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git"
+pip install "snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git"
 ```
 
 ```{note}
