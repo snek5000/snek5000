@@ -1,7 +1,7 @@
 from math import pi
 
 from snek5000.info import InfoSolverMake
-from snek5000.params import _complete_params_from_par_file
+from snek5000.params import complete_params_from_par_file
 from snek5000.solvers.base import SimulNek
 
 
@@ -49,7 +49,7 @@ class SimulTGV(SimulNek):
         info_solver = cls.info_solver  # cls.InfoSolver()
         output_cls = info_solver.import_classes()["Output"]
         root = output_cls.get_root()
-        _complete_params_from_par_file(
+        complete_params_from_par_file(
             params, root / f"{info_solver.short_name}.par.cfg"
         )
 

@@ -16,8 +16,8 @@ from .. import logger, mpi
 from ..info import InfoSolverNek
 from ..params import (
     Parameters,
-    _complete_params_from_par_file,
     _complete_params_from_xml_file,
+    complete_params_from_par_file,
 )
 from ..util import docstring_params
 
@@ -73,7 +73,7 @@ class SimulNek(SimulCore):
                 "Loading from a par file will not have full details of the simulation"
             )
             params = cls.create_default_params()
-            _complete_params_from_par_file(params, path_par)
+            complete_params_from_par_file(params, path_par)
 
         cls._set_internal_sections(params)
         return params

@@ -85,6 +85,8 @@ deprecations.
 
 ### Deprecated
 
+- {func}`snek5000.params._complete_params_from_par_file` (renamed as
+  {func}`snek5000.params.complete_params_from_par_file`).
 - {func}`snek5000.util.restart.prepare_for_restart`
 - Passing rules as iterables to {meth}`snek5000.make.Make.exec`. Pass positional
   parameters instead.
