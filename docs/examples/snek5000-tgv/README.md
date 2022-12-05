@@ -1,6 +1,15 @@
-Orphan:
+# Snek5000 solver for DNS of Taylor-Green Vortices (TGV)
 
-# Verification: DNS of the Taylor-Green vortex at Re=1600
+This [Snek5000] solver demonstrate how to write a solver for a particular usecase taken
+from the [NekExamples repo]. Something completely different than a high speed train...
 
-This example would reuse the `tgv.usr` file and the reference data given in
-[NekExamples repo](https://github.com/Nek5000/NekExamples/tree/master/tgv).
+## Install
+
+```bash
+pip install snek5000-tgv
+```
+
+For more details, see https://snek5000.readthedocs.io/en/latest/install.html
+
+[nekexamples repo]: https://github.com/Nek5000/NekExamples/tree/master/tgv
+[snek5000]: https://github.com/snek5000/snek5000
