@@ -10,7 +10,7 @@ params.output.history_points.coords: list[tuple[float, float, float] | tuple[flo
 ```
 
 For example, see the
-[parameters used in the tutorial for snek5000-cbox](../tuto_cbox.md#initialize-and-setup-simulation-parameters).
+[parameters used in the tutorial for snek5000-cbox](../tuto_cbox.myst.md#initialize-and-setup-simulation-parameters).
 
 This should be coupled along with a `hpts()` call in `userchk()` subroutine in the
 Nek5000 user file. For more information, see *documentation for
@@ -21,4 +21,4 @@ Nek5000 user file. For more information, see *documentation for
 Use `load*` and `plot*` methods in class
 {class}`snek5000.output.history_points.HistoryPoints`. A working example of this can be
 found in
-[a tutorial where we process results from a snek5000-cbox simulation](../tuto_cbox.md#postprocessing).
+[a tutorial where we process results from a snek5000-cbox simulation](../tuto_cbox.myst.md#postprocessing).

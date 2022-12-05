@@ -47,7 +47,7 @@ Let's give few examples. We start from a simulation using the `snek5000-phill` s
    ```
 
    ```{note}
-   This method is used in [the tutorial using our snek5000-tgv solver](../tuto_tgv.md#restart-to-run-further).
+   This method is used in [the tutorial using our snek5000-tgv solver](../tuto_tgv.myst.md#restart-to-run-further).
    ```
 
 1. To restart the simulation in a new session (no compilation needed) from the

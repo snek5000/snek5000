@@ -89,7 +89,7 @@ extensions = [
     "sphinx_inline_tabs",
     "IPython.sphinxext.ipython_console_highlighting",
     #  "recommonmark",
-    #  "myst_parser",
+    # "myst_parser",
     "myst_nb",
     "sphinx_copybutton",
 ]
@@ -115,8 +115,7 @@ copybutton_selector = ",".join(
 source_suffix = {
     ".rst": "restructuredtext",
     ".ipynb": "myst-nb",
-    ".myst": "myst-nb",
-    ".md": "myst-nb",
+    ".myst.md": "myst-nb",
 }
 
 # Execute Doxygen

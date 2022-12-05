@@ -1,6 +1,6 @@
 # How to work on tutorials
 
-The tutorials are saved and version controlled as .md files (md:myst format) in the
+The tutorials are saved and version controlled as `.myst.md` files (md:myst format) in the
 `docs` directory. They can be opened as standard text file with your favorite text
 editor. Moreover, these files can be opened as notebooks in Jupyter Lab. One needs to
 start Jupyter Lab from the `docs` directory. When [Jupytext] is installed, you should be
