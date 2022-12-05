@@ -154,6 +154,11 @@ def pip_compile(session, extra):
     session.log(f"Removing absolute paths from {out_file}")
     packages = out_file.read_text()
     rel_path_packages = packages.replace("file://" + str(Path.cwd().resolve()), ".")
+
+    # special cases for snek5000-canonical and snek5000-tgv
+    for package in ("snek5000-canonical", "snek5000-tgv"):
+        rel_path_packages = rel_path_packages.replace(f"{package} @ ", "")
+
     if extra == "tests":
         tests_editable = out_file.parent / out_file.name.replace(
             "tests", "tests-editable"

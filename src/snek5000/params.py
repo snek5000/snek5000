@@ -8,6 +8,7 @@ import logging
 import os
 import sys
 import textwrap
+import warnings
 from ast import literal_eval
 from configparser import ConfigParser
 from io import StringIO
@@ -464,11 +465,23 @@ def _str_par_file(params):
 
 
 def _complete_params_from_par_file(params, path):
+    warnings.warn(
+        "complete_params_from_par_file has been deprecated and will be "
+        "removed in the next major release. Use complete_params_from_par_file",
+        DeprecationWarning,
+    )
+    return complete_params_from_par_file(params, path)
+
+
+def complete_params_from_par_file(params, path):
     """Populate the ``params.nek`` object by reading a `.par` file and
     :attr:`filename_map_user_params`.
 
     """
     _check_path_like(path)
+    if not path.exists():
+        raise IOError(f"{path} does not exist.")
+
     nek = _get_params_nek(params)
     nek._par_file.read(path)
 

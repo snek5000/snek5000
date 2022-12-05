@@ -8,9 +8,9 @@ from snek5000.params import (
     Parameters,
     _as_nek_value,
     _as_python_value,
-    _complete_params_from_par_file,
     _save_par_file,
     _str_par_file,
+    complete_params_from_par_file,
 )
 from snek5000.util import init_params
 
@@ -63,7 +63,7 @@ def test_simul_params():
     assert txt
 
     params1 = Simul.create_default_params()
-    _complete_params_from_par_file(params1, path_par)
+    complete_params_from_par_file(params1, path_par)
 
     assert params1.nek.general.dt == params.nek.general.dt
 
@@ -184,7 +184,7 @@ def test_user_params():
     params1 = Simul.create_default_params()
     complete_create_default_params(params1)
 
-    _complete_params_from_par_file(params1, path_par)
+    complete_params_from_par_file(params1, path_par)
 
     assert params1.prandtl == params.prandtl
     assert params1.rayleigh == params.rayleigh

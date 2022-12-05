@@ -28,7 +28,6 @@ Inspection
 Input / Output
 --------------
 
-.. autofunction:: snek5000.params._complete_params_from_par_file
 .. autofunction:: snek5000.params._complete_params_from_xml_file
 .. autofunction:: snek5000.params._save_recorded_user_params
 .. autofunction:: snek5000.params._load_recorded_user_params
