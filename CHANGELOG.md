@@ -32,19 +32,17 @@ Security in case of vulnerabilities.
 
 ## [0.8.0] - 2022-12-05
 
-This is the first stable version and is the result of a huge work (more than
-550 commits and [60 closed
-issues](https://github.com/snek5000/snek5000/milestone/1)). To summarize, we
-work a lot on stability, on improving the API, the logging and the user
-experience, and on improving our
-[documentation](https://snek5000.readthedocs.io) and
-[tutorials](https://snek5000.readthedocs.io/en/latest/tutorials.html). The
-following lists are a very incomplete lists of the additions, changes and
-deprecations.
+This is the first stable version and is the result of a huge work (more than 550 commits
+and [60 closed issues](https://github.com/snek5000/snek5000/milestone/1)). To summarize,
+we work a lot on stability, on improving the API, the logging and the user experience,
+and on improving our [documentation](https://snek5000.readthedocs.io) and
+[tutorials](https://snek5000.readthedocs.io/en/latest/tutorials.html). The following
+lists are a very incomplete lists of the additions, changes and deprecations.
 
 ### Added
 
-- Commands [`snek-make`](https://snek5000.readthedocs.io/en/latest/how-to/snek-make.html),
+- Commands
+  [`snek-make`](https://snek5000.readthedocs.io/en/latest/how-to/snek-make.html),
   [`snek-restart`](https://snek5000.readthedocs.io/en/latest/how-to/restart.html),
   `snek-info`, `snek-ipy-load` and `snek-generate-config`.
 - Functions {func}`snek5000.util.restart.load_for_restart`,
