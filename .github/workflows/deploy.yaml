@@ -19,6 +19,11 @@ jobs:
     - name: Clone Nek5000
       run: git clone --depth=1 https://github.com/snek5000/Nek5000.git $HOME/Nek5000
 
+    - name: Install apt packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install gfortran libopenmpi-dev
+
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
