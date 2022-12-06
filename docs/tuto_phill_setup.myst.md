@@ -14,17 +14,23 @@ kernelspec:
 
 <!-- #region tags=[] -->
 
-# First steps with snek5000-phill: setting up the simulation
+# First steps with `snek5000-phill`: setting up a simulation
+
+## Installation of `snek5000-phill`
 
 The
 [Nek5000 phill example](https://github.com/KTH-Nek5000/KTH_Examples/tree/master/phill_STAT)
-has been adapted for a workflow using snek5000. Here we will show how this workflow
-looks like. To get started, we install everything we need:
+(`phill` means periodic hill) has been adapted for a workflow using Snek5000. We created
+[a small Python project called `snek5000-phill`](https://pypi.org/project/snek5000-phill/)
+using the Snek5000 API to define the `phill` case. In this tutorial and in the tutorial
+[](../tuto_phill.md), we will show how this solver can be used. Let's first recall that
+the installation procedure looks like this:
 
 ```sh
+export NEK_SOURCE_ROOT="/path/to/Nek5000"
 python -m venv venv
 source venv/bin/activate
-pip install "snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git"
+pip install snek5000-phill
 ```
 
 ```{note}
@@ -44,12 +50,13 @@ params = Simul.create_default_params()
 ```
 
 The `params` object gives you a consolidated view of the parameters which are spread out
-in a typical Nek5000 case into `.par`, `.box` and `SIZE` file. Already we seen that the
-parameters are more verbose, easier to understand. As a bonus, some parameters which
-depend on others are automatically set. For example, see {py:mod}`snek5000.operators`.
+in a typical Nek5000 case into `.par`, `.box` and `SIZE` file. We will see that the
+parameters are more verbose and easier to understand. As a bonus, some Nek5000
+parameters which depend on others are automatically set. For example, see
+{py:mod}`snek5000.operators`.
 
-Now let us take a look at all the compilation parameters that we can modify. In a
-console the params would also output as follows:
+Now let us take a look at the parameters defining a simulation. In a IPython or Jupyter
+console, the `params` object would also output as follows:
 
 ```{code-cell}
 print(params)
@@ -68,13 +75,13 @@ params.oper._print_docs()
 ```
 
 ```{warning}
-The same object `params` can also be obtained from a simulation object (with
-`sim.params`), but the help on the parameters can only be printed from `params`
-objects obtained from `Simul.create_default_params()`.
+We will see later that the same object `params` can also be obtained from a simulation
+object (with `sim.params`), but the help on the parameters can only be printed from
+`params` objects obtained from `Simul.create_default_params()`.
 ```
 
-The parameters can be modified. For instance, let us tweak the number of elements,
-time-stepping and I/O parameters
+Of course, the parameters can be modified. For instance, let us tweak the number of
+elements, time-stepping and I/O parameters
 
 ```python
 # This affects both the .box and SIZE files
@@ -93,21 +100,28 @@ params.nek.stat.av_step = 3
 params.nek.stat.io_step = 10
 ```
 
-Now let's initialize the simulation. This is going to create the files based on the
-templates we have specified.
+## Creation of the simulation directory
+
+Now let's create the simulation object (We usually use the name `sim`.):
 
 ```{code-cell}
 sim = Simul(params)
 ```
 
-A directory has been created with all the files necessary to compile and run the
-simulation:
+Information is given about the structure of the `sim` object (which has attributes
+`sim.oper`, `sim.output` and `sim.make` corresponding to different aspects of the
+simulation) and about the creation of some files.
+
+We see that a directory has been created with all the files (`.usr`, `.par`, `.box`,
+`SIZE`, etc.) necessary to compile and run the simulation. Note that these files has
+been created based on templates files in the `snek5000` and `phill` packages. The path
+towards the simulation directory is:
 
 ```{code-cell}
 sim.path_run
 ```
 
-Let's check that the .par, .box and SIZE file are present:
+Let's check that the `.par`, `.box` and `SIZE` files are present:
 
 ```{code-cell}
 !ls {sim.path_run}
