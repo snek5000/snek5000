@@ -26,7 +26,7 @@ be obtained with (the `!` is for calling a command in Jupyter):
 From a simulation directory, `snek-make -l` lists the available targets. One can do for
 example:
 
-```bash
+```sh
 snek-make cleanall
 snek-make compile
 snek-make show_config

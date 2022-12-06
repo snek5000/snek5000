@@ -1,4 +1,4 @@
-.. snek5000 documentation master file, created by
+.. snek5000 documentation main file, created by
    sphinx-quickstart on Wed Dec 25 01:55:26 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -33,14 +33,11 @@ internals rely on FluidSim's core_ to build its API.
    tutorials
    how-to/index.md
 
-User Guide
-----------
+.. toctree::
+   :maxdepth: 1
+   :caption: User guide & Python API
 
-.. autosummary::
-   :toctree: _generated/
-   :caption: User Guide
-
-   snek5000
+   autosum
 
 .. toctree::
    :maxdepth: 1
@@ -54,7 +51,7 @@ User Guide
    Source code on GitHub <https://github.com/snek5000/snek5000>
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

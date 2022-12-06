@@ -1,11 +1,11 @@
 # Snek5000 solver for DNS of Taylor-Green Vortices (TGV)
 
-This [Snek5000] solver demonstrate how to write a solver for a particular usecase taken
+This [Snek5000] solver demonstrates how to write a solver for a particular usecase taken
 from the [NekExamples repo]. Something completely different than a high speed train...
 
 ## Install
 
-```bash
+```sh
 pip install snek5000-tgv
 ```
 

@@ -1,13 +1,22 @@
 Installation
 #############
 
-You should always have these environment variables set, pointing to the Nek5000
-source code and the ``bin`` directory within
+Preliminary: setup Nek5000
+==========================
+
+You should always have the environment variable ``NEK_SOURCE_ROOT`` pointing to
+the Nek5000 source code directory:
 
 .. code-block:: bash
 
    export NEK_SOURCE_ROOT="/path/to/Nek5000"
-   export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
+
+.. note::
+
+   You may want to also add the Nek5000 ``bin`` directory in your path (with
+   something like ``export PATH=$PATH:$NEK_SOURCE_ROOT/bin``) to also be able
+   to use Nek5000 directly without Snek5000, but it should not be mandatory for
+   Snek5000.
 
 .. important::
 
