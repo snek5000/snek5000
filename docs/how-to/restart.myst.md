@@ -12,7 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Restart simulations
+# How to restart simulations
 
 Restarting simulations with Nek5000 can be tricky. For example, it is easy to erase some
 results from the initial simulation! To fix this issue Snek5000 uses the notion of
@@ -47,7 +47,7 @@ Let's give few examples. We start from a simulation using the `snek5000-phill` s
    ```
 
    ```{note}
-   This method is used in [the tutorial using our snek5000-tgv solver](../tuto_tgv.md#restart-to-run-further).
+   This method is used in [the tutorial using our snek5000-tgv solver](../tuto_tgv.myst.md#restart-to-run-further).
    ```
 
 1. To restart the simulation in a new session (no compilation needed) from the

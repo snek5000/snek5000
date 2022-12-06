@@ -3,12 +3,12 @@
 # Snek5000
 
 [![PyPI](https://img.shields.io/pypi/v/snek5000)](https://pypi.org/project/snek5000/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7399622.svg)](https://doi.org/10.5281/zenodo.7399622)
 [![Build Status](https://img.shields.io/github/workflow/status/snek5000/snek5000/build)](https://github.com/snek5000/snek5000/actions)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/snek5000/snek5000/main.svg)](https://results.pre-commit.ci/latest/github/snek5000/snek5000/main)
 [![Documentation Status](https://readthedocs.org/projects/snek5000/badge/?version=latest)](https://snek5000.readthedocs.io/en/latest/?badge=latest)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=snek5000_snek5000&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=snek5000_snek5000)
 [![Code coverage](https://codecov.io/gh/snek5000/snek5000/branch/main/graph/badge.svg?token=WzGnN0dfbw)](https://codecov.io/gh/snek5000/snek5000)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7399621.svg)](https://doi.org/10.5281/zenodo.7399621)
 
 <!-- badges -->
 

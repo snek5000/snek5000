@@ -30,7 +30,7 @@ Security in case of vulnerabilities.
 
 <!-- ## [Unreleased] -->
 
-## [0.8.0] - 2022-12-05
+## [0.8.0] - 2022-12-06
 
 This is the first stable version and is the result of a huge work (more than 550 commits
 and [60 closed issues](https://github.com/snek5000/snek5000/milestone/1)). To summarize,

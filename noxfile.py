@@ -36,7 +36,10 @@ else:
 try:
     NEK_SOURCE_ROOT = os.environ["NEK_SOURCE_ROOT"]
 except KeyError:
-    raise RuntimeError("NEK_SOURCE_ROOT has point to Nek5000 top level directory.")
+    raise RuntimeError(
+        "Environment variable NEK_SOURCE_ROOT should be set "
+        "pointing to Nek5000 top level directory."
+    )
 
 TEST_ENV_VARS = {
     "NEK_SOURCE_ROOT": NEK_SOURCE_ROOT,

@@ -6,9 +6,13 @@
 ---
 maxdepth: 1
 ---
-restart.md
+run-background-foreground.md
+restart.myst.md
 history_points.md
 snek-make.md
+rebuild-nek.md
+export-sans-snek5000.myst.md
+archive-simulation-data.md
 ```
 
 ## For developer of Snek5000 solvers
@@ -17,4 +21,6 @@ snek-make.md
 ---
 maxdepth: 1
 ---
+control-fortran-warnings.md
+read-write-par-files.md
 ```
