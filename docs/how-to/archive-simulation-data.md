@@ -12,13 +12,13 @@ tools namely [`zstandard`](https://en.wikipedia.org/wiki/Zstd) and preferably
 (usually faster) if not [GNU `tar`](https://www.gnu.org/software/tar/). If unavailable
 some of these can be installed using conda / mamba:
 
-```bash
+```sh
 conda install -c conda-forge zstandard tar
 ```
 
 Once a simulation is done, you can create the archive using
 
-```bash
+```sh
 cd path/to/sim
 snek-make archive
 ```

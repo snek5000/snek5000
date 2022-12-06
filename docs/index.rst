@@ -1,4 +1,4 @@
-.. snek5000 documentation master file, created by
+.. snek5000 documentation main file, created by
    sphinx-quickstart on Wed Dec 25 01:55:26 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.

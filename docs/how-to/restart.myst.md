@@ -42,7 +42,7 @@ Let's give few examples. We start from a simulation using the `snek5000-phill` s
 1. To restart the simulation in a new session (no compilation needed) from the last
    state file, one can run:
 
-   ```bash
+   ```sh
    snek-restart /path/of/the/simulation --use-start-from -1 --end-time 0.005
    ```
 
@@ -53,14 +53,14 @@ Let's give few examples. We start from a simulation using the `snek5000-phill` s
 1. To restart the simulation in a new session (no compilation needed) from the
    [KTH toolbox] restart files:
 
-   ```bash
+   ```sh
    snek-restart /path/of/the/simulation --use-checkpoint 1 --end-time 0.005
    ```
 
 1. Alternatively, one can restart a simulation in a new directory (new compilation
    needed, first directory unmodified) with:
 
-   ```bash
+   ```sh
    snek-restart /path/of/the/simulation \
        --use-checkpoint 1 --end-time 0.005 --new-dir-results \
        --modify-params "params.nek.stat.av_step=1;"

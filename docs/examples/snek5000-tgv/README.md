@@ -5,7 +5,7 @@ from the [NekExamples repo]. Something completely different than a high speed tr
 
 ## Install
 
-```bash
+```sh
 pip install snek5000-tgv
 ```
 

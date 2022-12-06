@@ -46,20 +46,17 @@ nox -s pip-sync
 - **Editor**: Use an editor which supports [EditorConfig](http://editorconfig.org/)
 
 - **Style guide**: For Python code, `black`, `isort` and `flake8` are used to check and
-  lint. Installing `pre-commit` would enforce the style automatically as a git hook.
+  lint. Installing `pre-commit` would enforce the style automatically as a Git hook.
 
   ```sh
   pre-commit install
   ```
 
 - **Branching model**: The development uses branches and pull-requests for experimental
-  features. You may find the following git branches when you clone `snek5000`:
+  features. You may find the following Git branches when you clone `snek5000`:
 
-  - `master`: main branch
+  - `main`: main branch
   - `fix/...`, `enh/...`: feature branches
-
-  Executing the following command would configure git to work with submodules easily and
-  ensures consistency:
 
 - **Testing**: [Run `pytest`](https://pytest.readthedocs.io/) from the top-level
   directory. The test-cases can be found under `tests/` directory. To run the slow tests
@@ -67,7 +64,7 @@ nox -s pip-sync
 
 - **Debugging**: Set the environment variable:
 
-  ```bash
+  ```sh
   export SNEK_DEBUG=true
   ```
 
