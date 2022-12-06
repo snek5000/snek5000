@@ -5,7 +5,7 @@ Configuring compilation and execution
 
 Since ``snek5000`` acts as a thin interface automation of not just setting up a
 run, but also the **compilation** and **execution**, you would often need to customize
-the compiler and its flags. By default it is configured to use the gcc,
+the compiler and its flags. By default it is configured to use gcc,
 gfortran and OpenMPI to compile the code.
 
 .. literalinclude:: ../src/snek5000/resources/default_configfile.yml
@@ -26,7 +26,9 @@ warning similar to::
    Using default configuration for now:
    /home/docs/src/snek5000/snek5000/src/snek5000/resources/default_configfile.yml
 
-As the warnings suggest, there are three possible paths where you can save your configuration:
+As the warnings suggest, (i) a simple method to avoid these warnings is to
+run the command ``snek-generate-config`` and (ii) there are three possible
+paths where you can save your configuration:
 
 1. ``~/.config/snek5000/<hostname>.yml``
 2. ``~/.config/snek5000.yml``

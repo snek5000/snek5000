@@ -30,7 +30,7 @@ internals rely on FluidSim's core_ to build its API.
 
    intro
    install
-   tutorials
+   tutorials.md
    how-to/index.md
 
 .. toctree::
