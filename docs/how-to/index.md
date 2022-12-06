@@ -22,4 +22,5 @@ archive-simulation-data.md
 maxdepth: 1
 ---
 control-fortran-warnings.md
+read-write-par-files.md
 ```
