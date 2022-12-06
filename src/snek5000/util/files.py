@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from shutil import copy2
 
-from pymech import readnek
+from pymech.neksuite.field import read_header
 
 from fluiddyn.io import FLUIDSIM_PATH
 
@@ -138,7 +138,7 @@ class LazyNekFile:
 
     @property
     def time(self):
-        return readnek(self.path).time
+        return read_header(self.path).time
 
     def __gt__(self, other):
         time = other.time if isinstance(other, type(self)) else other
@@ -163,7 +163,7 @@ def bisect_nek_files_by_time(files, time):
 
     time: float
         Approximate simulation time. Finds ``file`` such that
-        :func:`readnek(file).time <pymech:pymech.neksuite.readnek>` < ``time``.
+        :func:`read_header(file).time <pymech:pymech.neksuite.field.read_header>` < ``time``.
 
     Returns
     -------
