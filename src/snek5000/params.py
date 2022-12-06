@@ -54,11 +54,6 @@ def _check_user_param_index(idx):
     """Check if the index of user parameter is within bounds"""
     if idx > 20:
         raise ValueError(f"userParam {idx = } > 20")
-    elif idx > 10:
-        logger.warning(
-            "Due to a bug in Nek5000, the last index of userParam## that we can "
-            f"specify seems to be 10. {idx = } may not work"
-        )
 
 
 def _as_python_value(input_value):
