@@ -474,11 +474,17 @@ snakemake==7.18.2
 ./docs/examples/snek5000-canonical
     # via -r requirements/vcs_packages.in
 snek5000-cbox @ git+https://github.com/snek5000/snek5000-cbox.git
-    # via -r requirements/vcs_packages.in
+    # via
+    #   -r requirements/vcs_packages.in
+    #   snek5000 (setup.cfg)
 snek5000-phill @ git+https://github.com/snek5000/snek5000-phill.git
-    # via -r requirements/vcs_packages.in
+    # via
+    #   -r requirements/vcs_packages.in
+    #   snek5000 (setup.cfg)
 ./docs/examples/snek5000-tgv
-    # via -r requirements/vcs_packages.in
+    # via
+    #   -r requirements/vcs_packages.in
+    #   snek5000 (setup.cfg)
 sniffio==1.3.0
     # via anyio
 snowballstemmer==2.2.0
