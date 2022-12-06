@@ -44,7 +44,6 @@ Install it as follows:
 
 ```sh
 export NEK_SOURCE_ROOT="/path/to/Nek5000"
-export PATH="$PATH:$NEK_SOURCE_ROOT/bin"
 
 pip install snek5000
 ```

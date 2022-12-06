@@ -24,27 +24,30 @@ internals rely on FluidSim's core_ to build its API.
 | Version    | |release|                            |
 +------------+--------------------------------------+
 
+Getting Started
+---------------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Getting Started
 
    intro
    install
    tutorials
    how-to/index.md
 
-User Guide
-----------
+User guide & Python API
+-----------------------
 
 .. autosummary::
    :toctree: _generated/
-   :caption: User Guide
 
    snek5000
 
+Help & Reference
+----------------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Help & Reference
 
    dev/index.rst
    CONTRIBUTING

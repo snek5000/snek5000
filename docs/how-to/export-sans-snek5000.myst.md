@@ -51,8 +51,8 @@ rule source_archive:
         """
 ```
 
-Now execute in an IPython console to generate source code from your templates
-and prescribed parameters.
+Now execute in an IPython console to generate source code from your templates and
+prescribed parameters.
 
 ```{code-cell} python
 ---
@@ -78,7 +78,7 @@ sim.make.exec('source_archive')
 %mv {sim.path_run}/phill_source-archive.tar.gz .
 ```
 
-This archive may now be shared to your colleagues or kept as a standalone
-archive which only depends on Nek5000 for compilation.
+This archive may now be shared to your colleagues or kept as a standalone archive which
+only depends on Nek5000 for compilation.
 
 [snek5000-phill]: https://github.com/snek5000/snek5000-phill/blob/main/src/phill/Snakefile

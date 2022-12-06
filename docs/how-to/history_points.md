@@ -14,7 +14,7 @@ For example, see the
 
 This should be coupled along with a `hpts()` call in `userchk()` subroutine in the
 Nek5000 user file. For more information, see *documentation for
-`params.output.history_points`* in {class}`snek5000.output.base.Output`
+`params.output.history_points`* in {class}`snek5000.output.base.Output`.
 
 ## Loading and plotting
 

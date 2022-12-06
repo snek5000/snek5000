@@ -1,6 +1,7 @@
 # How to read / write default parameter values from a `*.par` file
 
-Snek5000 is capable of parsing existing `*.par` files. This is shown in the [`snek5000-tgv` example](../examples/snek5000-tgv/src/snek5000_tgv/solver.py),
+Snek5000 is capable of parsing existing `*.par` files. This is shown in the
+[`snek5000-tgv` example](../examples/snek5000-tgv/src/snek5000_tgv/solver.py),
 
 ```{code-block} python
 ---
@@ -26,8 +27,8 @@ class SimulTGV(SimulNek):
 ```
 
 This is useful while porting an existing Nek5000 code as a Snek5000 solver.
-[See the function's
-documentation](snek5000.params.complete_params_from_par_file) for more details.
+[See the function's documentation](snek5000.params.complete_params_from_par_file) for
+more details.
 
 ```{note}
 In Snek5000 we follow a convention of renaming the `*.par` file as `*.par.cfg`
