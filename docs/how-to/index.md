@@ -6,6 +6,7 @@
 ---
 maxdepth: 1
 ---
+run-background-foreground.md
 restart.myst.md
 history_points.md
 snek-make.md
