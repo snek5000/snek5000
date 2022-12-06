@@ -24,30 +24,24 @@ internals rely on FluidSim's core_ to build its API.
 | Version    | |release|                            |
 +------------+--------------------------------------+
 
-Getting Started
----------------
-
 .. toctree::
    :maxdepth: 1
+   :caption: Getting Started
 
    intro
    install
    tutorials
    how-to/index.md
 
-User guide & Python API
------------------------
+.. toctree::
+   :maxdepth: 1
+   :caption: User guide & Python API
 
-.. autosummary::
-   :toctree: _generated/
-
-   snek5000
-
-Help & Reference
-----------------
+   autosum
 
 .. toctree::
    :maxdepth: 1
+   :caption: Help & Reference
 
    dev/index.rst
    CONTRIBUTING
@@ -57,7 +51,7 @@ Help & Reference
    Source code on GitHub <https://github.com/snek5000/snek5000>
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
