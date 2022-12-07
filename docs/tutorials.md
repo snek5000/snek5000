@@ -47,13 +47,13 @@ maxdepth: 2
 ---
 tuto_phill_setup.myst.md
 tuto_phill_make.myst.md
-tuto_config.rst
 tuto_phill_script.myst.md
 tuto_tgv.myst.md
 tuto_cbox.myst.md
+tuto_config.rst
 tuto_packaging.rst
 ```
 
 The snek5000-cbox repository contains
-[real life scripts](https://github.com/snek5000/snek5000-cbox/tree/main/doc/examples)
+[scripts used for a real life study](https://github.com/snek5000/snek5000-cbox/tree/main/doc/examples)
 that can be interesting for any Snek5000 users.

@@ -14,7 +14,7 @@ kernelspec:
 
 # Demo periodic hill (`snek5000-phill` solver): running a simulation from a script
 
-## Execution of the script
+## Run a simulation by executing a script
 
 Now let's execute the simulation. We will use the script
 [docs/examples/scripts/tuto_phill.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_phill.py),
@@ -25,14 +25,22 @@ which contains:
 ```
 
 In normal life, we would just execute this script with something like
-`python tuto_phill.py`. However, in this notebook, we need a bit more code. This is
-specific to these tutorials so you can just look at the output of this cell.
+`python tuto_phill.py`.
 
 ```{code-cell} ipython3
+command = "python3 examples/scripts/tuto_phill.py"
+```
+
+However, in this notebook, we need a bit more code. How we execute this command is very
+specific to these tutorials written as notebooks so you can just look at the output of
+this cell.
+
+```{code-cell} ipython3
+---
+tags: [hide-input]
+---
 from subprocess import run, PIPE, STDOUT
 from time import perf_counter
-
-command = "python3 examples/scripts/tuto_phill.py"
 
 print("Running the script tuto_phill.py... (It can take few minutes.)")
 t_start = perf_counter()
@@ -40,32 +48,34 @@ process = run(
     command.split(), check=True, text=True, stdout=PIPE,  stderr=STDOUT
 )
 print(f"Script executed in {perf_counter() - t_start:.2f} s")
+lines = [
+    line for line in process.stdout.split("\n")
+    if not line.endswith(", errno = 1")
+]
 ```
 
 ### Snek5000 and Nek5000 log
 
-The simulation is done! We are going to look at its output (which is now in the
-variable `process.stdout`). However, be prepared to get something long because
-Nek5000 is very verbose. For readability of this tutorial, the output is hidden
-by default (click to see it):
+The simulation is done! We are going to look at its output (which is now in a variable
+`lines`). However, be prepared to get something long because Nek5000 is very verbose.
+For readability of this tutorial, the output is hidden by default (click to show it):
 
 ```{code-cell} ipython3
 ---
 tags: [hide-output]
 ---
-lines = [
-    line for line in process.stdout.split("\n")
-    if not line.endswith(", errno = 1")
-]
 print("\n".join(lines))
 ```
 
-To "load the simulation", i.e. to recreate a simulation object, we now need to
-extract from the output the path of the directory of the simulation. This is
-also very specific to this tutorial, so you don't need to understand this code.
-In real life, we can just read the log to know where the data has been saved.
+To "load the simulation", i.e. to recreate a simulation object, we now need to extract
+from the output the path of the directory of the simulation. This is also very specific
+to these tutorials, so you don't need to focus on this code. In real life, we can just
+read the log to know where the data has been saved.
 
 ```{code-cell} ipython3
+---
+tags: [hide-input]
+---
 path_run = None
 for line in lines:
     if "path_run: " in line:
@@ -73,6 +83,9 @@ for line in lines:
         break
 if path_run is None:
     raise RuntimeError
+```
+
+```{code-cell} ipython3
 path_run
 ```
 
@@ -106,7 +119,7 @@ The command `snek-ipy-load` can be used to start a IPython session and load the
 simulation saved in the current directory.
 ```
 
-## Read/plot state and stat files
+## Read/plot state and stat files as hexahedral data
 
 We saw that the directory `session_00` contains a state file (`phill0.f00001`) and a
 `sts` file (`stsphill0.f00001`).

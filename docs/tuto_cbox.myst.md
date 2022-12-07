@@ -14,7 +14,7 @@ kernelspec:
 
 # Demo sidewall convection (snek5000-cbox solver)
 
-## Initialize and setup simulation parameters
+## A more advanced script adated for a particular instability
 
 This example is based on
 [this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045).
@@ -27,7 +27,7 @@ for the implementation.
 
 The simulation will be carried out with the script
 [docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py).
-Note that this script is more complicated than for the previous tutorial. Here, we want
+Note that this script is more complicated than for the previous tutorials. Here, we want
 to demonstrate that it is possible to check what happen in the simulation from Python
 and to stop the simulation depending on its outputs. We know that for moderate Rayleigh
 number, the side wall convection in a box first reach a quasi-steady state from which
@@ -40,13 +40,22 @@ becomes slower than exponential.
 ```
 
 In normal life, we would just execute this script with something like
-`python tuto_cbox.py`. However, in this notebook, we need a bit more code:
+`python tuto_cbox.py`.
 
 ```{code-cell} ipython3
+command = "python3 examples/scripts/tuto_cbox.py"
+```
+
+However, in this notebook, we need a bit more code. How we execute this command is very
+specific to these tutorials written as notebooks so you can just look at the output of
+this cell.
+
+```{code-cell} ipython3
+---
+tags: [hide-input]
+---
 from subprocess import run, PIPE, STDOUT
 from time import perf_counter
-
-command = "python3 examples/scripts/tuto_cbox.py"
 
 print("Running the script tuto_cbox.py... (It can take few minutes.)")
 t_start = perf_counter()
@@ -54,9 +63,15 @@ process = run(
     command.split(), check=True, text=True, stdout=PIPE,  stderr=STDOUT
 )
 print(f"Script executed in {perf_counter() - t_start:.2f} s")
+lines = [
+    line for line in process.stdout.split("\n")
+    if not line.endswith(", errno = 1")
+]
 ```
 
-The script has now been executed. Let's look at its output.
+The simulation is done! We are going to look at its output (which is now in a variable
+`lines`). However, be prepared to get something long because Nek5000 is very verbose.
+For readability of this tutorial, the output is hidden by default (click to show it):
 
 ```{code-cell} ipython3
 ---
@@ -66,20 +81,28 @@ print(process.stdout)
 ```
 
 To "load the simulation", i.e. to recreate a simulation object, we now need to extract
-from the output the path of the directory of the simulation:
+from the output the path of the directory of the simulation. This is also very specific
+to these tutorials, so you don't need to focus on this code. In real life, we can just
+read the log to know where the data has been saved.
 
 ```{code-cell} ipython3
+---
+tags: [hide-input]
+---
 path_run = None
-for line in process.stdout.split("\n"):
+for line in lines:
     if "path_run: " in line:
         path_run = line.split("path_run: ")[1].split(" ", 1)[0]
         break
 if path_run is None:
     raise RuntimeError
+```
+
+```{code-cell} ipython3
 path_run
 ```
 
-We can now read the Nek5000 log file.
+We can now read the Nek5000 log file. First the first lines:
 
 ```{code-cell} ipython3
 ---
@@ -97,6 +120,8 @@ for line in lines:
     index_step2 += 1
 print("\n".join(lines[:index_step2+20]))
 ```
+
+And then the last lines:
 
 ```{code-cell} ipython3
 ---

@@ -41,7 +41,9 @@ name as the `usr` files. More on packaging Nek5000 files can be found in the
 
 <!-- #endregion -->
 
-## Initialize and setup up simulation parameters
+## `params` object for simulation parameters
+
+### Creating the `params` object containing default parameters
 
 ```{code-cell}
 from phill.solver import Simul
@@ -54,6 +56,8 @@ in a typical Nek5000 case into `.par`, `.box` and `SIZE` file. We will see that 
 parameters are more verbose and easier to understand. As a bonus, some Nek5000
 parameters which depend on others are automatically set. For example, see
 {py:mod}`snek5000.operators`.
+
+### Studying the parameters (print and get help)
 
 Now let us take a look at the parameters defining a simulation. In a IPython or Jupyter
 console, the `params` object would also output as follows:
@@ -68,7 +72,13 @@ One can also print only one section:
 print(params.nek.general)
 ```
 
-and print some help about some parameters:
+of alternatively, with the method `_print_as_code` (useful for copy-pasting):
+
+```{code-cell}
+params.nek.general._print_as_code()
+```
+
+Note that it is easy to print some help about some parameters:
 
 ```{code-cell}
 params.oper._print_docs()
@@ -79,6 +89,8 @@ We will see later that the same object `params` can also be obtained from a simu
 object (with `sim.params`), but the help on the parameters can only be printed from
 `params` objects obtained from `Simul.create_default_params()`.
 ```
+
+### Modifying the parameters
 
 Of course, the parameters can be modified. For instance, let us tweak the number of
 elements, time-stepping and I/O parameters
@@ -125,4 +137,9 @@ Let's check that the `.par`, `.box` and `SIZE` files are present:
 
 ```{code-cell}
 !ls {sim.path_run}
+```
+
+```{note}
+The path of the directory where the simulation directories are saved can be
+changed through the environment variable `FLUIDSIM_PATH`.
 ```

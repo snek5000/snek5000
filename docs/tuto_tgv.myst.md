@@ -14,14 +14,14 @@ kernelspec:
 
 <!-- #region tags=[] -->
 
-# Demo Taylor-Green vortex (snek5000-tgv solver)
+# Demo Taylor-Green vortex (`snek5000-tgv` solver)
 
 Snek5000 repository contains a
 [simple example solver](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv)
 for the Taylor-Green vortex flow. We are going to show how it can be used on a very
 small and short simulation.
 
-## Run the simulation
+## Run a simulation by executing a script
 
 We will run the simulation by executing the script
 [docs/examples/scripts/tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py),
@@ -32,13 +32,22 @@ which contains:
 ```
 
 In normal life, we would just execute this script with something like
-`python tuto_tgv.py`. However, in this notebook, we need a bit more code:
+`python tuto_tgv.py`.
 
 ```{code-cell} ipython3
+command = "python3 examples/scripts/tuto_tgv.py"
+```
+
+However, in this notebook, we need a bit more code. How we execute this command is very
+specific to these tutorials written as notebooks so you can just look at the output of
+this cell.
+
+```{code-cell} ipython3
+---
+tags: [hide-input]
+---
 from subprocess import run, PIPE, STDOUT
 from time import perf_counter
-
-command = "python3 examples/scripts/tuto_tgv.py"
 
 print("Running the script tuto_tgv.py... (It can take few minutes.)")
 t_start = perf_counter()
@@ -46,19 +55,22 @@ process = run(
     command.split(), check=True, text=True, stdout=PIPE,  stderr=STDOUT
 )
 print(f"Script executed in {perf_counter() - t_start:.2f} s")
+lines = [
+    line for line in process.stdout.split("\n")
+    if not line.endswith(", errno = 1")
+]
 ```
 
-The script has now been executed. Let's look at its output:
+The simulation is done! We are going to look at its output (which is now in a variable
+`lines`). However, be prepared to get something long because Nek5000 is very verbose.
+For readability of this tutorial, the output is hidden by default (click to show it).
+
+Let us first look at the first lines, until the beginning of the time stepping:
 
 ```{code-cell} ipython3
 ---
 tags: [hide-output]
 ---
-lines = [
-    line for line in process.stdout.split("\n")
-    if not line.endswith(", errno = 1")
-]
-
 index_step2 = 0
 for line in lines:
     if line.startswith("Step      2, t= "):
@@ -67,6 +79,8 @@ for line in lines:
 
 print("\n".join(lines[:index_step2+20]))
 ```
+
+And then at the last lines, from the end of the time stepping:
 
 ```{code-cell} ipython3
 ---
@@ -82,9 +96,14 @@ print("\n".join(lines[index_final_step-10:]))
 ```
 
 To "load the simulation", i.e. to recreate a simulation object, we now need to extract
-from the output the path of the directory of the simulation:
+from the output the path of the directory of the simulation. This is also very specific
+to these tutorials, so you don't need to focus on this code. In real life, we can just
+read the log to know where the data has been saved.
 
 ```{code-cell} ipython3
+---
+tags: [hide-input]
+---
 path_run = None
 for line in lines:
     if "path_run: " in line:
@@ -92,6 +111,10 @@ for line in lines:
         break
 if path_run is None:
     raise RuntimeError
+```
+
+```{code-cell} ipython3
+path_run
 ```
 
 ## Load the simulation
@@ -182,7 +205,18 @@ We see that our first simulation was clearly too short. We can use the command l
 continue the simulation from the last saved file (`--use-start-from -1`):
 
 ```{code-cell} ipython3
+print("Running the restart command...")
+t_start = perf_counter()
 lines = !snek-restart {sim.path_run} --use-start-from -1 --add-to-end-time 4
+print(f"Command executed in {perf_counter() - t_start:.2f} s")
+```
+
+```{code-cell} ipython3
+---
+tags: [hide-cell]
+---
+# filter to remove useless warnings
+lines = [line for line in lines if not line.endswith(", errno = 1")]
 ```
 
 Let's look at the end of the output of this command:
@@ -191,8 +225,6 @@ Let's look at the end of the output of this command:
 ---
 tags: [hide-output]
 ---
-# filter to remove useless warnings
-lines = [line for line in lines if not line.endswith(", errno = 1")]
 print("\n".join(lines[-120:]))
 ```
 
