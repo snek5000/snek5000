@@ -12,11 +12,7 @@ kernelspec:
   name: python3
 ---
 
-<!-- #region tags=[] -->
-
 # Demo periodic hill (`snek5000-phill` solver): running a simulation from a script
-
-<!-- #endregion -->
 
 ## Execution of the script
 
@@ -48,9 +44,15 @@ print(f"Script executed in {perf_counter() - t_start:.2f} s")
 
 ### Snek5000 and Nek5000 log
 
-The simulation is done! Let's look at its output:
+The simulation is done! We are going to look at its output (which is now in the
+variable `process.stdout`). However, be prepared to get something long because
+Nek5000 is very verbose. For readability of this tutorial, the output is hidden
+by default (click to see it):
 
 ```{code-cell} ipython3
+---
+tags: [hide-output]
+---
 lines = [
     line for line in process.stdout.split("\n")
     if not line.endswith(", errno = 1")
@@ -58,8 +60,10 @@ lines = [
 print("\n".join(lines))
 ```
 
-To "load the simulation", i.e. to recreate a simulation object, we now need to extract
-from the output the path of the directory of the simulation:
+To "load the simulation", i.e. to recreate a simulation object, we now need to
+extract from the output the path of the directory of the simulation. This is
+also very specific to this tutorial, so you don't need to understand this code.
+In real life, we can just read the log to know where the data has been saved.
 
 ```{code-cell} ipython3
 path_run = None

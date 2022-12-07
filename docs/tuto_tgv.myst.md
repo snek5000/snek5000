@@ -51,6 +51,9 @@ print(f"Script executed in {perf_counter() - t_start:.2f} s")
 The script has now been executed. Let's look at its output:
 
 ```{code-cell} ipython3
+---
+tags: [hide-output]
+---
 lines = [
     line for line in process.stdout.split("\n")
     if not line.endswith(", errno = 1")
@@ -66,6 +69,9 @@ print("\n".join(lines[:index_step2+20]))
 ```
 
 ```{code-cell} ipython3
+---
+tags: [hide-output]
+---
 index_final_step = 0
 for line in lines[::-1]:
     if line.startswith(" Final time step ="):
@@ -182,6 +188,9 @@ lines = !snek-restart {sim.path_run} --use-start-from -1 --add-to-end-time 4
 Let's look at the end of the output of this command:
 
 ```{code-cell} ipython3
+---
+tags: [hide-output]
+---
 # filter to remove useless warnings
 lines = [line for line in lines if not line.endswith(", errno = 1")]
 print("\n".join(lines[-120:]))
@@ -230,9 +239,3 @@ ax.figure
 
 Note that we use for this tutorial very small and coarse simulations, which explain the
 differences between our results and the reference!
-
-## Versions used in this tutorial
-
-```{code-cell} ipython3
-!snek-info
-```

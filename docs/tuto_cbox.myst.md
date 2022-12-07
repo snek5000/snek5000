@@ -12,11 +12,7 @@ kernelspec:
   name: python3
 ---
 
-<!-- #region tags=[] -->
-
 # Demo sidewall convection (snek5000-cbox solver)
-
-<!-- #endregion -->
 
 ## Initialize and setup simulation parameters
 
@@ -63,6 +59,9 @@ print(f"Script executed in {perf_counter() - t_start:.2f} s")
 The script has now been executed. Let's look at its output.
 
 ```{code-cell} ipython3
+---
+tags: [hide-output]
+---
 print(process.stdout)
 ```
 
@@ -83,6 +82,9 @@ path_run
 We can now read the Nek5000 log file.
 
 ```{code-cell} ipython3
+---
+tags: [hide-output]
+---
 from pathlib import Path
 
 path_log = Path(path_run) / "cbox.log"
@@ -97,6 +99,9 @@ print("\n".join(lines[:index_step2+20]))
 ```
 
 ```{code-cell} ipython3
+---
+tags: [hide-output]
+---
 index_final_step = 0
 for line in lines[::-1]:
     if line.startswith("Step") and ", t= " in line:
@@ -199,10 +204,4 @@ field = field.drop_duplicates(["x", "y"])
 field = field.interp(x=x_new, y=y_new)
 
 field.temperature.mean('x').plot();
-```
-
-## Versions used in this tutorial
-
-```{code-cell} ipython3
-!snek-info
 ```
