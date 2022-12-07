@@ -104,7 +104,7 @@ in directories "session_00", "session_01", etc.
 !ls {path_run}/session_00
 ```
 
-## Loading the simulation
+## Load the simulation
 
 One can recreate a simulation object from the simulation directory.
 

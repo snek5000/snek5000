@@ -17,23 +17,25 @@ kernelspec:
 ## A more advanced script adated for a particular instability
 
 This example is based on
-[this study](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045).
-The configuration is a square cavity. The control parameters are Prandtl $= 0.71$ and
-Rayleigh $= 2 \times 10^{8}$. The mesh size is $64 \times 64$. We want to have $25$
-probes (history points) to record the variable signals. We will use these probe signals
-in monitoring and postprocessing of the simulation. See
-[this example](https://github.com/snek5000/snek5000-cbox/blob/gh-actions/doc/examples/run_side_short.py)
-for the implementation.
+[the study *From onset of unsteadiness to chaos in a differentially heated square cavity* by Le Quéré & Behnia (1998)](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045).
+
+The configuration is convection in a 2D square cavity heated and cooled at two opposite
+sides. The control parameters are the Prandtl number $Pr= 0.71$ and the Rayleigh number
+$Ra = 2 \times 10^{8}$. The mesh size is $64 \times 64$ (8 elements in each direction).
 
 The simulation will be carried out with the script
-[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py).
-Note that this script is more complicated than for the previous tutorials. Here, we want
-to demonstrate that it is possible to check what happen in the simulation from Python
-and to stop the simulation depending on its outputs. We know that for moderate Rayleigh
-number, the side wall convection in a box first reach a quasi-steady state from which
-emerges an oscillatory instability. Here, we want to stop the simulation as soon as the
-linear instability starts to saturate, i.e. as soon as the growth of the unstable mode
-becomes slower than exponential.
+[docs/examples/scripts/tuto_cbox.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_cbox.py)
+(code shown just below). Note that this script is more complicated than for the previous
+tutorials. Here, we want to demonstrate that it is possible to check what happen in the
+simulation from Python and to stop the simulation depending on its outputs. We know that
+for some moderate Rayleigh number values, the side wall convection in a box first reach
+a quasi-steady state from which emerges an oscillatory instability. Here, we want to
+stop the simulation as soon as the linear instability starts to saturate, i.e. as soon
+as the growth of the unstable mode becomes slower than exponential.
+
+We want to have $25$ probes (using Nek5000 history points feature) to record the signals
+of the different physical variables and to use these probe signals to monitor and
+postprocess the simulation.
 
 ```{eval-rst}
 .. literalinclude:: ./examples/scripts/tuto_cbox.py
@@ -63,10 +65,15 @@ process = run(
     command.split(), check=True, text=True, stdout=PIPE,  stderr=STDOUT
 )
 print(f"Script executed in {perf_counter() - t_start:.2f} s")
-lines = [
-    line for line in process.stdout.split("\n")
-    if not line.endswith(", errno = 1")
-]
+lines = process.stdout.split("\n")
+```
+
+```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
+# filter to remove useless warnings
+lines = [line for line in lines if not line.endswith(", errno = 1")]
 ```
 
 The simulation is done! We are going to look at its output (which is now in a variable
@@ -77,7 +84,13 @@ For readability of this tutorial, the output is hidden by default (click to show
 ---
 tags: [hide-output]
 ---
-print(process.stdout)
+print("\n".join(lines))
+```
+
+The last lines of the output should be related to the checks done in our script:
+
+```{code-cell} ipython3
+print("\n".join(lines[-6:]))
 ```
 
 To "load the simulation", i.e. to recreate a simulation object, we now need to extract
@@ -135,9 +148,9 @@ for line in lines[::-1]:
 print("\n".join(lines[index_final_step-10:]))
 ```
 
-## Postprocessing
+## Load the simulation
 
-We can load the simulation:
+One can recreate a simulation object from the simulation directory.
 
 ```{code-cell} ipython3
 from snek5000 import load
@@ -149,6 +162,8 @@ sim = load(path_run)
 The command `snek-ipy-load` can be used to start a IPython session and load the
 simulation saved in the current directory.
 ```
+
+## Load and plot history points data
 
 Then we are able to plot all the history points for one variable (here the temperature),
 

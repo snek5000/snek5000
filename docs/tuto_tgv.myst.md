@@ -55,10 +55,15 @@ process = run(
     command.split(), check=True, text=True, stdout=PIPE,  stderr=STDOUT
 )
 print(f"Script executed in {perf_counter() - t_start:.2f} s")
-lines = [
-    line for line in process.stdout.split("\n")
-    if not line.endswith(", errno = 1")
-]
+lines = process.stdout.split("\n")
+```
+
+```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
+# filter to remove useless warnings
+lines = [line for line in lines if not line.endswith(", errno = 1")]
 ```
 
 The simulation is done! We are going to look at its output (which is now in a variable
@@ -213,7 +218,7 @@ print(f"Command executed in {perf_counter() - t_start:.2f} s")
 
 ```{code-cell} ipython3
 ---
-tags: [hide-cell]
+tags: [remove-cell]
 ---
 # filter to remove useless warnings
 lines = [line for line in lines if not line.endswith(", errno = 1")]
