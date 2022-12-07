@@ -14,105 +14,11 @@ kernelspec:
 
 <!-- #region tags=[] -->
 
-# Demo periodic hill (snek5000-phill solver)
+# Demo periodic hill (`snek5000-phill` solver): running a simulation from a script
 
 <!-- #endregion -->
 
-## Initialize and setup up simulation parameters (recap)
-
-In the previous tutorial we saw how to install the packages and setup a simulation run.
-Let us do it here in one step.
-
-```{code-cell} ipython3
-from phill.solver import Simul
-
-params = Simul.create_default_params()
-params.output.sub_directory = "examples_snek/tuto"
-params.oper.nx = 6
-params.oper.ny = 5
-params.oper.nz = 4
-params.oper.elem.order = params.oper.elem.order_out = 10
-
-params.oper.nproc_min = 2
-
-params.nek.general.num_steps = 10
-params.nek.general.time_stepper = "bdf2"
-params.nek.general.write_interval = 10
-
-params.nek.stat.av_step = 3
-params.nek.stat.io_step = 10
-
-sim = Simul(params)
-```
-
-We recall that this instanciation of the class `Simul` creates the simulation directory
-on the disk with the following files:
-
-```{code-cell} ipython3
-!ls {sim.path_run}
-```
-
-## Execute the simulation
-
-### Snakemake rules
-
-To run the simulation we need to execute certain commands. These are described using
-[snakemake](https://snakemake.rtfd.io) in the Snakefile. Let's look at the rules defined
-in the Snakefile (which are nearly generic for any Nek5000 case).
-
-```{code-cell} ipython3
-sim.make.list();
-```
-
-The rules in the Snakefile are either shell commands or Python code which handle
-different parts of the build step, such as building a mesh (rule `mesh`), compiling
-(rule `compile`) and running the simulation (rule `run` or `run_fg`). The rules can be
-executed on by one by passing them as strings to the [exec](snek5000.make.Make.exec)
-method of the `sim.make` object. The default parameter is to do everything to run a
-simulation.
-
-From a user's perspective the following rules are essential:
-
-- `compile`: Only compile the executable
-- `run`: Run the simulation in the background (non-blocking)
-- `run_fg`: Run the simulation in the foreground (blocking, till the simulation is over
-  / terminated)
-
-```{note}
-
-In real life, simulations are usually submitted with Snek5000 from a script and
-we are going to call Snakemake from the Snek5000 Python API with a call similar
-to `sim.make.exec("run_fg", nproc=2)` (as in the following example).
-
-However, there is also a command `snek-make` that can be run from the
-simulation directory to list and invoke the Snakemake rules. See `snek-make -h`
-and `snek-make -l`.
-
-```
-
-<!-- #region tags=[] -->
-
-### Debug mode
-
-During development, it can be useful to turn on the debug environment variable which can
-be done in Python with:
-
-<!-- #endregion -->
-
-```python
-import os
-os.environ["SNEK_DEBUG"] = "1"
-```
-
-The equivalent of this in the shell command line would be `export SNEK_DEBUG=1`. By
-doing so, snek5000 would:
-
-- perform stricter compile time checks. See
-  {func}`snek5000.util.smake.append_debug_flags`
-- activate the code blocks under the preprocessing flag in Fortran sources
-  `#ifdef DEBUG`
-
-### Execution of the main script
+## Execution of the script
 
 Now let's execute the simulation. We will use the script
 [docs/examples/scripts/tuto_phill.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_phill.py),
@@ -123,7 +29,8 @@ which contains:
 ```
 
 In normal life, we would just execute this script with something like
-`python tuto_phill.py`. However, in this notebook, we need a bit more code:
+`python tuto_phill.py`. However, in this notebook, we need a bit more code. This is
+specific to these tutorials so you can just look at the output of this cell.
 
 ```{code-cell} ipython3
 from subprocess import run, PIPE, STDOUT
@@ -229,10 +136,4 @@ hexa_data_stat.elem[0].scal.shape
 
 ```{code-cell} ipython3
 sim.output.phys_fields.plot_hexa_stat(key="scalar 8", vmin=-0.4, vmax=0.4)
-```
-
-## Versions used in this tutorial
-
-```{code-cell} ipython3
-!snek-info
 ```

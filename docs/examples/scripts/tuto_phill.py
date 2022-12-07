@@ -1,5 +1,3 @@
-# import os
-
 from phill.solver import Simul
 
 params = Simul.create_default_params()
@@ -19,7 +17,5 @@ params.nek.stat.av_step = 2
 params.nek.stat.io_step = 10
 
 sim = Simul(params)
-
-# os.environ["SNEK_DEBUG"] = "1"
 
 sim.make.exec("run_fg", nproc=2)
