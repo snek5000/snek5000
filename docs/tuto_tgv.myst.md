@@ -139,7 +139,30 @@ The command `snek-ipy-load` can be used to start a IPython session and load the
 simulation saved in the current directory.
 ```
 
-## Visualize raw data via `sim.output.print_stdout`
+## Parse, load and plot information contained in the Nek5000 log
+
+The object `sim.output.print_stdout` (see
+{class}`snek5000.output.print_stdout.PrintStdOut`) contains utilities to represent
+information contained in the Nek5000 log. For example, one can do:
+
+```{code-cell} ipython3
+log_data = sim.output.print_stdout.load()
+log_data
+```
+
+and plot useful figures with
+
+```{code-cell} ipython3
+sim.output.print_stdout.plot_dt_cfl()
+```
+
+and
+
+```{code-cell} ipython3
+sim.output.print_stdout.plot_nb_iterations()
+```
+
+## Visualize spatial means data
 
 In subroutine `userchk` of `tgv.usr.f`, the time stamp, kinetic energy and enstrophy are
 output into standard output, with a keyword `monitor` at the end of the line. We can use

@@ -21,4 +21,4 @@ Nek5000 user file. For more information, see *documentation for
 Use `load*` and `plot*` methods in class
 {class}`snek5000.output.history_points.HistoryPoints`. A working example of this can be
 found in
-[a tutorial where we process results from a snek5000-cbox simulation](../tuto_cbox.myst.md#postprocessing).
+[a tutorial where we process results from a snek5000-cbox simulation](../tuto_cbox.myst.md#load-and-plot-history-points-data).
