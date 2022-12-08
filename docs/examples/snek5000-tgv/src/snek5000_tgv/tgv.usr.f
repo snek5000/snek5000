@@ -18,7 +18,7 @@ C-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      integer e,eg, ix, iy, iz
+      integer e, eg, ix, iy, iz
 
       return
       end
@@ -34,7 +34,7 @@ c
       include 'TOTAL'
       include 'NEKUSE'
 
-      integer e,eg, ix, iy, iz
+      integer e, eg, ix, iy, iz
 
       ffx=0.
       ffy=0.
@@ -51,7 +51,7 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      integer e,eg, ix, iy, iz
+      integer e, eg, ix, iy, iz
       real source
 
       qvol   = 0.0
@@ -70,7 +70,7 @@ c     NOTE: This routine may or may not be called by every processor
       include 'TOTAL'
       include 'NEKUSE'
 
-      integer e,eg, ix, iy, iz
+      integer e, eg, ix, iy, iz
       real f
 
       return
@@ -84,7 +84,7 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      integer e,eg, ix, iy, iz
+      integer e, eg, ix, iy, iz
 
       ux   = sin(x)*cos(y)*cos(z)
       uy   = -cos(x)*sin(y)*cos(z)
@@ -101,7 +101,7 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
 
       character*80 fnames(3)
-      character*128 file_name, format
+      character*128 file_name
       logical exist
       real e1, e2
       real period_save, t_last_save
@@ -133,8 +133,6 @@ c
 c      iostep_full = iostep
 c      call full_restart_save(iostep_full)
       
-      format = '(g14.8,A,g14.8,A,g14.8)'
-
       if ((istep.eq.1) .or. (istep.eq.lastep) .or. (floor(time
      &/period_save)).gt.(floor(t_last_save/period_save))) then
       
@@ -146,10 +144,10 @@ c      call full_restart_save(iostep_full)
             write(6,2) time, e1, e2
   2         format(1p3e13.4,' monitor')
             open(10, File=file_name, position='append')
-            write(10,format) time,',',e1,',',e2
+            write(10,'(g14.8,A,g14.8,A,g14.8)') time,',',e1,',',e2
             close(10)
          endif
-         
+
       endif
 
       return
@@ -201,7 +199,7 @@ c-----------------------------------------------------------------------
       real sum_e1, sum_e2, vv, oo, e1, e2
       real glsum
 
-      ntot=nx1*ny1*nz1*nelv
+      ntot = nx1*ny1*nz1*nelv
 
       sum_e1 = 0.
       sum_e2 = 0.
