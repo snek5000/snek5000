@@ -100,16 +100,10 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      integer ntot
-      common /SCRNS/ w1 (lx1*ly1*lz1*lelv),
-     &               w2 (lx1*ly1*lz1*lelv),
-     &               omg(lx1*ly1*lz1*lelv,ldim)
-
       character*80 fnames(3)
       character*128 file_name, format
       logical exist
-      real w1, w2, omg
-      real sum_e1, sum_e2, vv, oo, e1, e2
+      real e1, e2
       real period_save, t_last_save
       save t_last_save
 
@@ -126,11 +120,6 @@ c-----------------------------------------------------------------------
                close(10)
             endif
           endif
-      endif
-
-      if (istep.eq.0) then
-         ntot=nx1*ny1*nz1*nelv   
-         t_last_save = time
       endif
 
 c      if (.false.) then
@@ -160,8 +149,9 @@ c      call full_restart_save(iostep_full)
             write(10,format) time,',',e1,',',e2
             close(10)
          endif
-      endif
          
+      endif
+
       return
       end
 c-----------------------------------------------------------------------
