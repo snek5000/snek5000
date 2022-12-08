@@ -146,8 +146,8 @@ c      call full_restart_save(iostep_full)
       
       format = '(g14.8,A,g14.8,A,g14.8)'
 
-      if ((floor(time/period_save)).gt.(floor(t_last_save/
-     &period_save))) then
+      if ((istep.eq.1) .or. (istep.eq.lastep) .or. (floor(time
+     &/period_save)).gt.(floor(t_last_save/period_save))) then
       
          t_last_save = time
 
@@ -160,22 +160,8 @@ c      call full_restart_save(iostep_full)
             write(10,format) time,',',e1,',',e2
             close(10)
          endif
-
-      else if ((istep.eq.1).or.(istep.eq.lastep)) then
-
-         t_last_save = time
-
-         call compute_energy_enstrophy(e1,e2,vx,vy,vz)
-
-         if (nid.eq.0) then
-            write(6,2) time, e1, e2
-            open(10, File=file_name, position='append')
-            write(10,format) time,',',e1,',',e2
-            close(10)
-         endif
-
       endif
-
+         
       return
       end
 c-----------------------------------------------------------------------

@@ -45,10 +45,10 @@ class SimulTGV(SimulNek):
         # Here we map the mesh length to userParam01, which is used in subroutine usrdat
         params.oper._record_nek_user_params({"Lx": 1})
 
-        params.output.phys_fields._set_attribs(
-            {"period_save": 10},
+        params.output._set_attribs(
+            {"spatial_means_period_save": 10},
         )
-        params.output.phys_fields._record_nek_user_params({"period_save": 2})
+        params.output._record_nek_user_params({"spatial_means_period_save": 2})
 
         # Read defaults for `params.nek` from `tgv.par.cfg` (original code)
         info_solver = cls.info_solver  # cls.InfoSolver()
