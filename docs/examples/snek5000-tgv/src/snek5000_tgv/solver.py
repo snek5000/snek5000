@@ -48,10 +48,8 @@ class SimulTGV(SimulNek):
         params.output.phys_fields._set_attribs(
             {"period_save": 10},
         )
-        params.output.phys_fields._record_nek_user_params(
-            {"period_save": 2}
-        )
-      
+        params.output.phys_fields._record_nek_user_params({"period_save": 2})
+
         # Read defaults for `params.nek` from `tgv.par.cfg` (original code)
         info_solver = cls.info_solver  # cls.InfoSolver()
         output_cls = info_solver.import_classes()["Output"]
