@@ -18,5 +18,7 @@ params.nek.general.extrapolation = "OIFS"
 params.nek.general.write_control = "runTime"
 params.nek.general.write_interval = 2.0
 
+params.output.phys_fields.period_save = 0.2
+
 sim = Simul(params)
 sim.make.exec("run_fg", nproc=2)

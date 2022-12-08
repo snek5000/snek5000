@@ -70,17 +70,42 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
-      subroutine userchk()
+      subroutine userchk
       include 'SIZE'
       include 'TOTAL'
 
+      integer ntot
       common /SCRNS/ w1 (lx1*ly1*lz1*lelv),
      &               w2 (lx1*ly1*lz1*lelv),
      &               omg(lx1*ly1*lz1*lelv,ldim)
 
       character*80 fnames(3)
+      character*128 file_name
+      logical exist
+      real w1, w2, omg
+      real sum_e1, sum_e2, vv, oo, e1, e2
+      real period_save, t_last_save
+      save t_last_save
 
-      n = nx1*ny1*nz1*nelv
+      period_save = real(UPARAM(2))
+
+      file_name = 'spatial_mean.csv'
+
+      if (istep.eq.0) then
+         inquire(file=file_name, exist=exist)   
+         if (.not. exist) then
+            if (nid.eq.0) then
+               open(10, File=file_name, position='append')
+               write(10,*) '# Time, Energy, Enstrophy'
+               close(10)
+            endif
+          endif
+      endif
+
+      if (istep.eq.0) then
+         ntot=nx1*ny1*nz1*nelv   
+         t_last_save = time
+      endif
 
 c      if (.false.) then
 c         call blank(fnames,size(fnames)*80)
@@ -92,22 +117,32 @@ c      endif
 c
 c      iostep_full = iostep
 c      call full_restart_save(iostep_full)
-
-      if (mod(istep,10).ne.0) return
-
-      sum_e1 = 0.
-      sum_e2 = 0.
-      call curl(omg,vx,vy,vz,.false.,w1,w2)
-      do i = 1,n
-         vv = vx(i,1,1,1)**2 + vy(i,1,1,1)**2 + vz(i,1,1,1)**2
-         oo = omg(i,1)**2 + omg(i,2)**2 + omg(i,3)**2
-         sum_e1 = sum_e1 + vv*bm1(i,1,1,1)
-         sum_e2 = sum_e2 + oo*bm1(i,1,1,1)
-      enddo
-      e1 = 0.5 * glsum(sum_e1,1) / volvm1
-      e2 = 0.5 * glsum(sum_e2,1) / volvm1
-      if (nid.eq.0) write(6,2) time, e1, e2
-  2                 format(1p3e13.4,' monitor')
+     
+      if ((floor(time/period_save)).gt.(floor(t_last_save/
+     &period_save))) then
+      
+         t_last_save = time
+      
+         sum_e1 = 0.
+         sum_e2 = 0.
+         call curl(omg,vx,vy,vz,.false.,w1,w2)
+         do i = 1,ntot
+            vv = vx(i,1,1,1)**2 + vy(i,1,1,1)**2 + vz(i,1,1,1)**2
+            oo = omg(i,1)**2 + omg(i,2)**2 + omg(i,3)**2
+            sum_e1 = sum_e1 + vv*bm1(i,1,1,1)
+            sum_e2 = sum_e2 + oo*bm1(i,1,1,1)
+         enddo
+         e1 = 0.5 * glsum(sum_e1,1) / volvm1
+         e2 = 0.5 * glsum(sum_e2,1) / volvm1
+         if (nid.eq.0) then
+            write(6,2) time, e1, e2
+  2         format(1p3e13.4,' monitor')
+  
+            open(10, File=file_name, position='append')
+            write(10,'(F22.15,A,F22.15,A,F22.15)') time,',',e1,',',e2
+            close(10)
+         endif
+      endif
 
       return
       end
