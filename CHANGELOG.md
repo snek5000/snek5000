@@ -28,7 +28,13 @@ Security in case of vulnerabilities.
 
 (changelog/unreleased)=
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+
+### Removed
+
+- Functions deprecated in 0.8.0 (`source_root`, `get_asset`, `get_root`,
+  `get_configfile`, `_complete_params_from_par_file`).
+- Subpackage `snek5000.assets`.
 
 ## [0.8.0] - 2022-12-06
 
@@ -344,8 +350,6 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
-<!-- [unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD -->
-
 [0.0.1]: https://github.com/snek5000/snek5000/releases/tag/0.0.1
 [0.1.0]: https://github.com/snek5000/snek5000/compare/0.0.1...0.1.0
 [0.1.1]: https://github.com/snek5000/snek5000/compare/0.1.0...0.1.1
@@ -363,3 +367,4 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 [0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
 [@paugier]: https://github.com/paugier
+[unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD
