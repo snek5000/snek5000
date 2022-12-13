@@ -8,7 +8,6 @@ import logging
 import os
 import sys
 import textwrap
-import warnings
 from ast import literal_eval
 from configparser import ConfigParser
 from io import StringIO
@@ -457,15 +456,6 @@ def _str_par_file(params):
     with StringIO() as output:
         nek._par_file.write(output)
         return output.getvalue()
-
-
-def _complete_params_from_par_file(params, path):
-    warnings.warn(
-        "complete_params_from_par_file has been deprecated and will be "
-        "removed in the next major release. Use complete_params_from_par_file",
-        DeprecationWarning,
-    )
-    return complete_params_from_par_file(params, path)
 
 
 def complete_params_from_par_file(params, path):

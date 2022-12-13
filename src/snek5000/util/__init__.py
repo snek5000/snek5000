@@ -21,14 +21,10 @@ from zipfile import ZipFile
 
 from fluiddyn import util
 
-from .. import (  # noqa: kept for backwards compatlibility
-    get_nek_source_root,
-    source_root,
-)
-from .restart import (  # noqa: kept for backwards compatibility
-    get_status,
-    prepare_for_restart,
-)
+from .. import get_nek_source_root
+from .restart import get_status
+
+__all__ = ["get_nek_source_root", "get_status"]
 
 repeat = partial(itertools.repeat, None)
 repeat.__doc__ = """\
