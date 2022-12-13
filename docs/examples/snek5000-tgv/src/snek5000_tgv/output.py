@@ -22,5 +22,18 @@ class OutputTGV(OutputBase):
             self.write_size(size)
             self.write_makefile_usr(makefile_usr)
 
+    @classmethod
+    def _set_info_solver_classes(cls, classes):
+        """Set the the classes for info_solver.classes.Output"""
+        super()._set_info_solver_classes(classes)
+
+        classes._set_child(
+            "SpatialMeans",
+            dict(
+                module_name="snek5000.output.spatial_means",
+                class_name="SpatialMeans",
+            ),
+        )
+
 
 Output = OutputTGV
