@@ -3,7 +3,6 @@
 """
 import re
 from pathlib import Path
-from warnings import warn
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -25,15 +24,6 @@ class PrintStdOut:
         self._path_file = path_file
         self.data = None
         self._data_modif_time = None
-
-    @property
-    def file(self):
-        warn(
-            "The property `file` is deprecated. Use `path_file` instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.path_file
 
     @property
     def path_file(self):
@@ -136,15 +126,6 @@ class PrintStdOut:
         self.data = df_step.join(df_pressure)
         self._data_modif_time = path_file_time
         return self.data
-
-    @property
-    def dt(self):
-        """Extract time step dt over the course of a simulation."""
-        warn(
-            "The property `dt` is deprecated. Use `load()` instead.",
-            DeprecationWarning,
-        )
-        return self.data.dt
 
     def __call__(self, *args):
         """Print to stdout and log file simultaneously."""

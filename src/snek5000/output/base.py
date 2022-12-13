@@ -202,35 +202,6 @@ class Output(OutputCore):
         return Path(inspect.getmodule(cls).__file__).parent
 
     @classmethod
-    def get_root(cls):
-
-        warnings.warn(
-            (
-                "Method get_root will be removed on a later release. "
-                "Use get_path_solver_package instead."
-            ),
-            DeprecationWarning,
-        )
-
-        return cls.get_path_solver_package()
-
-    @classmethod
-    def get_configfile(cls):
-
-        warnings.warn(
-            (
-                "Method get_configfile will be removed on a later release. "
-                "You can replace in the Snakefile the line\n"
-                "configfile: Output.get_configfile()\n"
-                "by:\n"
-                f'configfile: "{cls._config_filename}"'
-            ),
-            DeprecationWarning,
-        )
-
-        return Path(cls._config_filename).resolve()
-
-    @classmethod
     def find_configfile(cls, host=None):
         """Get path of the Snakemake configuration file for the current machine.
         All configuration files are stored under ``etc`` sub-package.

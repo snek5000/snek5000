@@ -31,7 +31,6 @@ API reference
 
 from importlib import resources as _resources
 import os
-from warnings import warn
 import weakref
 from pathlib import Path
 
@@ -66,41 +65,6 @@ def get_nek_source_root():
             "NEK_SOURCE_ROOT to point to Nek5000 top level directory."
         )
     return nek5000
-
-
-def source_root():
-
-    warn(
-        (
-            "Function source_root will be removed on a later release. "
-            "Use get_nek_source_root instead."
-        ),
-        DeprecationWarning,
-    )
-
-    return get_nek_source_root()
-
-
-def get_asset(asset_name):
-    """Fetches path of an asset from subpackage ``snek5000.assets``.
-
-    .. deprecated:: 0.8.0
-       Use :func:`get_snek_resource` instead
-
-    """
-
-    warn(
-        (
-            "Function get_asset will be removed on a later release. "
-            "Use get_snek_resource instead. Also replace "
-            '`jinja2.PackageLoader("snek5000", "assets")` '
-            'by `jinja2.PackageLoader("snek5000", "resources")` '
-            "in the source of your snek5000 solver."
-        ),
-        DeprecationWarning,
-    )
-
-    return get_snek_resource(asset_name)
 
 
 def get_snek_resource(resource_name):

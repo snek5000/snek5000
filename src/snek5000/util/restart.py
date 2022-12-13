@@ -7,7 +7,6 @@ import sys
 from enum import Enum
 from pathlib import Path
 from textwrap import dedent
-from warnings import warn
 
 from fluidsim_core.scripts.restart import RestarterABC
 
@@ -123,25 +122,6 @@ def get_status(path_dir, session_id=None, verbose=False):
         return SimStatus.PARTIAL_CONTENT
     else:
         return SimStatus.OK
-
-
-def prepare_for_restart(path, chkp_fnumber=1, verify_contents=True):
-    """Load only params for a restart. Use :func:`load_for_restart()` instead.
-
-    .. deprecated: 0.8.0b0
-
-    """
-    warn(
-        (
-            "Function prepare_for_restart is deprecated."
-            "Kept for compatibility and would disappear in version 0.9.0b0"
-        ),
-        DeprecationWarning,
-    )
-    params, _ = load_for_restart(
-        path, use_checkpoint=chkp_fnumber, verify_contents=verify_contents
-    )
-    return params
 
 
 def load_for_restart(
