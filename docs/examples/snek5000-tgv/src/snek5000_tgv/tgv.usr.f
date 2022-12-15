@@ -107,7 +107,7 @@ c-----------------------------------------------------------------------
       real period_save, t_last_save
       save t_last_save
 
-      period_save = real(UPARAM(2))
+      period_save = real(UPARAM(11))
 
       file_name = 'spatial_means.csv'
 
@@ -115,8 +115,8 @@ c-----------------------------------------------------------------------
          inquire(file=file_name, exist=exist)
          if (.not. exist) then
             if (nid.eq.0) then
-               open(10, File=file_name, position='append')
-               write(10,*) '# Time, Energy, Enstrophy'
+               open(10, File=file_name)
+               write(10,'(a)') 'time,energy,enstrophy'
                close(10)
             endif
           endif
@@ -141,8 +141,6 @@ c      call full_restart_save(iostep_full)
          call compute_energy_enstrophy(e1,e2,vx,vy,vz)
 
          if (nid.eq.0) then
-            write(6,2) time, e1, e2
-  2         format(1p3e13.4,' monitor')
             open(10, File=file_name, position='append')
             write(10,'(g14.8,A,g14.8,A,g14.8)') time,',',e1,',',e2
             close(10)

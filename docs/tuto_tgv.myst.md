@@ -165,41 +165,18 @@ sim.output.print_stdout.plot_nb_iterations()
 ## Visualize spatial means data
 
 In subroutine `userchk` of `tgv.usr.f`, the time stamp, kinetic energy and enstrophy are
-output into standard output, with a keyword `monitor` at the end of the line. We can use
-regular expressions to extract these lines. If you are new to regular expressions, this
-website can help you <https://regex101.com/>.
+output in a file `spatial_means.csv`. The data can be loaded with
 
 ```{code-cell} ipython3
-import re
-
-monitor = re.findall('(.*)monitor$', sim.output.print_stdout.text, re.MULTILINE)
-monitor
-```
-
-It is also possible to achieve the same using Python's string manipulation and list
-comprehension:
-
-```{code-cell} ipython3
-monitor = [
-    line[:-len("monitor")]  # Or in Python >= 3.9, line.removesuffix("monitor")
-    for line in sim.output.print_stdout.text.splitlines()
-    if line.endswith("monitor")
-]
-```
-
-```{code-cell} ipython3
-import pandas as pd
-
-df = pd.DataFrame(
-    ((float(value) for value in line.split()) for line in monitor),
-    columns=("time", "energy", "enstrophy")
-)
+df = sim.output.spatial_means.load()
 df.head()
 ```
 
 ### Reference data
 
 ```{code-cell} ipython3
+import pandas as pd
+
 ref = pd.read_csv(
     "examples/snek5000-tgv/ref_data_spectral_code.csv",
     sep=" ",
@@ -212,10 +189,14 @@ ref.head()
 ### Result
 
 ```{code-cell} ipython3
-ax = df.plot("time", ["enstrophy", "energy"], logy=True, colormap="Accent")
+sim.output.spatial_means.plot(logy=True, colormap="Accent")
+
+import matplotlib.pyplot as plt
+
+ax = plt.gca()
 ref.plot(
     "time",
-    ["ref:enstrophy", "ref:energy"],
+    ["ref:energy", "ref:enstrophy"],
     ax=ax,
     style="--",
     logy=True,
@@ -223,7 +204,8 @@ ref.plot(
 )
 ax.set(
     title=f"Taylor-Green vortex: evolution of K.E. and enstrophy. Re={-sim.params.nek.velocity.viscosity}"
-);
+)
+ax.figure.tight_layout()
 ```
 
 ### Restart to run further
@@ -275,25 +257,17 @@ paths_log = sorted(sim.path_run.glob("logs/*"))
 [p.name for p in paths_log]
 ```
 
-Let's get the "monitor" points from the log of the second simulation:
+Let's get the spatial means data from the second simulation:
 
 ```{code-cell} ipython3
-path_log_new_simul = paths_log[-1]
-monitor = [
-    line[:-len("monitor")]  # Or in Python >= 3.9, line.removesuffix("monitor")
-    for line in path_log_new_simul.read_text().splitlines()
-    if line.endswith("monitor")
-]
-df_new = pd.DataFrame(
-    ((float(value) for value in line.split()) for line in monitor),
-    columns=("time", "energy", "enstrophy")
-)
+df_new = sim.output.spatial_means.load()
+df_new = df_new[df_new.time > df.time.max()]
 ```
 
 We finally plot the new points!
 
 ```{code-cell} ipython3
-df_new.plot("time", ["enstrophy", "energy"], ax=ax, logy=True, colormap="Accent", style=".-")
+df_new.plot("time", ["energy", "enstrophy"], ax=ax, logy=True, colormap="Accent", style=".-")
 ax.figure
 ```
 

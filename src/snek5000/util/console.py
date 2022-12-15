@@ -38,11 +38,12 @@ def start_ipython_load_sim():
         """
         import numpy as np
         import matplotlib.pyplot as plt
+        import pandas as pd
         from snek5000 import load
         print("Loading simulation")
         sim = load()
         params = sim.params
-        print("`sim`, `params`, `np` and `plt` variables are available")
+        print("`sim`, `params`, `np`, `plt` and `pd` variables are available")
     """
     )
     argv.append("; ".join(code.strip().split("\n")))

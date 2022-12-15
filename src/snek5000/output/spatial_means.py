@@ -2,8 +2,6 @@
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 
@@ -27,3 +25,8 @@ class SpatialMeans:
 
     def load(self):
         return pd.read_csv(self.path_file)
+
+    def plot(self, **kwargs):
+        df = self.load()
+        ax = df.plot("time", **kwargs)
+        ax.figure.tight_layout()
