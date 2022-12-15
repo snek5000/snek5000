@@ -232,7 +232,7 @@ def sim_tgv_executed():
     if not sim.make.exec("run_fg", nproc=2):
         with open(Path(sim.output.path_run) / "cbox.log") as file:
             print(file.read())
-        raise RuntimeError("cbox simulation failed")
+        raise RuntimeError("tgv simulation failed")
 
     return sim
 

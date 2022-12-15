@@ -8,6 +8,7 @@ Manage outputs
    history_points
    print_stdout
    phys_fields
+   spatial_means
 
 """
 from pathlib import Path
