@@ -61,7 +61,7 @@ c-----------------------------------------------------------------------
       end
 c-----------------------------------------------------------------------
       subroutine userbc(ix,iy,iz,f,eg) ! set up boundary conditions
-      
+
 c     NOTE: This routine may or may not be called by every processor
 
       implicit none
@@ -107,16 +107,16 @@ c-----------------------------------------------------------------------
       real period_save, t_last_save
       save t_last_save
 
-      period_save = real(UPARAM(2))
+      period_save = real(UPARAM(11))
 
-      file_name = 'spatial_mean.csv'
+      file_name = 'spatial_means.csv'
 
       if (istep.eq.0) then
-         inquire(file=file_name, exist=exist)   
+         inquire(file=file_name, exist=exist)
          if (.not. exist) then
             if (nid.eq.0) then
-               open(10, File=file_name, position='append')
-               write(10,*) '# Time, Energy, Enstrophy'
+               open(10, File=file_name)
+               write(10,'(a)') 'time,energy,enstrophy'
                close(10)
             endif
           endif
@@ -132,17 +132,15 @@ c      endif
 c
 c      iostep_full = iostep
 c      call full_restart_save(iostep_full)
-      
+
       if ((istep.eq.1) .or. (istep.eq.lastep) .or. (floor(time
      &/period_save)).gt.(floor(t_last_save/period_save))) then
-      
+
          t_last_save = time
 
          call compute_energy_enstrophy(e1,e2,vx,vy,vz)
 
          if (nid.eq.0) then
-            write(6,2) time, e1, e2
-  2         format(1p3e13.4,' monitor')
             open(10, File=file_name, position='append')
             write(10,'(g14.8,A,g14.8,A,g14.8)') time,',',e1,',',e2
             close(10)
