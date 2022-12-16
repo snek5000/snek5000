@@ -3,7 +3,7 @@
 # Snek5000
 
 [![PyPI](https://img.shields.io/pypi/v/snek5000)](https://pypi.org/project/snek5000/)
-[![Build Status](https://img.shields.io/github/workflow/status/snek5000/snek5000/build)](https://github.com/snek5000/snek5000/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/snek5000/snek5000/build.yaml?branch=main)](https://github.com/snek5000/snek5000/actions)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/snek5000/snek5000/main.svg)](https://results.pre-commit.ci/latest/github/snek5000/snek5000/main)
 [![Documentation Status](https://readthedocs.org/projects/snek5000/badge/?version=latest)](https://snek5000.readthedocs.io/en/latest/?badge=latest)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=snek5000_snek5000&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=snek5000_snek5000)
