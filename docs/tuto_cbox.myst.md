@@ -12,7 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Demo sidewall convection (snek5000-cbox solver)
+# Demo sidewall convection (`snek5000-cbox` solver)
 
 ## A more advanced script adated for a particular instability
 
