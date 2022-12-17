@@ -20,7 +20,7 @@ class SimulTGV(SimulNek):
         # Read defaults for `params.nek` from `tgv.par.cfg` (original code)
         info_solver = cls.info_solver  # cls.InfoSolver()
         output_cls = info_solver.import_classes()["Output"]
-        root = output_cls.get_root()
+        root = output_cls.get_path_solver_package()
         complete_params_from_par_file(
             params, root / f"{info_solver.short_name}.par.cfg"
         )
