@@ -9,4 +9,8 @@ Notebook". Saving the notebook in the Jupyter interface should also saved the My
 
 Note that some files are coupled with a Python script in `docs/examples/scripts`.
 
+```{warning}
+One has to delete the `.ipynb` files before building the whole documentation with Sphinx.
+```
+
 [jupytext]: https://jupytext.readthedocs.io

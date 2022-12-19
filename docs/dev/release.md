@@ -1,4 +1,4 @@
-# Release checklist for maintainers
+# How to release
 
 ## Via GitHub Actions
 

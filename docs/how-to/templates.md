@@ -16,8 +16,8 @@ code:
 - These methods are called in a method
   {func}`snek5000.output.base.Output.post_init_create_additional_source_files` which
   uses the class attributes `template_box`, `template_size` and `template_makefile_usr`.
-  These attributes are defined in the solvers, for example for `snek5000-tgv` in the file
-  `snek5000_tgv.output`:
+  These attributes are defined in the solvers, for example for `snek5000-tgv` in the
+  file `snek5000_tgv.output`:
 
   ```{eval-rst}
   .. literalinclude:: ../examples/snek5000-tgv/src/snek5000_tgv/output.py
