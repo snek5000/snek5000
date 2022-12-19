@@ -82,6 +82,12 @@ src/snek5000_canonical/output.py
 
 .. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/output.py
 
+.. note::
+
+   One can also define your own Jinja templates or re-purpose them from
+   :mod:`snek5000.resources`. See our `How to page on templates
+   <./how-to/templates.html>`__.
+
 src/snek5000_canonical/phys_fields.py
 -------------------------------------
 
@@ -90,14 +96,6 @@ allow customized ``load``, ``get_var`` and ``plot_*`` methods suited for your
 case.
 
 .. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/phys_fields.py
-
-src/snek5000_canonical/templates/__init__.py
---------------------------------------------
-
-Define your own Jinja templates or re-purpose them from :mod:`snek5000.resources`
-if you may.
-
-.. literalinclude:: examples/snek5000-canonical/src/snek5000_canonical/templates/__init__.py
 
 .. _user_snakefile:
 

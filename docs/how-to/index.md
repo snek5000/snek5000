@@ -15,6 +15,7 @@ history_points.md
 rebuild-nek.md
 export-sans-snek5000.myst.md
 archive-simulation-data.md
+templates.md
 ```
 
 ## For developer of Snek5000 solvers
