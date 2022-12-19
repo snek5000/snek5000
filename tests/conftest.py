@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -8,6 +9,7 @@ import numpy as np
 import pymech
 import pytest
 
+from snek5000 import load
 from snek5000.util.gfortran_log import log_matches
 
 
@@ -202,6 +204,29 @@ def sim_cbox_executed():
             print(file.read())
         raise RuntimeError("cbox simulation failed")
     return sim
+
+
+@pytest.fixture(scope="session")
+def sim_cbox_executed_readonly(sim_cbox_executed):
+    path_run = Path(sim_cbox_executed.output.path_run)
+    with tempfile.TemporaryDirectory(suffix="snek5000_cbox_executed") as tmp_dir:
+        path_readonly_sim = Path(tmp_dir) / path_run.name
+        shutil.copytree(path_run, path_readonly_sim)
+
+        for path in path_readonly_sim.rglob("*"):
+            mod = 0o444
+            if path.is_dir():
+                mod = 0o544
+            path.chmod(mod)
+
+        sim = load(path_readonly_sim)
+        yield sim
+
+        for path in path_readonly_sim.rglob("*"):
+            mod = 0o644
+            if path.is_dir():
+                mod = 0o744
+            path.chmod(mod)
 
 
 @pytest.fixture(scope="session")
