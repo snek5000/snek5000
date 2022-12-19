@@ -28,10 +28,12 @@ To install for development, execute::
    phys_fields
    nek
    roadmap
-   release
 
 .. toctree::
    :maxdepth: 1
    :caption: How to for developers / maintainers of Snek5000 package
 
+   howto_test.md
+   howto_doc.md
    edit_tutorials.md
+   release.md

@@ -11,35 +11,31 @@ git clone https://github.com/snek5000/Nek5000.git
 export NEK_SOURCE_ROOT=$PWD/Nek5000
 
 git clone https://github.com/snek5000/snek5000.git
-
-# Activate paths: Start here. Always!
 cd snek5000
-source activate.sh
 ```
 
-Now you should setup a Python environment. There are two ways to do this (and it has to
-be done only once):
+Now you should setup a Python environment. Here, we show how to do it with the package
+`venv`:
 
-- Using `venv`
-
-  ```sh
-  python -m venv venv
-  source venv/bin/activate
-  ```
-
-- Using `conda`
-
-  ```sh
-  conda env create -n env-snek5000
-  conda activate env-snek5000
-  ```
+```sh
+python -m venv venv
+source venv/bin/activate
+```
 
 Finally, to install in development mode:
 
 ```sh
 pip install pip-tools nox
-nox -s pip-sync
+nox -s sync
 ```
+
+````{note}
+From the root directory of the project, one can then activate the dev
+environment with:
+```sh
+source activate.sh
+```
+````
 
 ## General guidelines
 
@@ -69,6 +65,8 @@ nox -s pip-sync
   ```
 
   to activate debugging logs and longer tests.
+
+See also our [](./dev/index.rst).
 
 ## Vim
 
