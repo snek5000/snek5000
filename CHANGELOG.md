@@ -28,7 +28,12 @@ Security in case of vulnerabilities.
 
 <!-- (changelog/unreleased)= -->
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+
+### Added
+
+- {func}`snek5000.output.base.Output.post_init_create_additional_source_files` and
+  {func}`snek5000.resources.get_base_templates`.
 
 ## [0.9.0rc0]
 
@@ -357,8 +362,6 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 - Python packaging
 - Sphinx + Doxygen + Breathe documentation
 
-<!-- [unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD -->
-
 [0.0.1]: https://github.com/snek5000/snek5000/releases/tag/0.0.1
 [0.1.0]: https://github.com/snek5000/snek5000/compare/0.0.1...0.1.0
 [0.1.1]: https://github.com/snek5000/snek5000/compare/0.1.0...0.1.1
@@ -377,3 +380,4 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
 [0.9.0rc0]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0rc0
 [@paugier]: https://github.com/paugier
+[unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD

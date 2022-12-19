@@ -42,12 +42,6 @@ Jinja templates
 .. literalinclude:: ../../src/snek5000/resources/box.j2
     :language: jinja
 
-- ``compile.sh.j2``: See also
-    :any:`snek5000.output.base.Output.write_compile_sh`.
-
-.. literalinclude:: ../../src/snek5000/resources/compile.sh.j2
-    :language: jinja
-
 - ``makefile_usr.inc.j2``: See also
     :any:`snek5000.output.base.Output.write_makefile_usr`.
 
@@ -62,4 +56,28 @@ Jinja templates
 .. literalinclude:: ../../src/snek5000/resources/SIZE.j2
     :language: jinja
 
+- ``compile.sh.j2``: See also
+    :any:`snek5000.output.base.Output.write_compile_sh`.
+
+.. literalinclude:: ../../src/snek5000/resources/compile.sh.j2
+    :language: jinja
+
 """
+
+
+import jinja2
+
+
+def get_base_templates():
+    """Get templates (box, makefile_usr and size) from ``snek5000.resources``."""
+    env = jinja2.Environment(
+        loader=jinja2.PackageLoader("snek5000", "resources"),
+        undefined=jinja2.StrictUndefined,
+        autoescape=True,
+    )
+
+    box = env.get_template("box.j2")
+    makefile_usr = env.get_template("makefile_usr.inc.j2")
+    size = env.get_template("SIZE.j2")
+
+    return box, makefile_usr, size
