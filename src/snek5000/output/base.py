@@ -772,6 +772,7 @@ class Output(OutputCore):
             self.post_init_create_additional_source_files()
 
     def post_init_create_additional_source_files(self):
+        """Create the .box, SIZE and makefile_usr files from their template"""
         for name in ("box", "size", "makefile_usr"):
             try:
                 template = getattr(self, f"template_{name}")

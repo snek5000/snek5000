@@ -23,6 +23,11 @@ code:
   .. literalinclude:: ../examples/snek5000-tgv/src/snek5000_tgv/output.py
   ```
 
+  ```{note}
+  With this mechanism, the template files can be obtained from a simulation
+  object with `sim.output.template_box.filename`.
+  ```
+
 - Some base template files are in the subpackage {mod}`snek5000.resources`. These files
   are general enough so that they can be used directly by most solvers (for example we
   saw that `snek5000-tgv` uses {func}`snek5000.resources.get_base_templates`). However,
