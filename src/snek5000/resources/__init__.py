@@ -73,7 +73,6 @@ def get_base_templates():
     env = jinja2.Environment(
         loader=jinja2.PackageLoader("snek5000", "resources"),
         undefined=jinja2.StrictUndefined,
-        autoescape=True,
     )
 
     box = env.get_template("box.j2")
