@@ -1,4 +1,5 @@
 from math import pi
+from pathlib import Path
 
 from snek5000.info import InfoSolverMake
 from snek5000.params import complete_params_from_par_file
@@ -46,11 +47,8 @@ class SimulTGV(SimulNek):
         params.oper._record_nek_user_params({"Lx": 1})
 
         # Read defaults for `params.nek` from `tgv.par.cfg` (original code)
-        info_solver = cls.info_solver  # cls.InfoSolver()
-        output_cls = info_solver.import_classes()["Output"]
-        root = output_cls.get_path_solver_package()
         complete_params_from_par_file(
-            params, root / f"{info_solver.short_name}.par.cfg"
+            params, Path(__file__).parent / f"{cls.info_solver.short_name}.par.cfg"
         )
 
         # Boundary conditions
