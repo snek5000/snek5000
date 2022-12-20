@@ -27,9 +27,7 @@ repository) like this::
            ├── __init__.py
            ├── canonical.usr.f
            ├── output.py
-           ├── solver.py
-           └── templates
-               └── __init__.py
+           └── solver.py
 
 You can copy the directory `docs/examples/snek5000-canonical
 <https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-canonical>`_

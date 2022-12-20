@@ -189,7 +189,7 @@ Need more reasons to use snek5000?
   [Snakemake](https://snakemake.readthedocs.io/en/stable/) functions and [how
   to write Jinja
   templates](https://jinja.palletsprojects.com/en/2.11.x/templates/) (which are
-  not so hard, btw)
+  [not so hard](https://snek5000.readthedocs.io/en/latest/how-to/templates.html), btw)
 
 </details>
 
