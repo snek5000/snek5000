@@ -5,7 +5,7 @@ Snek5000 is capable of parsing existing `*.par` files. This is shown in the
 
 ```{code-block} python
 ---
-emphasize-lines: 15-17
+emphasize-lines: 12-14
 ---
 from snek5000.solvers.base import SimulNek
 from snek5000.params import complete_params_from_par_file
@@ -18,11 +18,8 @@ class SimulTGV(SimulNek):
         ...
 
         # Read defaults for `params.nek` from `tgv.par.cfg` (original code)
-        info_solver = cls.info_solver  # cls.InfoSolver()
-        output_cls = info_solver.import_classes()["Output"]
-        root = output_cls.get_path_solver_package()
         complete_params_from_par_file(
-            params, root / f"{info_solver.short_name}.par.cfg"
+            params, Path(__file__).parent / f"{cls.info_solver.short_name}.par.cfg"
         )
 ```
 

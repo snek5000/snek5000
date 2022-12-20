@@ -12,7 +12,7 @@ class OutputCanonical(OutputBase):
 
     @classmethod
     def _set_info_solver_classes(cls, classes):
-        """Set the the classes for info_solver.classes.Output
+        """Set the classes for info_solver.classes.Output
 
         NOTE: This method is optional, and only required if custom classes are
         to be set.
