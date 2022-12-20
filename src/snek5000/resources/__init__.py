@@ -68,15 +68,27 @@ Jinja templates
 import jinja2
 
 
-def get_base_templates():
-    """Get templates (box, makefile_usr and size) from ``snek5000.resources``."""
-    env = jinja2.Environment(
-        loader=jinja2.PackageLoader("snek5000", "resources"),
-        undefined=jinja2.StrictUndefined,
-    )
+class BaseTemplates:
+    @property
+    def env(self):
+        return jinja2.Environment(
+            loader=jinja2.PackageLoader("snek5000", "resources"),
+            undefined=jinja2.StrictUndefined,
+        )
 
-    box = env.get_template("box.j2")
-    makefile_usr = env.get_template("makefile_usr.inc.j2")
-    size = env.get_template("SIZE.j2")
+    def get_base_templates(self):
+        """Get templates (box, makefile_usr and size) from ``snek5000.resources``."""
+        box = self.env.get_template("box.j2")
+        makefile_usr = self.env.get_template("makefile_usr.inc.j2")
+        size = self.env.get_template("SIZE.j2")
+        return box, makefile_usr, size
 
-    return box, makefile_usr, size
+    def get_base_template(self, name):
+        """Get a template from ``snek5000.resources``."""
+        return self.env.get_template(name)
+
+
+_templates = BaseTemplates()
+
+get_base_templates = _templates.get_base_templates
+get_base_template = _templates.get_base_template

@@ -26,9 +26,9 @@ rule generate_compile_sh:
     output:
         "compile.sh",
     run:
-        from phill.templates import env
+        from snek5000.resources import get_base_template
 
-        template = env.get_template("compile.sh.j2")
+        template = get_base_template("compile.sh.j2")
         Output.write_compile_sh(template, config, path=output)
 
 
