@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import snek5000
-
 from snek5000.resources import get_base_template, get_base_templates
 
 
