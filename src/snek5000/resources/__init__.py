@@ -37,7 +37,7 @@ Jinja templates
 - ``box.j2``: See also
     :any:`snek5000.operators.Operators.write_box`,
     :any:`snek5000.output.base.Output.write_box`.
-    :ref:`nek:mesh_gen`
+    :ref:`nek:tools_genbox`
 
 .. literalinclude:: ../../src/snek5000/resources/box.j2
     :language: jinja
