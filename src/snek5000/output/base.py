@@ -545,7 +545,7 @@ class Output(OutputCore):
         """Write <case name>.box file from box.j2 template.
 
         .. seealso::
-            :ref:`nek:mesh_gen`
+            :ref:`nek:tools_genbox`
 
         """
         if mpi.rank == 0:

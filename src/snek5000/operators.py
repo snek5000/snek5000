@@ -44,7 +44,7 @@ def next_power(value, base=2):
 
 
 class Operators:
-    """Container for parameters and writing :ref:`box <nek:mesh_gen>` and
+    """Container for parameters and writing :ref:`box <nek:tools_genbox>` and
     :ref:`SIZE <nek:case_files_size>` files.
 
     .. note:: Some values are not available as parameters and instead
