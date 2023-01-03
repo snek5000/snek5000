@@ -110,7 +110,7 @@ c      character*80 fnames(3)
       ! for remaining_clock_time
       character*28 rct_file_name
       real rct_seconds_between_save
-      real remaining_clock_time
+      real remaining_clock_time, remaining_eq_time
 
       period_save = real(UPARAM(11))
 
@@ -132,7 +132,9 @@ c      character*80 fnames(3)
          if (.not. exist) then
             if (nid.eq.0) then
                open(11, File=rct_file_name)
-               write(11,'(a)') 'it,time,dt,remaining_clock_time'
+               write(11,'(a,a)')
+     &           'it,equation_times,dt,remaining_clock_times,',
+     &           'remaining_equation_times'
                close(11)
             endif
          endif
@@ -149,13 +151,20 @@ c
 c      iostep_full = iostep
 c      call full_restart_save(iostep_full)
 
-      if ((nid .eq. 0) .and. (istep > 0)) then
+      if (nid .eq. 0) then
          call compute_remaining_clock_time(
-     &       rct_seconds_between_save, remaining_clock_time)
+     &       rct_seconds_between_save, remaining_clock_time,
+     &       remaining_eq_time)
          if (remaining_clock_time >= 0.0) then
             open(10, File=rct_file_name, position='append')
-            write(10,'(I12,A,g14.8,A,g14.8,A,g14.8)')
-     &          istep,',',time,',',dt,',',remaining_clock_time
+            write(10,'(I12,A,g14.8,A,g14.8,A,g14.8,A,g14.8)')
+     &          istep,',',time,',',dt,',',remaining_clock_time,
+     &          ',',remaining_eq_time
+            close(10)
+         elseif (istep <= 1) then
+            open(10, File=rct_file_name, position='append')
+            write(10,'(I12,A,g14.8,A,g14.8,A)')
+     &          istep,',',time,',',dt,',nan,nan'
             close(10)
          endif
       endif
@@ -241,15 +250,14 @@ c-----------------------------------------------------------------------
       end
 c-----------------------------------------------------------------------
       subroutine compute_remaining_clock_time(
-     &    seconds_between_save, remaining_clock_time)
+     &    seconds_between_save, remaining_clock_time, remaining_eq_time)
       implicit none
 
       include 'SIZE'
       include 'TOTAL'
 
       real seconds_between_save
-      real remaining_clock_time
-      real remaining_eq_time
+      real remaining_clock_time, remaining_eq_time
 
       real clock_time, delta_clock_time, delta_eq_time
 
@@ -260,7 +268,9 @@ c-----------------------------------------------------------------------
       save istep_next
 
       remaining_clock_time = -1.0
-      if (istep .eq. 1) then
+      if (istep .eq. 0) then
+        eq_time_last = time
+      elseif (istep .eq. 1) then
         call cpu_time(clock_time_last)
         eq_time_last = time
         istep_last = 1
