@@ -20,7 +20,7 @@ c
       parameter (lx2=4)                 ! GLL points for pressure (lx1 or lx1-2)
 
       parameter (lelg=8192)             ! max total number of elements
-      parameter (lpmin=8)               ! min MPI ranks
+      parameter (lpmin=2)               ! min MPI ranks
       parameter (lpmax=32)              ! max MPI ranks
       parameter (ldimt=1)               ! max auxiliary fields (temperature + scalars)
 
@@ -40,7 +40,7 @@ c
       parameter (lelx=32)               ! global tensor mesh dimensions
       parameter (lely=16)
       parameter (lelz=32)
-      parameter (lelt=1024)             ! max number of local elements per MPI rank
+      parameter (lelt=4096)             ! max number of local elements per MPI rank
       parameter (lbelt=1)               ! set to lelt for mhd
       parameter (lpelt=1)               ! set to lelt for linear stability
       parameter (lcvelt=1)              ! set to lelt for cvode

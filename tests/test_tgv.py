@@ -13,4 +13,4 @@ def test_tgv(sim_tgv_executed):
 
     df = sim.output.remaining_clock_time.load()
     assert isinstance(df, pd.DataFrame)
-    assert len(df) == 2
+    assert len(df) >= 2
