@@ -10,3 +10,7 @@ def test_tgv(sim_tgv_executed):
     assert isinstance(df, pd.DataFrame)
     assert len(df) > 2
     sim.output.spatial_means.plot()
+
+    df = sim.output.remaining_clock_time.load()
+    assert isinstance(df, pd.DataFrame)
+    assert len(df) == 2

@@ -252,6 +252,7 @@ def sim_tgv_executed():
     params.nek.general.write_interval = 0.5
 
     params.output.spatial_means.write_interval = 0.5
+    params.output.remaining_clock_time.period_save_in_seconds = 1.0
 
     sim = Simul(params)
     if not sim.make.exec("run_fg", nproc=2):
