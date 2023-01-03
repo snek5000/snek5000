@@ -49,6 +49,11 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(skip_slow)
 
 
+def modif_test_params(params):
+    params.output.sub_directory = "tests_snek5000"
+    params.oper.nproc_min = 2
+
+
 @pytest.fixture(scope="session")
 def jinja_env():
     import jinja2
@@ -65,7 +70,7 @@ def sim():
     from phill.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test_snek5000"
+    modif_test_params(params)
 
     params.nek.general.stop_at = "numSteps"
     params.nek.general.num_steps = 9
@@ -117,8 +122,7 @@ def sim2d():
     from phill.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test_snek5000"
-
+    modif_test_params(params)
     set_params_oper2d(params)
     return Simul(params)
 
@@ -128,8 +132,7 @@ def sim_canonical():
     from snek5000_canonical.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test_snek5000"
-
+    modif_test_params(params)
     return Simul(params)
 
 
@@ -138,13 +141,12 @@ def sim_executed():
     from phill.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "test_snek5000"
+    modif_test_params(params)
 
     params.nek.general.stop_at = "endTime"
     params.nek.general.end_time = 10 * abs(params.nek.general.dt)
     params.nek.general.write_interval = 5
 
-    params.oper.nproc_min = 2
     params.oper.nproc_max = 12
     params.oper.nx = params.oper.ny = params.oper.nz = 3
     params.oper.elem.order = params.oper.elem.order_out = 8
@@ -172,15 +174,14 @@ def sim_cbox_executed():
     from snek5000_cbox.solver import Simul
 
     params = Simul.create_default_params()
+    modif_test_params(params)
     params.Ra_side = 1.83e08
-    params.output.sub_directory = "test_snek5000"
 
     params.nek.general.stop_at = "numSteps"
     params.nek.general.dt = 1e-3
     params.nek.general.num_steps = 12
     params.nek.general.write_interval = 3
 
-    params.oper.nproc_min = 2
     params.oper.nproc_max = 12
     params.oper.dim = 2
     params.oper.nx = params.oper.ny = 8
@@ -234,11 +235,10 @@ def sim_tgv_executed():
     from snek5000_tgv.solver import Simul
 
     params = Simul.create_default_params()
-    params.output.sub_directory = "examples_snek/tuto"
+    modif_test_params(params)
 
     params.oper.nx = params.oper.ny = params.oper.nz = 6
     params.oper.elem.order = params.oper.elem.order_out = 6
-    params.oper.nproc_min = 2
 
     params.nek.velocity.residual_tol = 1e-07
     params.nek.pressure.residual_tol = 1e-05
@@ -252,6 +252,7 @@ def sim_tgv_executed():
     params.nek.general.write_interval = 0.5
 
     params.output.spatial_means.write_interval = 0.5
+    params.output.remaining_clock_time.period_save_in_seconds = 1.0
 
     sim = Simul(params)
     if not sim.make.exec("run_fg", nproc=2):

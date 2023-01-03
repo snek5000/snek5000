@@ -100,16 +100,24 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      character*80 fnames(3)
-      character*128 file_name
+c      character*80 fnames(3)
+      ! for spatial_means
+      character*28 file_name
       logical exist
       real e1, e2
       real period_save, t_last_save
       save t_last_save
+      ! for remaining_clock_time
+      character*28 rct_file_name
+      real rct_seconds_between_save
+      real remaining_clock_time
 
       period_save = real(UPARAM(11))
 
+      rct_seconds_between_save = real(UPARAM(12))
+
       file_name = 'spatial_means.csv'
+      rct_file_name = 'remaining_clock_time.csv'
 
       if (istep.eq.0) then
          inquire(file=file_name, exist=exist)
@@ -119,7 +127,15 @@ c-----------------------------------------------------------------------
                write(10,'(a)') 'time,energy,enstrophy'
                close(10)
             endif
-          endif
+         endif
+         inquire(file=rct_file_name, exist=exist)
+         if (.not. exist) then
+            if (nid.eq.0) then
+               open(11, File=rct_file_name)
+               write(11,'(a)') 'it,time,dt,remaining_clock_time'
+               close(11)
+            endif
+         endif
       endif
 
 c      if (.false.) then
@@ -133,19 +149,26 @@ c
 c      iostep_full = iostep
 c      call full_restart_save(iostep_full)
 
-      if ((istep.eq.1) .or. (istep.eq.lastep) .or. (floor(time
+      if ((nid .eq. 0) .and. (istep > 0)) then
+         call compute_remaining_clock_time(
+     &       rct_seconds_between_save, remaining_clock_time)
+         if (remaining_clock_time >= 0.0) then
+            open(10, File=rct_file_name, position='append')
+            write(10,'(I12,A,g14.8,A,g14.8,A,g14.8)')
+     &          istep,',',time,',',dt,',',remaining_clock_time
+            close(10)
+         endif
+      endif
+
+      if ((istep.eq.1) .or. (lastep .eq. 1) .or. (floor(time
      &/period_save)).gt.(floor(t_last_save/period_save))) then
-
          t_last_save = time
-
          call compute_energy_enstrophy(e1,e2,vx,vy,vz)
-
          if (nid.eq.0) then
             open(10, File=file_name, position='append')
             write(10,'(g14.8,A,g14.8,A,g14.8)') time,',',e1,',',e2
             close(10)
          endif
-
       endif
 
       return
@@ -217,3 +240,55 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
+      subroutine compute_remaining_clock_time(
+     &    seconds_between_save, remaining_clock_time)
+      implicit none
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      real seconds_between_save
+      real remaining_clock_time
+      real remaining_eq_time
+
+      real clock_time, delta_clock_time, delta_eq_time
+
+      real clock_time_last, eq_time_last
+      save clock_time_last, eq_time_last
+
+      integer istep_next, istep_last
+      save istep_next
+
+      remaining_clock_time = -1.0
+      if (istep .eq. 1) then
+        call cpu_time(clock_time_last)
+        eq_time_last = time
+        istep_last = 1
+        istep_next = 2
+      elseif ((istep .eq. istep_next) .or. (lastep .eq. 1)) then
+        call cpu_time(clock_time)
+        delta_clock_time = clock_time - clock_time_last
+        clock_time_last = clock_time
+
+        delta_eq_time = time - eq_time_last
+        eq_time_last = time
+
+        if (fintim > 0.0) then
+          remaining_eq_time = fintim - time
+        else
+          remaining_eq_time = (nsteps - istep) * dt
+        endif
+        istep_next = istep + int((istep - istep_last) *
+     &      seconds_between_save / delta_clock_time)
+        if (istep_next .eq. istep) then
+          istep_next = istep_next + 1
+        endif
+        istep_last = istep
+        remaining_clock_time = remaining_eq_time / delta_eq_time *
+     &      delta_clock_time
+        if (remaining_clock_time < 0.0) then
+          remaining_clock_time = 0.0
+        endif
+      endif
+
+      end subroutine
