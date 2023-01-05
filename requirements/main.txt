@@ -44,7 +44,7 @@ fonttools==4.38.0
     # via matplotlib
 gitdb==4.0.10
     # via gitpython
-gitpython==3.1.29
+gitpython==3.1.30
     # via snakemake
 h5netcdf==1.1.0
     # via fluiddyn
