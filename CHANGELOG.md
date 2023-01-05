@@ -33,7 +33,8 @@ Security in case of vulnerabilities.
 ### Added
 
 - {func}`snek5000.output.base.Output.post_init_create_additional_source_files`,
-  {func}`snek5000.resources.get_base_templates` and {func}`snek5000.resources.get_base_template`.
+  {func}`snek5000.resources.get_base_templates` and
+  {func}`snek5000.resources.get_base_template`.
 
 ## [0.9.0rc0]
 

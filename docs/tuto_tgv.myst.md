@@ -139,6 +139,24 @@ The command `snek-ipy-load` can be used to start a IPython session and load the
 simulation saved in the current directory.
 ```
 
++++
+
+## How long was the run?
+
+`snek5000-tgv` saves a file `remaining_clock_time.csv` during the simulation. It can be
+read manually,
+
+```{code-cell} ipython3
+!cat {path_run}/remaining_clock_time.csv
+```
+
+and there is also an object `sim.output.remaining_clock_time` to load and plot these
+data (which is especially useful during the simulation!):
+
+```{code-cell} ipython3
+sim.output.remaining_clock_time.plot()
+```
+
 ## Parse, load and plot information contained in the Nek5000 log
 
 The object `sim.output.print_stdout` (see
@@ -273,3 +291,9 @@ ax.figure
 
 Note that we use for this tutorial very small and coarse simulations, which explain the
 differences between our results and the reference!
+
+Let us see what gives the `remaining_clock_time` plot after the second simulation:
+
+```{code-cell} ipython3
+sim.output.remaining_clock_time.plot()
+```
