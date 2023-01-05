@@ -105,7 +105,7 @@ furo==2022.9.29
     # via snek5000 (setup.cfg)
 gitdb==4.0.10
     # via gitpython
-gitpython==3.1.29
+gitpython==3.1.30
     # via
     #   nbdime
     #   snakemake
