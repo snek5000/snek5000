@@ -9,6 +9,7 @@ Manage outputs
    print_stdout
    phys_fields
    spatial_means
+   remaining_clock_time
 
 """
 from pathlib import Path
