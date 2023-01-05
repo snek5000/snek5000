@@ -18,22 +18,21 @@ class RemainingClockTime(OutputWithCsvFileAndParam, Base):
     def _load_times(self):
         df = self.load()
         data = {key: df[key].values for key in df.keys()}
-        delta_clock_times = data["delta_clock_times"]
-        full_clock_time = delta_clock_times[np.isfinite(delta_clock_times)].sum()
-        data["full_clock_time"] = full_clock_time
-        data["equation_time_start"] = df[df.it == 0].loc[0, "equation_times"]
+        data["full_clock_time"] = np.nansum(data["delta_clock_times"])
+        data["equation_time_start"] = df.loc[0, "equation_times"]
         return data
 
     def load(self):
         df = super().load()
-        delta_equation_times = df.equation_times.diff()
+        df["delta_equation_times"] = df.equation_times.diff()
         delta_time_inds = df.it.diff()
-        df["delta_clock_times"] = (
-            delta_equation_times
-            * df.remaining_clock_times
-            / df.remaining_equation_times
-        )
         df["clock_times_per_timestep"] = df["delta_clock_times"] / delta_time_inds
+        keys = (
+            "delta_clock_times",
+            "delta_equation_times",
+            "clock_times_per_timestep",
+        )
+        df.loc[df["it"] == 0, keys] = np.nan
         return df
 
     def plot(self):

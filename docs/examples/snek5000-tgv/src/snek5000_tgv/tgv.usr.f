@@ -110,7 +110,7 @@ c      character*80 fnames(3)
       ! for remaining_clock_time
       character*28 rct_file_name
       real rct_seconds_between_save
-      real remaining_clock_time, remaining_eq_time
+      real remaining_clock_time, remaining_eq_time, delta_clock_time
 
       period_save = real(UPARAM(11))
 
@@ -133,8 +133,8 @@ c      character*80 fnames(3)
             if (nid.eq.0) then
                open(11, File=rct_file_name)
                write(11,'(a,a)')
-     &           'it,equation_times,dt,remaining_clock_times,',
-     &           'remaining_equation_times'
+     &           'it,equation_times,dt,delta_clock_times,',
+     &           'remaining_equation_times,remaining_clock_times'
                close(11)
             endif
          endif
@@ -154,17 +154,19 @@ c      call full_restart_save(iostep_full)
       if (nid .eq. 0) then
          call compute_remaining_clock_time(
      &       rct_seconds_between_save, remaining_clock_time,
-     &       remaining_eq_time)
-         if (remaining_clock_time >= 0.0) then
+     &       remaining_eq_time, delta_clock_time)
+         if (istep == 0) then
             open(10, File=rct_file_name, position='append')
-            write(10,'(I12,A,g14.8,A,g14.8,A,g14.8,A,g14.8)')
-     &          istep,',',time,',',dt,',',remaining_clock_time,
-     &          ',',remaining_eq_time
+            write(10,'(I12,A,g14.8,A,g14.8,A,g14.8,A)')
+     &          istep,',',time,',',dt,',',delta_clock_time,
+     &          ',nan,nan'
             close(10)
-         elseif (istep <= 1) then
+         elseif (remaining_clock_time >= 0.0) then
             open(10, File=rct_file_name, position='append')
-            write(10,'(I12,A,g14.8,A,g14.8,A)')
-     &          istep,',',time,',',dt,',nan,nan'
+            write(10,'(I12,A,g14.8,A,g14.8,A,g14.8,A,g14.8,A,g14.8)')
+     &          istep,',',time,',',dt,',',delta_clock_time,
+     &          ',',remaining_eq_time,
+     &          ',',remaining_clock_time
             close(10)
          endif
       endif
@@ -250,7 +252,8 @@ c-----------------------------------------------------------------------
       end
 c-----------------------------------------------------------------------
       subroutine compute_remaining_clock_time(
-     &    seconds_between_save, remaining_clock_time, remaining_eq_time)
+     &    seconds_between_save, remaining_clock_time, remaining_eq_time,
+     &    delta_clock_time)
       implicit none
 
       include 'SIZE'
@@ -268,13 +271,10 @@ c-----------------------------------------------------------------------
       save istep_next
 
       remaining_clock_time = -1.0
+      delta_clock_time = 0.0
       if (istep .eq. 0) then
         eq_time_last = time
-      elseif (istep .eq. 1) then
-        call cpu_time(clock_time_last)
-        eq_time_last = time
-        istep_last = 1
-        istep_next = 2
+        istep_next = 1
       elseif ((istep .eq. istep_next) .or. (lastep .eq. 1)) then
         call cpu_time(clock_time)
         delta_clock_time = clock_time - clock_time_last
@@ -288,10 +288,14 @@ c-----------------------------------------------------------------------
         else
           remaining_eq_time = (nsteps - istep) * dt
         endif
-        istep_next = istep + int((istep - istep_last) *
+        if (istep .eq. 1) then
+          istep_next = 2
+        else
+          istep_next = istep + int((istep - istep_last) *
      &      seconds_between_save / delta_clock_time)
-        if (istep_next .eq. istep) then
-          istep_next = istep_next + 1
+          if (istep_next .eq. istep) then
+            istep_next = istep_next + 1
+          endif
         endif
         istep_last = istep
         remaining_clock_time = remaining_eq_time / delta_eq_time *
