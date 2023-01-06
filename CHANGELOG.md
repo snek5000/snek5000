@@ -30,16 +30,14 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+## [0.9.0rc3]
+
 ### Added
 
+- {mod}`snek5000.output.remaining_clock_time`.
 - {func}`snek5000.output.base.Output.post_init_create_additional_source_files`,
   {func}`snek5000.resources.get_base_templates` and
   {func}`snek5000.resources.get_base_template`.
-
-## [0.9.0rc0]
-
-### Added
-
 - {class}`snek5000.output.spatial_means.SpatialMeans`.
 - New block `user_size` in `SIZE.j2` template (see {mod}`snek5000.resources`).
 
@@ -379,6 +377,6 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 [0.6.1b0]: https://github.com/snek5000/snek5000/compare/0.6.0b0...0.6.1b0
 [0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
-[0.9.0rc0]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0rc0
+[0.9.0rc3]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0rc3
 [@paugier]: https://github.com/paugier
 [unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD
