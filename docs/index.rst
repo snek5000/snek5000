@@ -7,8 +7,9 @@ Welcome to *Snek5000*'s documentation!
 ======================================
 
 Snek5000 is a Python package and a thin interface over Nek5000_. It provides a
-framework to organize parameters and launch multiple simulations. Snek5000's
-internals rely on FluidSim's core_ to build its API.
+framework to (i) organize parameters, (ii) launch/restart multiple simulations
+and (iii) load simulations to read the associated parameters/data and produce
+nice figures/movies.
 
 .. raw:: html
 

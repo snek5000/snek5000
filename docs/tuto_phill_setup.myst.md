@@ -72,7 +72,7 @@ One can also print only one section:
 print(params.nek.general)
 ```
 
-of alternatively, with the method `_print_as_code` (useful for copy-pasting):
+or alternatively, with the method `_print_as_code` (useful for copy-pasting):
 
 ```{code-cell}
 params.nek.general._print_as_code()
