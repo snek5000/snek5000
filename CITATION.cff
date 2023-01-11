@@ -20,7 +20,8 @@ authors:
     given-names: Pierre
     orcid: https://orcid.org/0000-0001-9481-4459
 
+version: 0.9.0
+date-released: 2023-01-11
 doi: 10.5281/zenodo.7399621
-date-released: 2022-12-06
 license: BSD-3-Clause
 repository-code: "https://github.com/snek5000/snek5000"

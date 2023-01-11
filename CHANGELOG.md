@@ -30,7 +30,7 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
-## [0.9.0rc3]
+## [0.9.0] - 2023-01-11
 
 ### Added
 
@@ -377,6 +377,6 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 [0.6.1b0]: https://github.com/snek5000/snek5000/compare/0.6.0b0...0.6.1b0
 [0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
-[0.9.0rc3]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0rc3
+[0.9.0]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0
 [@paugier]: https://github.com/paugier
-[unreleased]: https://github.com/snek5000/snek5000/compare/0.8.0...HEAD
+[unreleased]: https://github.com/snek5000/snek5000/compare/0.9.0...HEAD
