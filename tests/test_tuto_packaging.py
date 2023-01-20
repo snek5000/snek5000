@@ -15,6 +15,8 @@ def test_load(sim_canonical):
     sim2 = load(sim_canonical.path_run, reader="pymech_avg")
     with pytest.raises(IOError, match="no files to open"):
         sim2.output.phys_fields.plot_mean_vel()
+    with pytest.raises(IOError, match="No file "):
+        sim2.output.remaining_clock_time.load()
 
 
 @pytest.mark.slow
