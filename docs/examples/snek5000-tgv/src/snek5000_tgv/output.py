@@ -30,13 +30,5 @@ class OutputTGV(OutputBase):
             ),
         )
 
-        classes._set_child(
-            "RemainingClockTime",
-            dict(
-                module_name="snek5000.output.remaining_clock_time",
-                class_name="RemainingClockTime",
-            ),
-        )
-
 
 Output = OutputTGV

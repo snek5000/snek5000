@@ -23,6 +23,14 @@ class RemainingClockTime(OutputWithCsvFileAndParam, Base):
         return data
 
     def load(self):
+
+        if not self.path_file.exists():
+            raise IOError(
+                f"No file {self.path_file}. "
+                "Is it saved by a function in the .usr file? "
+                "See https://github.com/snek5000/snek5000/blob/main/docs/examples/snek5000-tgv/src/snek5000_tgv/tgv.usr.f"
+            )
+
         df = super().load()
         df["delta_equation_times"] = df.equation_times.diff()
         delta_time_inds = df.it.diff()
