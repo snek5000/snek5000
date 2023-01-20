@@ -150,6 +150,14 @@ class Output(OutputCore):
             ),
         )
 
+        classes._set_child(
+            "RemainingClockTime",
+            dict(
+                module_name="snek5000.output.remaining_clock_time",
+                class_name="RemainingClockTime",
+            ),
+        )
+
     @classmethod
     def _complete_info_solver(cls, info_solver):
         """Complete the info_solver instance with child class details (module
