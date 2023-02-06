@@ -270,7 +270,9 @@ def load_for_restart(
                 logger.debug(f"Symlinking {dest} -> {src}")
                 dest.symlink_to(src)
             else:
-                raise SnekRestartError(f"Restart file {path_start_from} not found")
+                raise SnekRestartError(
+                    f"Restart file {path_start_from} not found"
+                )
 
     return params, Simul
 
@@ -351,7 +353,9 @@ class Restarter(RestarterABC):
 
     def _get_params_simul_class(self, args):
         if args.use_start_from is None and args.use_checkpoint is None:
-            logger.error("Either --use-start-from or --use-checkpoint have to be given")
+            logger.error(
+                "Either --use-start-from or --use-checkpoint have to be given"
+            )
             sys.exit(1)
         return load_for_restart(
             args.path,
@@ -372,7 +376,9 @@ class Restarter(RestarterABC):
             if args.end_time is not None:
                 end_time = args.end_time
             else:
-                end_time = float(params.nek.general.end_time) + args.add_to_end_time
+                end_time = (
+                    float(params.nek.general.end_time) + args.add_to_end_time
+                )
             params.nek.general.end_time = end_time
 
     def _start_sim(self, sim, args):
@@ -396,7 +402,9 @@ class Restarter(RestarterABC):
         if args.use_start_from is not None:
             path_file = args.use_start_from
         elif args.use_checkpoint is not None:
-            path_file = f"Use checkpoint files (use_checkpoint={args.use_checkpoint})"
+            path_file = (
+                f"Use checkpoint files (use_checkpoint={args.use_checkpoint})"
+            )
         logger.info(path_file)
         return path_file
 

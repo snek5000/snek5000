@@ -8,7 +8,6 @@ from snek5000.solvers import available_solvers
 
 
 def print_versions():
-
     import pymech
     import snakemake
 

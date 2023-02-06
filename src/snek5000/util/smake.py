@@ -15,7 +15,9 @@ def ensure_env():
         os.environ["NEK_SOURCE_ROOT"] = NEK_SOURCE_ROOT
 
     if NEK_SOURCE_ROOT not in os.getenv("PATH"):
-        os.environ["PATH"] = ":".join([NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")])
+        os.environ["PATH"] = ":".join(
+            [NEK_SOURCE_ROOT + "/bin", os.getenv("PATH")]
+        )
 
 
 def set_compiler_verbosity(config, verbosity):

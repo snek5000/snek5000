@@ -5,7 +5,6 @@ box, makefile_usr, size = get_base_templates()
 
 
 class OutputCanonical(OutputBase):
-
     template_box = box
     template_makefile_usr = makefile_usr
     template_size = size

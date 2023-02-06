@@ -56,7 +56,9 @@ def get_nek_source_root():
             "NEK_SOURCE_ROOT has to point to Nek5000 top level directory."
         )
 
-    nek5000 = str(Path(os.path.expandvars(NEK_SOURCE_ROOT)).expanduser().absolute())
+    nek5000 = str(
+        Path(os.path.expandvars(NEK_SOURCE_ROOT)).expanduser().absolute()
+    )
 
     if not os.path.exists(nek5000):
         logger.error("NEK_SOURCE_ROOT: " + nek5000)
@@ -172,7 +174,9 @@ load = weakref.proxy(load_simul)  #: Alias for :func:`load_simul`
 from .util.smake import append_debug_flags, ensure_env  # noqa: F401, E402
 from .util import restart  # noqa: F401, E402
 
-get_status = restart.get_status  #: Alias for :func:`snek5000.util.restart.get_status`
+get_status = (
+    restart.get_status
+)  #: Alias for :func:`snek5000.util.restart.get_status`
 load_for_restart = (
     restart.load_for_restart
 )  #: Alias for :func:`snek5000.util.restart.load_for_restart`

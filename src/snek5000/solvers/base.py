@@ -232,7 +232,9 @@ class SimulNek(SimulCore):
         params_nek.scalar01._set_attribs(common_ts)
 
         params_nek.mesh._set_attrib("write_to_field_file", True)
-        params_nek.velocity._set_attribs(dict(viscosity=math.nan, density=math.nan))
+        params_nek.velocity._set_attribs(
+            dict(viscosity=math.nan, density=math.nan)
+        )
         params_nek.pressure._set_attrib("preconditioner", "semg_xxt")
         params_nek.temperature._set_attribs(
             dict(
@@ -241,7 +243,9 @@ class SimulNek(SimulCore):
                 rho_cp=math.nan,
             )
         )
-        params_nek.scalar01._set_attribs(dict(density=math.nan, diffusivity=math.nan))
+        params_nek.scalar01._set_attribs(
+            dict(density=math.nan, diffusivity=math.nan)
+        )
 
         # Document all params
         for child_name in params.nek._tag_children:

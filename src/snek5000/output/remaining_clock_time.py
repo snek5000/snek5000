@@ -23,7 +23,6 @@ class RemainingClockTime(OutputWithCsvFileAndParam, Base):
         return data
 
     def load(self):
-
         if not self.path_file.exists():
             raise IOError(
                 f"No file {self.path_file}. "

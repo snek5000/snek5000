@@ -527,7 +527,9 @@ Note that each code for the boundary cond. _must_ have 3 spaces.
                     "nelx nely nelz",
                     " ".join(
                         str(-n)
-                        for n in (params.oper.nx, params.oper.ny, params.oper.nz)[:dim]
+                        for n in (params.oper.nx, params.oper.ny, params.oper.nz)[
+                            :dim
+                        ]
                     ),
                 ),
                 (

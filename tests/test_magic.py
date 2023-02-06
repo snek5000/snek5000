@@ -9,6 +9,8 @@ except ImportError:
     ip = False
 
 
-@pytest.mark.skipif(not ip, reason="Magics cannot be tested if IPython is unavailable")
+@pytest.mark.skipif(
+    not ip, reason="Magics cannot be tested if IPython is unavailable"
+)
 def test_snek5000_magic():
     ip.run_line_magic("snek", "kth")

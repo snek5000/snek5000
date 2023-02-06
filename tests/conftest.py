@@ -35,7 +35,9 @@ def pytest_configure(config):
         # Inspired from: https://github.com/willmcgugan/rich/issues/1425
         snek5000.log.logger.removeHandler(snek5000.log.handler)
 
-        handler = snek5000.log.create_handler(width=shutil.get_terminal_size().columns)
+        handler = snek5000.log.create_handler(
+            width=shutil.get_terminal_size().columns
+        )
         snek5000.log.logger.addHandler(handler)
 
 
@@ -264,7 +266,6 @@ def sim_tgv_executed():
 
 
 def create_fake_nek_files(path_dir, name_solver, nb_files=1):
-
     nx = 2
     ny = 4
     nz = 6

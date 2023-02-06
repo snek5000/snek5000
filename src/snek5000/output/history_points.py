@@ -129,7 +129,6 @@ User parameter for history_points (subroutine hpts):
             return self.coords, self._data
 
     def _load_full(self):
-
         with open(self.path_file) as file:
             nb_points = int(file.readline().split(" ", 1)[0])
             coords = np.loadtxt(file, max_rows=nb_points)
@@ -148,7 +147,6 @@ User parameter for history_points (subroutine hpts):
         return self.coords, df
 
     def _create_df_from_lines(self, lines, nb_points):
-
         columns = ["time", "ux", "uy"]
 
         sim = self.output.sim
