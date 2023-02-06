@@ -301,7 +301,8 @@ def ctags(session):
         )
     )
     run_ext(
-        session, f"ctags -f {output} --language-force=Fortran -R {sources['nek5000']}"
+        session,
+        f"ctags -f {output} --language-force=Fortran -R {sources['nek5000']}",
     )
     run_ext(session, f"ctags -f {output} {excludes} --append -R {sources['snek5000']}")
 
@@ -382,7 +383,13 @@ def release_tests(session, dist_type):
         ), "Poetry local configuration exists. Please remove to continue"
         session.install("poetry")
         session.run(
-            "python", "-m", "poetry", "config", "--local", "virtualenvs.create", "false"
+            "python",
+            "-m",
+            "poetry",
+            "config",
+            "--local",
+            "virtualenvs.create",
+            "false",
         )
         pytest_cmd = install_with_tests(session, ["--no-root"])
     else:

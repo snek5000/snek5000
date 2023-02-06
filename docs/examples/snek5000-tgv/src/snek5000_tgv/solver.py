@@ -48,7 +48,8 @@ class SimulTGV(SimulNek):
 
         # Read defaults for `params.nek` from `tgv.par.cfg` (original code)
         complete_params_from_par_file(
-            params, Path(__file__).parent / f"{cls.info_solver.short_name}.par.cfg"
+            params,
+            Path(__file__).parent / f"{cls.info_solver.short_name}.par.cfg",
         )
 
         # Boundary conditions

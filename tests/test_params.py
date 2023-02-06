@@ -143,7 +143,6 @@ def test_par_xml_match():
 
 
 def test_user_params():
-
     tmp_dir = Path(tempfile.mkdtemp("snek5000", __name__))
 
     def complete_create_default_params(p):

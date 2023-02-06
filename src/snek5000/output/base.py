@@ -146,7 +146,8 @@ class Output(OutputCore):
         classes._set_child(
             "HistoryPoints",
             dict(
-                module_name="snek5000.output.history_points", class_name="HistoryPoints"
+                module_name="snek5000.output.history_points",
+                class_name="HistoryPoints",
             ),
         )
 

@@ -30,7 +30,6 @@ class Make:
     """
 
     def __init__(self, sim=None, path_run=None):
-
         if (sim is None and path_run is None) or (
             sim is not None and path_run is not None
         ):

@@ -264,7 +264,6 @@ def sim_tgv_executed():
 
 
 def create_fake_nek_files(path_dir, name_solver, nb_files=1):
-
     nx = 2
     ny = 4
     nz = 6

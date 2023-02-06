@@ -85,7 +85,8 @@ def load_params(path_dir="."):
     Simul = import_cls_simul(short_name)
 
     return Simul.load_params_from_file(
-        path_xml=path_dir / "params_simul.xml", path_par=path_dir / f"{short_name}.par"
+        path_xml=path_dir / "params_simul.xml",
+        path_par=path_dir / f"{short_name}.par",
     )
 
 

@@ -3,7 +3,10 @@ from functools import partial
 from snakemake import snakemake
 
 make = partial(
-    snakemake, snakefile="Snakefile", targets=("earth", "space"), printshellcmds=True
+    snakemake,
+    snakefile="Snakefile",
+    targets=("earth", "space"),
+    printshellcmds=True,
 )
 
 
