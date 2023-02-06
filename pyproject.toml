@@ -14,8 +14,6 @@ ignore = ["E501", "W505"]
 
 [tool.ruff.isort]
 known-first-party = ["fluiddyn", "fluidsim_core", "snek5000"]
-# multi_line_output = 3
-# profile = "black"
 
 [tool.coverage.run]
 source = ["snek5000", "snek5000_canonical", "./tests"]
