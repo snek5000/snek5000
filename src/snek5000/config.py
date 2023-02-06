@@ -14,9 +14,7 @@ def ensure_config_file():
     This function is used by the console script `snek-generate-config`.
     """
     host = os.getenv("SNIC_RESOURCE", os.getenv("GITHUB_WORKFLOW", gethostname()))
-    xdg_config = Path(
-        os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config"))
-    )
+    xdg_config = Path(os.path.expandvars(os.getenv("XDG_CONFIG_HOME", "$HOME/.config")))
     configfile_xdg_config_host = xdg_config / f"snek5000/{host}.yml"
     configfile_xdg_config = xdg_config / "snek5000.yml"
 

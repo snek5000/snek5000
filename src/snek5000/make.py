@@ -42,9 +42,7 @@ class Make:
                     f for f in sim.output.get_paths() if f.name == "Snakefile"
                 )
             except AttributeError:
-                raise AttributeError(
-                    "Unable to get path of Snakefile via Output class"
-                )
+                raise AttributeError("Unable to get path of Snakefile via Output class")
             except StopIteration:
                 raise FileNotFoundError(f"No Snakefile in {self.path_run}")
         else:
@@ -66,9 +64,7 @@ class Make:
 
         """
         with change_dir(self.path_run):
-            return snakemake(
-                self.file, listrules=True, log_handler=self.log_handler
-            )
+            return snakemake(self.file, listrules=True, log_handler=self.log_handler)
 
     def exec(
         self,
@@ -275,9 +271,7 @@ class _Nek5000Make(Make):
         with self.lock:
             # Only one process can inspect at a time. No timeout
             if self.has_to_build(compiler_config):
-                return self.exec(
-                    *self.targets, config=config, force_incomplete=True
-                )
+                return self.exec(*self.targets, config=config, force_incomplete=True)
             else:
                 return True
 

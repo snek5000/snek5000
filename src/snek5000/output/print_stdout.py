@@ -151,9 +151,7 @@ class PrintStdOut:
         params = self.output.sim.params
 
         if params.nek.general.variable_dt:
-            ax_top.axhline(
-                params.nek.general.target_cfl, color="r", label="Target CFL"
-            )
+            ax_top.axhline(params.nek.general.target_cfl, color="r", label="Target CFL")
             ax_top.legend(loc="lower right")
 
         fig.tight_layout()

@@ -7,9 +7,7 @@ snakemake_versions = """7.18.2, 7.18.1, 7.18.0, 7.17.1, 7.17.0, 7.16.2, 7.16.1, 
 snakemake_old_versions = """6.4.1, 6.4.0, 6.3.0, 6.2.1, 6.2.0, 6.1.2, 6.1.1, 6.1.0, 6.0.5, 6.0.4, 6.0.3, 6.0.2, 6.0.1, 6.0.0""".split(
     ", "
 )
-snakemake_minor_versions = [
-    ver for ver in snakemake_versions if ver.endswith(".0")
-]
+snakemake_minor_versions = [ver for ver in snakemake_versions if ver.endswith(".0")]
 snakemake_latest_versions = snakemake_versions[:11]
 
 

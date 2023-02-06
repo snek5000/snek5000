@@ -175,8 +175,7 @@ def docstring_params(Class, sections=False, indent_len=4):
                 lines.append(f"{indent}.. _{heading[idx:]}:\n")
                 lines.append(f"{indent}**{heading}**")
             elif "Documentation for" in prev_line and any(
-                line.startswith(underline)
-                for underline in ("====", "----", "~~~~")
+                line.startswith(underline) for underline in ("====", "----", "~~~~")
             ):
                 continue
             else:

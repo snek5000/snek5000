@@ -108,9 +108,7 @@ class Parameters(_Parameters):
         comments = ("#",)
         self._set_internal_attr(
             "_par_file",
-            ConfigParser(
-                comment_prefixes=comments, inline_comment_prefixes=comments
-            ),
+            ConfigParser(comment_prefixes=comments, inline_comment_prefixes=comments),
         )
         # Only enabled parameters would be written into par file
         self._set_internal_attr("_enabled", True)
@@ -286,9 +284,7 @@ class Parameters(_Parameters):
         # Useful while building isolated `params` for a specific class,
         # for e.g.: Operators, Output etc.
         if not hasattr(params, "nek"):
-            log_level = (
-                logging.DEBUG if "sphinx" in sys.modules else logging.WARNING
-            )
+            log_level = logging.DEBUG if "sphinx" in sys.modules else logging.WARNING
             logger.log(
                 log_level,
                 (
@@ -477,9 +473,7 @@ def complete_params_from_par_file(params, path):
 
     recorded_user_params_path = path.with_name(filename_map_user_params)
     if recorded_user_params_path.exists():
-        recorded_user_params = _load_recorded_user_params(
-            recorded_user_params_path
-        )
+        recorded_user_params = _load_recorded_user_params(recorded_user_params_path)
     elif hasattr(nek.general, "_recorded_user_params"):
         recorded_user_params = nek.general._recorded_user_params
     else:

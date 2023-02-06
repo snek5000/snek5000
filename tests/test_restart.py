@@ -141,9 +141,7 @@ def test_load_with_phys_fields(sim, reader):
 
 
 def test_load_wrong_phys_fields_reader(sim):
-    with pytest.raises(
-        ValueError, match="params.output.phys_fields.available_readers"
-    ):
+    with pytest.raises(ValueError, match="params.output.phys_fields.available_readers"):
         snek5000.load(sim.path_run, reader=1.0)
 
 

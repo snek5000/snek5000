@@ -15,9 +15,7 @@ from snek5000.params import (
 from snek5000.util import init_params
 
 
-@pytest.mark.parametrize(
-    "input_value", (True, False, None, "a string", 1, 3.14, "nan")
-)
+@pytest.mark.parametrize("input_value", (True, False, None, "a string", 1, 3.14, "nan"))
 def test_python_value_roundtrip(input_value):
     roundtrip_python_nek = _as_python_value(_as_nek_value(input_value))
     assert input_value == roundtrip_python_nek
@@ -154,9 +152,7 @@ def test_user_params():
         p._record_nek_user_params({"prandtl": 1, "rayleigh": 2})
         p._set_child("output")
         p.output._set_child("other", {"write_interval": 100})
-        p.output.other._record_nek_user_params(
-            {"write_interval": 10}, overwrite=True
-        )
+        p.output.other._record_nek_user_params({"write_interval": 10}, overwrite=True)
 
         with pytest.raises(ValueError):
             p._change_index_userparams({2: "prandtl"})
@@ -191,9 +187,7 @@ def test_user_params():
 
     assert params1.prandtl == params.prandtl
     assert params1.rayleigh == params.rayleigh
-    assert (
-        params1.output.other.write_interval == params.output.other.write_interval
-    )
+    assert params1.output.other.write_interval == params.output.other.write_interval
 
 
 def test_str_par_file(sim, tmp_path):

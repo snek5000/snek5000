@@ -104,9 +104,7 @@ def exec_tar(tarball, items, remove):
     else:
         output = tar
 
-    main = shlex.split(
-        tar_cmd(compress_format, remove=remove, append=output.exists())
-    )
+    main = shlex.split(tar_cmd(compress_format, remove=remove, append=output.exists()))
 
     # run command
     items = [str(i) for i in items]

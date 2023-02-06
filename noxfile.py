@@ -119,9 +119,7 @@ def requires(session):
 
 
 @nox.session(name="pip-compile", reuse_venv=True)
-@nox.parametrize(
-    "extra", [nox.param(extra, id=extra) for extra in EXTRA_REQUIRES]
-)
+@nox.parametrize("extra", [nox.param(extra, id=extra) for extra in EXTRA_REQUIRES])
 def pip_compile(session, extra):
     """Pin dependencies to requirements/*.txt
 
@@ -158,9 +156,7 @@ def pip_compile(session, extra):
 
     session.log(f"Removing absolute paths from {out_file}")
     packages = out_file.read_text()
-    rel_path_packages = packages.replace(
-        "file://" + str(Path.cwd().resolve()), "."
-    )
+    rel_path_packages = packages.replace("file://" + str(Path.cwd().resolve()), ".")
 
     # special cases for snek5000-canonical and snek5000-tgv
     for package in ("snek5000-canonical", "snek5000-tgv"):
@@ -308,9 +304,7 @@ def ctags(session):
         session,
         f"ctags -f {output} --language-force=Fortran -R {sources['nek5000']}",
     )
-    run_ext(
-        session, f"ctags -f {output} {excludes} --append -R {sources['snek5000']}"
-    )
+    run_ext(session, f"ctags -f {output} {excludes} --append -R {sources['snek5000']}")
 
 
 @no_venv_session

@@ -60,9 +60,7 @@ class PhysFields(PhysFields4Snek5000):
             "phys_fields", attribs={"reader": "pymech", "available_readers": []}
         )
 
-        dict_classes = (
-            info_solver.classes.Output.classes.PhysFields.import_classes()
-        )
+        dict_classes = info_solver.classes.Output.classes.PhysFields.import_classes()
         iter_complete_params(params, info_solver, dict_classes.values())
 
     @property
