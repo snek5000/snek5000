@@ -9,18 +9,13 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "src/snek5000/_version.py"
 
-[tool.black]
-line-length = 82
-
 [tool.ruff]
 ignore = ["E501", "W505"]
-line-length = 82
 
 [tool.ruff.isort]
 known-first-party = ["fluiddyn", "fluidsim_core", "snek5000"]
 # multi_line_output = 3
 # profile = "black"
-# line_length = 82
 
 [tool.coverage.run]
 source = ["snek5000", "snek5000_canonical", "./tests"]
