@@ -1,3 +1,36 @@
-# How to set adpative time step in Nek5000
+# How to set adaptive time step in Nek5000
 
-The `target_cfl` is used to set the stability and target CFL number for OIFS (Over-Integrated Factor Split) or variable time steps. In the case of standard extrapolation, it is fixed to `0.5`. The time step used to evolve the solution in time is the minimum of `dt` and `dt_cfl`, where `dt_cfl` is calculated based on the `target_cfl` number. By choosing the minimum of these two values, Nek5000 ensures stability and accuracy in the numerical solution. One can control the time step with `target_cfl` by setting a negative `dt`(see [tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py)).
+In the Nek5000 documentation, `variableDT` in `GENERAL` keys in [`.par` file](https://nek5000.github.io/NekDoc/problem_setup/case_files.html#parameter-file-par) is used to control whether the step size will be adjusted to match the `targetCFL`.
+
+In Snek5000, you can enable this feature by setting `params.nek.general.variable_dt` to `True`.
+
+For example, in the script below, we set `variable_dt` as `True`, which subsequently leads to an adaptive time step based on the `target_cfl`:
+
+```python
+from snek5000_tgv.solver import Simul
+
+params = Simul.create_default_params()
+params.output.sub_directory = "examples_snek/tuto"
+
+params.oper.nx = params.oper.ny = params.oper.nz = 8
+params.oper.elem.order = params.oper.elem.order_out = 8
+params.oper.nproc_min = 2
+
+params.nek.velocity.residual_tol = 1e-07
+params.nek.pressure.residual_tol = 1e-05
+
+params.nek.general.write_control = "runTime"
+params.nek.general.write_interval = 2.0
+
+params.output.spatial_means.write_interval = 0.5
+
+params.nek.general.end_time = 10
+params.nek.general.dt = 1
+params.nek.general.target_cfl = 1.4
+params.nek.general.extrapolation = "OIFS"
+params.nek.general.variable_dt = True
+
+
+sim = Simul(params)
+sim.make.exec("run_fg", nproc=2)
+```
