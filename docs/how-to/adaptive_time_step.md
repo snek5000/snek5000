@@ -1,0 +1,3 @@
+# How to set adpative time step in Nek5000
+
+The `target_cfl` is used to set the stability and target CFL number for OIFS (Over-Integrated Factor Split) or variable time steps. In the case of standard extrapolation, it is fixed to `0.5`. The time step used to evolve the solution in time is the minimum of `dt` and `dt_cfl`, where `dt_cfl` is calculated based on the `target_cfl` number. By choosing the minimum of these two values, Nek5000 ensures stability and accuracy in the numerical solution. One can control the time step with `target_cfl` by setting a negative `dt`(see [tuto_tgv.py](https://github.com/snek5000/snek5000/tree/main/docs/examples/scripts/tuto_tgv.py)).
