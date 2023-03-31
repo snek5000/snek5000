@@ -10,20 +10,21 @@ authors:
   - name: Ashwin Vishnu Mohanan
     orcid: 0000-0002-2979-6327
     equal-contrib: true
-    affiliation: 1 
+    affiliation: 1
   - name: Arman Khoubani
     orcid: 0000-0002-0295-5308
     equal-contrib: true
-    affiliation: 2 
+    affiliation: 2
   - name: Pierre Augier
     orcid: 0000-0001-9481-4459
     equal-contrib: true
-    affiliation: 2 
+    affiliation: 2
 affiliations:
- - name: Swedish Meteorological and Hydrological Institute, Norrk{\"o}ping, Sweden
-   index: 1
- - name: Laboratoire des \'Ecoulements G\'eophysiques et Industriels, Universit\'e~Grenoble~Alpes, CNRS, Grenoble~INP, 38000~Grenoble, France
-   index: 2
+  - name: Swedish Meteorological and Hydrological Institute, Norrk{\"o}ping, Sweden
+    index: 1
+  - name: Laboratoire des \'Ecoulements G\'eophysiques et Industriels, Universit\'e~Grenoble~Alpes,
+      CNRS, Grenoble~INP, 38000~Grenoble, France
+    index: 2
 date: 2 March 2023
 bibliography: paper.bib
 ---
@@ -59,7 +60,8 @@ Snek5000 leverages a variety of Python packages, including Snakemake, Fluidsim, 
 Snek5000 provides comprehensive documentation (https://snek5000.readthedocs.io/) and tutorials to guide users through its features and capabilities. These resources help new users quickly become familiar with Snek5000 and enable experienced users to explore advanced features and customization options. By providing thorough documentation, Snek5000 promotes its widespread adoption and fosters a vibrant community of users and developers.
 
 ### Future Developments and Enhancements
-The Snek5000 development team is committed to continuously improving the package and incorporating user feedback to address evolving needs within the scientific community. 
+
+The Snek5000 development team is committed to continuously improving the package and incorporating user feedback to address evolving needs within the scientific community.
 
 # Statement of need
 
