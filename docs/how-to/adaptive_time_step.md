@@ -6,7 +6,7 @@ In Snek5000, you can enable this feature by setting `params.nek.general.variable
 
 For example, in the script below, we set `variable_dt` as `True`, which subsequently leads to an adaptive time step based on the `target_cfl`:
 
-```python
+```{code-block} python
 ---
 emphasize-lines: 20-21
 ---
