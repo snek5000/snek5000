@@ -16,6 +16,7 @@ rebuild-nek.md
 export-sans-snek5000.myst.md
 archive-simulation-data.md
 templates.md
+adaptive_time_step.md
 ```
 
 ## For developer of Snek5000 solvers
