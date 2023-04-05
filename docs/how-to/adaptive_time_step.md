@@ -7,6 +7,9 @@ In Snek5000, you can enable this feature by setting `params.nek.general.variable
 For example, in the script below, we set `variable_dt` as `True`, which subsequently leads to an adaptive time step based on the `target_cfl`:
 
 ```python
+---
+emphasize-lines: 20-21
+---
 from snek5000_tgv.solver import Simul
 
 params = Simul.create_default_params()
@@ -27,9 +30,8 @@ params.output.spatial_means.write_interval = 0.5
 params.nek.general.end_time = 10
 params.nek.general.dt = 1
 params.nek.general.target_cfl = 1.4
-params.nek.general.extrapolation = "OIFS"
 params.nek.general.variable_dt = True
-
+params.nek.general.extrapolation = "OIFS"
 
 sim = Simul(params)
 sim.make.exec("run_fg", nproc=2)
