@@ -11,6 +11,8 @@ gfortran and OpenMPI to compile the code.
 .. literalinclude:: ../src/snek5000/resources/default_configfile.yml
    :language: yaml
 
+.. _config_files:
+
 Customization via config files
 ------------------------------
 
@@ -56,6 +58,8 @@ the function :meth:`snek5000.output.base.Output.write_snakemake_config`:
    sim.output.write_snakemake_config(
        custom_env_vars={"MPIEXEC_FLAGS": "--report-pid PID.txt"}
    )
+
+.. _override_config_env:
 
 Overriding configuration with environment variables
 ---------------------------------------------------
