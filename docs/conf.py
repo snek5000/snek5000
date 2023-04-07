@@ -198,6 +198,7 @@ exclude_patterns = [
     "Thumbs.db",
     ".DS_Store",
     "examples/snek5000-*/README.md",
+    "joss_paper/paper.md"
 ]
 
 # -- Options for HTML output -------------------------------------------------
