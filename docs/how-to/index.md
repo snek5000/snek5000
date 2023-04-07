@@ -6,7 +6,8 @@
 ---
 maxdepth: 1
 ---
-snek-make.md
+config-c-fortran-compilers.md
+snek-make.myst.md
 run-background-foreground.md
 restart.myst.md
 load_state_stat_files.md
