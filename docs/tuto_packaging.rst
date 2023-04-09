@@ -53,6 +53,7 @@ pyproject.toml
 
 .. literalinclude:: examples/snek5000-canonical/pyproject.toml
    :language: toml
+   :end-before: [tool.coverage.run]
 
 .. _init.py:
 
