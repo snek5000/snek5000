@@ -3,6 +3,12 @@
 Create your own Snek5000 solver, packaging your Nek5000 user source code
 ========================================================================
 
+.. tip::
+   You can now use the Copier template
+   <https://github.com/snek5000/template-snek5000-solver/> to render the
+   following packaging structure effortlessly!
+
+
 This document describes how to package a Nek5000 source code in your own
 repository via ``snek5000``'s API. What is described is the bare minimum to
 get started.  Assume your files are named ``canonical.usr``, ``canonical.par``
@@ -19,8 +25,7 @@ repository) like this::
    .
    ├── LICENSE
    ├── README.md
-   ├── setup.cfg
-   ├── setup.py
+   ├── pyproject.toml
    └── src
        └── snek5000_canonical
            ├── Snakefile
@@ -40,18 +45,14 @@ as needed.
    layout. In snek5000 solvers, one can rename this file with the ``.usr.f``
    extension so that editors can correctly highlight the Fortran code.
 
-setup.py
---------
-
-.. literalinclude:: examples/snek5000-canonical/setup.py
-
 .. _setup.cfg:
+.. _pyproject.toml:
 
-setup.cfg
----------
+pyproject.toml
+--------------
 
-.. literalinclude:: examples/snek5000-canonical/setup.cfg
-   :language: cfg
+.. literalinclude:: examples/snek5000-canonical/pyproject.toml
+   :language: toml
 
 .. _init.py:
 
