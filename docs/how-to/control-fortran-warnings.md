@@ -19,3 +19,9 @@ configfile: "config_simul.yml"
 
 Output.update_snakemake_config(config, short_name, verbosity=1)
 ```
+
+## How to halt compilation if Fortran warnings arise from case file (`*.usr`)
+
+Fortran warnings from Nek5000 code-base maybe inevitable, but it is indeed
+possible to keep the case file tidy and subject to a stricter set of Fortran
+convention.
