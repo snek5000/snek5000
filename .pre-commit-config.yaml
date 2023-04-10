@@ -14,11 +14,11 @@ repos:
   hooks:
   - id: black
 - repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.0.260
+  rev: v0.0.261
   hooks:
   - id: ruff
 - repo: https://github.com/snakemake/snakefmt
-  rev: v0.8.3
+  rev: v0.8.4
   hooks:
   - id: snakefmt
 - repo: https://github.com/executablebooks/mdformat
