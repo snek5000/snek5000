@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "snek5000_canonical"
+name = "snek5000-canonical"
 version = "0.0.1"
 description = "An empty solver to demonstrate the packaging layout of a typical Snek5000 solver"
 readme = "README.md"
