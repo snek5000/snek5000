@@ -3,6 +3,7 @@
 
 """
 import argparse
+import subprocess
 import sys
 from pathlib import Path
 from typing import Iterable
@@ -29,16 +30,19 @@ class Make:
 
     """
 
-    def __init__(self, sim=None, path_run=None):
+    def __init__(self, sim=None, path_run=None, snakefile=None):
         if (sim is None and path_run is None) or (
             sim is not None and path_run is not None
         ):
             raise ValueError("Either sim of path_run has to be given.")
 
+        if snakefile:
+            snakefile = Path(snakefile)
+
         if path_run is None:
             self.path_run = sim.output.path_run
             try:
-                self.file = next(
+                self.file = snakefile or next(
                     f for f in sim.output.get_paths() if f.name == "Snakefile"
                 )
             except AttributeError:
@@ -49,13 +53,13 @@ class Make:
             if not path_run.exists():
                 raise FileNotFoundError(f"{path_run} does not exist.")
             self.path_run = Path(path_run)
-            self.file = self.path_run / "Snakefile"
+            self.file = snakefile or self.path_run / "Snakefile"
             if not self.file.exists():
                 raise FileNotFoundError(f"No Snakefile in {path_run}")
 
         self.log_handler = []
 
-    def list(self):
+    def list(self, **kwargs):
         """List rules.
 
         Equivalent to::
@@ -64,7 +68,12 @@ class Make:
 
         """
         with change_dir(self.path_run):
-            return snakemake(self.file, listrules=True, log_handler=self.log_handler)
+            return snakemake(
+                self.file,
+                listrules=True,
+                log_handler=self.log_handler,
+                **kwargs
+            )
 
     def exec(
         self,
@@ -332,3 +341,62 @@ def snek_make():
         keep_incomplete=not args.clean_after_fail,
         nproc=args.nproc,
     )
+
+
+def snek_make_nek():
+    """Used for the command snek-make-nek"""
+    parser = argparse.ArgumentParser(
+        prog="snek-make-nek",
+        description="Execute Snakemake rules to build Nek5000 tools and libraries",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+
+    parser.add_argument(
+        "rule",
+        nargs="?",
+        default=None,
+        help="Snakemake rule to be executed.",
+    )
+    parser.add_argument(
+        "-l",
+        "--list-rules",
+        action="store_true",
+        help="List rules and exit.",
+    )
+    parser.add_argument(
+        "-c",
+        "--clean-git",
+        action="store_true",
+        help="Apply git-clean on Nek5000 repository before building."
+    )
+
+    args = parser.parse_args()
+
+
+    # make = Make(path_run=Path(snek5000.get_nek_source_root()), snakefile=snek5000.get_snek_resource("nek5000.smk"))
+    #
+    make = _Nek5000Make()
+
+    from snek5000.output.base import Output
+
+    with Output.find_configfile().open() as fp:
+        config = yaml.safe_load(fp)
+
+    Output.update_snakemake_config(config, "snek-make-nek", env_sensitive=True)
+
+    if args.list_rules:
+        make.list(config=config)
+        sys.exit(0)
+
+    if args.clean_git:
+        with change_dir(snek5000.get_nek_source_root()):
+            subprocess.run(["git", "clean", "-xdf"])
+
+    if args.rule is None:
+        make.build(config)
+    else:
+        make.exec(
+            args.rule,
+            nproc=4,
+            config=config
+        )
