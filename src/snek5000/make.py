@@ -69,10 +69,7 @@ class Make:
         """
         with change_dir(self.path_run):
             return snakemake(
-                self.file,
-                listrules=True,
-                log_handler=self.log_handler,
-                **kwargs
+                self.file, listrules=True, log_handler=self.log_handler, **kwargs
             )
 
     def exec(
@@ -367,11 +364,10 @@ def snek_make_nek():
         "-c",
         "--clean-git",
         action="store_true",
-        help="Apply git-clean on Nek5000 repository before building."
+        help="Apply git-clean on Nek5000 repository before building.",
     )
 
     args = parser.parse_args()
-
 
     # make = Make(path_run=Path(snek5000.get_nek_source_root()), snakefile=snek5000.get_snek_resource("nek5000.smk"))
     #
@@ -395,8 +391,4 @@ def snek_make_nek():
     if args.rule is None:
         make.build(config)
     else:
-        make.exec(
-            args.rule,
-            nproc=4,
-            config=config
-        )
+        make.exec(args.rule, nproc=4, config=config)
