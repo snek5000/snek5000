@@ -53,7 +53,7 @@ def test_snek_make_clean(sim_data, monkeypatch):
         snek_make()
 
 
-def test_snek_make_list():
+def test_snek_make_nek_list():
     with patch.object(sys, "argv", ["snek-make-nek", "--list"]):
         with pytest.raises(SystemExit):
             snek_make_nek()
@@ -64,6 +64,6 @@ def test_snek_make_nek_clean_default():
         snek_make_nek()
 
 
-def test_snek_make_genmap():
+def test_snek_make_nek_genmap():
     with patch.object(sys, "argv", ["snek-make-nek", "bin/genmap"]):
         snek_make_nek()
