@@ -50,9 +50,9 @@ restarting simulations, loading simulation data, and generating figures and movi
 paper introduces Snek5000, discusses its design principles, and highlights its impact on
 the scientific community.
 
-## Snek5000: features and capabilities
+# Snek5000: features and capabilities
 
-### A Fluidsim extension
+## A Fluidsim extension
 
 Snek5000 is based on the CDF framework Fluidsim \[@fluidsim\], which introduces the concept of
 "Fluidsim solvers". A Fluidsim solver \[@fluidsim\] is a set of files describing a set of potential
@@ -78,12 +78,12 @@ and the equations), the solver can contain code to create, plot and postprocess 
 data, which is accessible through objects contained in `sim.output` .
 
 Snek5000 extends Fluidsim to enable users to create Fluidsim solvers for simulations
-based on the Nek5000 code. Open-source solvers, such as snek5000-phill, snek5000-cbox,
-and snek5000-tgv, are available, and users can easily develop custom solvers tailored to
+based on the Nek5000 code. Open-source solvers, such as [snek5000-phill](https://github.com/snek5000/snek5000-phill), [snek5000-cbox](https://github.com/snek5000/snek5000-cbox), 
+and [snek5000-tgv](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv), are available, and users can easily develop custom solvers tailored to
 their specific Nek5000 cases. This flexibility allows researchers to adapt Snek5000 to a
 wide range of fluid dynamics problems and simulation requirements.
 
-### Streamlined simulation management
+## Streamlined simulation management
 
 With a Snek5000-Fluidsim solver, users can efficiently launch and restart simulations
 using Python scripts and a terminal command ( `snek-restart` ). Snek5000 handles various
@@ -91,18 +91,18 @@ all file operations, such as directory creation and file copying. This streamlin
 process of managing simulations, freeing up time and resources for data analysis and
 understanding the underlying physics.
 
-### Loading simulations and data visualization
+## Loading simulations and data visualization
 
 It is very easy to "load" an existing simulation, i.e. to recreate a Python object `sim` similar to the one used to create the simulation. This can be done with the function
 `snek5000.load` or with the command `snek-ipy-load` , which opens a IPython session with
 a `sim` variable. Snek5000 simplifies the process of reading associated parameters (in
-`sim.params` ) and data, and generating visualizations, such as figures and movies. By
-utilizing popular Python packages, such as Matplotlib \[@matplotlib\] and Xarray \[@xarray\], Snek5000 facilitates the creation of high-quality visualizations that can be easily customized to meet
+`sim.params` ) and data, and generating visualizations, such as figures ( `sim.output.phys_fields.plot_hexa` ) and movies ( `sim.output.phys_fields.animate` ). By
+utilizing popular Python packages, such as Matplotlib [@matplotlib] and Xarray [@xarray], Snek5000 facilitates the creation of high-quality visualizations that can be easily customized to meet
 individual needs. This powerful visualization capability aids researchers in
 understanding complex fluid dynamics phenomena and effectively presenting their
 findings.
 
-### Post-processing and Data Analysis
+## Post-processing and Data Analysis
 
 Beyond visualization, Snek5000 also provides tools for post-processing and data
 analysis. Users can easily load simulation data into Python for further processing,
@@ -110,11 +110,11 @@ statistical analysis, and comparison between different simulations. This streaml
 approach to data analysis enables researchers to gain valuable insights into their
 simulations and focus on the underlying physical processes.
 
-### Powered by Python Packages
+## Powered by Python Packages
 
 Snek5000 leverages a variety of Python packages, including Snakemake \[@snakemake\], Fluidsim \[@fluidsim\], Pymech, Matplotlib \[@matplotlib\], Jinja, Pytest, and Xarray \[@xarray\], to deliver a robust and user-friendly workflow management tool for Nek5000. These packages provide a powerful foundation for Snek5000, enabling its seamless integration with existing Python-based workflows and enhancing its overall usability.
 
-### Tutorials and Documentation
+## Tutorials and Documentation
 
 Snek5000 provides comprehensive [documentation](https://snek5000.readthedocs.io/) and
 tutorials to guide users through its features and capabilities. These resources help new
@@ -123,7 +123,7 @@ advanced features and customization options. By providing thorough documentation
 Snek5000 promotes its widespread adoption and fosters a community of users and
 developers.
 
-### Future Developments and Enhancements
+## Future Developments and Enhancements
 
 The Snek5000 development team is committed to continuously improving the package and
 incorporating user feedback to address evolving needs within the scientific community.
@@ -145,6 +145,11 @@ advancements in the field.
 
 # Acknowledgements
 
-We acknowledge ...
+The authors acknowledge the numerical support provided by Olivier De-Marchi,
+Gabriel Moreau and Cyrille Bonamy of the LEGI informatics team. This project
+was funded by the project LEFE/IMAGO-2019 contract COSTRIO. AK acknowledges the
+finance of his PhD thesis from the school STEP of the University Grenoble
+Alpes. Part of this work was performed using resources provided by
+\href{https://www.cines.fr/}{CINES} under GENCI allocation number A0120107567.
 
 # References
