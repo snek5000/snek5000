@@ -78,7 +78,7 @@ and the equations), the solver can contain code to create, plot and postprocess 
 data, which is accessible through objects contained in `sim.output` .
 
 Snek5000 extends Fluidsim to enable users to create Fluidsim solvers for simulations
-based on the Nek5000 code. Open-source solvers, such as [snek5000-phill](https://github.com/snek5000/snek5000-phill), [snek5000-cbox](https://github.com/snek5000/snek5000-cbox), 
+based on the Nek5000 code. Open-source solvers, such as [snek5000-phill](https://github.com/snek5000/snek5000-phill), [snek5000-cbox](https://github.com/snek5000/snek5000-cbox),
 and [snek5000-tgv](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv), are available, and users can easily develop custom solvers tailored to
 their specific Nek5000 cases. This flexibility allows researchers to adapt Snek5000 to a
 wide range of fluid dynamics problems and simulation requirements.
@@ -97,7 +97,7 @@ It is very easy to "load" an existing simulation, i.e. to recreate a Python obje
 `snek5000.load` or with the command `snek-ipy-load` , which opens a IPython session with
 a `sim` variable. Snek5000 simplifies the process of reading associated parameters (in
 `sim.params` ) and data, and generating visualizations, such as figures ( `sim.output.phys_fields.plot_hexa` ) and movies ( `sim.output.phys_fields.animate` ). By
-utilizing popular Python packages, such as Matplotlib [@matplotlib] and Xarray [@xarray], Snek5000 facilitates the creation of high-quality visualizations that can be easily customized to meet
+utilizing popular Python packages, such as Matplotlib \[@matplotlib\] and Xarray \[@xarray\], Snek5000 facilitates the creation of high-quality visualizations that can be easily customized to meet
 individual needs. This powerful visualization capability aids researchers in
 understanding complex fluid dynamics phenomena and effectively presenting their
 findings.
@@ -150,6 +150,6 @@ Gabriel Moreau and Cyrille Bonamy of the LEGI informatics team. This project
 was funded by the project LEFE/IMAGO-2019 contract COSTRIO. AK acknowledges the
 finance of his PhD thesis from the school STEP of the University Grenoble
 Alpes. Part of this work was performed using resources provided by
-\href{https://www.cines.fr/}{CINES} under GENCI allocation number A0120107567.
+\\href{https://www.cines.fr/}\{CINES} under GENCI allocation number A0120107567.
 
 # References
