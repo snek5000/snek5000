@@ -1,0 +1,11 @@
+# Changes here will be overwritten by Copier
+_commit: 23.04.2
+_src_path: gh://snek5000/template-snek5000-solver
+author: Ashwin Vishnu
+ci: none
+description: An empty solver to demonstrate the packaging layout of a typical Snek5000
+    solver
+kth_framework: false
+package_name: snek5000_canonical
+project_name: snek5000-canonical
+short_name: canonical

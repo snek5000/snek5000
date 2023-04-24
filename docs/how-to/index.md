@@ -6,7 +6,8 @@
 ---
 maxdepth: 1
 ---
-snek-make.md
+config-c-fortran-compilers.md
+snek-make.myst.md
 run-background-foreground.md
 restart.myst.md
 load_state_stat_files.md
@@ -16,6 +17,7 @@ rebuild-nek.md
 export-sans-snek5000.myst.md
 archive-simulation-data.md
 templates.md
+adaptive_time_step.md
 ```
 
 ## For developer of Snek5000 solvers

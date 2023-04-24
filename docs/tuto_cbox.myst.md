@@ -14,7 +14,7 @@ kernelspec:
 
 # Demo sidewall convection (`snek5000-cbox` solver)
 
-## A more advanced script adated for a particular instability
+## A more advanced script adapted for a particular instability
 
 This example is based on
 [the study *From onset of unsteadiness to chaos in a differentially heated square cavity* by Le Quéré & Behnia (1998)](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/from-onset-of-unsteadiness-to-chaos-in-a-differentially-heated-square-cavity/617F4CB2C23DD74C3D0CB872AE7C0045).

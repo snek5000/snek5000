@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snek5000-canonical"
+version = "0.0.1"
+description = "An empty solver to demonstrate the packaging layout of a typical Snek5000 solver"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Ashwin Vishnu" }
+]
+keywords = ["Snek5000", "Fluidsim", "Nek5000", "CFD"]
+dependencies = [
+    "snek5000 >= 0.9.0"
+]
+
+[project.optional-dependencies]
+tests = [
+    "nox",
+    "pytest",
+    "pytest-cov"
+]
+
+[project.entry-points."snek5000.solvers"]
+canonical = "snek5000_canonical.solver"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+snek5000_canonical = ["*.usr.f", "*.par.cfg", "Snakefile", "etc/*.yml"]
+
+[tool.coverage.run]
+source = ["snek5000_canonical", "./tests"]
+data_file = ".coverage/coverage"
+omit = [
+    "*/try_*.py",
+    "*/_old_*.py",
+    "tests/test_slow_*.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "if __name__ == .__main__.:",
+    'if "sphinx" in sys.modules:',
+    "raise ValueError",
+    "raise NotImplementedError",
+    "except KeyError:",
+    "except ImportError:",
+    "except AttributeError:",
+    "except NotImplementedError:"
+]
+
+[tool.coverage.html]
+directory = ".coverage/html"
