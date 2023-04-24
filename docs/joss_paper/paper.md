@@ -53,7 +53,7 @@ scientific community.
 
 ## A Fluidsim extension
 
-Snek5000 is based on the CDF framework Fluidsim [@fluidsim], which introduces
+Snek5000 is based on the CDF framework Fluidsim \[@fluidsim\], which introduces
 the concept of "Fluidsim solvers". A Fluidsim solver consists of few files
 describing a set of potential and similar simulations. A concrete simulation
 can be created via a simple and generic Python API. For example,
@@ -103,7 +103,7 @@ opens a IPython session with a `sim` variable. Snek5000 simplifies the process
 of reading associated parameters (in `sim.params` ) and data, and generating
 visualizations, such as figures ( `sim.output.phys_fields.plot_hexa` ) and
 movies ( `sim.output.phys_fields.animate` ). By utilizing popular Python
-packages, such as Matplotlib [@matplotlib] and Xarray [@xarray], Snek5000
+packages, such as Matplotlib \[@matplotlib\] and Xarray \[@xarray\], Snek5000
 facilitates the creation of high-quality visualizations that can be easily
 customized to meet individual needs. This powerful visualization capability
 aids researchers in understanding complex fluid dynamics phenomena and
@@ -117,8 +117,8 @@ and focus on the underlying physical processes.
 ## Powered by Python Packages
 
 Snek5000 leverages a variety of Python packages, including Snakemake
-[@snakemake], Fluidsim [@fluidsim], Pymech, Matplotlib [@matplotlib], Jinja,
-Pytest, and Xarray [@xarray], to deliver a robust and user-friendly workflow
+\[@snakemake\], Fluidsim \[@fluidsim\], Pymech, Matplotlib \[@matplotlib\], Jinja,
+Pytest, and Xarray \[@xarray\], to deliver a robust and user-friendly workflow
 management tool for Nek5000. These packages provide a powerful foundation for
 Snek5000, enabling its seamless integration with existing Python-based
 workflows and enhancing its overall usability.
@@ -142,13 +142,13 @@ scientific community.
 Snek5000, has been thoughtfully designed with modularity and code reuse
 principles in mind. By leveraging inheritance and object-oriented programming,
 Snek5000 is well-positioned to accommodate the adoption of the next-generation
-NekRS [@nekrs] code, developed by the Nek5000 team, while maintaining its
+NekRS \[@nekrs\] code, developed by the Nek5000 team, while maintaining its
 existing structure and functionality. This adaptability ensures that the
 framework stays up-to-date with the latest advancements in the field.
 
 Moreover, FluidsimFoam, currently under development, is a promising Fluidsim
 extension similar to Snek5000 designed to bridge the gap between Fluidsim and
-OpenFOAM [@openfoam]. This extension allows users to create custom Fluidsim
+OpenFOAM \[@openfoam\]. This extension allows users to create custom Fluidsim
 solvers specifically tailored for simulations on the widely-used open-source
 CFD software package, OpenFOAM. By harnessing the strengths of Python and
 OpenFOAM, FluidsimFoam aims to provide a versatile and user-friendly
