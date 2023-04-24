@@ -117,11 +117,11 @@ and focus on the underlying physical processes.
 ## Powered by Python Packages
 
 Snek5000 leverages a variety of Python packages, including Snakemake
-[@snakemake], Fluidsim [@fluidsim], Pymech, Matplotlib [@matplotlib], Jinja,
-Pytest, and Xarray [@xarray], to deliver a robust and user-friendly workflow
-management tool for Nek5000. These packages provide a powerful foundation for
-Snek5000, enabling its seamless integration with existing Python-based
-workflows and enhancing its overall usability.
+[@snakemake], Fluidsim [@fluidsim], Pymech [@pymech], Matplotlib [@matplotlib],
+Jinja, Pytest, and Xarray [@xarray], to deliver a robust and user-friendly
+workflow management tool for Nek5000. These packages provide a powerful
+foundation for Snek5000, enabling its seamless integration with existing
+Python-based workflows and enhancing its overall usability.
 
 ## Tutorials and Documentation
 
