@@ -49,12 +49,62 @@ simulation data, and generating figures and movies. This paper introduces
 Snek5000, discusses its design principles, and highlights its impact on the
 scientific community.
 
-# Snek5000: features and capabilities
+# Statement of need
+
+## State of the art
+
+The CFD framework Nek5000 is the culmination of several decades of development.
+Nek5000 solvers can produce high-fidelity simulations owing to spectral-element
+method and can scale up to several thousands of cores [@nek5000_scaling].
+Development of Nek5000 is primarily driven by performance optimization,
+incorporating new numerical method whilst following a keep-it-simple approach
+to ensure portability across various HPC machines.
+
+Development of Nek5000 continues to this day with efforts underway to use GPUs
+[@nek5000_openacc] and to rewrite it in C++ [@nekrs] and modern Fortran
+[@neko].
+
+To the best of the authors' knowledge no other actively maintained and reusable
+approaches have been made to wrap Nek5000. A project called `nekpy` [@nekpy]
+was the only known prior work resembling Snek5000, where it uses template
+source files to fill in parameters.
+
+## Better user-experience with Snek5000
+
+Snek5000 enhances the user-experience by addressing the following downsides of
+using a typical Nek5000 solver:
+
+1. Only a limited set of utilities come packaged with Nek5000 and those focus
+on compilation and mesh-generation. As a result, usability of Nek5000 takes a
+hit and a practitioner is left to construct a home-brewed solution to conduct
+exploratory research and parametric studies. Snek5000 functions as a workflow
+manager for assisting packaging, setup, compilation and post-processing aspects
+of a simulation.
+
+2. The simulation parameters are spread in at least three different files (
+`*.box`, `*.par` and `SIZE`). Some parameters have short and cryptic names
+(for example, `lx1`, `lxd`, etc.) and are dependent on each other. Snek5000
+tries to provide good defaults, uses more legible parameter names when
+necessary and [dynamically set some of these
+parameters](https://snek5000.readthedocs.io/en/stable/_generated/snek5000.operators.html#snek5000.operators.Operators)
+when possible. This allows a user to get started without the need to master the
+whole manual.
+
+# Snek5000: design principles, features and capabilities
+
+## Powered by Python Packages
+
+Snek5000 leverages a variety of Python packages, including Snakemake
+[@snakemake], FluidSim [@fluidsim], Pymech [@pymech], Matplotlib [@matplotlib],
+Jinja, Pytest, and Xarray [@xarray], to deliver a robust and user-friendly
+workflow management tool for Nek5000. These packages provide a powerful
+foundation for Snek5000, enabling its seamless integration with existing
+Python-based workflows and enhancing its overall usability.
 
 ## A FluidSim extension
 
 Snek5000 is based on the CFD framework FluidSim [@fluidsim], which introduces
-the concept of "Fluidsim solvers". A Fluidsim solver consists of few files
+the concept of "FluidSim solvers". A FluidSim solver consists of few files
 describing a set of potential and similar simulations. A concrete simulation
 can be created via a simple and generic Python API. For example, for the
 `snek5000-cbox` solver,
@@ -91,7 +141,7 @@ vertical convection [@Khoubani2023vertical].
 
 ## Streamlined simulation management
 
-With a Snek5000-Fluidsim solver, users can efficiently launch and restart
+With a Snek5000-FluidSim solver, users can efficiently launch and restart
 simulations using Python scripts and a terminal command ( `snek-restart` ).
 Snek5000 handles all file operations, such as directory creation and file
 copying. This streamlines the process of managing simulations, freeing up time
@@ -117,15 +167,6 @@ comparison between different simulations. This streamlined approach to data
 analysis enables researchers to gain valuable insights into their simulations
 and focus on the underlying physical processes.
 
-## Powered by Python Packages
-
-Snek5000 leverages a variety of Python packages, including Snakemake
-[@snakemake], Fluidsim [@fluidsim], Pymech [@pymech], Matplotlib [@matplotlib],
-Jinja, Pytest, and Xarray [@xarray], to deliver a robust and user-friendly
-workflow management tool for Nek5000. These packages provide a powerful
-foundation for Snek5000, enabling its seamless integration with existing
-Python-based workflows and enhancing its overall usability.
-
 ## Tutorials and Documentation
 
 Snek5000 provides comprehensive
@@ -147,60 +188,20 @@ principles in mind. By leveraging inheritance and object-oriented programming,
 Snek5000 is well-positioned to accommodate the adoption of the next-generation
 NekRS [@nekrs] code, developed by the Nek5000 team, while maintaining its
 existing structure and functionality. This adaptability ensures that the
-framework stays up-to-date with the latest advancements in the field.
+framework stays up-to-date with the latest advancements in the field. In the
+future, Snek5000 can also function as a compatibility layer to migrate to
+upcoming rewrites of Nek5000 which require some extra input files [@nekrs,
+@neko].
 
-Moreover, FluidsimFoam, currently under development, is a promising Fluidsim
-extension similar to Snek5000 designed to bridge the gap between Fluidsim and
-OpenFOAM [@openfoam]. This extension allows users to create custom Fluidsim
-solvers specifically tailored for simulations on the widely-used open-source
-CFD software package, OpenFOAM. By harnessing the strengths of Python and
-OpenFOAM, FluidsimFoam aims to provide a versatile and user-friendly
+The design principles of Snek5000 has inspired
+[FluidsimFoam](https://fluidsimfoam.readthedocs.io/), currently under
+development, a promising FluidSim extension to bridge the gap between
+FluidSim and OpenFOAM [@openfoam]. This extension allows users to create custom
+FluidSim solvers specifically tailored for simulations on the widely-used
+open-source CFD software package, OpenFOAM. By harnessing the strengths of
+Python and OpenFOAM, FluidsimFoam aims to provide a versatile and user-friendly
 environment for conducting computational fluid dynamics simulations, broadening
 the scope of potential applications.
-
-# Statement of need
-
-## State of the art
-
-The CFD framework Nek5000 is the culmination of several decades of development.
-Nek5000 solvers can produce high-fidelity simulations owing to spectral-element
-method and can scale up to several thousands of cores [@nek5000_scaling].
-Development of Nek5000 is primarily driven by performance optimization,
-incorporating new numerical method whilst following a keep-it-simple approach
-to ensure portability across various HPC machines.
-
-Development of Nek5000 continues to this day with efforts underway to use GPUs
-[@nek5000_openacc] and to rewrite it in C++ [@nekrs] and modern Fortran
-[@neko].
-
-To the best of the authors' knowledge no other actively maintained and reusable
-approaches have been made to wrap Nek5000. A project called `nekpy` [@nekpy]
-was the only known prior work resembling Snek5000, where it uses template
-source files to fill in parameters.
-
-## Better user-experience with Snek5000
-
-Snek5000 enhances the user-experience by addressing the following downsides of
-using a typical Nek5000 solver:
-
-1. Only a limited set of utilities come packaged with Nek5000 and those focus
-on compilation and mesh-generation. As a result, usability of Nek5000 takes a
-hit and a practitioner is left to construct a home-brewed solution to conduct
-exploratory research and parametric studies. Snek5000 functions as a workflow
-manager for assisting packaging, setup, compilation and post-processing aspects
-of a simulation.
-
-2. The simulation parameters are spread in at least three different files (
-`*.box`, `*.par` and `SIZE`). Some parameters have short and cryptic names (for
-example, `lx1`, `lxd`, etc.) and are dependent on each other. Snek5000 tries to
-provide good defaults and [dynamically set some of these
-parameters](https://snek5000.readthedocs.io/en/stable/_generated/snek5000.operators.html#snek5000.operators.Operators)
-when possible, allowing a user to get started without the need to master the
-whole manual.
-
-In the future, Snek5000 can also function as a compatibility layer to migrate
-to upcoming rewrites of Nek5000 which require some extra input files [@nekrs,
-@neko].
 
 # Acknowledgements
 
