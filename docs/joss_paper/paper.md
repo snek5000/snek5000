@@ -175,7 +175,7 @@ comparison between different simulations. This streamlined approach to data
 analysis enables researchers to gain valuable insights into their simulations
 and focus on the underlying physical processes.
 
-## Tutorials and Documentation
+## Tutorials and documentation
 
 Snek5000 provides comprehensive
 [documentation](https://snek5000.readthedocs.io/) and tutorials to guide users
@@ -185,7 +185,7 @@ features and customization options. By providing thorough documentation,
 Snek5000 promotes its widespread adoption and fosters a community of users and
 developers.
 
-## Future Developments and Enhancements
+## Future developments and enhancements
 
 The Snek5000 development team is committed to continuously improving the
 package and incorporating user feedback to address evolving needs within the
