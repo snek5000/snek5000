@@ -53,7 +53,8 @@ scientific community.
 
 ## State of the art
 
-The CFD framework Nek5000 is the culmination of several decades of development.
+The CFD framework Nek5000 [@nek5000] is the culmination of several decades of
+development.
 Nek5000 solvers can produce high-fidelity simulations owing to spectral-element
 method and can scale up to several thousands of cores [@nek5000_scaling].
 Development of Nek5000 is primarily driven by performance optimization,
