@@ -65,7 +65,8 @@ Development of Nek5000 continues to this day with efforts underway to use GPUs
 [@neko].
 
 To the best of the authors' knowledge no other actively maintained and reusable
-approaches have been made to wrap Nek5000. A project called `nekpy` [@nekpy]
+approaches have been made to wrap Nek5000. A project called
+[`nekpy`](https://github.com/maxhutch/nekpy)
 was the only known prior work resembling Snek5000, where it uses template
 source files to fill in parameters.
 
