@@ -160,7 +160,7 @@ the scope of potential applications.
 
 # Statement of need
 
-## State of art
+## State of the art
 
 The CFD framework Nek5000 is the culmination of several decades of development.
 Nek5000 solvers can produce high-fidelity simulations owing to spectral-element
