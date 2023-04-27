@@ -84,7 +84,9 @@ simulations based on the Nek5000 code. Open-source solvers, such as
 [snek5000-tgv](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv),
 are available, and users can easily develop custom solvers tailored to their
 specific Nek5000 cases. This flexibility allows researchers to adapt Snek5000
-to a wide range of fluid dynamics problems and simulation requirements.
+to a wide range of fluid dynamics problems and simulation requirements. For
+example, Snek5000-cbox has been used for a study on linear stability of
+vertical convection [@Khoubani2023vertical].
 
 ## Streamlined simulation management
 
@@ -157,14 +159,47 @@ the scope of potential applications.
 
 # Statement of need
 
-Snek5000 is a powerful and versatile Python package designed to streamline the
-management and visualization of Nek5000-based fluid dynamics simulations. By
-providing an efficient interface for creating solvers, launching and restarting
-simulations, and generating visualizations, Snek5000 enables researchers to
-focus on scientific discovery and understanding complex fluid dynamics
-problems. With its open-source nature, comprehensive documentation, and active
-development, Snek5000 has the potential to significantly impact the fluid
-dynamics research community and drive further advancements in the field.
+## State of art
+
+The CFD framework Nek5000 is the culmination of several decades of development.
+Nek5000 solvers can produce high-fidelity simulations owing to spectral-element
+method and can scale up to several thousands of cores [@nek5000_scaling].
+Development of Nek5000 is primarily driven by performance optimization,
+incorporating new numerical method whilst following a keep-it-simple approach
+to ensure portability across various HPC machines.
+
+Development of Nek5000 continues to this day with efforts underway to use GPUs
+[@nek5000_openacc] and to rewrite it in C++ [@nekrs] and modern Fortran
+[@neko].
+
+To the best of the authors' knowledge no other actively maintained and reusable
+approaches have been made to wrap Nek5000. A project called `nekpy` [@nekpy]
+was the only known prior work resembling Snek5000, where it uses templated
+source files to fill in parameters.
+
+## Better user-experience with Snek5000
+
+Snek5000 enhances the user-experience by addressing the following downsides of
+using a typical Nek5000 solver:
+
+1. Only a limited set of utilities come packaged with Nek5000 and those focus
+   on compilation and mesh-generation. As a result, usability of Nek5000 takes
+   a hit and a practitioner is left to construct a homebrewn solution to
+   conduct exploratory research and parametric studies. Snek5000 functions as a
+   workflow manager for assisting packaging, setup, compilation and
+   post-processing aspects of a simulation.
+
+2. The simulation parameters are spread in at least three different files (
+   `*.box`, `*.par` and `SIZE`). Some parameters have short and cryptic names
+   (for example, `lx1`, `lxd` etc.) and are dependent on each other. Snek5000 tries
+   to provide good defaults and [dynamically set some of these
+   parameters](https://snek5000.readthedocs.io/en/stable/_generated/snek5000.operators.html#snek5000.operators.Operators)
+   when possible, allowing a user to get started the need to master the whole
+   manual.
+
+In the future, Snek5000 can also function as a compatibility layer to migrate
+to upcoming rewrites of Nek5000 which require some extra input files [@nekrs,
+@neko].
 
 # Acknowledgements
 
@@ -173,6 +208,9 @@ Gabriel Moreau and Cyrille Bonamy of the LEGI informatics team. This project
 was funded by the project LEFE/IMAGO-2019 contract COSTRIO. AK acknowledges the
 finance of his PhD thesis from the school STEP of the University Grenoble
 Alpes. Part of this work was performed using resources provided under GENCI
-allocation number A0120107567.
+allocation number A0120107567. A CC-BY public copyright license has been
+applied by the authors to the present document and will be applied to all
+subsequent versions up to the Author Accepted Manuscript arising from this
+submission, in accordance with the grant's open access conditions.
 
 # References
