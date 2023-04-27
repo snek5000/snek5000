@@ -25,11 +25,11 @@ authors:
 
 affiliations:
 
-  - name: Swedish Meteorological and Hydrological Institute, Norrk{\"o}ping, Sweden
+  - name: Swedish Meteorological and Hydrological Institute, Norrköping, Sweden
     index: 1
 
-  - name: Laboratoire des \'Ecoulements G\'eophysiques et Industriels, Universit\'e~Grenoble~Alpes,
-      CNRS, Grenoble~INP, 38000~Grenoble, France
+  - name: Laboratoire des Écoulements Géophysiques et Industriels, Université Grenoble Alpes,
+      CNRS, Grenoble INP, 38000 Grenoble, France
     index: 2
 
 date: 2 March 2023
@@ -56,7 +56,8 @@ scientific community.
 Snek5000 is based on the CDF framework Fluidsim [@fluidsim], which introduces
 the concept of "Fluidsim solvers". A Fluidsim solver consists of few files
 describing a set of potential and similar simulations. A concrete simulation
-can be created via a simple and generic Python API. For example,
+can be created via a simple and generic Python API. For example, for the
+`snek5000-cbox` solver,
 
 ```python
 from snek5000_cbox import Simul
@@ -183,19 +184,19 @@ Snek5000 enhances the user-experience by addressing the following downsides of
 using a typical Nek5000 solver:
 
 1. Only a limited set of utilities come packaged with Nek5000 and those focus
-   on compilation and mesh-generation. As a result, usability of Nek5000 takes
-   a hit and a practitioner is left to construct a homebrewn solution to
-   conduct exploratory research and parametric studies. Snek5000 functions as a
-   workflow manager for assisting packaging, setup, compilation and
-   post-processing aspects of a simulation.
+on compilation and mesh-generation. As a result, usability of Nek5000 takes a
+hit and a practitioner is left to construct a homebrewn solution to conduct
+exploratory research and parametric studies. Snek5000 functions as a workflow
+manager for assisting packaging, setup, compilation and post-processing aspects
+of a simulation.
 
 2. The simulation parameters are spread in at least three different files (
-   `*.box`, `*.par` and `SIZE`). Some parameters have short and cryptic names
-   (for example, `lx1`, `lxd` etc.) and are dependent on each other. Snek5000 tries
-   to provide good defaults and [dynamically set some of these
-   parameters](https://snek5000.readthedocs.io/en/stable/_generated/snek5000.operators.html#snek5000.operators.Operators)
-   when possible, allowing a user to get started the need to master the whole
-   manual.
+`*.box`, `*.par` and `SIZE`). Some parameters have short and cryptic names (for
+example, `lx1`, `lxd`, etc.) and are dependent on each other. Snek5000 tries to
+provide good defaults and [dynamically set some of these
+parameters](https://snek5000.readthedocs.io/en/stable/_generated/snek5000.operators.html#snek5000.operators.Operators)
+when possible, allowing a user to get started without the need to master the
+whole manual.
 
 In the future, Snek5000 can also function as a compatibility layer to migrate
 to upcoming rewrites of Nek5000 which require some extra input files [@nekrs,
