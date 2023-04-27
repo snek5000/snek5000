@@ -1,0 +1,62 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "Code",
+    "identifier": "snek5000",
+    "name": "snek5000",
+    "version": "0.9.0",
+    "description": "A Python framework for Nek5000.",
+    "license": "BSD-3-Clause",
+    "author": [
+        {
+            "@id": "https://orcid.org/0000-0002-2979-6327",
+            "@type": "Person",
+            "email": "ashwin.mohanan@smhi.se",
+            "givenName": "Ashwin Vishnu",
+            "familyName": "Mohanan",
+            "affiliation": "Swedish Meteorological and Hydrological Institute, Norrk{\"o}ping, Sweden"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-0295-5308",
+            "@type": "Person",
+            "givenName": "Arman",
+            "familyName": "Khoubani",
+            "affiliation": "LEGI, Grenoble, France"
+        },
+        {
+            "@id": "https://orcid.org/0000-0001-9481-4459",
+            "@type": "Person",
+            "givenName": "Pierre",
+            "familyName": "Augier",
+            "affiliation": "LEGI, Grenoble, France"
+        }
+    ],
+    "audience": [
+        {
+            "@type": "Audience",
+            "audienceType": "Science/Research"
+        }
+    ],
+    "codeRepository": "https://github.com/snek5000/snek5000.git",
+    "issueTracker": "https://github.com/snek5000/snek5000/issues",
+    "programmingLanguage": "Python",
+    "datePublished": "2020-05-09",
+    "dateModified": "2023-01-11",
+    "dateCreated": "2020-01-17",
+    "keywords": [
+        "CFD",
+        "Python",
+        "Nek5000",
+        "FluidSim",
+        "Snakemake"
+    ],
+    "title": "Snek5000: Python framework for Nek5000",
+    "provider": {
+        "@id": "https://pypi.org",
+        "@type": "Organization",
+        "name": "The Python Package Index",
+        "url": "https://pypi.org"
+    },
+    "runtimePlatform": "Python 3",
+    "url": "https://github.com/snek5000",
+    "operatingSystem": "OS Independent"
+}

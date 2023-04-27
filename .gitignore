@@ -97,3 +97,7 @@ bin/*_JOB.md
 
 # Nix
 requirements/.mamba
+
+# paper
+docs/joss_paper/*.pdf
+docs/joss_paper/.whedon
