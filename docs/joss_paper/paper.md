@@ -8,27 +8,27 @@ tags:
   - Snakemake
 authors:
 
-    name: Ashwin Vishnu Mohanan
+  - name: Ashwin Vishnu Mohanan
     orcid: 0000-0002-2979-6327
     equal-contrib: true
     affiliation: 1
 
-    name: Arman Khoubani
+  - name: Arman Khoubani
     orcid: 0000-0002-0295-5308
     equal-contrib: true
     affiliation: 2
 
-    name: Pierre Augier
+  - name: Pierre Augier
     orcid: 0000-0001-9481-4459
     equal-contrib: true
     affiliation: 2
 
 affiliations:
 
-    name: Swedish Meteorological and Hydrological Institute, Norrk{\"o}ping, Sweden
+  - name: Swedish Meteorological and Hydrological Institute, Norrk{\"o}ping, Sweden
     index: 1
 
-    name: Laboratoire des \'Ecoulements G\'eophysiques et Industriels, Universit\'e~Grenoble~Alpes,
+  - name: Laboratoire des \'Ecoulements G\'eophysiques et Industriels, Universit\'e~Grenoble~Alpes,
       CNRS, Grenoble~INP, 38000~Grenoble, France
     index: 2
 
