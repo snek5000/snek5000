@@ -1,5 +1,5 @@
 ---
-title: 'Snek5000: Python framework for Nek5000'
+title: 'Snek5000: a new Python framework for Nek5000'
 tags:
   - CFD
   - Python
