@@ -5,12 +5,12 @@ from json import load
 from pathlib import Path
 from datetime import datetime
 
-import ruamel.yaml
+import yaml
 
 
 here = Path.cwd()
 
-with (here.parent / "codemeta.json").open() as fp:
+with (here / "codemeta.json").open() as fp:
     cm = load(fp)
 
 
@@ -62,12 +62,12 @@ data = {
 # yaml.indent(sequence=4, offset=2, mapping=4)
 def dump(data, dest):
     # yaml.dump(data, dest)
-    ruamel.yaml.dump(
+    yaml.safe_dump(
         data,
-        dest,
+        stream=dest,
         explicit_start=True,
         allow_unicode=True,
-        Dumper=ruamel.yaml.RoundTripDumper,
+        # Dumper=ruamel.yaml.RoundTripDumper,
     )
 
 
