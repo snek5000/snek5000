@@ -141,7 +141,7 @@ simulations based on the Nek5000 code. Open-source solvers, such as
 [snek5000-cbox](https://github.com/snek5000/snek5000-cbox), and
 [snek5000-tgv](https://github.com/snek5000/snek5000/tree/main/docs/examples/snek5000-tgv),
 are available, and [users can easily develop custom
-solvers](https://snek5000.readthedocs.io/en/stable/tuto_packaging.html)
+solvers](https://snek5000.readthedocs.io/en/latest/tuto_packaging.html)
 tailored to their specific Nek5000 cases. This flexibility allows researchers
 to adapt Snek5000 to a wide range of fluid dynamics problems and simulation
 requirements. For example, Snek5000-cbox has been used for a study on linear
@@ -150,14 +150,18 @@ stability of vertical convection [@Khoubani2023vertical].
 ## Streamlined simulation management
 
 With a Snek5000-FluidSim solver, users can efficiently launch and restart
-simulations using Python scripts and a terminal command ( `snek-restart` ).
+simulations using Python scripts and a terminal command (
+[`snek-restart`](https://snek5000.readthedocs.io/en/latest/how-to/restart.html)
+).
 Snek5000 handles all file operations, such as directory creation and file
 copying. This streamlines the process of managing simulations, freeing up time
 and resources for data analysis and understanding the underlying physics.
 
 ## Loading simulations for data visualization, post-processing and data analysis
 
-It is very easy to "load" an existing simulation, i.e. to recreate a Python
+It is very easy to ["load" an existing
+simulation](https://snek5000.readthedocs.io/en/latest/tuto_phill_script.html#load-the-simulation),
+i.e. to recreate a Python
 object `sim` similar to the one used to create the simulation. This can be done
 with the function `snek5000.load` or with the command `snek-ipy-load` , which
 opens a IPython session with a `sim` variable. Snek5000 simplifies the process
