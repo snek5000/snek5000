@@ -213,7 +213,9 @@ the scope of potential applications.
 
 # Acknowledgements
 
-The authors acknowledge the numerical support provided by Olivier De-Marchi,
+The financial support of the SeRC ExABL project which made this project possible
+is duly acknowledged.
+The authors also acknowledge the numerical support provided by Olivier De-Marchi,
 Gabriel Moreau and Cyrille Bonamy of the LEGI informatics team. This project
 was funded by the project LEFE/IMAGO-2019 contract COSTRIO. AK acknowledges the
 finance of his PhD thesis from the school STEP of the University Grenoble
