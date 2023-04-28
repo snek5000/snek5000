@@ -190,7 +190,6 @@ to adapt Snek5000 to a wide range of fluid dynamics problems and simulation
 requirements. For example, Snek5000-cbox has been used for a study on linear
 stability of vertical convection [@Khoubani2023vertical].
 
-
 ## Future developments and enhancements
 
 The Snek5000 development team is committed to continuously improving the
@@ -204,8 +203,7 @@ NekRS [@nekrs] code, developed by the Nek5000 team, while maintaining its
 existing structure and functionality. This adaptability ensures that the
 framework stays up-to-date with the latest advancements in the field. In the
 future, Snek5000 can also function as a compatibility layer to migrate to
-upcoming rewrites of Nek5000 which require some extra input files [@nekrs,
-@neko].
+upcoming rewrites of Nek5000 which require some extra input files [@nekrs;@neko].
 
 The design principles of Snek5000 has inspired
 [FluidsimFoam](https://fluidsimfoam.readthedocs.io/), currently under
