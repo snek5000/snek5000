@@ -23,7 +23,7 @@ for the simulations on the Fortran [CFD] code [Nek5000]. There are open-source
 solvers (in particular [snek5000-phill], [snek5000-cbox] and [snek5000-tgv])
 and it's not difficult to write your own solver based on your Nek5000 cases (as
 shown in [this
-tutorial](https://snek5000.readthedocs.io/en/latest/packaging.html)).
+tutorial](https://snek5000.readthedocs.io/en/latest/tuto_packaging.html)).
 
 With a Snek5000-Fluidsim solver, it becomes very easy to
 
