@@ -6,8 +6,5 @@ update, or if you change it intentionally you may need to recompile Nek5000 libr
 again. To do so:
 
 ```sh
-cd $NEK_SOURCE_ROOT
-git clean -xdf
+snek-make-nek --clean-git
 ```
-
-Next time you execute a Snek5000 solver, the libraries would be rebuild.

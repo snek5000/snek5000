@@ -32,7 +32,7 @@ Security in case of vulnerabilities.
 
 ## [0.9.1] - 2023-05-01
 
-## Added
+### Added
 
 - New command `snek-make-nek` to clean and rebuild Nek5000 tools
 - JOSS paper draft
@@ -43,7 +43,7 @@ Documentation
 - How to configure C and Fortran compilers
 - Document the new copier template
 
-## Changed
+### Changed
 
 - Use `remaining_clock_time` by default
 - Replace isort and flake8 with ruff, upgrade hooks
