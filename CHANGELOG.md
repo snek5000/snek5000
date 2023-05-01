@@ -30,6 +30,24 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+## [0.9.1] - 2023-05-01
+
+## Added
+
+- New command `snek-make-nek` to clean and rebuild Nek5000 tools
+- JOSS paper draft
+
+Documentation
+
+- How to use adaptive time step
+- How to configure C and Fortran compilers
+- Document the new copier template
+
+## Changed
+
+- Use `remaining_clock_time` by default
+- Replace isort and flake8 with ruff, upgrade hooks
+
 ## [0.9.0] - 2023-01-11
 
 ### Added
@@ -378,5 +396,6 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 [0.7.0b0]: https://github.com/snek5000/snek5000/compare/0.6.1b0...0.7.0b0
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
 [0.9.0]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0
+[0.9.1]: https://github.com/snek5000/snek5000/compare/0.9.0...0.9.1
 [@paugier]: https://github.com/paugier
-[unreleased]: https://github.com/snek5000/snek5000/compare/0.9.0...HEAD
+[unreleased]: https://github.com/snek5000/snek5000/compare/0.9.1...HEAD

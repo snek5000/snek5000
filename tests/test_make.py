@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from snek5000.make import _Nek5000Make, snek_make
+from snek5000.make import _Nek5000Make, snek_make, snek_make_nek
 
 
 def nek5000_build(config):
@@ -51,3 +51,24 @@ def test_snek_make_clean(sim_data, monkeypatch):
     monkeypatch.chdir(sim_data)
     with patch.object(sys, "argv", ["snek-make", "clean"]):
         snek_make()
+
+
+def test_snek_make_nek_list():
+    with patch.object(sys, "argv", ["snek-make-nek", "--list"]):
+        with pytest.raises(SystemExit):
+            snek_make_nek()
+
+
+def test_snek_make_nek_default():
+    with patch.object(sys, "argv", ["snek-make-nek"]):
+        snek_make_nek()
+
+
+def test_snek_make_nek_clean_nek():
+    with patch.object(sys, "argv", ["snek-make-nek", "--clean-git"]):
+        snek_make_nek()
+
+
+def test_snek_make_nek_genmap():
+    with patch.object(sys, "argv", ["snek-make-nek", "bin/genmap"]):
+        snek_make_nek()
