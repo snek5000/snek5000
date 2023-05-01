@@ -59,8 +59,13 @@ def test_snek_make_nek_list():
             snek_make_nek()
 
 
-def test_snek_make_nek_clean_default():
+def test_snek_make_nek_default():
     with patch.object(sys, "argv", ["snek-make-nek"]):
+        snek_make_nek()
+
+
+def test_snek_make_nek_clean_nek():
+    with patch.object(sys, "argv", ["snek-make-nek", "--clean-git"]):
         snek_make_nek()
 
 
