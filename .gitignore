@@ -54,6 +54,7 @@ src/**/*.log
 makefile_usr.inc
 
 # Python
+.venv/
 venv/
 .python-version
 .snakemake

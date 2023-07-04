@@ -71,7 +71,8 @@ params.oper.nx = 12
 params.oper.ny = 10
 params.oper.nz = 8
 
-params.nek.general.num_steps = 10
+params.nek.general.write_interval = 4
+params.nek.general.num_steps = 12
 
 ...
 
@@ -94,9 +95,10 @@ command, and run:
 sim.params
 
 # few examples of various read and plots
-sim.output.print_stdout.plot_dt()
+sim.output.print_stdout.plot_dt_cfl()
 sim.output.print_stdout.plot_nb_iterations()
 
+# some solvers save "history points" (not phill)
 sim.output.history_points.plot()
 sim.output.history_points.coords
 data = sim.output.history_points.load_1point(2)
