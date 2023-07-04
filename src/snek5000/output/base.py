@@ -211,7 +211,7 @@ class Output(OutputCore):
         return Path(inspect.getmodule(cls).__file__).parent
 
     @classmethod
-    def find_configfile(cls, host=None):
+    def find_configfile(cls, host=None) -> Path:
         """Get path of the Snakemake configuration file for the current machine.
         All configuration files are stored under ``etc`` sub-package.
 
@@ -303,7 +303,7 @@ class Output(OutputCore):
         if missing_config:
             raise ValueError(
                 f"Some keys are missing from the configfile "
-                f"{cls.get_configfile()}: {missing_config}"
+                f"{cls.find_configfile()}: {missing_config}"
             )
 
         try:
