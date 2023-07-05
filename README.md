@@ -118,7 +118,7 @@ To see how this works, run a short [snek5000-cbox] simulation
 change to the simulation directory, execute `snek-ipy-load` command and then
 
 ```python
-# Plot a point
+# Plot all history points
 sim.output.history_points.plot()
 # Print the coordinates of the history points
 sim.output.history_points.coords
