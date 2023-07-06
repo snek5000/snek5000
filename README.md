@@ -56,7 +56,7 @@ The [`snek5000` Python
 API](https://snek5000.readthedocs.io/en/latest/_generated/snek5000.html) allows
 you to launch/restart/load simulations. For example, the [periodic hill Nek5000
 example](https://nek5000.github.io/NekDoc/tutorials/perhill.html) can be
-launched with our [snek5000-phill] solver (installable with `pip install snek5000-phill`) as follow:
+launched with our [snek5000-phill] solver (installable with `pip install snek5000-phill`) as follows:
 
 ```python
 from phill.solver import Simul
@@ -71,7 +71,8 @@ params.oper.nx = 12
 params.oper.ny = 10
 params.oper.nz = 8
 
-params.nek.general.num_steps = 10
+params.nek.general.write_interval = 4
+params.nek.general.num_steps = 12
 
 ...
 
@@ -87,19 +88,15 @@ like
 `~/Sim_data/examples_snek_phill/phill_readme_12x10x8_V1.x1.x1._2022-10-27_15-21-58`).
 Then, the simulation object can be recreated from this directory. An easy way
 would be to go into this directory, start IPython with the `snek-ipy-load`
-command, and run:
+command. Then, to post-process the results run:
 
 ```python
 # get/print the simulation parameters from the object
 sim.params
 
 # few examples of various read and plots
-sim.output.print_stdout.plot_dt()
+sim.output.print_stdout.plot_dt_cfl()
 sim.output.print_stdout.plot_nb_iterations()
-
-sim.output.history_points.plot()
-sim.output.history_points.coords
-data = sim.output.history_points.load_1point(2)
 
 sim.output.phys_fields.plot_hexa()
 sim.output.phys_fields.animate("pressure", interactive=True)
@@ -108,11 +105,28 @@ sim.output.phys_fields.animate(
 )
 ```
 
-For example, this movie has been produced by a `sim.output.phys_fields.animate`
+As another example, this movie has been produced by a `sim.output.phys_fields.animate`
 call from a [snek5000-cbox]
 [simulation](https://github.com/snek5000/snek5000/blob/main/docs/examples/scripts/simul_cbox_movie.py):
 
 https://user-images.githubusercontent.com/8842662/202872147-4ea3c749-dc63-4a73-98a0-6c787edb9cd3.mp4
+
+Solvers can also have extra capabilities such as
+[processing data from history points](https://snek5000.readthedocs.io/en/latest/how-to/history_points.html).
+To see how this works, run a short [snek5000-cbox] simulation
+[script where history points are defined](https://github.com/snek5000/snek5000-cbox/blob/main/doc/examples/run_side_short.py),
+change to the simulation directory, execute `snek-ipy-load` command and then
+
+```python
+# Plot all history points
+sim.output.history_points.plot()
+# Print the coordinates of the history points
+sim.output.history_points.coords
+# Load one history point as a dataframe for further post-processing
+coords, data = sim.output.history_points.load_1point(2)
+```
+
+![](https://raw.githubusercontent.com/snek5000/snek5000/main/docs/_static/history_points.png)
 
 Check out the
 [tutorials](https://snek5000.readthedocs.io/en/latest/tutorials.html) to learn

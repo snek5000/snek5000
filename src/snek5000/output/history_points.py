@@ -91,7 +91,11 @@ User parameter for history_points (subroutine hpts):
         )
 
     def load(self):
-        if self._data is None:
+        if self.coords is None:
+            raise ValueError(
+                "No history points were defined in this simulation / solver."
+            )
+        elif self._data is None:
             return self._load_full()
         else:
             nb_points = self.coords.shape[0]
