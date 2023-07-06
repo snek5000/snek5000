@@ -20,9 +20,16 @@ the Nek5000 source code directory:
 
 .. important::
 
+   **Nek5000 version**: To ensure compatibility, you should use our fork
+   `snek5000/Nek5000`_. It contains some
+   bug fixes and enhancements on top of Nek5000 v19 [#fork]_. We cannot use
+   the bleeding-edge ``master`` branch of Nek5000 due to another bug [#master]_.
+
    **Nek5000 dependencies**: Ensure you have the necessary compilers, build
    tools and libraries as recommended in the :doc:`Nek5000 documentation
    <nek:quickstart>`.
+
+.. _snek5000/Nek5000: https://github.com/snek5000/Nek5000
 
 Install using pip
 =================
@@ -77,3 +84,22 @@ then execute:
    :caption: Optional dependencies
 
    install_opt.rst
+
+
+Footnotes
+=========
+
+.. [#fork] The following commits in the `snek5000/Nek5000`_ fork compared to
+   Nek5000 v19 release are essential for Snek5000 to work correctly.
+
+   1. Fixes bug which can cause simultaneously launched simulation to fail: `Nek5000/Nek5000@3e53855 <https://github.com/Nek5000/Nek5000/commit/3e538555256b047a6d534111efa669e0557d0979>`_
+   2. Allows for upto 20 userparams `Nek5000/Nek5000@5581603 <https://github.com/Nek5000/Nek5000/commit/5581603ce76cbf54d9b8a5e73b6044a7ba8678dd>`_
+
+   These are also available in the upstream ``master`` branch, but has not been
+   released yet. If you have your own Nek5000 fork, consider executing ``git
+   cherry-pick`` of these commits.
+
+.. [#master] The ``master`` branch handles the working directory differently as
+   compared to Nek5000 v19. We will try to support this when they release the
+   new version and finalize it. See `issue #270
+   <https://github.com/snek5000/snek5000/issues/270>`_ for more details.
