@@ -48,7 +48,8 @@ export NEK_SOURCE_ROOT="/path/to/Nek5000"
 pip install snek5000
 ```
 
-See here for [detailed installation instructions](https://snek5000.readthedocs.io/en/latest/install.html).
+See here for
+[detailed installation instructions and notes on incompatible Nek5000 versions](https://snek5000.readthedocs.io/en/latest/install.html).
 
 ### Why Snek5000?
 
