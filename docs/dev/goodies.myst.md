@@ -117,6 +117,7 @@ au BufNewFile,BufRead *.smk set filetype=snakemake syntax=snakemake
 "}}}
 
 " Fuzzy search:
+" Assuming Nek5000 source code is at lib/Nek5000
 " Use :fin[d] command
 set path=.,src/**,lib/Nek5000/core/**,tests,docs,.github/workflows
 set wildignore+=*.pyc,*.o,*.so
