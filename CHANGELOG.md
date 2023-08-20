@@ -30,6 +30,16 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+### Added
+- Donation links.
+
+### Fixed
+
+- {func}`snek5000.find_configfile` removes call to deprecated function.
+- Explicit `ValueError` when no coordinates are defined and history points
+  object's `load` method is invoked.
+- Minor corrections in `README.md` and documentation and JOSS manuscript.
+
 ## [0.9.1] - 2023-05-01
 
 ### Added
