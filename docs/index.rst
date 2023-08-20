@@ -47,7 +47,7 @@ nice figures/movies.
    dev/index.rst
    CONTRIBUTING
    CHANGELOG
-   AUTHORS
+   authors.md
    license
    Source code on GitHub <https://github.com/snek5000/snek5000>
 

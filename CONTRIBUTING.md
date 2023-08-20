@@ -68,13 +68,6 @@ source activate.sh
 
 See also our [](./dev/index.rst).
 
-## Vim
+## Goodies
 
-Vim users could benefit by setting:
-
-```vim
-set secure exrc
-```
-
-This sources the `.exrc` file which comes along with the repository and enables syntax
-highlighting for file extensions used in `Nek5000`.
+See [here](./dev/goodies).

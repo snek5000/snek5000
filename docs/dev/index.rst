@@ -36,4 +36,5 @@ To install for development, execute::
    howto_test.md
    howto_doc.md
    edit_tutorials.md
+   goodies.myst.md
    release.md
