@@ -30,6 +30,18 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+## [0.9.2] - 2023-08-23
+
+### Added
+- Donation links.
+
+### Fixed
+
+- {func}`snek5000.find_configfile` removes call to deprecated function.
+- Explicit `ValueError` when no coordinates are defined and history points
+  object's `load` method is invoked.
+- Minor corrections in `README.md` and documentation and JOSS manuscript.
+
 ## [0.9.1] - 2023-05-01
 
 ### Added
@@ -397,5 +409,6 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
 [0.9.0]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0
 [0.9.1]: https://github.com/snek5000/snek5000/compare/0.9.0...0.9.1
+[0.9.2]:  https://github.com/snek5000/snek5000/compare/0.9.1...0.9.2
 [@paugier]: https://github.com/paugier
-[unreleased]: https://github.com/snek5000/snek5000/compare/0.9.1...HEAD
+[unreleased]: https://github.com/snek5000/snek5000/compare/0.9.2...HEAD

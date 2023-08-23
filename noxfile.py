@@ -147,7 +147,7 @@ def pip_compile(session, extra):
 
     session.run(
         *shlex.split(
-            "python -m piptools compile --resolver backtracking --quiet "
+            "python -m piptools compile --resolver backtracking --quiet -U "
             f"{in_extra} {in_file} {PACKAGE_SPEC} "
             f"-o {out_file}"
         ),

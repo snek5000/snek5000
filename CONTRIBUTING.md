@@ -39,8 +39,6 @@ source activate.sh
 
 ## General guidelines
 
-- **Editor**: Use an editor which supports [EditorConfig](http://editorconfig.org/)
-
 - **Style guide**: For Python code, `black`, `isort` and `flake8` are used to check and
   lint. Installing `pre-commit` would enforce the style automatically as a Git hook.
 
