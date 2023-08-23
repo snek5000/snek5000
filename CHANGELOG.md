@@ -30,6 +30,8 @@ Security in case of vulnerabilities.
 
 ## [Unreleased]
 
+## [0.9.2] - 2023-08-23
+
 ### Added
 - Donation links.
 
@@ -407,5 +409,6 @@ lists are a very incomplete lists of the additions, changes and deprecations.
 [0.8.0]: https://github.com/snek5000/snek5000/compare/0.7.0b0...0.8.0
 [0.9.0]: https://github.com/snek5000/snek5000/compare/0.8.0...0.9.0
 [0.9.1]: https://github.com/snek5000/snek5000/compare/0.9.0...0.9.1
+[0.9.2]:  https://github.com/snek5000/snek5000/compare/0.9.1...0.9.2
 [@paugier]: https://github.com/paugier
-[unreleased]: https://github.com/snek5000/snek5000/compare/0.9.1...HEAD
+[unreleased]: https://github.com/snek5000/snek5000/compare/0.9.2...HEAD
