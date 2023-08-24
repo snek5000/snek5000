@@ -1,12 +1,17 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "Snek5000: Computational Fluid Dynamics with Python and Nek5000"
+title: 'Snek5000: a new Python framework for Nek5000'
 abstract: |
-  Snek5000 is a Python package which allows one to write Fluidsim solvers based
-  for the simulations on the Fortran CFD code Nek5000. With a Snek5000-Fluidsim
-  solver, it becomes very easy to (i) launch/restart simulations with Python scripts
-  and (ii) load simulations, read the associated parameters/data and
-  produce nice figures/movies.
+  Computational fluid dynamics (CFD) simulations are essential tools in various
+  scientific and engineering disciplines. Nek5000 is a CFD Fortran code based on
+  spectral element methods with a proven track record in numerous applications.
+  In this article, we present Snek5000, a Python package designed to streamline
+  the management and visualization of fluid dynamics simulations based on
+  Nek5000. The package builds upon the functionality of Nek5000 by providing a
+  user-friendly interface for launching and restarting simulations, loading
+  simulation data, and generating figures and movies. This paper introduces
+  Snek5000, discusses its design principles, and highlights its impact on the
+  scientific community.
 
 authors:
   - family-names: Mohanan
@@ -15,6 +20,7 @@ authors:
 
   - family-names: Khoubani
     given-names: Arman
+    orcid: https://orcid.org/0000-0002-0295-5308
 
   - family-names: Augier
     given-names: Pierre
