@@ -8,7 +8,8 @@
 [![Documentation Status](https://readthedocs.org/projects/snek5000/badge/?version=latest)](https://snek5000.readthedocs.io/en/latest/?badge=latest)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=snek5000_snek5000&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=snek5000_snek5000)
 [![Code coverage](https://codecov.io/gh/snek5000/snek5000/branch/main/graph/badge.svg?token=WzGnN0dfbw)](https://codecov.io/gh/snek5000/snek5000)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7399621.svg)](https://doi.org/10.5281/zenodo.7399621)
+[![Archive](https://zenodo.org/badge/DOI/10.5281/zenodo.7399621.svg)](https://doi.org/10.5281/zenodo.7399621)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05586/status.svg)](https://doi.org/10.21105/joss.05586)
 
 <!-- badges -->
 
