@@ -83,9 +83,9 @@ exploratory research and parametric studies. Snek5000 functions as a workflow
 manager for assisting packaging, setup, compilation and post-processing aspects
 of a simulation.
 
-2. The simulation parameters are spread in at least three different files (
-`*.box`, `*.par` and `SIZE`). Some parameters have short and cryptic names
-(for example, `lx1`, `lxd`, etc.) and are dependent on each other. Snek5000
+2. The simulation parameters are spread across at least three different files
+(`*.box`, `*.par`, and `SIZE`). Some parameters have short and cryptic names
+(for example, `lx1`, `lxd`) and are dependent on each other. Snek5000
 tries to provide good defaults, uses more legible parameter names when
 necessary and [dynamically set some of these
 parameters](https://snek5000.readthedocs.io/en/stable/_generated/snek5000.operators.html#snek5000.operators.Operators)
@@ -151,13 +151,13 @@ and resources for data analysis and understanding the underlying physics.
 
 It is very easy to ["load" an existing
 simulation](https://snek5000.readthedocs.io/en/latest/tuto_phill_script.html#load-the-simulation),
-i.e. to recreate a Python
+i.e., to recreate a Python
 object `sim` similar to the one used to create the simulation. This can be done
-with the function `snek5000.load` or with the command `snek-ipy-load` , which
+with the function `snek5000.load` or with the command `snek-ipy-load`, which
 opens a IPython session with a `sim` variable. Snek5000 simplifies the process
-of reading associated parameters (in `sim.params` ) and data, and generating
-visualizations, such as figures ( `sim.output.phys_fields.plot_hexa` ) and
-movies ( `sim.output.phys_fields.animate` ). By utilizing popular Python
+of reading associated parameters (in `sim.params`) and data, and generating
+visualizations, such as figures (`sim.output.phys_fields.plot_hexa`) and
+movies (`sim.output.phys_fields.animate`). By utilizing popular Python
 packages, such as Matplotlib [@matplotlib] and Xarray [@xarray], Snek5000
 facilitates the creation of high-quality visualizations that can be easily
 customized to meet individual needs. This powerful visualization capability
