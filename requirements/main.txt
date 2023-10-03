@@ -106,7 +106,7 @@ pandas==2.0.3
     # via
     #   snek5000 (setup.cfg)
     #   xarray
-pillow==10.0.0
+pillow==10.0.1
     # via matplotlib
 pkgutil-resolve-name==1.3.10
     # via jsonschema
