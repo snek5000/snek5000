@@ -1,4 +1,5 @@
 """Snakemake helper utilities"""
+
 import os
 
 
