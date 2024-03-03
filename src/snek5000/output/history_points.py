@@ -1,6 +1,7 @@
 """Interface for Nek5000 history points
 
 """
+
 from io import StringIO
 
 import matplotlib.pyplot as plt

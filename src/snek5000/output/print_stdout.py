@@ -1,6 +1,7 @@
 """Load and parse stdout from Nek5000.
 
 """
+
 import re
 from pathlib import Path
 

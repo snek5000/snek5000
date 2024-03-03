@@ -1,6 +1,7 @@
 """Base class for ``sim.output``.
 
 """
+
 import inspect
 import logging
 import os

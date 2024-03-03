@@ -14,6 +14,7 @@ Usage example in an IPython console:
    In [3]: sim = Simul(params)
 
 """
+
 from IPython.core.magic import line_magic, magics_class
 from IPython.core.magic_arguments import argument, magic_arguments
 
