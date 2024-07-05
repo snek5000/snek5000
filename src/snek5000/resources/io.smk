@@ -53,7 +53,7 @@ rule archive:
         solution=sorted(
             itertools.chain.from_iterable(
                 (
-                    iglob(f"{prefix}{config['CASE']}0.f*")
+                    iglob(f"{prefix} {config['CASE']}0.f*")
                     for prefix in ("", "c2D", "sts")
                 )
             )
