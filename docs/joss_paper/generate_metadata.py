@@ -1,4 +1,5 @@
 """Generate pandoc metadata from codemeta.json"""
+
 import sys
 from collections import OrderedDict
 from json import load

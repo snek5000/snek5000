@@ -5,6 +5,7 @@ Store information regarding modules and class names of simulation class and
 dependent objects.
 
 """
+
 from fluidsim_core.info import InfoSolverCore
 
 

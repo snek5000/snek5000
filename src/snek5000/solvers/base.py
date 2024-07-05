@@ -4,6 +4,7 @@
 A bare Nek5000 solver which does not rely on any user parameters.
 
 """
+
 import math
 import textwrap
 from pathlib import Path
