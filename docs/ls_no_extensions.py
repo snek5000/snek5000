@@ -1,4 +1,5 @@
 """List files with no extensions"""
+
 import os
 from pathlib import Path
 

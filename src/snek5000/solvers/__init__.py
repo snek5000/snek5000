@@ -8,6 +8,7 @@ Solver framework
    kth
 
 """
+
 import importlib
 from functools import partial
 from pkgutil import ModuleInfo

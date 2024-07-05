@@ -64,7 +64,6 @@ Jinja templates
 
 """
 
-
 import jinja2
 
 

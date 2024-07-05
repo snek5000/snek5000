@@ -15,6 +15,7 @@ or:
 execute ``make list-sessions```` or ``nox -l`` for a list of sessions.
 
 """
+
 import os
 import re
 import shlex
