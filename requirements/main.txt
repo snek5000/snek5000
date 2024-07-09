@@ -179,7 +179,7 @@ xarray==2023.1.0
     # via pymech
 yte==1.5.1
     # via snakemake
-zipp==3.16.2
+zipp==3.19.1
     # via
     #   importlib-metadata
     #   importlib-resources
