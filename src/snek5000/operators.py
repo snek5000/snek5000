@@ -133,9 +133,9 @@ Parameters for mesh description:
 Parameters for boundary conditions:
 
 - ``boundary``: list[str]
-    :ref:`Velocity boundary conditions <nek:tab:ubcf>`
+    :ref:`Velocity boundary conditions <nek:sec:velbcs>`
 - ``boundary_scalars``: list[str]
-    :ref:`Temperature and passive scalar boundary conditions <nek:tab:userbct>`
+    :ref:`Temperature and passive scalar boundary conditions <nek:sec:tempbcs>`
 
 The following table matches counterpart of mandatory :ref:`SIZE
 <nek:case_files_size>` variables.
@@ -648,6 +648,4 @@ Operators.__doc__ += """\n
           those are ambiguously named.
 
 
-""" + docstring_params(
-    Operators, indent_len=0
-)
+""" + docstring_params(Operators, indent_len=0)
