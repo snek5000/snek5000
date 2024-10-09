@@ -648,4 +648,6 @@ Operators.__doc__ += """\n
           those are ambiguously named.
 
 
-""" + docstring_params(Operators, indent_len=0)
+""" + docstring_params(
+    Operators, indent_len=0
+)
