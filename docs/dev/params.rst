@@ -4,7 +4,7 @@ Internal API of Parameters
 .. seealso::
 
    :doc:`Tutorial on FluidDyn's ParamContainer API
-   <fluiddyn:ipynb/tuto_paramscontainer>` and documentation of
+   <fluiddyn:tutorials/tuto_paramscontainer>` and documentation of
    :class:`fluiddyn.util.paramcontainer.ParamContainer` which is
    extended for Snek5000.
 
