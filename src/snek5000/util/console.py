@@ -1,6 +1,4 @@
-"""Console script functions
-
-"""
+"""Console script functions"""
 
 from textwrap import dedent
 

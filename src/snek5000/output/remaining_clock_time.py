@@ -1,6 +1,4 @@
-"""Plot remaining clock time
-
-"""
+"""Plot remaining clock time"""
 
 import numpy as np
 

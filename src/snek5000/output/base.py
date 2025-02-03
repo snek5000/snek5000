@@ -1,6 +1,4 @@
-"""Base class for ``sim.output``.
-
-"""
+"""Base class for ``sim.output``."""
 
 import inspect
 import logging

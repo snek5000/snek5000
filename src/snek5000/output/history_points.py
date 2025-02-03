@@ -1,6 +1,4 @@
-"""Interface for Nek5000 history points
-
-"""
+"""Interface for Nek5000 history points"""
 
 from io import StringIO
 
